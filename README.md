@@ -91,8 +91,9 @@ python3 replay.py verify --case mirage-argmax-tightness --jobs 2 --work .work/re
 
 The [workflow](.github/workflows/megakernel-artifacts.yml) checks frozen source
 hashes and runner unit tests on pushes to `main` and on pull requests.
-Proof checks are opt-in: maintainers can select **Actions > Megakernel artifacts
-> Run workflow** and choose `tightness` or `shared`, or use:
+Proof checks are opt-in: maintainers can open **Actions**, select
+**Megakernel artifacts**, choose **Run workflow**, and select `tightness` or
+`shared`, or use:
 
 ```sh
 gh workflow run megakernel-artifacts.yml --repo FStarLang/kuiper-megakernels -f suite=tightness
