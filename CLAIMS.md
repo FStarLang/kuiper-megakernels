@@ -31,6 +31,17 @@ stability, or a guarantee of equal selected tokens/experts. Each execution
 follows its own permitted numerical observations and selection history.
 Satisfaction of the numerical premises is not newly established by replay.
 
+FlashMoE's [`KPlay.Review.fsti`](proofs/flashmoe-program/KPlay.Review.fsti) is a
+compact checked review surface for this claim. Its `base` and `optimized` functions
+call the distinctly named verified entry modules, with a common precondition and
+postcondition parameterized only by the one-versus-three completion epochs.
+The corresponding `.fst` proves the adapters from the original role-specific postconditions
+to that common form. Allocation and result-construction failures, output
+ownership, input preservation and pending frame recovery remain explicit.
+The review does not equate native numerical observations or prove the two
+executions choose the same experts. The `flashmoe-program-review` case rechecks
+both implementation bodies and their helpers along with the review.
+
 Mirage's shared check includes its mixed-observation/legacy compatibility
 bridge. Both complete Mirage programs and that check import one
 [canonical specification module](proofs/mirage-program/KPlay.SharedSpec.fst);

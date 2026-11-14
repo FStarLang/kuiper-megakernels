@@ -86,6 +86,46 @@ class ReplayTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "proof root"):
                 replay.inventory()
 
+    def add_review_case(self):
+        review = self.root / "proofs/case/Review.fst"
+        review.write_text("module Review\n")
+        relative = str(review.relative_to(self.root))
+        self.manifest["files"][relative] = replay.sha256(review)
+        case = {
+            "id": "review", "kind": "review", "profile": "profile",
+            "directory": "proofs/case", "implementation_cases": ["case"],
+            "roots": [relative, *self.manifest["cases"][0]["roots"]],
+        }
+        self.manifest["cases"].append(case)
+        return case
+
+    def test_review_includes_implementation_checks(self):
+        self.add_review_case()
+        replay.write_json(self.root / "manifest.json", self.manifest)
+        with patch.object(replay, "ROOT", self.root):
+            self.assertEqual(replay.inventory(), self.manifest)
+
+    def test_review_cannot_check_only_an_implementation_interface(self):
+        interface = self.source.with_suffix(".fsti")
+        interface.write_text("module Example\n")
+        relative = str(interface.relative_to(self.root))
+        self.manifest["files"][relative] = replay.sha256(interface)
+        self.manifest["cases"][0]["roots"].append(relative)
+        review = self.add_review_case()
+        review["roots"].remove(str(self.source.relative_to(self.root)))
+        replay.write_json(self.root / "manifest.json", self.manifest)
+        with patch.object(replay, "ROOT", self.root):
+            with self.assertRaisesRegex(ValueError, "Review omits implementation checks"):
+                replay.inventory()
+
+    def test_review_rejects_unknown_implementation(self):
+        review = self.add_review_case()
+        review["implementation_cases"] = ["missing"]
+        replay.write_json(self.root / "manifest.json", self.manifest)
+        with patch.object(replay, "ROOT", self.root):
+            with self.assertRaisesRegex(ValueError, "Review omits implementation checks"):
+                replay.inventory()
+
     def test_missing_case_does_not_prepare_toolchain(self):
         args = argparse.Namespace(kind="all", case=["missing-*"])
         with patch.object(replay, "setup") as setup:

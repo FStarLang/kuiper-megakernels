@@ -2,7 +2,8 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**. No RESOLVE installation, agent, DTester,
+and 12 family-tightness proofs**, plus a checked FlashMoE contract review.
+No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
 This standalone repository was migrated from `FStarLang/kuiper`, branch
@@ -73,7 +74,11 @@ One proof-only replay adjustment is disclosed in
 [replay-adjustments.patch](replay-adjustments.patch): an explicit, proved
 real-division identity in Mirage's optimized decoder. Its original source hash
 is retained in `manifest.json`; contracts, executable operations, and CUDA are
-unchanged. All other retained proof sources preserve their historical bytes.
+unchanged. FlashMoE's complete-program entry modules additionally have distinct
+module names so the checked review can import both at once; only their filenames
+and first-line module declarations changed. Their historical hashes are retained
+in `manifest.json` under `historical_entry_modules`. Other retained proof sources
+preserve their historical bytes.
 
 Each kernel has one directory containing its shared specification, its
 family-tightness proof where present, and separate implementations. For example:
@@ -98,11 +103,11 @@ The family specifications and the LUCE/FlashMoE program specifications were
 already byte-identical across roles. The complete Mirage programs use the
 unchanged former optimized/shared specification, whose prefix contains the
 entire former base specification. Only paths and duplicate files changed;
-theorem statements, numerical assumptions, and implementations are unchanged.
+theorem statements, numerical assumptions, and implementation bodies are unchanged.
 Existing case IDs and replay commands are unchanged.
 
 `--case` accepts a quoted pattern and is repeatable. `--kind` selects `family`,
-`program`, `shared`, or `tightness`; the default is `all`. A changed support
+`program`, `shared`, `tightness`, or `review`; the default is `all`. A changed support
 profile requires a new `--work` directory. The old compiler's packaged checked
 caches produced verification failures during preparation, so replay deliberately
 retains the historical cache-free checking policy.
@@ -114,6 +119,34 @@ To start over after an interrupted toolchain preparation, use a fresh directory:
 ```sh
 python3 replay.py verify --case mirage-argmax-tightness --jobs 2 --work .work/retry
 ```
+
+## Review the base/optimized correspondence
+
+Start with [`proofs/flashmoe-program/KPlay.Review.fsti`](proofs/flashmoe-program/KPlay.Review.fsti).
+It exposes the common caller precondition, the complete success/failure
+postcondition, the completion-epoch definition, and the `base`, `optimized`,
+and implementation-indexed `switcher` signatures. The corresponding `.fst` keeps the adaptation
+proofs and wrappers that call the verified implementations directly. Their
+signatures are identical except for `BaseRole` versus `OptimizedRole`: completion
+is after one launch versus three. `input_models_agree` proves the input adapters
+identical; `allocation_failure_contracts_agree` and `returned_contracts_agree`
+prove postcondition equality, with completion epochs aligned for the latter.
+These are equalities of predicates on the same result, not of two executions'
+results. Both wrappers preserve the caller's input references,
+input cells and frame; successful returned cells satisfy the same
+`Shared.task_relation`. This is common-task refinement, not output equality.
+`switcher i` dispatches to the chosen implementation under that same precondition
+and proves `after_call i`; compatibility is checked at the dispatch site.
+
+```sh
+python3 replay.py verify --case flashmoe-program-review --jobs 8
+```
+
+This case checks the review **and all roots of both implementation cases**,
+including their bodies, not just their interfaces. The manifest validator rejects
+a review that omits a referenced implementation's roots. It is also included in
+`--kind review` and the default full suite; the existing `shared` CI suite is
+unchanged.
 
 ## Continuous integration
 
@@ -182,8 +215,10 @@ Native extension builds may be reused on subsequent invocations; select a new
 | Tightness | Twelve constructive family-level proofs | Existence and full-observation determination, or the stated choice/approximation policy; not IEEE uniqueness |
 | Replay | Small standalone proof and CUDA runners | No discovery, agent orchestration, fuzzing pipeline, or DTester implementation |
 
-This repository is independent of Kuiper's source tree: cases reuse module
-names and must have isolated include paths. The replay runner provides that
+This repository is independent of Kuiper's source tree: most cases reuse module
+names and must have isolated include paths. FlashMoE's complete-program entry
+modules are named `KPlay.Base.Functional` and `KPlay.Optimized.Functional` to
+allow their joint review. The replay runner provides the required
 isolation and obtains its compiler from the pinned public release. No Kuiper
 checkout or submodule is required. Frozen payloads preserve their original
 whitespace and are excluded from formatting/whitespace cleanup.

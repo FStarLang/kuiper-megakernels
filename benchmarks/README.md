@@ -108,6 +108,9 @@ The proof directories have since been grouped by kernel and shared sources
 deduplicated. Archived paths and inventory fingerprints describe the original
 layout; case IDs and retained source bytes are unchanged. These measurements
 are not timings of the grouped layout.
+The later FlashMoE entry-module renaming and new `flashmoe-program-review`
+case are also outside these historical measurements; the current suite has
+46 cases. The review checks its own module and both implementations' roots.
 
 The sum of these 45 successful case wall times is **11,301.3 s (3 h 8 min)**,
 excluding setup and the failed original attempt. This is a sum across two runs,
