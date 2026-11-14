@@ -758,6 +758,10 @@
     },
     {
       "directory": "proofs/luce-final_norm_projection/base",
+      "historical_entry_modules": {
+        "proofs/luce-final_norm_projection/base/KPlay.Functional.fst": "c62f2709a6a8f6f9026ea147ca8b86b9c7b38d8b836ebb17a810e4b8a6dce353",
+        "proofs/luce-final_norm_projection/base/KPlay.Functional.fsti": "246b650331df897d17f9bcabe3661485f32939c97ed66555aa8d44afccd47233"
+      },
       "historical_receipt_sha256": "0d493ce571cad30b82e89f4e63fde94503fd82422538aa81a97952539013cf53",
       "historical_target_sha256": "ef8ebdd8ff272506fce7f421ccefd02afe31e779bd3457ff4caeca3340b62128",
       "id": "luce-final_norm_projection-base",
@@ -773,8 +777,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-final_norm_projection/base/KPlay.Functional.fsti",
-        "proofs/luce-final_norm_projection/base/KPlay.Functional.fst",
+        "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fst",
         "proofs/luce-final_norm_projection/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -810,6 +814,10 @@
     },
     {
       "directory": "proofs/luce-final_norm_projection/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fst": "12c442632f05bcd53c6f334634bc8d320c170498aa2554050651734d195540df",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fsti": "87a4d43f894d374be6501a0b1368e8e2fec3001fc6393e09e90f09acf1e7655a"
+      },
       "historical_receipt_sha256": "2e9888e808d656caa0905869a6615d074b1e3900ca1a49d931ad2fe148fe001c",
       "historical_target_sha256": "9ba6719aa10968a0b858ce6598e00fe9dc9750f044653269f7122f6d9f078c0b",
       "id": "luce-final_norm_projection-optimized",
@@ -825,8 +833,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fsti",
-        "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fst",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-final_norm_projection/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -858,6 +866,26 @@
         {
           "kind": "int"
         }
+      ]
+    },
+    {
+      "directory": "proofs/luce-final_norm_projection",
+      "id": "luce-final_norm_projection-review",
+      "implementation_cases": [
+        "luce-final_norm_projection-base",
+        "luce-final_norm_projection-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-final_norm_projection/KPlay.Review.fsti",
+        "proofs/luce-final_norm_projection/KPlay.Review.fst",
+        "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fst",
+        "proofs/luce-final_norm_projection/KPlay.SharedSpec.fst",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2069,11 +2097,13 @@
     "proofs/luce-embedding/optimized/KPlay.Functional.fst": "cb4ed4ce4828398973525086f65fd0f9ac4a7dbe929734975d5d17fbd6573d59",
     "proofs/luce-embedding/optimized/KPlay.Functional.fsti": "d555df17b4ec3d1e0032d10f893aa79d173a8d46e4bb95326cd17a6f7b3b873f",
     "proofs/luce-final_norm_projection/KPlay.Proof.Tightness.fst": "efb775ce42718cab60c21a5f7474351bb881030676c5dbc9398b775fa77006a6",
+    "proofs/luce-final_norm_projection/KPlay.Review.fst": "7d45789d4dc4564a863695d7721e84c4b7e05de5e0c4702e94201b1f1de6afab",
+    "proofs/luce-final_norm_projection/KPlay.Review.fsti": "00a7a73e5f9aae09d492d2918bf2cbc0878f269d4c98ac19468a999b7cd224f6",
     "proofs/luce-final_norm_projection/KPlay.SharedSpec.fst": "110aa570de1f6c69bbd9a4a68032833e4d9bcb1af66598f4c5cd6cf75b85c090",
-    "proofs/luce-final_norm_projection/base/KPlay.Functional.fst": "c62f2709a6a8f6f9026ea147ca8b86b9c7b38d8b836ebb17a810e4b8a6dce353",
-    "proofs/luce-final_norm_projection/base/KPlay.Functional.fsti": "246b650331df897d17f9bcabe3661485f32939c97ed66555aa8d44afccd47233",
-    "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fst": "12c442632f05bcd53c6f334634bc8d320c170498aa2554050651734d195540df",
-    "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fsti": "87a4d43f894d374be6501a0b1368e8e2fec3001fc6393e09e90f09acf1e7655a",
+    "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fst": "f4453df4519a2272089c168d01b12758dba1ed272346d929aa728c5fc4775fa5",
+    "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fsti": "bf007c1e5592a552d82399fb84eaae61cd802888cba850c36f973b1947d714e3",
+    "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fst": "4b69ce246846303d1e9b1abb84ce3bb53f10f88a0e37ff3632dc4493934dedc2",
+    "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti": "b96c586a05147b254ec0ef0c698ff1189508c32a0f93f777d1f4e9cca95ba4bd",
     "proofs/luce-full_attention_decoder/KPlay.Proof.Tightness.fst": "1e63a8f5e88436fae20b85c4253f2dfcdcb2c834da9a9dc7bf3ef48d4cc769c6",
     "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst": "e55b6c011749382e783ca51db42345151e5075e6c64769c8b110a45302461ff4",
     "proofs/luce-full_attention_decoder/base/KPlay.Functional.fst": "5959ae6316535299fc4ad2e114a346fee518d98e4d3eff08a0c0da151fd4dea5",

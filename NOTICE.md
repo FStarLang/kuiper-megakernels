@@ -31,10 +31,12 @@ role-specific historical source/acceptance identities are in `manifest.json`.
 The single proof-only replay adjustment is recorded separately with its
 original source hash and reversible diff; it is not misidentified as the
 original receipt-bound proof bytes.
-The FlashMoE complete-program, Mirage embedding/position and argmax, and LUCE argmax entry
+The FlashMoE complete-program, Mirage embedding/position and argmax, and LUCE
+argmax and final norm/projection entry
 modules were subsequently renamed to
 `KPlay.Base.Functional` and `KPlay.Optimized.Functional` for their joint checked
-review. Only filenames and first-line module declarations changed; their
+review. Only filenames, module declarations, and qualified tactic self-references
+(in LUCE final norm/projection) changed; their
 historical hashes are retained as `historical_entry_modules` in `manifest.json`.
 The `KPlay.Review.{fst,fsti}` files are new contract-adaptation proofs and review
 interfaces, not historical artifacts.

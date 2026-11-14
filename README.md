@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus four checked contract reviews.
+and 12 family-tightness proofs**, plus five checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -75,8 +75,8 @@ One proof-only replay adjustment is disclosed in
 real-division identity in Mirage's optimized decoder. Its original source hash
 is retained in `manifest.json`; contracts, executable operations, and CUDA are
 unchanged. The reviewed kernels' entry modules additionally have distinct
-module names so the checked review can import both at once; only their filenames
-and first-line module declarations changed. Their historical hashes are retained
+module names so the checked review can import both at once; only their filenames,
+module declarations, and qualified tactic self-references changed. Their historical hashes are retained
 in `manifest.json` under `historical_entry_modules`. Other retained proof sources
 preserve their historical bytes.
 
@@ -142,13 +142,14 @@ and proves `after_call i`; compatibility is checked at the dispatch site.
 python3 replay.py verify --case flashmoe-program-review --jobs 8
 ```
 
-Three family reviews use the same interface-and-dispatcher style:
+Four family reviews use the same interface-and-dispatcher style:
 
 | Review interface | Explicit representation difference | Common guarantee |
 | --- | --- | --- |
 | [Mirage embedding/position](proofs/mirage-embedding_position/KPlay.Review.fsti) | Seven versus eight hidden rows; seven versus 4096 rotary positions | Shared embedding/rotary postcondition on all seven prompt positions |
 | [Mirage argmax](proofs/mirage-argmax/KPlay.Review.fsti) | Vocabulary stride 151936 versus padded stride 153600 | Shared prompt/output and allowed-maximum relation, under explicit finite comparison-faithful input representation |
 | [LUCE argmax](proofs/luce-argmax/KPlay.Review.fsti) | BF16 versus FP32 scores; first versus any maximum | Explicit proof that the base postcondition implies the optimized postcondition on the same represented logical scores and output; exact history update |
+| [LUCE final norm/projection](proofs/luce-final_norm_projection/KPlay.Review.fsti) | BF16 versus FP32 returned logits | Identical shared mathematical logit targets, exact hidden-history append, and preserved input ownership |
 
 Each `*-review` case checks the review **and all roots of both implementation cases**,
 including their bodies, not just their interfaces. The manifest validator rejects

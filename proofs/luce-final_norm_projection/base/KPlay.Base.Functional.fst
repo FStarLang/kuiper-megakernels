@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Base.Functional
 
 #lang-pulse
 
@@ -73,8 +73,8 @@ let real_argument_expand (hidden:Shared.vector bf16 1024)
         Shared.reference_epsilon) by (
     FStar.Tactics.V2.norm [
       zeta; iota; delta_only [
-        "KPlay.Functional.real_argument";
-        "KPlay.Functional.squares_sum";
+        "KPlay.Base.Functional.real_argument";
+        "KPlay.Base.Functional.squares_sum";
         "KPlay.SharedSpec.rms_argument";
         "KPlay.SharedSpec.real_vector"]];
     FStar.Tactics.V2.trefl ())
@@ -338,8 +338,8 @@ let normalized_formula
     (1.0R +. Approx.to_real (Seq.index packed (254279680 + i)))) by (
     FStar.Tactics.V2.norm [
       zeta; iota; delta_only [
-        "KPlay.Functional.normalized_vector";
-        "KPlay.Functional.real_argument";
+        "KPlay.Base.Functional.normalized_vector";
+        "KPlay.Base.Functional.real_argument";
         "KPlay.SharedSpec.normalized_for_logits";
         "KPlay.SharedSpec.real_vector"]];
     FStar.Tactics.V2.trefl ())
@@ -402,8 +402,8 @@ let squares_sum_seq (hidden:lseq bf16 1024)
         (fun (i:natlt 1024) -> square_real (Seq.index hidden i))) by (
     FStar.Tactics.V2.norm [
       zeta; iota; delta_only [
-        "KPlay.Functional.squares_sum";
-        "KPlay.Functional.square_real";
+        "KPlay.Base.Functional.squares_sum";
+        "KPlay.Base.Functional.square_real";
         "KPlay.SharedSpec.real_sum"]];
     FStar.Tactics.V2.trefl ())
 
@@ -1380,8 +1380,8 @@ let shared_score_sum
         Approx.to_real (Seq.index packed (token * 1024 + i)))) by (
     FStar.Tactics.V2.norm [
       zeta; iota; delta_only [
-        "KPlay.Functional.shared_scores";
-        "KPlay.Functional.normalized_vector";
+        "KPlay.Base.Functional.shared_scores";
+        "KPlay.Base.Functional.normalized_vector";
         "KPlay.SharedSpec.logical_logits";
         "KPlay.SharedSpec.project";
         "KPlay.SharedSpec.real_sum";
@@ -1643,13 +1643,13 @@ let shared_scores_mapping
       (vector_view hidden) (norm_weight_view packed) (embedding_view packed) token) by (
     FStar.Tactics.V2.norm [
       zeta; iota; delta_only [
-        "KPlay.Functional.shared_scores";
-        "KPlay.Functional.vector_view";
-        "KPlay.Functional.norm_weight_view";
-        "KPlay.Functional.embedding_view";
-        "KPlay.Functional.embedding_elements";
-        "KPlay.Functional.hidden_size";
-        "KPlay.Functional.vocab_size";
+        "KPlay.Base.Functional.shared_scores";
+        "KPlay.Base.Functional.vector_view";
+        "KPlay.Base.Functional.norm_weight_view";
+        "KPlay.Base.Functional.embedding_view";
+        "KPlay.Base.Functional.embedding_elements";
+        "KPlay.Base.Functional.hidden_size";
+        "KPlay.Base.Functional.vocab_size";
         "KPlay.SharedSpec.reference_hidden_size";
         "KPlay.SharedSpec.reference_vocab_size"]];
     FStar.Tactics.V2.trefl ())

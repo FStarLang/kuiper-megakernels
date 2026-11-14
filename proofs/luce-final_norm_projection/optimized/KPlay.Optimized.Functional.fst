@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Optimized.Functional
 
 #lang-pulse
 
@@ -877,7 +877,7 @@ let projection_dot_model
     assert (S.equal actual expected);
     S.lemma_eq_elim actual expected;
     assert (projected_cell (fst model) (snd model) row == rsum expected)
-      by (FStar.Tactics.V2.norm [delta_only ["KPlay.Functional.projected_cell"]])
+      by (FStar.Tactics.V2.norm [delta_only ["KPlay.Optimized.Functional.projected_cell"]])
 
 inline_for_extraction noextract
 let projection_from_dot
@@ -999,7 +999,7 @@ let projection_finished
     in
     C.forall_intro_2 aux;
     assert (projection_post weights hidden scores)
-      by (FStar.Tactics.V2.norm [delta_only ["KPlay.Functional.projection_post"]])
+      by (FStar.Tactics.V2.norm [delta_only ["KPlay.Optimized.Functional.projection_post"]])
 
 inline_for_extraction noextract
 fn project_scores
@@ -1275,7 +1275,7 @@ let shared_logits_expand
       Shared.real_sum (shared_projection_term weights hidden row)) by (
     FStar.Tactics.V2.norm [
       zeta; iota; delta_only [
-        "KPlay.Functional.shared_projection_term";
+        "KPlay.Optimized.Functional.shared_projection_term";
         "KPlay.SharedSpec.logical_logits";
         "KPlay.SharedSpec.project";
         "KPlay.SharedSpec.real_matrix";
@@ -1299,7 +1299,7 @@ let model_projection_expand
   S.lemma_eq_elim actual expected;
   assert (
     projected_cell (real_values weights) (real_values hidden) row == rsum expected) by (
-    FStar.Tactics.V2.norm [delta_only ["KPlay.Functional.projected_cell"]])
+    FStar.Tactics.V2.norm [delta_only ["KPlay.Optimized.Functional.projected_cell"]])
 
 inline_for_extraction noextract
 let projected_refinement

@@ -99,6 +99,13 @@ Score representation preserves categories (including NaNs and infinities),
 signed-zero keys, ordering, and ties across the BF16/FP32 physical interfaces.
 Both contracts retain exact history updates and inactive empty histories.
 
+The [LUCE final norm/projection review](proofs/luce-final_norm_projection/KPlay.Review.fsti)
+uses identical input ownership and mathematical targets for both implementations,
+while exposing the BF16/FP32 score representation difference. Both append the
+exact unnormalized input hidden row on emitting calls, preserve prior history,
+and preserve input permissions. The common approximation target does not
+establish comparison preservation or bitwise equality between their scores.
+
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
 models, or native termination proofs. A determinate but wrong task could still
