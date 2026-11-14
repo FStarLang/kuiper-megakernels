@@ -1,7 +1,7 @@
-diff --git a/proofs/mirage-decoder-optimized/KPlay.Functional.fst b/proofs/mirage-decoder-optimized/KPlay.Functional.fst
+diff --git a/proofs/mirage-decoder/optimized/KPlay.Functional.fst b/proofs/mirage-decoder/optimized/KPlay.Functional.fst
 index 172db141..6805d791 100644
---- a/proofs/mirage-decoder-optimized/KPlay.Functional.fst
-+++ b/proofs/mirage-decoder-optimized/KPlay.Functional.fst
+--- a/proofs/mirage-decoder/optimized/KPlay.Functional.fst
++++ b/proofs/mirage-decoder/optimized/KPlay.Functional.fst
 @@ -2268,6 +2268,10 @@ let f32_to_bf16_all (value:F32.t)
    FStar.Classical.forall_intro
      (FStar.Classical.move_requires (Casts.fcast_approx #F32.t #bf16 value))

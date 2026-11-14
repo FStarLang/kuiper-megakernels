@@ -8,8 +8,10 @@ model weights, private checkout, or historical checked cache is required.
 This standalone repository was migrated from `FStarLang/kuiper`, branch
 `examples/megakernel-proof-artifacts`, commit
 `756939b576b262523c8a45e92316ea97b895aa1f`.
-The proof, support-library, and CUDA payloads and historical timing records are
-unchanged. See [NOTICE.md](NOTICE.md) for attribution and licensing boundaries.
+The support-library and CUDA payloads and historical timing records are
+unchanged. Proofs are now grouped by kernel with one shared specification,
+as described below. See [NOTICE.md](NOTICE.md) for attribution and licensing
+boundaries.
 FlashMoE still has an explicitly unresolved original-candidate provenance gap.
 
 ## Quick start (CPU only)
@@ -71,7 +73,33 @@ One proof-only replay adjustment is disclosed in
 [replay-adjustments.patch](replay-adjustments.patch): an explicit, proved
 real-division identity in Mirage's optimized decoder. Its original source hash
 is retained in `manifest.json`; contracts, executable operations, and CUDA are
-unchanged. All other proof payloads retain their historical bytes.
+unchanged. All other retained proof sources preserve their historical bytes.
+
+Each kernel has one directory containing its shared specification, its
+family-tightness proof where present, and separate implementations. For example:
+
+```text
+proofs/mirage-decoder/
+  KPlay.SharedSpec.fst
+  KPlay.Proof.Tightness.fst
+  base/KPlay.Functional.{fst,fsti}
+  optimized/KPlay.Functional.{fst,fsti}
+```
+
+The three complete programs use the same layout under
+`proofs/<project>-program/`, without whole-program tightness proofs.
+Their common `KPlay.Proof.Shared.*` helper modules also live at the group root;
+Mirage's additional shared-check implementation lives in `shared/`.
+Every role imports the group's single `KPlay.SharedSpec` module. The manifest
+lists the common sources as roots of each case, and the runner includes their
+directory and checks them afresh with each selected case.
+
+The family specifications and the LUCE/FlashMoE program specifications were
+already byte-identical across roles. The complete Mirage programs use the
+unchanged former optimized/shared specification, whose prefix contains the
+entire former base specification. Only paths and duplicate files changed;
+theorem statements, numerical assumptions, and implementations are unchanged.
+Existing case IDs and replay commands are unchanged.
 
 `--case` accepts a quoted pattern and is repeatable. `--kind` selects `family`,
 `program`, `shared`, or `tightness`; the default is `all`. A changed support

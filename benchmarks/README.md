@@ -100,8 +100,14 @@ No alternate solver setting, admission, or weakened contract was retained.
 
 The 44 passing first-sweep cases plus this recheck cover **all 45 current cases
 and 377 module roots**. Each successful root's recorded hash was checked against
-the current manifest. The first sweep retains the original inventory fingerprint;
+the manifest at the time of measurement. The first sweep retains the original
+inventory fingerprint;
 the recheck binds the updated inventory containing the disclosed proof change.
+
+The proof directories have since been grouped by kernel and shared sources
+deduplicated. Archived paths and inventory fingerprints describe the original
+layout; case IDs and retained source bytes are unchanged. These measurements
+are not timings of the grouped layout.
 
 The sum of these 45 successful case wall times is **11,301.3 s (3 h 8 min)**,
 excluding setup and the failed original attempt. This is a sum across two runs,

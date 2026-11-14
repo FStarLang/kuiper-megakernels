@@ -52,9 +52,15 @@ def inventory():
     if len(identifiers) != len(set(identifiers)):
         raise ValueError("Duplicate case IDs.")
     for case in manifest["cases"]:
-        if not case["roots"] or len(case["roots"]) != len(set(case["roots"])) or any(
-            root not in manifest["files"] or Path(root).parent != Path(case["directory"])
-            for root in case["roots"]
+        roots = case["roots"]
+        if (
+            not roots or len(roots) != len({Path(root).name for root in roots})
+            or not any(Path(root).parent == Path(case["directory"]) for root in roots)
+            or any(
+                root not in manifest["files"] or not Path(root).is_relative_to("proofs")
+                or Path(root).suffix not in (".fst", ".fsti")
+                for root in roots
+            )
         ):
             raise ValueError(f"Unindexed or misplaced proof root: {case['id']}")
     return manifest
@@ -135,12 +141,12 @@ def prepare(work, manifest):
     write_json(state, {"support_sha256": fingerprint, "fstar_version": version, "toolchain": pin})
 
 
-def command(work, profile, cache, source_directory):
+def command(work, profile, cache, source_directories):
     package = work / "toolchain/kuiper"
     stdlib = work / "stdlib"
     includes = [stdlib, stdlib / "pulse", stdlib / "fstarc"]
     includes += [work / "support" / profile / "sources"]
-    includes += [source_directory, cache]
+    includes += [*source_directories, cache]
     result = [
         str(package / "inst/bin/fstar.exe"),
         "--no_default_includes", "--cache_dir", str(cache), "--odir", str(cache),
@@ -192,7 +198,8 @@ def check_set(work, profile, sources, output, jobs):
     output.mkdir(parents=True, exist_ok=True)
     cache = output / "checked"
     cache.mkdir(exist_ok=True)
-    cmd = command(work, profile, cache, sources[0].parent)
+    source_directories = list(dict.fromkeys(source.parent for source in sources))
+    cmd = command(work, profile, cache, source_directories)
     config = output / "command.json"
     write_json(config, {"command": cmd, "output": str(output)})
     started = time.monotonic()
