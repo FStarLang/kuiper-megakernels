@@ -91,6 +91,14 @@ and requires finite, comparison-faithful logical score representations; its
 common postcondition permits the shared specification's tie choices.
 Neither review asserts equality of results from separate executions.
 
+The [LUCE argmax review](proofs/luce-argmax/KPlay.Review.fsti) preserves the
+stronger first-maximum base guarantee and proves it implies the optimized
+any-maximum guarantee for the same logical scores and output. The dispatcher
+establishes both its role's guarantee and the common any-maximum guarantee.
+Score representation preserves categories (including NaNs and infinities),
+signed-zero keys, ordering, and ties across the BF16/FP32 physical interfaces.
+Both contracts retain exact history updates and inactive empty histories.
+
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
 models, or native termination proofs. A determinate but wrong task could still

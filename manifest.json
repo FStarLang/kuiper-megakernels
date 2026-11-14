@@ -522,6 +522,10 @@
     },
     {
       "directory": "proofs/luce-argmax/base",
+      "historical_entry_modules": {
+        "proofs/luce-argmax/base/KPlay.Functional.fst": "153bca1a4d1647fc2a37192e716eb0eac7918b106299adae692854660b9543a2",
+        "proofs/luce-argmax/base/KPlay.Functional.fsti": "5c2567afe0a4bb91ce02b1cd4ec2faec7351a9aea4e365c825cb15f6f10e51e8"
+      },
       "historical_receipt_sha256": "c9028cdb821c17d6a86abaa7f9bf1d50f1274f48ae534240f4bf0329e59f85a0",
       "historical_target_sha256": "1e21641ddcb26f5231c197ac2f8662fe294baced3b3dcd2c1b3ba2c51f971b23",
       "id": "luce-argmax-base",
@@ -536,8 +540,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-argmax/base/KPlay.Functional.fsti",
-        "proofs/luce-argmax/base/KPlay.Functional.fst",
+        "proofs/luce-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-argmax/base/KPlay.Base.Functional.fst",
         "proofs/luce-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -565,6 +569,10 @@
     },
     {
       "directory": "proofs/luce-argmax/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-argmax/optimized/KPlay.Functional.fst": "c7461d4ec15d989d08b090f7dee1ec2b0a9e4bcf4635378e09e4be6c6c06ad0e",
+        "proofs/luce-argmax/optimized/KPlay.Functional.fsti": "4d922e9274b8040ff9208bc3b5fc3c89040e1cd07d058bc8b541f7a4a5bc17e1"
+      },
       "historical_receipt_sha256": "65e7b19e2412e6d97f219002e1f0bc76af1927ea29e3e435f2fec325052b0935",
       "historical_target_sha256": "21bfc0d500f920ad690b465a348f8158c177db6d75619613aec9c26e04946683",
       "id": "luce-argmax-optimized",
@@ -579,8 +587,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-argmax/optimized/KPlay.Functional.fsti",
-        "proofs/luce-argmax/optimized/KPlay.Functional.fst",
+        "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -604,6 +612,26 @@
         {
           "kind": "int"
         }
+      ]
+    },
+    {
+      "directory": "proofs/luce-argmax",
+      "id": "luce-argmax-review",
+      "implementation_cases": [
+        "luce-argmax-base",
+        "luce-argmax-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-argmax/KPlay.Review.fsti",
+        "proofs/luce-argmax/KPlay.Review.fst",
+        "proofs/luce-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-argmax/base/KPlay.Base.Functional.fst",
+        "proofs/luce-argmax/KPlay.SharedSpec.fst",
+        "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2027,11 +2055,13 @@
     "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fst": "5aceda926d62620b38d45b146cda9609482a18025bd16ec765fa6e1a35083e32",
     "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fsti": "5d7b54ec2b887886236d8a2f5774b99a8ec6860391d8ddcbc01370bd0dc45d64",
     "proofs/luce-argmax/KPlay.Proof.Tightness.fst": "5be169a982d8659c36cfce05e6d83cb17326c2f6f285712e20f4ae3c1c4a4d97",
+    "proofs/luce-argmax/KPlay.Review.fst": "e89ae193c6ed239576ddcf91e70722787cdbac4e790109c5c2ebcae2c65d5864",
+    "proofs/luce-argmax/KPlay.Review.fsti": "2c829fd44b884951d94a300b1cbdb613a47981adaf6ba3fb52dedce2aa721387",
     "proofs/luce-argmax/KPlay.SharedSpec.fst": "64e604faa08cd6503abad960ad2e695389ccf4be836d80bddaeff4fed7b99fbf",
-    "proofs/luce-argmax/base/KPlay.Functional.fst": "153bca1a4d1647fc2a37192e716eb0eac7918b106299adae692854660b9543a2",
-    "proofs/luce-argmax/base/KPlay.Functional.fsti": "5c2567afe0a4bb91ce02b1cd4ec2faec7351a9aea4e365c825cb15f6f10e51e8",
-    "proofs/luce-argmax/optimized/KPlay.Functional.fst": "c7461d4ec15d989d08b090f7dee1ec2b0a9e4bcf4635378e09e4be6c6c06ad0e",
-    "proofs/luce-argmax/optimized/KPlay.Functional.fsti": "4d922e9274b8040ff9208bc3b5fc3c89040e1cd07d058bc8b541f7a4a5bc17e1",
+    "proofs/luce-argmax/base/KPlay.Base.Functional.fst": "e58c0fc0fd730e21d6aeeb8385ede6997e0af040769f37e34616b3d8b4337396",
+    "proofs/luce-argmax/base/KPlay.Base.Functional.fsti": "a2121fbb4d47811142c4b9672e8aed827133c76439a8ab644bfb42aa47cead3a",
+    "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fst": "1aa32f62baa9e8affe11366d0f373da87417eedb0ff2e23c5797b0f44aa6c2b6",
+    "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fsti": "4a06e165190c3f1f36a00ea732b3c89abf13d4d9b00945f6ae30c8df5349ad96",
     "proofs/luce-embedding/KPlay.Proof.Tightness.fst": "7a43d87d3cf84a94ab47131c0e2839038381410dcc42a45009b95ffe3ffd7752",
     "proofs/luce-embedding/KPlay.SharedSpec.fst": "aacbce004448929092d1e12bae004b6b414395f0c7aef4c5637b8bf2b929e995",
     "proofs/luce-embedding/base/KPlay.Functional.fst": "7c6d552105850e2af5e005806ec5d06f43392e5a276ce0d7854a475c037598cb",

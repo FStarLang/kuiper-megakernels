@@ -108,9 +108,9 @@ The proof directories have since been grouped by kernel and shared sources
 deduplicated. Archived paths and inventory fingerprints describe the original
 layout; case IDs and retained source bytes are unchanged. These measurements
 are not timings of the grouped layout.
-The later entry-module renamings and three new review cases (FlashMoE program,
-Mirage embedding/position, and Mirage argmax) are also outside these historical
-measurements; the current suite has 48 cases. Each review checks its own modules
+The later entry-module renamings and four new review cases (FlashMoE program,
+Mirage embedding/position, Mirage argmax, and LUCE argmax) are also outside these historical
+measurements; the current suite has 49 cases. Each review checks its own modules
 and both implementations' roots.
 
 The sum of these 45 successful case wall times is **11,301.3 s (3 h 8 min)**,
