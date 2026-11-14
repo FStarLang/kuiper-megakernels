@@ -31,13 +31,17 @@ role-specific historical source/acceptance identities are in `manifest.json`.
 The single proof-only replay adjustment is recorded separately with its
 original source hash and reversible diff; it is not misidentified as the
 original receipt-bound proof bytes.
-The FlashMoE complete-program, Mirage embedding/position and argmax, and LUCE
-embedding, argmax, and final norm/projection entry
+The FlashMoE complete-program and argmax, Mirage embedding/position and argmax, and LUCE
+embedding, argmax, final norm/projection, and recurrent-decoder entry
 modules were subsequently renamed to
 `KPlay.Base.Functional` and `KPlay.Optimized.Functional` for their joint checked
-review. Only filenames, module declarations, and qualified tactic self-references
-(in LUCE final norm/projection) changed; their
+review. Filenames, module declarations, and qualified tactic self-references
+(in LUCE final norm/projection and recurrent decoder) changed; their
 historical hashes are retained as `historical_entry_modules` in `manifest.json`.
+Recurrent decoder additionally has an explicit erased product witness and
+intermediate approximation facts in base `gate_head`, and a pointwise sum proof in optimized
+`convolution_sum_shared`, resolving solver sensitivity exposed by renaming.
+Neither change alters a contract or an executable operation.
 The `KPlay.Review.{fst,fsti}` files are new contract-adaptation proofs and review
 interfaces, not historical artifacts.
 No runtime source rewriting is performed by the smoke runner; its generated

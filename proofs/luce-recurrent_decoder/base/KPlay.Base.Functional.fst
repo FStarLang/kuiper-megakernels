@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Base.Functional
 
 #lang-pulse
 
@@ -50,7 +50,7 @@ let sum_n (n:nat) (f:S.vector n) : GTot real = Sum.sum 0 n (fun i -> f i)
 inline_for_extraction noextract
 let sum_unfold (n:nat) (f:S.vector n)
   : Lemma (sum_n n f == Sum.sum 0 n f) =
-  norm_spec [delta_once ["KPlay.Functional.sum_n"]] (sum_n n f);
+  norm_spec [delta_once ["KPlay.Base.Functional.sum_n"]] (sum_n n f);
   native_sum_ext n (fun (i:Kuiper.Common.between 0 n) -> f i) f
 
 inline_for_extraction noextract
@@ -220,21 +220,21 @@ let bounded_sum (#n:nat) (count:nat{count <= n}) (terms:S.vector n) : GTot real 
 inline_for_extraction noextract
 let bounded_sum_step (#n:nat) (count:nat{count < n}) (terms:S.vector n)
   : Lemma (bounded_sum (count + 1) terms == bounded_sum count terms +. terms count) =
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]] (bounded_sum (count + 1) terms);
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]] (bounded_sum count terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]] (bounded_sum (count + 1) terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]] (bounded_sum count terms);
   sum_step (count + 1) (fun i -> terms i);
   sum_ext count (fun (i:S.fin (count + 1 - 1)) -> terms i) (fun i -> terms i)
 
 inline_for_extraction noextract
 let bounded_sum_full (#n:nat) (terms:S.vector n)
   : Lemma (bounded_sum n terms == sum_n n terms) =
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]] (bounded_sum n terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]] (bounded_sum n terms);
   sum_ext n (fun i -> terms i) terms
 
 inline_for_extraction noextract
 let bounded_zero (#n:nat) (terms:S.vector n)
   : Lemma (ensures bounded_sum 0 terms == 0.0R) [SMTPat (bounded_sum 0 terms)] =
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]] (bounded_sum 0 terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]] (bounded_sum 0 terms);
   sum_zero (fun i -> terms i)
 
 inline_for_extraction noextract
@@ -285,8 +285,8 @@ let ubf_congr (#d:Type0) (n:nat) (s:seq bf16) (x y:vector_family d n)
   : Lemma
       (requires ubf n s x /\ (forall (c:d) (i:S.fin n). x c i == y c i))
       (ensures ubf n s y) =
-  norm_spec [delta_only ["KPlay.Functional.ubf"; "KPlay.Functional.bf_rep"]] (ubf n s x);
-  norm_spec [delta_only ["KPlay.Functional.ubf"; "KPlay.Functional.bf_rep"]] (ubf n s y)
+  norm_spec [delta_only ["KPlay.Base.Functional.ubf"; "KPlay.Base.Functional.bf_rep"]] (ubf n s x);
+  norm_spec [delta_only ["KPlay.Base.Functional.ubf"; "KPlay.Base.Functional.bf_rep"]] (ubf n s y)
 
 inline_for_extraction noextract
 let ufp (#d:Type0) (n:nat) (s:seq f32) (x:vector_family d n) : GTot prop =
@@ -895,7 +895,7 @@ fn tensor_kernel
       Pulse.Lib.Trade.elim_trade (at |-> Frac (1.0R /. 32.0R) av) (a |-> Frac (1.0R /. 32.0R) va);
       with bv. assert bt |-> Frac (1.0R /. 32.0R) bv;
       Pulse.Lib.Trade.elim_trade (bt |-> Frac (1.0R /. 32.0R) bv) (b |-> Frac (1.0R /. 32.0R) vb);
-      norm_spec [delta_once ["KPlay.Functional.mma_accum"]]
+      norm_spec [delta_once ["KPlay.Base.Functional.mma_accum"]]
         (mma_accum va vb r start (kk + 1));
       k := kk +^ 1sz;
     };
@@ -935,8 +935,8 @@ let rec mma_accum_approx
       (requires va %~ ra /\ vb %~ rb)
       (ensures mma_accum va vb row start finish %~ real_accum ra rb row start finish)
       (decreases (finish - start)) =
-  norm_spec [delta_once ["KPlay.Functional.mma_accum"]] (mma_accum va vb row start finish);
-  norm_spec [delta_once ["KPlay.Functional.real_accum"]] (real_accum ra rb row start finish);
+  norm_spec [delta_once ["KPlay.Base.Functional.mma_accum"]] (mma_accum va vb row start finish);
+  norm_spec [delta_once ["KPlay.Base.Functional.real_accum"]] (real_accum ra rb row start finish);
   if finish = start then ()
   else (
     mma_accum_approx va vb ra rb row start (finish - 1);
@@ -967,9 +967,9 @@ let segment_step (#n:nat) (start:nat) (middle:nat{start <= middle})
       segment_sum start finish terms ==
       segment_sum start middle terms +. segment_sum middle finish terms) =
   sum_split (middle - start) (finish - middle) (fun i -> terms (start + i));
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]] (segment_sum start finish terms);
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]] (segment_sum start middle terms);
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]] (segment_sum middle finish terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]] (segment_sum start finish terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]] (segment_sum start middle terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]] (segment_sum middle finish terms);
   sum_ext (finish - start)
     (fun (i:S.fin (middle - start + (finish - middle))) -> terms (start + i))
     (fun i -> terms (start + i));
@@ -985,7 +985,7 @@ let rec tile_dot
       (decreases n) =
   if n = 0 then (
     G.__gmatmul_single_zero_lemma 0.0R ( *. ) ( +. ) a b r c;
-    norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
       (bounded_sum 0 (dot_terms a b r c))
   ) else (
     tile_dot a b r c (n - 1);
@@ -1011,7 +1011,7 @@ let tile_sum
   sum_ext 16
     (dot_terms a b r c)
     (fun k -> dot_terms ra rb (16 * row + r) c (16 * block + k));
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]]
     (segment_sum (16 * block) (16 * (block + 1)) (dot_terms ra rb (16 * row + r) c));
   sum_ext 16
     (fun (i:S.fin (16 * (block + 1) - 16 * block)) ->
@@ -1028,9 +1028,9 @@ let rec real_accum_dot
       acc2 (real_accum ra rb row start finish) r c ==
       segment_sum (16 * start) (16 * finish) (dot_terms ra rb (16 * row + r) c))
       (decreases (finish - start)) =
-  norm_spec [delta_once ["KPlay.Functional.real_accum"]] (real_accum ra rb row start finish);
+  norm_spec [delta_once ["KPlay.Base.Functional.real_accum"]] (real_accum ra rb row start finish);
   if finish = start then (
-    norm_spec [delta_once ["KPlay.Functional.segment_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]]
       (segment_sum (16 * start) (16 * finish) (dot_terms ra rb (16 * row + r) c))
   ) else (
     real_accum_dot ra rb row start (finish - 1) r c;
@@ -1076,9 +1076,9 @@ let rec zero_suffix_sum (n:nat) (count:nat{count <= n}) (terms:S.vector n)
     let lower:S.vector (n - 1) = fun i -> terms i in
     zero_suffix_sum (n - 1) count lower;
     sum_step n terms;
-    norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
       (bounded_sum count lower);
-    norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
       (bounded_sum count terms);
     sum_ext count (fun i -> lower i) (fun i -> terms i)
   )
@@ -1099,14 +1099,14 @@ let full_linear_bridge
   pad16_bounds cols;
   let terms = dot_terms (padded_matrix rows cols w) (padded_input cols x) r 0 in
   zero_suffix_sum (pad16 cols) cols terms;
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]]
     (segment_sum 0 (pad16 cols) terms);
   sum_ext (pad16 cols)
     (fun (i:S.fin (pad16 cols - 0)) -> terms (0 + i))
     (fun i -> terms (0 + i));
   sum_ext (pad16 cols) (fun i -> terms (0 + i)) terms;
   assert (segment_sum 0 (pad16 cols) terms == bounded_sum cols terms);
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
     (bounded_sum cols terms);
   sum_ext cols (fun i -> terms (i <: nat)) (fun i -> w r i *. x i);
   assert (bounded_sum cols terms == sum_n cols (fun i -> w r i *. x i));
@@ -1115,7 +1115,7 @@ let full_linear_bridge
 inline_for_extraction noextract
 let segment_empty (#n:nat) (position:nat{position <= n}) (terms:S.vector n)
   : Lemma (segment_sum position position terms == 0.0R) =
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]] (segment_sum position position terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]] (segment_sum position position terms);
   sum_zero (fun i -> terms (position + i))
 
 inline_for_extraction noextract
@@ -1571,9 +1571,9 @@ let merge_sum_family (#d:Type0) (half:pos{half <= 128}) (x:vector_family d 256)
       partial_sum half (merge_partial half (x c)) == partial_sum (2 * half) (x c)) =
   let point (c:d) : Lemma (
       partial_sum half (merge_partial half (x c)) == partial_sum (2 * half) (x c)) =
-    norm_spec [delta_once ["KPlay.Functional.partial_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]]
       (partial_sum half (merge_partial half (x c)));
-    norm_spec [delta_once ["KPlay.Functional.partial_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]]
       (partial_sum (2 * half) (x c));
     sum_halves half (fun i -> x c i);
     sum_ext half (fun i -> merge_partial half (x c) i)
@@ -1584,7 +1584,7 @@ inline_for_extraction noextract
 let partial_one_family (#d:Type0) (x:vector_family d 256)
   : Lemma (forall (c:d). partial_sum 1 (x c) == x c 0) =
   let point (c:d) : Lemma (partial_sum 1 (x c) == x c 0) =
-    norm_spec [delta_once ["KPlay.Functional.partial_sum"]] (partial_sum 1 (x c));
+    norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]] (partial_sum 1 (x c));
     sum_step 1 (fun i -> x c i); sum_zero (fun i -> x c i)
   in FStar.Classical.forall_intro point
 
@@ -1735,13 +1735,13 @@ let grouped_squares_family (#d:Type0)
     let group (g:S.fin (width / chunk))
       : Lemma (grouped_squares width chunk (x c) g ==
         sum_n chunk (fun j -> x c (chunk * g + j) *. x c (chunk * g + j))) =
-      norm_spec [delta_once ["KPlay.Functional.grouped_squares"]]
+      norm_spec [delta_once ["KPlay.Base.Functional.grouped_squares"]]
         (grouped_squares width chunk (x c) g);
       sum_ext chunk (square_terms width chunk g (x c))
         (fun j -> x c (chunk * g + j) *. x c (chunk * g + j))
     in
     FStar.Classical.forall_intro group;
-    norm_spec [delta_once ["KPlay.Functional.partial_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]]
       (partial_sum (width / chunk) (grouped_squares width chunk (x c)));
     sum_ext (width / chunk)
       (fun g -> grouped_squares width chunk (x c) g)
@@ -2049,7 +2049,7 @@ let make_head (w:S.weights) (qkv:S.vector 6144) (z:S.vector 2048)
     sum_ext 128 (fun i -> p.updated i j *. p.query i) (fun i -> updated i j *. query i)
   in
   FStar.Classical.forall_intro core_point;
-  norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head p);
+  norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head p);
   p
 #pop-options
 
@@ -2063,7 +2063,7 @@ let head_normalization_laws (#d:Type0) (p:d -> GTot head_model)
   let point (c:d) : Lemma (forall (i:S.fin 128).
       (p c).query i == S.l2_normalize (p c).qinput i *. R.rsqrt 128.0R /\
       (p c).key i == S.l2_normalize (p c).kinput i) =
-    norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head (p c))
+    norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head (p c))
   in FStar.Classical.forall_intro point
 
 inline_for_extraction noextract
@@ -2078,7 +2078,7 @@ let head_parameter_laws (#d:Type0) (p:d -> GTot head_model)
       (p c).beta == S.sigmoid (p c).b /\
       (p c).decay == E.exp ((0.0R -. E.exp (p c).a_log) *.
         S.softplus ((p c).a +. (p c).dt_bias))) =
-    norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head (p c))
+    norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head (p c))
   in FStar.Classical.forall_intro point
 
 inline_for_extraction noextract
@@ -2089,7 +2089,7 @@ let head_decay_laws (#d:Type0) (p:d -> GTot head_model)
         (p c).decayed i j == (p c).old i j *. (p c).decay) =
   let point (c:d) : Lemma (forall (i j:S.fin 128).
       (p c).decayed i j == (p c).old i j *. (p c).decay) =
-    norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head (p c))
+    norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head (p c))
   in FStar.Classical.forall_intro point
 
 inline_for_extraction noextract
@@ -2100,7 +2100,7 @@ let head_update_laws (#d:Type0) (p:d -> GTot head_model)
         (p c).updated i j == (p c).decayed i j +. (p c).key i *. (p c).delta j) =
   let point (c:d) : Lemma (forall (i j:S.fin 128).
       (p c).updated i j == (p c).decayed i j +. (p c).key i *. (p c).delta j) =
-    norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head (p c))
+    norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head (p c))
   in FStar.Classical.forall_intro point
 
 inline_for_extraction noextract
@@ -2115,7 +2115,7 @@ let head_dot_laws (#d:Type0) (p:d -> GTot head_model)
       (p c).delta j ==
         ((p c).value j -. sum_n 128 (fun i -> (p c).decayed i j *. (p c).key i)) *. (p c).beta /\
       (p c).core j == sum_n 128 (fun i -> (p c).updated i j *. (p c).query i)) =
-    norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head (p c))
+    norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head (p c))
   in FStar.Classical.forall_intro point
 
 inline_for_extraction noextract
@@ -2128,7 +2128,7 @@ let head_gating_laws (#d:Type0) (p:d -> GTot head_model)
   let point (c:d) : Lemma (forall (i:S.fin 128).
       (p c).gated i ==
         ((p c).weight i *. ((p c).core i *. S.rms_scale (p c).core)) *. S.silu ((p c).z i)) =
-    norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head (p c))
+    norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head (p c))
   in FStar.Classical.forall_intro point
 
 inline_for_extraction noextract
@@ -2140,7 +2140,7 @@ let head_delta_result (#d:Type0) (p:d -> GTot head_model) (j:S.fin 128) (v:f32)
           sum_n 128 (fun i -> (p c).decayed i j *. (p c).key i)) *. (p c).beta))
       (ensures ua v (fun c -> (p c).delta j)) =
   let point (c:d) : Lemma (v_approximates v ((p c).delta j)) =
-    norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head (p c));
+    norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head (p c));
     assert ((p c).delta j == ((p c).value j -.
       sum_n 128 (fun i -> (p c).decayed i j *. (p c).key i)) *. (p c).beta)
   in FStar.Classical.forall_intro point
@@ -2153,7 +2153,7 @@ let head_core_result (#d:Type0) (p:d -> GTot head_model) (j:S.fin 128) (v:f32)
         ua v (fun c -> sum_n 128 (fun i -> (p c).updated i j *. (p c).query i)))
       (ensures ua v (fun c -> (p c).core j)) =
   let point (c:d) : Lemma (v_approximates v ((p c).core j)) =
-    norm_spec [delta_once ["KPlay.Functional.valid_head"]] (valid_head (p c));
+    norm_spec [delta_once ["KPlay.Base.Functional.valid_head"]] (valid_head (p c));
     assert ((p c).core j == sum_n 128 (fun i -> (p c).updated i j *. (p c).query i))
   in FStar.Classical.forall_intro point
 
@@ -2239,7 +2239,7 @@ let recurrent_tree_sum (f:S.vector 128)
     in
     FStar.Classical.forall_intro row;
     sum_interleaved 4 8 (fun i -> f (y + 4 * i));
-    norm_spec [delta_once ["KPlay.Functional.dot_partial"]] (dot_partial f y);
+    norm_spec [delta_once ["KPlay.Base.Functional.dot_partial"]] (dot_partial f y);
     sum_ext 4
       (fun r -> sum_n 8 (stripe_terms f y r))
       (fun r -> sum_n 8 (fun t -> f (y + 4 * (r + 4 * t))))
@@ -2355,7 +2355,7 @@ let partial_four_family (#d:Type0) (f:vector_family d 128) (y:S.fin 4)
       ((sum_n 8 (stripe_terms (f c) y 0) +. sum_n 8 (stripe_terms (f c) y 1)) +.
         sum_n 8 (stripe_terms (f c) y 2)) +. sum_n 8 (stripe_terms (f c) y 3) ==
       dot_partial (f c) y) =
-    norm_spec [delta_once ["KPlay.Functional.dot_partial"]] (dot_partial (f c) y);
+    norm_spec [delta_once ["KPlay.Base.Functional.dot_partial"]] (dot_partial (f c) y);
     sum_four (fun r -> sum_n 8 (stripe_terms (f c) y r))
   in FStar.Classical.forall_intro point
 
@@ -2673,8 +2673,8 @@ let head_progress_start (#d:Type0) (h:S.fin 16) (s:lseq f32 262144)
   (p:d -> GTot head_model)
   : Lemma (requires head_rep h s (fun c -> (p c).decayed))
       (ensures head_progress h 0 s p) =
-  norm_spec [delta_only ["KPlay.Functional.head_rep"]] (head_rep h s (fun c -> (p c).decayed));
-  norm_spec [delta_only ["KPlay.Functional.head_progress"]] (head_progress h 0 s p)
+  norm_spec [delta_only ["KPlay.Base.Functional.head_rep"]] (head_rep h s (fun c -> (p c).decayed));
+  norm_spec [delta_only ["KPlay.Base.Functional.head_progress"]] (head_progress h 0 s p)
 
 inline_for_extraction noextract
 let head_progress_step (#d:Type0) (h:S.fin 16) (j:sz{j < 128})
@@ -2701,8 +2701,8 @@ let head_progress_done (#d:Type0) (h:S.fin 16) (s:lseq f32 262144)
   (p:d -> GTot head_model)
   : Lemma (requires head_progress h 128 s p)
       (ensures head_rep h s (fun c -> (p c).updated)) =
-  norm_spec [delta_only ["KPlay.Functional.head_rep"]] (head_rep h s (fun c -> (p c).updated));
-  norm_spec [delta_only ["KPlay.Functional.head_progress"]] (head_progress h 128 s p)
+  norm_spec [delta_only ["KPlay.Base.Functional.head_rep"]] (head_rep h s (fun c -> (p c).updated));
+  norm_spec [delta_only ["KPlay.Base.Functional.head_progress"]] (head_progress h 128 s p)
 
 inline_for_extraction noextract
 fn recurrent_head (#d:Type0)
@@ -2818,11 +2818,14 @@ fn gate_head (#d:Type0)
     let rounded = round_bf normalized #(fun c -> ((reveal p) c).core j *. S.rms_scale ((reveal p) c).core);
     let weighted = rounded_mul rounded (C.fcast #bf16 #f32 w)
       #(fun c -> ((reveal p) c).core j *. S.rms_scale ((reveal p) c).core) #(fun c -> ((reveal p) c).weight j);
-    let weighted_bf = round_bf weighted
-      #(fun c -> ((reveal p) c).weight j *. (((reveal p) c).core j *. S.rms_scale ((reveal p) c).core));
+    let weighted_model:erased (real_family d) = hide
+      (fun c -> (((reveal p) c).core j *. S.rms_scale ((reveal p) c).core) *. ((reveal p) c).weight j);
+    let weighted_bf = round_bf weighted #weighted_model;
+    assert pure (ua weighted_bf weighted_model);
     let gate = activation32 true z0 #(fun c -> ((reveal p) c).z j);
+    assert pure (ua gate (fun c -> S.silu (((reveal p) c).z j)));
     let value = rounded_mul weighted_bf gate
-      #(fun c -> ((reveal p) c).weight j *. (((reveal p) c).core j *. S.rms_scale ((reveal p) c).core))
+      #weighted_model
       #(fun c -> S.silu (((reveal p) c).z j));
     narrow_family value (fun c -> ((reveal p) c).gated j);
     output.(head *^ 128sz +^ j) <- C.fcast #f32 #bf16 value;
@@ -3027,7 +3030,7 @@ let mixer_outputs_intro (#d:Type0) (sr:lseq f32 262144) (sy:lseq bf16 2048)
         (forall (c:d) (i:S.fin 2048).
           v_approximates (Seq.index sy i) ((p c (i / 128)).gated (i % 128))))
       (ensures mixer_outputs sr sy p) =
-  norm_spec [delta_only ["KPlay.Functional.mixer_outputs"; "KPlay.Functional.ubf"; "KPlay.Functional.bf_rep"]]
+  norm_spec [delta_only ["KPlay.Base.Functional.mixer_outputs"; "KPlay.Base.Functional.ubf"; "KPlay.Base.Functional.bf_rep"]]
     (mixer_outputs sr sy p)
 
 inline_for_extraction noextract
@@ -3042,7 +3045,7 @@ let mixer_head_inputs (#d:Type0) (sw sq z_values sb sa:seq bf16) (sr:seq f32)
         segment_rep 2048 (h * 128) 128 z_values (fun c -> (p c h).z) /\
         segment_rep weight_count gated_norm_offset 128 sw (fun c -> (p c h).weight) /\
         head_rep h sr (fun c -> (p c h).old)) =
-  norm_spec [delta_once ["KPlay.Functional.mixer_inputs"]] (mixer_inputs sw sq z_values sb sa sr p);
+  norm_spec [delta_once ["KPlay.Base.Functional.mixer_inputs"]] (mixer_inputs sw sq z_values sb sa sr p);
   let all_heads:squash (forall (head:S.fin 16).
     (forall (c:d). valid_head (p c head)) /\
     segment_rep 6144 (head * 128) 128 sq (fun c -> (p c head).qinput) /\
@@ -3072,7 +3075,7 @@ let gated_progress_step (#d:Type0) (h:S.fin 16)
         (forall (i:S.fin 2048). i / 128 =!= h ==> Seq.index after i == Seq.index before i))
       (ensures forall (c:d) (i:nat{i < (h + 1) * 128}).
         v_approximates (Seq.index after i) ((p c (i / 128)).gated (i % 128))) =
-  norm_spec [delta_once ["KPlay.Functional.segment_rep"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_rep"]]
     (segment_rep 2048 (h * 128) 128 after (fun c -> (p c h).gated));
   let point (c:d) (i:nat{i < (h + 1) * 128})
     : Lemma (v_approximates (Seq.index after i) ((p c (i / 128)).gated (i % 128))) =
@@ -3142,7 +3145,7 @@ fn mixer_kernel (#d:Type0)
       mixer_outputs nr ny p)
 {
   physical_extents ();
-  norm_spec [delta_once ["KPlay.Functional.mixer_inputs"]] (mixer_inputs sw sq z_values sb sa sr p);
+  norm_spec [delta_once ["KPlay.Base.Functional.mixer_inputs"]] (mixer_inputs sw sq z_values sb sa sr p);
   A.pts_to_len state;
   A.pts_to_len output;
   A.pts_to_len query;
@@ -3270,14 +3273,14 @@ let interpretation_intro
   : Lemma
       (requires input_representation c.call c.weight c.input c.before w x r conv)
       (ensures logical_input_matches w x r conv c) =
-  norm_spec [delta_once ["KPlay.Functional.logical_input_matches"]] (logical_input_matches w x r conv c)
+  norm_spec [delta_once ["KPlay.Base.Functional.logical_input_matches"]] (logical_input_matches w x r conv c)
 
 inline_for_extraction noextract
 let interpretation_laws
   (w:lseq bf16 weight_count) (x:lseq bf16 1024)
   (r:lseq f32 262144) (conv:lseq bf16 24576) (c:interpretations w x r conv)
   : Lemma (input_representation c.call c.weight c.input c.before w x r conv) =
-  norm_spec [delta_once ["KPlay.Functional.logical_input_matches"]] (logical_input_matches w x r conv c)
+  norm_spec [delta_once ["KPlay.Base.Functional.logical_input_matches"]] (logical_input_matches w x r conv c)
 
 noextract
 noeq type decoder_stages = {
@@ -3375,7 +3378,7 @@ let stage_head_view_lemma (c:logical_call) (h:S.fin 16) : Lemma (stage_head_view
   let p = make_head c.weight s.convolved s.projected_z s.projected_b s.projected_a
     (old_recurrent c.call c.before) h in
   assert (s.head_plans h == p);
-  norm_spec [delta_once ["KPlay.Functional.stage_head_view"]] (stage_head_view c h)
+  norm_spec [delta_once ["KPlay.Base.Functional.stage_head_view"]] (stage_head_view c h)
 #pop-options
 
 inline_for_extraction noextract
@@ -3383,9 +3386,9 @@ let weight_matrix_view (rows cols:pos) (offset:nat{offset + rows * cols <= weigh
   (sw:lseq bf16 weight_count) (w:S.matrix rows cols)
   : Lemma (requires weight_matrix_representation rows cols offset sw w)
       (ensures matrix_rep rows cols weight_count offset cols 1 sw w) =
-  norm_spec [delta_only ["KPlay.Functional.weight_matrix_representation"; "KPlay.Functional.row_major"]]
+  norm_spec [delta_only ["KPlay.Base.Functional.weight_matrix_representation"; "KPlay.Base.Functional.row_major"]]
     (weight_matrix_representation rows cols offset sw w);
-  norm_spec [delta_once ["KPlay.Functional.matrix_rep"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.matrix_rep"]]
     (matrix_rep rows cols weight_count offset cols 1 sw w)
 
 inline_for_extraction noextract
@@ -3398,7 +3401,7 @@ let weight_matrix_family (#d:Type0) (rows cols:pos)
     weight_matrix_view rows cols offset sw (w c)
   in
   FStar.Classical.forall_intro point;
-  norm_spec [delta_once ["KPlay.Functional.umatrix"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.umatrix"]]
     (umatrix rows cols weight_count offset cols 1 sw w)
 
 inline_for_extraction noextract
@@ -3409,11 +3412,11 @@ let weight_vector_family (#d:Type0) (width:pos)
       (ensures segment_rep weight_count offset width sw w) =
   let point (c:d) (i:S.fin width)
     : Lemma (v_approximates (Seq.index sw (offset + i)) (w c i)) =
-    norm_spec [delta_once ["KPlay.Functional.weight_vector_representation"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.weight_vector_representation"]]
       (weight_vector_representation width offset sw (w c))
   in
   FStar.Classical.forall_intro_2 point;
-  norm_spec [delta_once ["KPlay.Functional.segment_rep"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_rep"]]
     (segment_rep weight_count offset width sw w)
 
 inline_for_extraction noextract
@@ -3480,7 +3483,7 @@ let input_views
       bf_rep 24576 conv (flat_convolution (old_convolution c.call c.before)) /\
       weights_representation w c.weight) =
     interpretation_laws w x r conv c;
-    norm_spec [delta_once ["KPlay.Functional.input_representation"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.input_representation"]]
       (input_representation c.call c.weight c.input c.before w x r conv);
     convolution_flat_rep conv (old_convolution c.call c.before)
   in
@@ -3491,18 +3494,18 @@ let input_views
       : Lemma (v_approximates (Seq.index r ((h * 128 + i) * 128 + j))
         (old_recurrent c.call c.before h i j)) =
       interpretation_laws w x r conv c;
-      norm_spec [delta_only ["KPlay.Functional.input_representation";
-        "KPlay.Functional.recurrent_representation"; "KPlay.Functional.recurrent_index"]]
+      norm_spec [delta_only ["KPlay.Base.Functional.input_representation";
+        "KPlay.Base.Functional.recurrent_representation"; "KPlay.Base.Functional.recurrent_index"]]
         (input_representation c.call c.weight c.input c.before w x r conv)
     in
     FStar.Classical.forall_intro_3 element;
-    norm_spec [delta_once ["KPlay.Functional.head_rep"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.head_rep"]]
       (head_rep h r (fun (c:interpretations w x r conv) -> old_recurrent c.call c.before h))
   in
   FStar.Classical.forall_intro head;
-  norm_spec [delta_once ["KPlay.Functional.ubf"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.ubf"]]
     (ubf 1024 x (fun (c:interpretations w x r conv) -> c.input));
-  norm_spec [delta_once ["KPlay.Functional.ubf"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.ubf"]]
     (ubf 24576 conv (fun (c:interpretations w x r conv) -> flat_convolution (old_convolution c.call c.before)))
 
 inline_for_extraction noextract
@@ -3511,8 +3514,8 @@ let segment_from_vector (#d:Type0) (n offset:nat) (width:nat{offset + width <= n
   : Lemma
       (requires ubf n s x /\ (forall (c:d) (i:S.fin width). x c (offset + i) == y c i))
       (ensures segment_rep n offset width s y) =
-  norm_spec [delta_only ["KPlay.Functional.ubf"; "KPlay.Functional.bf_rep"]] (ubf n s x);
-  norm_spec [delta_once ["KPlay.Functional.segment_rep"]] (segment_rep n offset width s y)
+  norm_spec [delta_only ["KPlay.Base.Functional.ubf"; "KPlay.Base.Functional.bf_rep"]] (ubf n s x);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_rep"]] (segment_rep n offset width s y)
 
 inline_for_extraction noextract
 let segment_congr (#d:Type0) (n offset:nat) (width:nat{offset + width <= n})
@@ -3520,16 +3523,16 @@ let segment_congr (#d:Type0) (n offset:nat) (width:nat{offset + width <= n})
   : Lemma
       (requires segment_rep n offset width s x /\ (forall (c:d) (i:S.fin width). x c i == y c i))
       (ensures segment_rep n offset width s y) =
-  norm_spec [delta_once ["KPlay.Functional.segment_rep"]] (segment_rep n offset width s x);
-  norm_spec [delta_once ["KPlay.Functional.segment_rep"]] (segment_rep n offset width s y)
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_rep"]] (segment_rep n offset width s x);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_rep"]] (segment_rep n offset width s y)
 
 inline_for_extraction noextract
 let head_rep_congr (#d:Type0) (h:S.fin 16) (s:seq f32) (x y:matrix_family d 128 128)
   : Lemma
       (requires head_rep h s x /\ (forall (c:d) (i j:S.fin 128). x c i j == y c i j))
       (ensures head_rep h s y) =
-  norm_spec [delta_once ["KPlay.Functional.head_rep"]] (head_rep h s x);
-  norm_spec [delta_once ["KPlay.Functional.head_rep"]] (head_rep h s y)
+  norm_spec [delta_once ["KPlay.Base.Functional.head_rep"]] (head_rep h s x);
+  norm_spec [delta_once ["KPlay.Base.Functional.head_rep"]] (head_rep h s y)
 
 inline_for_extraction noextract
 let mixer_ready
@@ -3601,7 +3604,7 @@ let mixer_ready
       (fun (c:interpretations w x r conv) -> ((build_stages c).head_plans h).old)
   in
   FStar.Classical.forall_intro head;
-  norm_spec [delta_only ["KPlay.Functional.mixer_inputs"; "KPlay.Functional.decoder_head_models"]]
+  norm_spec [delta_only ["KPlay.Base.Functional.mixer_inputs"; "KPlay.Base.Functional.decoder_head_models"]]
     (mixer_inputs w q z b a r (decoder_head_models w x r conv))
 
 noextract
@@ -3627,8 +3630,8 @@ let models_match (c:logical_call)
         (build_stages c).next_conv channel tap ==
         (S.decoder_values c.call c.weight c.input c.before).convolution_value channel tap))
     by (FStar.Tactics.V2.norm [iota; reduce_projections; unascribe; primops; simplify; delta_only [
-      "KPlay.Functional.build_stages"; "KPlay.Functional.make_head";
-      "KPlay.Functional.sum_n"; "KPlay.Functional.old_convolution"; "KPlay.Functional.old_recurrent";
+      "KPlay.Base.Functional.build_stages"; "KPlay.Base.Functional.make_head";
+      "KPlay.Base.Functional.sum_n"; "KPlay.Base.Functional.old_convolution"; "KPlay.Base.Functional.old_recurrent";
       "KPlay.SharedSpec.decoder_values"; "KPlay.SharedSpec.token_mixer"; "KPlay.SharedSpec.feed_forward"
     ]];
     FStar.Tactics.V2.trivial ())
@@ -3674,9 +3677,9 @@ let output_model_at (#d:Type0)
     assert (recurrent_index h i j == h * 16384 + (i * 128 + j))
   in
   FStar.Classical.forall_intro_3 state_point;
-  norm_spec [delta_only ["KPlay.Functional.output_representation";
-    "KPlay.Functional.bf16_vector_representation"; "KPlay.Functional.recurrent_representation";
-    "KPlay.Functional.convolution_representation"]] (output_representation ny nr nc expected)
+  norm_spec [delta_only ["KPlay.Base.Functional.output_representation";
+    "KPlay.Base.Functional.bf16_vector_representation"; "KPlay.Base.Functional.recurrent_representation";
+    "KPlay.Base.Functional.convolution_representation"]] (output_representation ny nr nc expected)
 
 noextract
 let establish_postcondition
@@ -3690,7 +3693,7 @@ let establish_postcondition
         mixer_outputs nr gated (decoder_head_models w x r conv) /\
         ubf 24576 nc (fun (c:interpretations w x r conv) -> flat_convolution (build_stages c).next_conv))
       (ensures semantic_postcondition w x r conv ny nr nc) =
-  norm_spec [delta_only ["KPlay.Functional.mixer_outputs"; "KPlay.Functional.decoder_head_models"]]
+  norm_spec [delta_only ["KPlay.Base.Functional.mixer_outputs"; "KPlay.Base.Functional.decoder_head_models"]]
     (mixer_outputs nr gated (decoder_head_models w x r conv));
   let point (call:S.invocation) (weight:S.weights) (input:S.vector 1024)
     (before:S.model_cache{S.cache_domain call before /\
@@ -3835,7 +3838,7 @@ fn kplay_run
     #(decoder_head_models weights hidden recurrent convolution);
   with sgated. assert on gpu_loc (gated |-> sgated);
   with nr. assert on gpu_loc (output_recurrent |-> nr);
-  norm_spec [delta_once ["KPlay.Functional.decoder_head_models"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.decoder_head_models"]]
     (mixer_outputs nr sgated (decoder_head_models weights hidden recurrent convolution));
   ubf_congr 2048 sgated
     (fun (c:interpretations weights hidden recurrent convolution) i -> ((build_stages c).head_plans (i / 128)).gated (i % 128))

@@ -113,6 +113,23 @@ the optimized embedding call produces them. Half-permission input ownership
 supports the initial previous-token/prompt alias. The common domain requires
 valid prompt tokens and an explicitly identified selected token.
 
+The [LUCE recurrent-decoder review](proofs/luce-recurrent_decoder/KPlay.Review.fsti)
+exposes the BF16/FP32 convolution-state difference, transposed recurrent
+key/value axes, and optimized allocation-free initial state. Both return
+represented layer values satisfying the same complete shared decoder/cache
+postcondition, including installation of the layer state and cache framing.
+The base requires materialized buffers representing zero state on first use.
+This is common-task refinement, not equality of separate numerical executions.
+
+The [FlashMoE argmax review](proofs/flashmoe-argmax/KPlay.Review.fsti) gives
+both entry points the same stable-maximum/gather postcondition on finite FP32
+probabilities in [0,1]. It exposes that a base call processes one row and copies
+its routing frame, whereas an optimized call processes a batch and materializes
+the gathered probabilities. `base_batch_refines` proves that the row contracts
+compose into the batched shared postcondition; it is not a new batch executor.
+The dispatcher can choose either implementation for one row, and only optimized
+for a larger batch. All frame copies and actual best-buffer cells remain explicit.
+
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
 models, or native termination proofs. A determinate but wrong task could still

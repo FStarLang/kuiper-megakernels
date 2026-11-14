@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Optimized.Functional
 
 #lang-pulse
 
@@ -653,6 +653,7 @@ let convolved_head_at (rw:real_vector weight_count) (conv:real_vector convolutio
   norm_spec [delta_only [`%convolution_sum]; zeta; iota]
     (convolution_sum rw conv (region * value_width + head * head_width + i))
 
+#push-options "--z3rlimit 10"
 let convolution_sum_shared (rw:real_vector weight_count)
   (w:Shared.matrix qkv_width conv_width) (conv:Shared.convolution_state)
   (channel:Shared.fin qkv_width)
@@ -660,11 +661,27 @@ let convolution_sum_shared (rw:real_vector weight_count)
       (requires real_weight_matrix qkv_width conv_width conv_kernel_offset rw w)
       (ensures convolution_sum rw (pack_convolution conv) channel ==
         Sum.sum 0 4 (fun tap -> w channel tap *. conv channel tap)) =
-  sequence_sum_shared #4
-    (S.init_ghost tap_count (fun tap ->
+  physical_extents ();
+  let terms = S.init_ghost tap_count (fun tap ->
       S.index (pack_convolution conv) (channel * tap_count + tap) *.
-        S.index rw (convolution_offset + channel * tap_count + tap)))
-    (fun tap -> w channel tap *. conv channel tap)
+        S.index rw (convolution_offset + channel * tap_count + tap)) in
+  let point (tap:Shared.fin 4)
+    : Lemma (S.index terms tap == w channel tap *. conv channel tap) =
+    assert (S.index (pack_convolution conv) (channel * tap_count + tap) ==
+      conv channel tap);
+    assert (S.index rw (convolution_offset + channel * tap_count + tap) ==
+      w channel tap)
+  in
+  C.forall_intro point;
+  sequence_sum_shared #4 terms (fun tap -> w channel tap *. conv channel tap);
+  assert (convolution_sum rw (pack_convolution conv) channel ==
+    rsum (S.init_ghost tap_count (fun tap ->
+      S.index (pack_convolution conv) (channel * tap_count + tap) *.
+        S.index rw (convolution_offset + channel * tap_count + tap)))) by (
+    FStar.Tactics.V2.norm [zeta; iota; delta_only [
+      "KPlay.Optimized.Functional.convolution_sum"]];
+    FStar.Tactics.V2.trefl ())
+#pop-options
 
 let shared_convolve_at (w:Shared.matrix qkv_width conv_width)
   (conv:Shared.convolution_state) (channel:Shared.fin qkv_width)

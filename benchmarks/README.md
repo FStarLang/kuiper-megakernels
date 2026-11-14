@@ -108,10 +108,11 @@ The proof directories have since been grouped by kernel and shared sources
 deduplicated. Archived paths and inventory fingerprints describe the original
 layout; case IDs and retained source bytes are unchanged. These measurements
 are not timings of the grouped layout.
-The later entry-module renamings and six new review cases (FlashMoE program,
-Mirage embedding/position, Mirage argmax, LUCE argmax, and LUCE final
-norm/projection, and LUCE embedding) are also outside these historical measurements; the current
-suite has 51 cases. Each review checks its own modules
+The later entry-module renamings, recurrent-decoder proof stabilization, and
+eight new review cases (FlashMoE program, FlashMoE argmax, Mirage embedding/position, Mirage
+argmax, LUCE argmax, LUCE final norm/projection, LUCE embedding, and LUCE
+recurrent decoder) are outside these historical measurements; the current
+suite has 53 cases. Each review checks its own modules
 and both implementations' roots.
 
 The sum of these 45 successful case wall times is **11,301.3 s (3 h 8 min)**,

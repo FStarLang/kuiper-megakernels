@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Optimized.Functional
 
 #lang-pulse
 
@@ -6,6 +6,7 @@ open Kuiper
 module S = KPlay.SharedSpec
 module Seq = FStar.Seq
 module Approx = Kuiper.Approximates.Base
+module I64 = FStar.Int64
 
 // These are model dimensions, not dimensions inferred from a trace.
 inline_for_extraction noextract
@@ -81,6 +82,14 @@ inline_for_extraction noextract
 let weight_count : pos = out_projection_offset + hidden_width * mixer_width
 
 inline_for_extraction noextract
+let valid_position (position:int) : prop =
+  0 <= position /\ position < 2048
+
+inline_for_extraction noextract
+let previous_elements (position:int) (count:nat) : nat =
+  if position = 0 then 0 else count
+
+inline_for_extraction noextract
 let physical_extents ()
   : Lemma
       (weight_count == 21555360 /\
@@ -108,7 +117,7 @@ inline_for_extraction noextract
 let recurrent_index
   (head:S.fin heads) (key value:S.fin head_width)
   : S.fin recurrent_count
-  = (head * head_width + key) * head_width + value
+  = (head * head_width + value) * head_width + key
 
 inline_for_extraction noextract
 let convolution_index_covers (i:S.fin convolution_count)
@@ -119,7 +128,7 @@ inline_for_extraction noextract
 let recurrent_index_covers (i:S.fin recurrent_count)
   : Lemma
       (recurrent_index (i / (head_width * head_width))
-         ((i / head_width) % head_width) (i % head_width) == i)
+         (i % head_width) ((i / head_width) % head_width) == i)
   = ()
 
 inline_for_extraction noextract
@@ -182,7 +191,7 @@ let weights_representation
 
 inline_for_extraction noextract
 let convolution_representation
-  (physical:lseq bf16 convolution_count) (logical:S.convolution_state)
+  (physical:lseq f32 convolution_count) (logical:S.convolution_state)
   : GTot prop
   =
   forall (channel:S.fin qkv_width) (tap:S.fin conv_width).
@@ -198,7 +207,7 @@ let recurrent_representation
     Approx.v_approximates
       (Seq.index physical (recurrent_index head key value)) (logical head key value)
 
-// Materialized zero buffers represent absent slots; there is no null-state ABI.
+// The candidate initializes absent histories at their first consumer.
 inline_for_extraction noextract
 let old_convolution
   (call:S.invocation) (before:S.model_cache{S.cache_domain call before})
@@ -223,21 +232,25 @@ let input_representation
   (before:S.model_cache{S.cache_domain call before})
   (physical_weights:lseq bf16 weight_count)
   (physical_hidden:lseq bf16 hidden_width)
-  (physical_recurrent:lseq f32 recurrent_count)
-  (physical_convolution:lseq bf16 convolution_count)
+  (position:int)
+  (physical_recurrent:lseq f32 (previous_elements position recurrent_count))
+  (physical_convolution:lseq f32 (previous_elements position convolution_count))
   : GTot prop
   =
+  call.cache_position == position /\
   weights_representation physical_weights weights /\
   bf16_vector_representation physical_hidden hidden /\
-  recurrent_representation physical_recurrent (old_recurrent call before) /\
-  convolution_representation physical_convolution (old_convolution call before)
+  (if position = 0 then True
+   else
+     recurrent_representation physical_recurrent (old_recurrent call before) /\
+     convolution_representation physical_convolution (old_convolution call before))
 
 // The physical ABI is hidden, recurrent, convolution, not shared-output order.
 inline_for_extraction noextract
 let output_representation
   (physical_hidden:lseq bf16 hidden_width)
   (physical_recurrent:lseq f32 recurrent_count)
-  (physical_convolution:lseq bf16 convolution_count)
+  (physical_convolution:lseq f32 convolution_count)
   (logical:S.layer_values)
   : GTot prop
   =
@@ -268,7 +281,7 @@ let call_postcondition
   (before:S.model_cache{S.cache_domain call before})
   (physical_hidden:lseq bf16 hidden_width)
   (physical_recurrent:lseq f32 recurrent_count)
-  (physical_convolution:lseq bf16 convolution_count)
+  (physical_convolution:lseq f32 convolution_count)
   : GTot prop
   =
   exists (values:S.layer_values).
@@ -281,7 +294,7 @@ let decoder_values_establish_call_postcondition
   (before:S.model_cache{S.cache_domain call before})
   (physical_hidden:lseq bf16 hidden_width)
   (physical_recurrent:lseq f32 recurrent_count)
-  (physical_convolution:lseq bf16 convolution_count)
+  (physical_convolution:lseq f32 convolution_count)
   : Lemma
       (requires
         output_representation physical_hidden physical_recurrent physical_convolution
@@ -301,42 +314,61 @@ inline_for_extraction noextract
 let semantic_postcondition
   (physical_weights:lseq bf16 weight_count)
   (physical_hidden:lseq bf16 hidden_width)
-  (physical_recurrent:lseq f32 recurrent_count)
-  (physical_convolution:lseq bf16 convolution_count)
+  (position:int)
+  (physical_recurrent:lseq f32 (previous_elements position recurrent_count))
+  (physical_convolution:lseq f32 (previous_elements position convolution_count))
   (next_hidden:lseq bf16 hidden_width)
   (next_recurrent:lseq f32 recurrent_count)
-  (next_convolution:lseq bf16 convolution_count)
+  (next_convolution:lseq f32 convolution_count)
   : GTot prop
   =
   forall (call:S.invocation) (weights:S.weights) (hidden:S.vector hidden_width)
          (before:S.model_cache{S.cache_domain call before}).
     input_representation call weights hidden before
-      physical_weights physical_hidden physical_recurrent physical_convolution ==>
+      physical_weights physical_hidden position physical_recurrent physical_convolution ==>
     call_postcondition call weights hidden before next_hidden next_recurrent next_convolution
 
+inline_for_extraction noextract
+let first_use_is_zero
+  (call:S.invocation{call.cache_position == 0})
+  (before:S.model_cache{S.cache_domain call before})
+  : Lemma
+      (old_convolution call before == S.zero_convolution () /\
+       old_recurrent call before == S.zero_recurrent ())
+  = ()
+
+inline_for_extraction noextract
+let state_ownership
+  (buffer:array f32) (position:int) (count:nat) (fraction:perm)
+  (contents:lseq f32 (previous_elements position count))
+  : slprop
+  = if position = 0 then emp
+    else pure (is_global_array buffer) ** buffer |-> Frac fraction contents
+
 fn kplay_run
-  (#weights:erased (lseq bf16 weight_count))
-  (#hidden:erased (lseq bf16 hidden_width))
-  (#recurrent:erased (lseq f32 recurrent_count))
-  (#convolution:erased (lseq bf16 convolution_count))
-  (#weights_perm #hidden_perm #recurrent_perm #convolution_perm:perm)
   (input_weights:larray bf16 weight_count{is_global_array input_weights})
   (input_hidden:larray bf16 hidden_width{is_global_array input_hidden})
-  (input_recurrent:larray f32 recurrent_count{is_global_array input_recurrent})
-  (input_convolution:larray bf16 convolution_count{is_global_array input_convolution})
+  (input_recurrent:array f32)
+  (input_convolution:array f32)
+  (position:i64{valid_position (I64.v position)})
   (output_hidden:larray bf16 hidden_width{is_global_array output_hidden})
   (output_recurrent:larray f32 recurrent_count{is_global_array output_recurrent})
-  (output_convolution:larray bf16 convolution_count{is_global_array output_convolution})
+  (output_convolution:larray f32 convolution_count{is_global_array output_convolution})
+  (#weights:erased (lseq bf16 weight_count))
+  (#hidden:erased (lseq bf16 hidden_width))
+  (#recurrent:erased (lseq f32 (previous_elements (I64.v position) recurrent_count)))
+  (#convolution:erased (lseq f32 (previous_elements (I64.v position) convolution_count)))
+  (#weights_perm #hidden_perm #recurrent_perm #convolution_perm:perm)
   preserves cpu **
     on gpu_loc (
       input_weights |-> Frac weights_perm weights **
       input_hidden |-> Frac hidden_perm hidden **
-      input_recurrent |-> Frac recurrent_perm recurrent **
-      input_convolution |-> Frac convolution_perm convolution)
+      state_ownership input_recurrent (I64.v position) recurrent_count recurrent_perm recurrent **
+      state_ownership input_convolution (I64.v position) convolution_count convolution_perm convolution)
   requires
     exists* (hidden_before:lseq bf16 hidden_width)
             (recurrent_before:lseq f32 recurrent_count)
-            (convolution_before:lseq bf16 convolution_count).
+            (convolution_before:lseq f32 convolution_count).
       on gpu_loc (
         output_hidden |-> hidden_before **
         output_recurrent |-> recurrent_before **
@@ -345,10 +377,10 @@ fn kplay_run
   ensures
     exists* (next_hidden:lseq bf16 hidden_width)
             (next_recurrent:lseq f32 recurrent_count)
-            (next_convolution:lseq bf16 convolution_count).
+            (next_convolution:lseq f32 convolution_count).
       on gpu_loc (
         output_hidden |-> next_hidden **
         output_recurrent |-> next_recurrent **
         output_convolution |-> next_convolution) **
-      pure (semantic_postcondition weights hidden recurrent convolution
+      pure (semantic_postcondition weights hidden (I64.v position) recurrent convolution
               next_hidden next_recurrent next_convolution)

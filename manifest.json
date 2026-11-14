@@ -2,6 +2,10 @@
   "cases": [
     {
       "directory": "proofs/flashmoe-argmax/base",
+      "historical_entry_modules": {
+        "proofs/flashmoe-argmax/base/KPlay.Functional.fst": "982f27cbe0d64ac09eab0efe3a208f691fdb540fd045e598efbab5501032f53e",
+        "proofs/flashmoe-argmax/base/KPlay.Functional.fsti": "597c57b88f0caab7238510668d73aed14d6f495340d4ddd6d304b7f6aacff074"
+      },
       "historical_receipt_sha256": "30591d9bf342c097aaebf2a0884237b8a2be3aa8b70ef07f6d07c4b74c4f54bd",
       "historical_target_sha256": "e6eaf7d51130434eaa2c0f7a1186e7f677f8185a59ece1fb65528b34d99f1cf2",
       "id": "flashmoe-argmax-base",
@@ -18,8 +22,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-argmax/base/KPlay.Functional.fsti",
-        "proofs/flashmoe-argmax/base/KPlay.Functional.fst",
+        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst",
         "proofs/flashmoe-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -68,6 +72,10 @@
     },
     {
       "directory": "proofs/flashmoe-argmax/optimized",
+      "historical_entry_modules": {
+        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst": "7b18534206f9426b44c143ae905236136702ddb112be8a391da5677c4090c101",
+        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti": "059abd3943a086b39a9b3b5ad46440377c7cd73d0399a14c6d2824c1eba7e275"
+      },
       "historical_receipt_sha256": "7a04b475e4db9be44ffa20e8cacd09394a80467150d330485474d7701863f85f",
       "historical_target_sha256": "a05ba38e0ba22a2e6259c8f3155b8c0b0286d234ad4ad73963ffea1563357c1f",
       "id": "flashmoe-argmax-optimized",
@@ -79,8 +87,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti",
-        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst",
         "proofs/flashmoe-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -92,6 +100,26 @@
             8
           ]
         }
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-argmax",
+      "id": "flashmoe-argmax-review",
+      "implementation_cases": [
+        "flashmoe-argmax-base",
+        "flashmoe-argmax-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-argmax/KPlay.Review.fsti",
+        "proofs/flashmoe-argmax/KPlay.Review.fst",
+        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst",
+        "proofs/flashmoe-argmax/KPlay.SharedSpec.fst",
+        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -1315,6 +1343,10 @@
     },
     {
       "directory": "proofs/luce-recurrent_decoder/base",
+      "historical_entry_modules": {
+        "proofs/luce-recurrent_decoder/base/KPlay.Functional.fst": "4dd1413980ad57f206c2fc5d7266e1d450563f78d6d722e1fea04327a2ba0838",
+        "proofs/luce-recurrent_decoder/base/KPlay.Functional.fsti": "57aa3c6f1a1a3fe5efd29a4b8f2f0cf87be1d7c137fb0809db23e8a28b9ad3ab"
+      },
       "historical_receipt_sha256": "c5aa333936b28a43f736e7dab0ee6d08dcabee50418c90cf2f67ef63727b01dd",
       "historical_target_sha256": "57ddf33e508b2baa99bf7e54b23011090f8ef7b70afdfcb3329300f1b4137950",
       "id": "luce-recurrent_decoder-base",
@@ -1329,8 +1361,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-recurrent_decoder/base/KPlay.Functional.fsti",
-        "proofs/luce-recurrent_decoder/base/KPlay.Functional.fst",
+        "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fst",
         "proofs/luce-recurrent_decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1366,6 +1398,10 @@
     },
     {
       "directory": "proofs/luce-recurrent_decoder/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fst": "68f794b8422afa5107957fe932d6f83c3b6a2ea3ba7cf0ed26c0a3b4147f926c",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fsti": "5235f8147eb4732f8a5d70006a81dc5ffba006a54fc01e7a89dbc2d17fe7666e"
+      },
       "historical_receipt_sha256": "bd224bb9bcf0d4a425bf3145a0632ea24608bb946269a7b90b29411b58d9d56d",
       "historical_target_sha256": "a60e1bc9197fd08f4708627ddacb3a6178c3f5441441e824f03e606a5a6f5bdb",
       "id": "luce-recurrent_decoder-optimized",
@@ -1381,8 +1417,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fsti",
-        "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fst",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-recurrent_decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1415,6 +1451,26 @@
         {
           "kind": "int"
         }
+      ]
+    },
+    {
+      "directory": "proofs/luce-recurrent_decoder",
+      "id": "luce-recurrent_decoder-review",
+      "implementation_cases": [
+        "luce-recurrent_decoder-base",
+        "luce-recurrent_decoder-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-recurrent_decoder/KPlay.Review.fsti",
+        "proofs/luce-recurrent_decoder/KPlay.Review.fst",
+        "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fst",
+        "proofs/luce-recurrent_decoder/KPlay.SharedSpec.fst",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2051,11 +2107,13 @@
     "kernels/mirage-program-base.cu": "dc1c365f9bef5c25df3ab839fec2ff2ee91f38c93a10dd8ea107a73889000149",
     "kernels/mirage-program-optimized.cu": "c0338eb766188a8831d25e760161a954bbb7bce0de66c89dfab18fbd29123626",
     "proofs/flashmoe-argmax/KPlay.Proof.Tightness.fst": "44bb186b409243d6d1adc9d72f7272c8a16106e71b83c1d9c094eada60788ded",
+    "proofs/flashmoe-argmax/KPlay.Review.fst": "d97e9fd46fafb61556f9efa95178b16d200408323322fdeb42842f65083b237d",
+    "proofs/flashmoe-argmax/KPlay.Review.fsti": "afb67c41f547325852119bc1c1abe4bc91ce72e08023d82a9eea757285a90201",
     "proofs/flashmoe-argmax/KPlay.SharedSpec.fst": "abf2ce5a034c8297aa87f2452ab2901e2c0e89357315a53132ec7843666318a9",
-    "proofs/flashmoe-argmax/base/KPlay.Functional.fst": "982f27cbe0d64ac09eab0efe3a208f691fdb540fd045e598efbab5501032f53e",
-    "proofs/flashmoe-argmax/base/KPlay.Functional.fsti": "597c57b88f0caab7238510668d73aed14d6f495340d4ddd6d304b7f6aacff074",
-    "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst": "7b18534206f9426b44c143ae905236136702ddb112be8a391da5677c4090c101",
-    "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti": "059abd3943a086b39a9b3b5ad46440377c7cd73d0399a14c6d2824c1eba7e275",
+    "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst": "8e12fca2050d948747aec72856625b03f4a29c8043d8c4ace14c0f4a3cd63a05",
+    "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti": "0d6366e21450de2fecddff233f6c2ad79803c6cb429979585fd5fa10779c9ada",
+    "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst": "ef7dbd20554d0357849097610f2c7a285ce5a7538fe0a91e264182a20749958e",
+    "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti": "0b5a1a6ef59f5c206929bde488883aa906f67bb85c7efedeb6e8bf7cf32d5c70",
     "proofs/flashmoe-normalization_capacity/KPlay.Proof.Tightness.fst": "288af3c12d5df55fd4e12a2a43e709491951b3fb18b58959d2a8cb849db12c8d",
     "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst": "0a9268fe77de43f3f58795bdadcce8be988a96bdb34ba889478e81ed74203cd5",
     "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fst": "e216589ccd8ee97114fdcddffb7825defe2cbe8b7259b4f95a360230f589b78d",
@@ -2345,11 +2403,13 @@
     "proofs/luce-program/optimized/KPlay.Proof.Optimized.Trace.fst": "69cd19bb56975b46fba1fd9c232f7d43d0f640bc41642c3668cb15e841ccc0f0",
     "proofs/luce-program/optimized/KPlay.Proof.Optimized.WeightFields.fst": "bbe81ae7d47703ac4c565312a1f59175e58344dcfcfd23f7102e0c02ec4e9323",
     "proofs/luce-recurrent_decoder/KPlay.Proof.Tightness.fst": "66d1b89453c15ebcc7875bbaca819a3aa677efce164ef6966e3807c5bb6c4863",
+    "proofs/luce-recurrent_decoder/KPlay.Review.fst": "ea62a7f75d872ab239d04693209b643e64741e2c2162a425249bcff75025e30d",
+    "proofs/luce-recurrent_decoder/KPlay.Review.fsti": "7cd98c063ece77897e53ee91555b87a5459534eedd76fab5834e9b2296070d8f",
     "proofs/luce-recurrent_decoder/KPlay.SharedSpec.fst": "6ce27da7d4e9d073c2443645bfcba033b62174bb1814b2df80a5ac1022891660",
-    "proofs/luce-recurrent_decoder/base/KPlay.Functional.fst": "4dd1413980ad57f206c2fc5d7266e1d450563f78d6d722e1fea04327a2ba0838",
-    "proofs/luce-recurrent_decoder/base/KPlay.Functional.fsti": "57aa3c6f1a1a3fe5efd29a4b8f2f0cf87be1d7c137fb0809db23e8a28b9ad3ab",
-    "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fst": "68f794b8422afa5107957fe932d6f83c3b6a2ea3ba7cf0ed26c0a3b4147f926c",
-    "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fsti": "5235f8147eb4732f8a5d70006a81dc5ffba006a54fc01e7a89dbc2d17fe7666e",
+    "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fst": "086be5e341467a5a34fd63dfc3a94d73c9161f0e5f56cac6454fa0dfb048c9d4",
+    "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fsti": "f3136d0de512bc9be68ff0c567f28ddf9e4b1be16b39a59a161549d68842cbe9",
+    "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fst": "940a98e83a58c7109ed7b6ba2a7462d07baadd534f32ce95c458279bbb8e9baa",
+    "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fsti": "dc880f5b0841f6c64ee8428c58e837034c5248eb68b522362af85bb0e10b4466",
     "proofs/mirage-argmax/KPlay.Proof.Tightness.fst": "228531b9d9a05e022cf9d9bb93b47b5ec7a026ad8c6b3c94daba8bab8a150c53",
     "proofs/mirage-argmax/KPlay.Review.fst": "efbed114e57e95c719f92cc02ea2dbdd2bda2c963998c5ba48ba48807dc79b0e",
     "proofs/mirage-argmax/KPlay.Review.fsti": "57c82f2e90f7faf1ddb18518b70a7525d52706a33039f516fb676ef2357f11e0",
