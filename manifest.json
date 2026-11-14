@@ -652,6 +652,10 @@
     },
     {
       "directory": "proofs/luce-embedding/base",
+      "historical_entry_modules": {
+        "proofs/luce-embedding/base/KPlay.Functional.fst": "7c6d552105850e2af5e005806ec5d06f43392e5a276ce0d7854a475c037598cb",
+        "proofs/luce-embedding/base/KPlay.Functional.fsti": "1d10a0ecfa1abd11bfbca210dfd0cb21a81ae28eb0eff74eaea83e977bcb75c6"
+      },
       "historical_receipt_sha256": "a077aa1e9d5830b3483703fb63855050f8d391fc35038469ea9fd88d1f689a9d",
       "historical_target_sha256": "2db0284e6d6eab44d07774bde8962115831829d7b2af332207ad14519f6067da",
       "id": "luce-embedding-base",
@@ -666,8 +670,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-embedding/base/KPlay.Functional.fsti",
-        "proofs/luce-embedding/base/KPlay.Functional.fst",
+        "proofs/luce-embedding/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-embedding/base/KPlay.Base.Functional.fst",
         "proofs/luce-embedding/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -697,6 +701,10 @@
     },
     {
       "directory": "proofs/luce-embedding/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-embedding/optimized/KPlay.Functional.fst": "cb4ed4ce4828398973525086f65fd0f9ac4a7dbe929734975d5d17fbd6573d59",
+        "proofs/luce-embedding/optimized/KPlay.Functional.fsti": "d555df17b4ec3d1e0032d10f893aa79d173a8d46e4bb95326cd17a6f7b3b873f"
+      },
       "historical_receipt_sha256": "59bee00ac5e0a8f680eb52bba0918110213296da2cdcb5a6ce077b1593d812a1",
       "historical_target_sha256": "57cfd04870e98b1934d76a1b5b89bb4912a76d237284733520082ebf48810561",
       "id": "luce-embedding-optimized",
@@ -711,8 +719,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-embedding/optimized/KPlay.Functional.fsti",
-        "proofs/luce-embedding/optimized/KPlay.Functional.fst",
+        "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-embedding/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -738,6 +746,26 @@
         {
           "kind": "int"
         }
+      ]
+    },
+    {
+      "directory": "proofs/luce-embedding",
+      "id": "luce-embedding-review",
+      "implementation_cases": [
+        "luce-embedding-base",
+        "luce-embedding-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-embedding/KPlay.Review.fsti",
+        "proofs/luce-embedding/KPlay.Review.fst",
+        "proofs/luce-embedding/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-embedding/base/KPlay.Base.Functional.fst",
+        "proofs/luce-embedding/KPlay.SharedSpec.fst",
+        "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2091,11 +2119,13 @@
     "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fst": "1aa32f62baa9e8affe11366d0f373da87417eedb0ff2e23c5797b0f44aa6c2b6",
     "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fsti": "4a06e165190c3f1f36a00ea732b3c89abf13d4d9b00945f6ae30c8df5349ad96",
     "proofs/luce-embedding/KPlay.Proof.Tightness.fst": "7a43d87d3cf84a94ab47131c0e2839038381410dcc42a45009b95ffe3ffd7752",
+    "proofs/luce-embedding/KPlay.Review.fst": "1e0080edf918770bebeff2a6d098d55e3dc10ca5e94e0bfa5941a99a35c36d2d",
+    "proofs/luce-embedding/KPlay.Review.fsti": "f558167801695a6bdbf1ef93eb9356bf585888911261e3e8abbefa06a9c25c86",
     "proofs/luce-embedding/KPlay.SharedSpec.fst": "aacbce004448929092d1e12bae004b6b414395f0c7aef4c5637b8bf2b929e995",
-    "proofs/luce-embedding/base/KPlay.Functional.fst": "7c6d552105850e2af5e005806ec5d06f43392e5a276ce0d7854a475c037598cb",
-    "proofs/luce-embedding/base/KPlay.Functional.fsti": "1d10a0ecfa1abd11bfbca210dfd0cb21a81ae28eb0eff74eaea83e977bcb75c6",
-    "proofs/luce-embedding/optimized/KPlay.Functional.fst": "cb4ed4ce4828398973525086f65fd0f9ac4a7dbe929734975d5d17fbd6573d59",
-    "proofs/luce-embedding/optimized/KPlay.Functional.fsti": "d555df17b4ec3d1e0032d10f893aa79d173a8d46e4bb95326cd17a6f7b3b873f",
+    "proofs/luce-embedding/base/KPlay.Base.Functional.fst": "14104c07c70a4994190b91dce050a56373f6c98f0716f5c54f6cf51f377dba44",
+    "proofs/luce-embedding/base/KPlay.Base.Functional.fsti": "4759b27814d41e4237dc042c7787cc0e78330b2186a1fee0ada86dffaa2c4871",
+    "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fst": "e50d4f12da60c1728db29d8d2bcb46d34242997c4a2e69b736abf16601634b9a",
+    "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fsti": "4c313199846032bcb0c9e4af49d76a1aa893cdd5fc2fc1fa6fa724d61a648326",
     "proofs/luce-final_norm_projection/KPlay.Proof.Tightness.fst": "efb775ce42718cab60c21a5f7474351bb881030676c5dbc9398b775fa77006a6",
     "proofs/luce-final_norm_projection/KPlay.Review.fst": "7d45789d4dc4564a863695d7721e84c4b7e05de5e0c4702e94201b1f1de6afab",
     "proofs/luce-final_norm_projection/KPlay.Review.fsti": "00a7a73e5f9aae09d492d2918bf2cbc0878f269d4c98ac19468a999b7cd224f6",

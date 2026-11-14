@@ -32,7 +32,7 @@ The single proof-only replay adjustment is recorded separately with its
 original source hash and reversible diff; it is not misidentified as the
 original receipt-bound proof bytes.
 The FlashMoE complete-program, Mirage embedding/position and argmax, and LUCE
-argmax and final norm/projection entry
+embedding, argmax, and final norm/projection entry
 modules were subsequently renamed to
 `KPlay.Base.Functional` and `KPlay.Optimized.Functional` for their joint checked
 review. Only filenames, module declarations, and qualified tactic self-references

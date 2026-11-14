@@ -106,6 +106,13 @@ exact unnormalized input hidden row on emitting calls, preserve prior history,
 and preserve input permissions. The common approximation target does not
 establish comparison preservation or bitwise equality between their scores.
 
+The [LUCE embedding review](proofs/luce-embedding/KPlay.Review.fsti) states the
+same exact BF16 embedding-row postcondition for both implementations. It also
+exposes the base-only rotary and initial-state outputs without implying that
+the optimized embedding call produces them. Half-permission input ownership
+supports the initial previous-token/prompt alias. The common domain requires
+valid prompt tokens and an explicitly identified selected token.
+
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
 models, or native termination proofs. A determinate but wrong task could still

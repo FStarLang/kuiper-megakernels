@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus five checked contract reviews.
+and 12 family-tightness proofs**, plus six checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -142,7 +142,7 @@ and proves `after_call i`; compatibility is checked at the dispatch site.
 python3 replay.py verify --case flashmoe-program-review --jobs 8
 ```
 
-Four family reviews use the same interface-and-dispatcher style:
+Five family reviews use the same interface-and-dispatcher style:
 
 | Review interface | Explicit representation difference | Common guarantee |
 | --- | --- | --- |
@@ -150,6 +150,7 @@ Four family reviews use the same interface-and-dispatcher style:
 | [Mirage argmax](proofs/mirage-argmax/KPlay.Review.fsti) | Vocabulary stride 151936 versus padded stride 153600 | Shared prompt/output and allowed-maximum relation, under explicit finite comparison-faithful input representation |
 | [LUCE argmax](proofs/luce-argmax/KPlay.Review.fsti) | BF16 versus FP32 scores; first versus any maximum | Explicit proof that the base postcondition implies the optimized postcondition on the same represented logical scores and output; exact history update |
 | [LUCE final norm/projection](proofs/luce-final_norm_projection/KPlay.Review.fsti) | BF16 versus FP32 returned logits | Identical shared mathematical logit targets, exact hidden-history append, and preserved input ownership |
+| [LUCE embedding](proofs/luce-embedding/KPlay.Review.fsti) | Base additionally returns rotary data and initial recurrent/convolution state | Identical exact BF16 embedding-row postcondition; auxiliary outputs and initial-token alias ownership are explicit |
 
 Each `*-review` case checks the review **and all roots of both implementation cases**,
 including their bodies, not just their interfaces. The manifest validator rejects
