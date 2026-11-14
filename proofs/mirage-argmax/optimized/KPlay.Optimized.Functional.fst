@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Optimized.Functional
 
 #lang-pulse
 open Kuiper

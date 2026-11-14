@@ -82,6 +82,15 @@ Inspect `unique`, `full_contract`, `no_extra_results`, `fixed_choice_unique`,
 family has the same theorem shape. In particular, float-to-real approximation
 does **not** make two allowed floating-point bit patterns identical.
 
+Mirage's [embedding/position review](proofs/mirage-embedding_position/KPlay.Review.fsti)
+and [argmax review](proofs/mirage-argmax/KPlay.Review.fsti) additionally provide
+checked `base`, `optimized`, and implementation-indexed `switcher` contracts.
+Embedding compares the seven logical prompt positions, not optimized padding or
+unused rotary-table entries. Argmax exposes the different physical row strides
+and requires finite, comparison-faithful logical score representations; its
+common postcondition permits the shared specification's tie choices.
+Neither review asserts equality of results from separate executions.
+
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
 models, or native termination proofs. A determinate but wrong task could still

@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus a checked FlashMoE contract review.
+and 12 family-tightness proofs**, plus three checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -74,7 +74,7 @@ One proof-only replay adjustment is disclosed in
 [replay-adjustments.patch](replay-adjustments.patch): an explicit, proved
 real-division identity in Mirage's optimized decoder. Its original source hash
 is retained in `manifest.json`; contracts, executable operations, and CUDA are
-unchanged. FlashMoE's complete-program entry modules additionally have distinct
+unchanged. The reviewed kernels' entry modules additionally have distinct
 module names so the checked review can import both at once; only their filenames
 and first-line module declarations changed. Their historical hashes are retained
 in `manifest.json` under `historical_entry_modules`. Other retained proof sources
@@ -142,7 +142,14 @@ and proves `after_call i`; compatibility is checked at the dispatch site.
 python3 replay.py verify --case flashmoe-program-review --jobs 8
 ```
 
-This case checks the review **and all roots of both implementation cases**,
+Two family reviews use the same interface-and-dispatcher style:
+
+| Review interface | Explicit representation difference | Common guarantee |
+| --- | --- | --- |
+| [Mirage embedding/position](proofs/mirage-embedding_position/KPlay.Review.fsti) | Seven versus eight hidden rows; seven versus 4096 rotary positions | Shared embedding/rotary postcondition on all seven prompt positions |
+| [Mirage argmax](proofs/mirage-argmax/KPlay.Review.fsti) | Vocabulary stride 151936 versus padded stride 153600 | Shared prompt/output and allowed-maximum relation, under explicit finite comparison-faithful input representation |
+
+Each `*-review` case checks the review **and all roots of both implementation cases**,
 including their bodies, not just their interfaces. The manifest validator rejects
 a review that omits a referenced implementation's roots. It is also included in
 `--kind review` and the default full suite; the existing `shared` CI suite is
@@ -216,7 +223,7 @@ Native extension builds may be reused on subsequent invocations; select a new
 | Replay | Small standalone proof and CUDA runners | No discovery, agent orchestration, fuzzing pipeline, or DTester implementation |
 
 This repository is independent of Kuiper's source tree: most cases reuse module
-names and must have isolated include paths. FlashMoE's complete-program entry
+names and must have isolated include paths. Reviewed kernels' entry
 modules are named `KPlay.Base.Functional` and `KPlay.Optimized.Functional` to
 allow their joint review. The replay runner provides the required
 isolation and obtains its compiler from the pinned public release. No Kuiper
