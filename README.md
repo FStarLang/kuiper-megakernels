@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus twelve checked contract reviews.
+and 12 family-tightness proofs**, plus thirteen checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -77,8 +77,9 @@ is retained in `manifest.json`; contracts, executable operations, and CUDA are
 unchanged. The reviewed kernels' entry modules additionally have distinct
 module names so the checked review can import both at once; only their filenames,
 module declarations, and qualified tactic self-references changed, except for
-explicit proof steps added to two recurrent-decoder lemmas and a full-attention
-cache-loop exit after renaming exposed solver sensitivity. Contracts and executable operations are unchanged. Historical hashes are retained
+explicit proof steps added to two recurrent-decoder lemmas, a full-attention
+cache-loop exit, and Mirage base rotary normalization after renaming exposed
+solver sensitivity. Contracts and executable operations are unchanged. Historical hashes are retained
 in `manifest.json` under `historical_entry_modules`. Other retained proof sources
 preserve their historical bytes.
 
@@ -89,8 +90,9 @@ family-tightness proof where present, and separate implementations. For example:
 proofs/mirage-decoder/
   KPlay.SharedSpec.fst
   KPlay.Proof.Tightness.fst
-  base/KPlay.Functional.{fst,fsti}
-  optimized/KPlay.Functional.{fst,fsti}
+  KPlay.Review.{fst,fsti}
+  base/KPlay.Base.Functional.{fst,fsti}
+  optimized/KPlay.Optimized.Functional.{fst,fsti}
 ```
 
 The three complete programs use the same layout under
@@ -144,13 +146,14 @@ and proves `after_call i`; compatibility is checked at the dispatch site.
 python3 replay.py verify --case flashmoe-program-review --jobs 8
 ```
 
-Eleven family reviews use the same interface-and-dispatcher style:
+All twelve family reviews use the same interface-and-dispatcher style:
 
 | Review interface | Explicit representation difference | Common guarantee |
 | --- | --- | --- |
 | [Mirage embedding/position](proofs/mirage-embedding_position/KPlay.Review.fsti) | Seven versus eight hidden rows; seven versus 4096 rotary positions | Shared embedding/rotary postcondition on all seven prompt positions |
 | [Mirage argmax](proofs/mirage-argmax/KPlay.Review.fsti) | Vocabulary stride 151936 versus padded stride 153600 | Shared prompt/output and allowed-maximum relation, under explicit finite comparison-faithful input representation |
 | [Mirage final norm/projection](proofs/mirage-final_norm_projection/KPlay.Review.fsti) | Packed weights and residual+delta versus separate weights and prepared hidden input; optimized input/score padding | Same logical input, complete shared normalization/projection postcondition, all seven vocabulary-score rows, and explicit zero-modeled score padding |
+| [Mirage decoder](proofs/mirage-decoder/KPlay.Review.fsti) | Seven residual/delta rows versus eight hidden rows; compact versus full rotary storage; explicit observed cache indices | Same complete shared decoder/cache task on canonical packed weights; unconditional cache observations, optimized numerical finiteness premise and padding target, and an invocation-bound receipt |
 | [LUCE argmax](proofs/luce-argmax/KPlay.Review.fsti) | BF16 versus FP32 scores; first versus any maximum | Explicit proof that the base postcondition implies the optimized postcondition on the same represented logical scores and output; exact history update |
 | [LUCE final norm/projection](proofs/luce-final_norm_projection/KPlay.Review.fsti) | BF16 versus FP32 returned logits | Identical shared mathematical logit targets, exact hidden-history append, and preserved input ownership |
 | [LUCE embedding](proofs/luce-embedding/KPlay.Review.fsti) | Base additionally returns rotary data and initial recurrent/convolution state | Identical exact BF16 embedding-row postcondition; auxiliary outputs and initial-token alias ownership are explicit |

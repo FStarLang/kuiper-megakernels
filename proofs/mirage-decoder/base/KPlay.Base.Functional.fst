@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Base.Functional
 
 #lang-pulse
 
@@ -2450,6 +2450,24 @@ let qk_rotary_at
     (FStar.Tactics.V2.norm [delta_only [`%qk_model; `%Shared.rotary]];
      FStar.Tactics.V2.trivial ())
 
+#push-options "--fuel 2 --ifuel 1 --z3rlimit 10 --z3refresh"
+let qk_rotary_approx
+  (weights:Shared.parameters) (input:Shared.matrix 7 4096) (data:Shared.attention_data)
+  (row:natlt 7) (head:natlt 24) (col:natlt 128) (value:BF16.t)
+  : Lemma
+      (requires value %~
+        (normalized_qk weights input row head col *. data.cosine row col +.
+          (if col < 64 then 0.0R -. normalized_qk weights input row head ((col+64)%128)
+           else normalized_qk weights input row head ((col+64)%128)) *. data.sine row col))
+      (ensures value %~ qk_model weights input data row head col) =
+  qk_rotary_at weights input data row head col;
+  ()
+
+let rotary_indices (c:sz{c < 128})
+  : Lemma (
+      SZ.v ((c +^ 64sz) %^ 128sz) == (SZ.v c + 64) % 128 /\
+      (c <^ 64sz) == (SZ.v c < 64)) = ()
+
 inline_for_extraction noextract
 fn normalize_rotate_kernel
   (#n:erased nat{n<=2147483647})
@@ -2506,6 +2524,7 @@ fn normalize_rotate_kernel
     {
       let c = !lane;
       let partner = (c +^ 64sz) %^ 128sz;
+      rotary_indices c;
       let x = normalized.(c);
       let other = normalized.(partner);
       let cosine = rotary.(row *^ 128sz +^ c);
@@ -2517,7 +2536,7 @@ fn normalize_rotate_kernel
       let value = rotary_value x other cosine sine (c <^ 64sz)
         #(normalized_qk wr xr row head c) #(normalized_qk wr xr row head partner)
         #((reveal data).cosine row c) #((reveal data).sine row c);
-      qk_rotary_at wr xr data row head c;
+      qk_rotary_approx wr xr data row head c value;
       assert pure (value %~ qk_model wr xr data row head c);
       qk_flat_at (qk_model wr xr data) j c;
       with values. assert output |-> values;
@@ -2528,6 +2547,7 @@ fn normalize_rotate_kernel
     index := j +^ 1sz;
   };
 }
+#pop-options
 
 let rec sum_zero (n:nat)
   : Lemma (nr_sum_n n (fun _ -> 0.0R) == 0.0R) (decreases n) =

@@ -1718,6 +1718,10 @@
     },
     {
       "directory": "proofs/mirage-decoder/base",
+      "historical_entry_modules": {
+        "proofs/mirage-decoder/base/KPlay.Functional.fst": "55da98f34428fc84b4f499416779bdd260c82c378b7a32a8c9012c73a3cc873b",
+        "proofs/mirage-decoder/base/KPlay.Functional.fsti": "9c55da3c35d428c6d2a658eda0e6b05c7d6ed772715c842109896b1caa20d776"
+      },
       "historical_receipt_sha256": "29747107d3285be414fe1f642a0c755e162253d2a04835cfd4ebccec3d655adf",
       "historical_target_sha256": "9b044d9e7a54dc45ac1ed7bb004341bb1c6d38c8f81164223a93219f4ae34ece",
       "id": "mirage-decoder-base",
@@ -1740,8 +1744,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-decoder/base/KPlay.Functional.fsti",
-        "proofs/mirage-decoder/base/KPlay.Functional.fst",
+        "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-decoder/base/KPlay.Base.Functional.fst",
         "proofs/mirage-decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1805,6 +1809,10 @@
     },
     {
       "directory": "proofs/mirage-decoder/optimized",
+      "historical_entry_modules": {
+        "proofs/mirage-decoder/optimized/KPlay.Functional.fst": "a8f90d977d8fa8283941ea81f548f363ebc4e3629480b66ca6de7c0062f55537",
+        "proofs/mirage-decoder/optimized/KPlay.Functional.fsti": "35fbc888432da4663be1656b87c49495e5575604c7cda59a43183da3fb2a54ef"
+      },
       "historical_receipt_sha256": "ae133f2438bd0dd10fe31c000682854b513e1e6c78ad58d547b0abc3b06b0d45",
       "historical_source_sha256": {
         "KPlay.Functional.fst": "5006a9d1c416e426dab98133e2463b5845234910a4a557a18e4ed8c0898671b0"
@@ -1823,8 +1831,8 @@
       "project": "mirage",
       "replay_adjustment": "An explicit proved real-division identity makes the unchanged rms_radicand_at statement robust under cache-free replay; see replay-adjustments.patch. No contracts, executable operations, or assumptions changed.",
       "roots": [
-        "proofs/mirage-decoder/optimized/KPlay.Functional.fsti",
-        "proofs/mirage-decoder/optimized/KPlay.Functional.fst",
+        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst",
         "proofs/mirage-decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1855,6 +1863,26 @@
         {
           "kind": "int"
         }
+      ]
+    },
+    {
+      "directory": "proofs/mirage-decoder",
+      "id": "mirage-decoder-review",
+      "implementation_cases": [
+        "mirage-decoder-base",
+        "mirage-decoder-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-decoder/KPlay.Review.fsti",
+        "proofs/mirage-decoder/KPlay.Review.fst",
+        "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-decoder/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-decoder/KPlay.SharedSpec.fst",
+        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2537,11 +2565,13 @@
     "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fst": "8b5f70383956282abd84ca1280db8a01b8c391d55c375cce6324c4e61e3c3205",
     "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fsti": "0218f6fe5b66d07341ef9968c7dc15ead6f8baed9a8f005ff3d9cda1ab3f85ec",
     "proofs/mirage-decoder/KPlay.Proof.Tightness.fst": "5c067a7ab43f29eebc87c4472e5c73df0bd0c0369c3dfb1131eb1bb72341b7bf",
+    "proofs/mirage-decoder/KPlay.Review.fst": "86db4a7e3a5c0f46c6d52d57ff4bbbe9a402a00a34a0391c42b0d91a67d2a28d",
+    "proofs/mirage-decoder/KPlay.Review.fsti": "c7db396e14323e9b1a159179d1875466f349f99d56ec0ef0717ebfc5b0f4451b",
     "proofs/mirage-decoder/KPlay.SharedSpec.fst": "25dc6788b3d19cf34924b2f30d5c38fe2ea8012318d2adf851743a75b7d5d057",
-    "proofs/mirage-decoder/base/KPlay.Functional.fst": "55da98f34428fc84b4f499416779bdd260c82c378b7a32a8c9012c73a3cc873b",
-    "proofs/mirage-decoder/base/KPlay.Functional.fsti": "9c55da3c35d428c6d2a658eda0e6b05c7d6ed772715c842109896b1caa20d776",
-    "proofs/mirage-decoder/optimized/KPlay.Functional.fst": "a8f90d977d8fa8283941ea81f548f363ebc4e3629480b66ca6de7c0062f55537",
-    "proofs/mirage-decoder/optimized/KPlay.Functional.fsti": "35fbc888432da4663be1656b87c49495e5575604c7cda59a43183da3fb2a54ef",
+    "proofs/mirage-decoder/base/KPlay.Base.Functional.fst": "837fd541bd97e80ec660e052862ec48f2ca430d7b443f35bf833d613debc7655",
+    "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti": "4a7dc2d0e151ca439fbafd634d25139357b91a0254209dbff974c663627dd430",
+    "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst": "302a6b73dfeb0620984070aa6a10cad620a6ba4d1f3c1f208c4f40f33fbf64b6",
+    "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti": "71724e2d16448e6a70a98fe81781b78c8b2ed25b8344ea66416e492ca59cea0c",
     "proofs/mirage-embedding_position/KPlay.Proof.Tightness.fst": "4a33561ed02ca5a8d1c5ab84731f2b1ab96dada693e6d77e66995cbf37bc6db5",
     "proofs/mirage-embedding_position/KPlay.Review.fst": "371039e5ccaf4118049165ed70b29fbd31527b70fb0eb980295d9321c9dc58be",
     "proofs/mirage-embedding_position/KPlay.Review.fsti": "c9d00ae394c1413602819ed55537a8133771876a6660296f8548d33945250026",

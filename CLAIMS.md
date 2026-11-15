@@ -100,6 +100,18 @@ The optimized eighth input row is outside the logical task, and padded score
 columns represent zero. This does not establish bitwise equality or preservation
 of score comparisons between executions.
 
+The [Mirage decoder review](proofs/mirage-decoder/KPlay.Review.fsti)
+uses one shared prefill input and the optimized canonical packed-weight layout
+for both wrappers; native base supports additional layouts outside this review.
+It exposes seven residual/delta rows versus eight hidden rows, both rotary
+representations, and the exact physical indices of observed keys and values.
+Canonical cache observations are unconditional. The complete shared task is
+unconditional for base and conditional on finite actual live MMA scores for
+optimized, whose eighth-row target is also explicit. The optimized receipt
+ties the returned observation and cells to the same consumed invocation.
+Cache observations are erased temporary snapshots, not returned persistent KV
+buffers. No equality of independent executions is claimed.
+
 The [LUCE argmax review](proofs/luce-argmax/KPlay.Review.fsti) preserves the
 stronger first-maximum base guarantee and proves it implies the optimized
 any-maximum guarantee for the same logical scores and output. The dispatcher
@@ -224,3 +236,7 @@ real-division rewrite in `rms_radicand_at` during public-toolchain replay.
 explicit with a proved helper. The original source SHA-256 remains recorded in
 `manifest.json`. This changes proof presentation only: the theorem statement,
 specification, native operations, and trusted assumptions are unchanged.
+That historical patch retains its original `KPlay.Functional.fst` path and
+module declaration. Restore that filename and declaration before applying its
+reverse diff to the renamed optimized decoder; the new review namespace is
+not part of the historical patch.
