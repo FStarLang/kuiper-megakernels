@@ -42,6 +42,17 @@ The review does not equate native numerical observations or prove the two
 executions choose the same experts. The `flashmoe-program-review` case rechecks
 both implementation bodies and their helpers along with the review.
 
+The [LUCE program review](proofs/luce-program/KPlay.Review.fsti) proves that both
+packing maps describe the same 752393024 BF16 weights, parameter addresses and
+prompt cells. Both wrappers retain allocation failure, owning returned tensors,
+and the complete queued safety/history postcondition at the next epoch.
+Their actual execution witnesses remain distinct: base convolution/normalization
+observations are BF16, optimized observations FP32. Base numerical correctness
+is unconditional; the optimized numerical prefix is conditional on its
+`family_dependencies` and `numerical_scope` for that returned execution.
+The dispatcher does not claim unconditional numerical equivalence or equal
+generated tokens.
+
 Mirage's shared check includes its mixed-observation/legacy compatibility
 bridge. Both complete Mirage programs and that check import one
 [canonical specification module](proofs/mirage-program/KPlay.SharedSpec.fst);

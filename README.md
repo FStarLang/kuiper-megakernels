@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus thirteen checked contract reviews.
+and 12 family-tightness proofs**, plus fourteen checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -145,6 +145,13 @@ and proves `after_call i`; compatibility is checked at the dispatch site.
 ```sh
 python3 replay.py verify --case flashmoe-program-review --jobs 8
 ```
+
+The [LUCE program review](proofs/luce-program/KPlay.Review.fsti) uses the same
+dispatcher style. It proves equality of the packed input views and exposes the
+same complete safety/history postcondition for both implementations. Base numerical
+correctness is unconditional; optimized numerical correctness retains its
+family-dependency and numerical-scope premises on the actual returned execution.
+Both enqueue one completion epoch and preserve allocation-failure behavior.
 
 All twelve family reviews use the same interface-and-dispatcher style:
 

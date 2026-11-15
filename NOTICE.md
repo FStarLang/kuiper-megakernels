@@ -34,7 +34,7 @@ original receipt-bound proof bytes.
 The FlashMoE complete-program, argmax, projection/softmax, and normalization/capacity,
 Mirage decoder, embedding/position, argmax, and
 final norm/projection, and LUCE
-embedding, argmax, final norm/projection, recurrent-decoder, and full-attention-decoder entry
+complete-program, embedding, argmax, final norm/projection, recurrent-decoder, and full-attention-decoder entry
 modules were subsequently renamed to
 `KPlay.Base.Functional` and `KPlay.Optimized.Functional` for their joint checked
 review. Filenames, module declarations, and qualified tactic self-references
@@ -53,6 +53,9 @@ optimized-decoder replay patch still uses `KPlay.Functional.fst`; restore that
 filename and module declaration before applying its reverse diff.
 The `KPlay.Review.{fst,fsti}` files are new contract-adaptation proofs and review
 interfaces, not historical artifacts.
+LUCE complete-program's byte-identical `KPlay.Proof.NativeInput.fst` copies were
+also consolidated into its group directory; both implementation cases check
+that same unchanged source.
 No runtime source rewriting is performed by the smoke runner; its generated
 C++ file only adds a Python binding to the existing `kplay_run` function.
 
