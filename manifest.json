@@ -962,6 +962,10 @@
     },
     {
       "directory": "proofs/luce-full_attention_decoder/base",
+      "historical_entry_modules": {
+        "proofs/luce-full_attention_decoder/base/KPlay.Functional.fst": "5959ae6316535299fc4ad2e114a346fee518d98e4d3eff08a0c0da151fd4dea5",
+        "proofs/luce-full_attention_decoder/base/KPlay.Functional.fsti": "b71e309db2b261fe248da9891d26cc0c5861a58ba3ad1470b85b24b8baa32a19"
+      },
       "historical_receipt_sha256": "60701444d66534f227a82f50a641ac4510764a6d073dc92f5a95f117fe31c637",
       "historical_target_sha256": "f5fe2653fdd4bd6dc833a15ccedfaaa64b2ddffaf28df0b8789f8d51db9fac69",
       "id": "luce-full_attention_decoder-base",
@@ -978,8 +982,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-full_attention_decoder/base/KPlay.Functional.fsti",
-        "proofs/luce-full_attention_decoder/base/KPlay.Functional.fst",
+        "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fst",
         "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1027,6 +1031,10 @@
     },
     {
       "directory": "proofs/luce-full_attention_decoder/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fst": "8d225cbe507094493dcc1869bb031c96741d6386947da318d9797d87442cc80b",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fsti": "e6e92d126ea691bf1f4bc5f2bcf71a480ee75573f0689e43e689aa16714bf8a2"
+      },
       "historical_receipt_sha256": "4f90096aa4a0acbecf991e71ad0f5f69bded96791dd03b02ae7db04280911a76",
       "historical_target_sha256": "90e41bac91c5705a5062faac881f2d44adccebd22f0976950821e388e72887c1",
       "id": "luce-full_attention_decoder-optimized",
@@ -1042,8 +1050,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fsti",
-        "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fst",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1078,6 +1086,26 @@
         {
           "kind": "int"
         }
+      ]
+    },
+    {
+      "directory": "proofs/luce-full_attention_decoder",
+      "id": "luce-full_attention_decoder-review",
+      "implementation_cases": [
+        "luce-full_attention_decoder-base",
+        "luce-full_attention_decoder-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-full_attention_decoder/KPlay.Review.fsti",
+        "proofs/luce-full_attention_decoder/KPlay.Review.fst",
+        "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fst",
+        "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2221,11 +2249,13 @@
     "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fst": "4b69ce246846303d1e9b1abb84ce3bb53f10f88a0e37ff3632dc4493934dedc2",
     "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti": "b96c586a05147b254ec0ef0c698ff1189508c32a0f93f777d1f4e9cca95ba4bd",
     "proofs/luce-full_attention_decoder/KPlay.Proof.Tightness.fst": "1e63a8f5e88436fae20b85c4253f2dfcdcb2c834da9a9dc7bf3ef48d4cc769c6",
+    "proofs/luce-full_attention_decoder/KPlay.Review.fst": "183c7007f6f52375840b52a580b9d007b53cf41981d1123f4da19240a7c6bd5c",
+    "proofs/luce-full_attention_decoder/KPlay.Review.fsti": "f576935f58c0eda5f9cba2c0384da21887740278799ffed4313eab6bb1014d28",
     "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst": "e55b6c011749382e783ca51db42345151e5075e6c64769c8b110a45302461ff4",
-    "proofs/luce-full_attention_decoder/base/KPlay.Functional.fst": "5959ae6316535299fc4ad2e114a346fee518d98e4d3eff08a0c0da151fd4dea5",
-    "proofs/luce-full_attention_decoder/base/KPlay.Functional.fsti": "b71e309db2b261fe248da9891d26cc0c5861a58ba3ad1470b85b24b8baa32a19",
-    "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fst": "8d225cbe507094493dcc1869bb031c96741d6386947da318d9797d87442cc80b",
-    "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fsti": "e6e92d126ea691bf1f4bc5f2bcf71a480ee75573f0689e43e689aa16714bf8a2",
+    "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fst": "4b132969ec5a3548d348d08c52e35d47c7b15de4557d5f5e9daa77d62c8987c6",
+    "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fsti": "8897aba6488311cb2f0c6c62005f80abc7093383b4d0be0efdd3473a50527fdc",
+    "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fst": "6f8bfd7599cf121a6a89fbfc830f97f3c9fd505b3ff09d25c25ac0b816b3c970",
+    "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fsti": "b1f8ca562b27ebfaf19f8e639aa7a5626dc335cfd7c6ff2c990b06f87d2c9084",
     "proofs/luce-program/KPlay.Proof.Shared.Attention.fst": "0774222af42fd2e12d56353b855022dfd2c0c18f75a0d6392e2a845536951e27",
     "proofs/luce-program/KPlay.Proof.Shared.Embedding.fst": "0bc64e0b835654b11762ae3c179b66b3cfec7acc86e36bac9c58b566688997ee",
     "proofs/luce-program/KPlay.Proof.Shared.Model.fst": "7dbf92a07a5a23138f271da8bad61fd253e25b5b09b3021f8751e9faa1860e18",

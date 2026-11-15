@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Optimized.Functional
 
 #lang-pulse
 
@@ -3711,6 +3711,8 @@ fn store_cache (input : array bf16) (output : larray bf16 cache_elements)
       (output |-> physical_cache_prefix (I64.v position) previous cv (SZ.v i + 1));
     coordinate := i +^ 1sz;
   };
+  with completed. assert (coordinate |-> completed);
+  assert pure (SZ.v completed == kv_width);
   physical_cache_prefix_full (I64.v position) previous cv;
   rewrite (output |-> physical_cache_prefix (I64.v position) previous cv kv_width) as
     (output |-> physical_cache (I64.v position) previous cv);

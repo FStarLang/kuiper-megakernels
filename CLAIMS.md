@@ -130,6 +130,16 @@ postcondition, including installation of the layer state and cache framing.
 The base requires materialized buffers representing zero state on first use.
 This is common-task refinement, not equality of separate numerical executions.
 
+The [LUCE full-attention review](proofs/luce-full_attention_decoder/KPlay.Review.fsti)
+exposes compact time-major base caches versus full head-major optimized caches,
+null initial source buffers, and the base-only rotary input. Both return
+represented layer values satisfying the complete shared decoder/cache transition,
+but the optimized numerical guarantee requires finiteness of the actual returned
+live-score observation. This premise is visible in `numerical_premise`, not
+assumed or discharged by the dispatcher. Physical cache retention and ownership
+are unconditional. The review does not claim unconditional equivalence of the
+native numerical contracts or equality of independent executions.
+
 The [FlashMoE argmax review](proofs/flashmoe-argmax/KPlay.Review.fsti) gives
 both entry points the same stable-maximum/gather postcondition on finite FP32
 probabilities in [0,1]. It exposes that a base call processes one row and copies

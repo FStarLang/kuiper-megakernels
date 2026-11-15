@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus nine checked contract reviews.
+and 12 family-tightness proofs**, plus ten checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -77,8 +77,8 @@ is retained in `manifest.json`; contracts, executable operations, and CUDA are
 unchanged. The reviewed kernels' entry modules additionally have distinct
 module names so the checked review can import both at once; only their filenames,
 module declarations, and qualified tactic self-references changed, except for
-explicit proof steps added to two recurrent-decoder lemmas after renaming exposed
-solver sensitivity. Contracts and executable operations are unchanged. Historical hashes are retained
+explicit proof steps added to two recurrent-decoder lemmas and a full-attention
+cache-loop exit after renaming exposed solver sensitivity. Contracts and executable operations are unchanged. Historical hashes are retained
 in `manifest.json` under `historical_entry_modules`. Other retained proof sources
 preserve their historical bytes.
 
@@ -144,7 +144,7 @@ and proves `after_call i`; compatibility is checked at the dispatch site.
 python3 replay.py verify --case flashmoe-program-review --jobs 8
 ```
 
-Eight family reviews use the same interface-and-dispatcher style:
+Nine family reviews use the same interface-and-dispatcher style:
 
 | Review interface | Explicit representation difference | Common guarantee |
 | --- | --- | --- |
@@ -155,6 +155,7 @@ Eight family reviews use the same interface-and-dispatcher style:
 | [LUCE final norm/projection](proofs/luce-final_norm_projection/KPlay.Review.fsti) | BF16 versus FP32 returned logits | Identical shared mathematical logit targets, exact hidden-history append, and preserved input ownership |
 | [LUCE embedding](proofs/luce-embedding/KPlay.Review.fsti) | Base additionally returns rotary data and initial recurrent/convolution state | Identical exact BF16 embedding-row postcondition; auxiliary outputs and initial-token alias ownership are explicit |
 | [LUCE recurrent decoder](proofs/luce-recurrent_decoder/KPlay.Review.fsti) | BF16 versus FP32 convolution state, transposed recurrent axes, and optimized allocation-free initial state | Same complete shared decoder/cache transition under explicit input/output representations |
+| [LUCE full-attention decoder](proofs/luce-full_attention_decoder/KPlay.Review.fsti) | Compact time-major versus full head-major caches; external versus internal rotary computation | Complete shared decoder/cache transition; optimized numerical guarantee requires finite actual live scores, while physical cache retention is unconditional |
 | [FlashMoE argmax](proofs/flashmoe-argmax/KPlay.Review.fsti) | Base copies one row and routing frame; optimized selects a batch and returns gathered best probabilities | Identical stable-maximum/gather relation; explicit lemma lifts base row contracts to the batched shared postcondition |
 
 Each `*-review` case checks the review **and all roots of both implementation cases**,

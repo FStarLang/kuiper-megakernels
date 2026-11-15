@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Base.Functional
 
 #lang-pulse
 
@@ -235,15 +235,15 @@ inline_for_extraction noextract
 let bounded_sum_step (#n:nat) (count:nat{count < n}) (terms:S.vector n)
   : Lemma (
       bounded_sum (count + 1) terms == bounded_sum count terms +. terms count) =
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]] (bounded_sum (count + 1) terms);
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]] (bounded_sum count terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]] (bounded_sum (count + 1) terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]] (bounded_sum count terms);
   sum_step (count + 1) (fun i -> terms i);
   sum_ext count (fun (i:S.index (count + 1 - 1)) -> terms i) (fun i -> terms i)
 
 inline_for_extraction noextract
 let bounded_sum_full (#n:nat) (terms:S.vector n)
   : Lemma (bounded_sum n terms == S.sum n terms) =
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]] (bounded_sum n terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]] (bounded_sum n terms);
   sum_ext n (fun i -> terms i) terms
 
 inline_for_extraction noextract
@@ -279,9 +279,9 @@ let merge_sum (half:pos{half <= 128}) (r:S.vector 256)
   : Lemma (
       partial_sum half (merge_partial half r) ==
       partial_sum (2 * half) r) =
-  norm_spec [delta_once ["KPlay.Functional.partial_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]]
     (partial_sum half (merge_partial half r));
-  norm_spec [delta_once ["KPlay.Functional.partial_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]]
     (partial_sum (2 * half) r);
   sum_halves half (fun i -> r i);
   sum_ext half (fun i -> merge_partial half r i) (fun i -> r i +. r (i + half))
@@ -424,13 +424,13 @@ let grouped_squares_sum
         grouped_squares width x (g <: nat) ==
         S.sum 4 (fun j -> x (4 * g + j) *. x (4 * g + j))) =
     norm_spec [delta_once [
-      "KPlay.Functional.grouped_squares"; "KPlay.Functional.square_terms"
+      "KPlay.Base.Functional.grouped_squares"; "KPlay.Base.Functional.square_terms"
     ]] (grouped_squares width x (g <: nat))
   in
   FStar.Classical.forall_intro #(S.index (width / 4)) #(fun g ->
     grouped_squares width x (g <: nat) ==
     S.sum 4 (fun j -> x (4 * g + j) *. x (4 * g + j))) point;
-  norm_spec [delta_once ["KPlay.Functional.partial_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]]
     (partial_sum (width / 4) (grouped_squares width x));
   sum_ext (width / 4)
     (fun g -> grouped_squares width x (g <: nat))
@@ -831,7 +831,7 @@ fn tensor_kernel
       Pulse.Lib.Trade.elim_trade (at |-> Frac (1.0R /. 32.0R) av) (a |-> Frac (1.0R /. 32.0R) va);
       with bv. assert bt |-> Frac (1.0R /. 32.0R) bv;
       Pulse.Lib.Trade.elim_trade (bt |-> Frac (1.0R /. 32.0R) bv) (b |-> Frac (1.0R /. 32.0R) vb);
-      norm_spec [delta_once ["KPlay.Functional.mma_accum"]]
+      norm_spec [delta_once ["KPlay.Base.Functional.mma_accum"]]
         (mma_accum va vb r start (kk + 1));
       k := kk +^ 1sz;
     };
@@ -871,8 +871,8 @@ let rec mma_accum_approx
       (requires va %~ ra /\ vb %~ rb)
       (ensures mma_accum va vb row start finish %~ real_accum ra rb row start finish)
       (decreases (finish - start)) =
-  norm_spec [delta_once ["KPlay.Functional.mma_accum"]] (mma_accum va vb row start finish);
-  norm_spec [delta_once ["KPlay.Functional.real_accum"]] (real_accum ra rb row start finish);
+  norm_spec [delta_once ["KPlay.Base.Functional.mma_accum"]] (mma_accum va vb row start finish);
+  norm_spec [delta_once ["KPlay.Base.Functional.real_accum"]] (real_accum ra rb row start finish);
   if finish = start then ()
   else (
     mma_accum_approx va vb ra rb row start (finish - 1);
@@ -903,9 +903,9 @@ let segment_step (#n:nat) (start:nat) (middle:nat{start <= middle})
       segment_sum start finish terms ==
       segment_sum start middle terms +. segment_sum middle finish terms) =
   sum_split (middle - start) (finish - middle) (fun i -> terms (start + i));
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]] (segment_sum start finish terms);
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]] (segment_sum start middle terms);
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]] (segment_sum middle finish terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]] (segment_sum start finish terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]] (segment_sum start middle terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]] (segment_sum middle finish terms);
   sum_ext (finish - start)
     (fun (i:S.index (middle - start + (finish - middle))) -> terms (start + i))
     (fun i -> terms (start + i));
@@ -921,7 +921,7 @@ let rec tile_dot
       (decreases n) =
   if n = 0 then (
     G.__gmatmul_single_zero_lemma 0.0R ( *. ) ( +. ) a b r c;
-    norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
       (bounded_sum 0 (dot_terms a b r c))
   ) else (
     tile_dot a b r c (n - 1);
@@ -947,7 +947,7 @@ let tile_sum
   sum_ext 16
     (dot_terms a b r c)
     (fun k -> dot_terms ra rb (16 * row + r) c (16 * block + k));
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]]
     (segment_sum (16 * block) (16 * (block + 1)) (dot_terms ra rb (16 * row + r) c));
   sum_ext 16
     (fun (i:S.index (16 * (block + 1) - 16 * block)) ->
@@ -964,9 +964,9 @@ let rec real_accum_dot
       acc2 (real_accum ra rb row start finish) r c ==
       segment_sum (16 * start) (16 * finish) (dot_terms ra rb (16 * row + r) c))
       (decreases (finish - start)) =
-  norm_spec [delta_once ["KPlay.Functional.real_accum"]] (real_accum ra rb row start finish);
+  norm_spec [delta_once ["KPlay.Base.Functional.real_accum"]] (real_accum ra rb row start finish);
   if finish = start then (
-    norm_spec [delta_once ["KPlay.Functional.segment_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]]
       (segment_sum (16 * start) (16 * finish) (dot_terms ra rb (16 * row + r) c))
   ) else (
     real_accum_dot ra rb row start (finish - 1) r c;
@@ -1012,9 +1012,9 @@ let rec zero_suffix_sum (n:nat) (count:nat{count <= n}) (terms:S.vector n)
     let lower:S.vector (n - 1) = fun i -> terms i in
     zero_suffix_sum (n - 1) count lower;
     sum_step n terms;
-    norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
       (bounded_sum count lower);
-    norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+    norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
       (bounded_sum count terms);
     sum_ext count (fun i -> lower i) (fun i -> terms i)
   )
@@ -1029,13 +1029,13 @@ let full_linear_bridge
   pad16_bounds cols;
   let terms = dot_terms (padded_matrix rows cols w) (padded_input cols x) r 0 in
   zero_suffix_sum (pad16 cols) cols terms;
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]]
     (segment_sum 0 (pad16 cols) terms);
   sum_ext (pad16 cols)
     (fun (i:S.index (pad16 cols - 0)) -> terms (0 + i))
     (fun i -> terms (0 + i));
   sum_ext (pad16 cols) (fun i -> terms (0 + i)) terms;
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
     (bounded_sum cols terms);
   sum_ext cols (fun i -> terms (i <: nat)) (fun i -> w r i *. x i);
   norm_spec [delta_once ["KPlay.SharedSpec.linear"]] (S.linear rows cols w x r)
@@ -1043,7 +1043,7 @@ let full_linear_bridge
 inline_for_extraction noextract
 let segment_empty (#n:nat) (position:nat{position <= n}) (terms:S.vector n)
   : Lemma (segment_sum position position terms == 0.0R) =
-  norm_spec [delta_once ["KPlay.Functional.segment_sum"]] (segment_sum position position terms);
+  norm_spec [delta_once ["KPlay.Base.Functional.segment_sum"]] (segment_sum position position terms);
   sum_zero (fun i -> terms (position + i))
 
 inline_for_extraction noextract
@@ -1431,7 +1431,7 @@ let stripes_sum
   FStar.Classical.forall_intro #(S.index width) #(fun group ->
     group_sums n width terms (group <: nat) ==
     S.sum (slots n width) (fun q -> padded (q * width + group))) stripe;
-  norm_spec [delta_once ["KPlay.Functional.partial_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]]
     (partial_sum width (group_sums n width terms));
   sum_ext width
     (fun group -> group_sums n width terms (group <: nat))
@@ -1439,7 +1439,7 @@ let stripes_sum
   sum_swap width (slots n width) (fun group q -> padded (q * width + group));
   sum_grid (slots n width) width padded;
   zero_suffix_sum (slots n width * width) n padded;
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]]
     (bounded_sum n padded);
   sum_ext n (fun i -> padded (i <: nat)) terms
 
@@ -1951,7 +1951,7 @@ let chunk_groups_sum
   FStar.Classical.forall_intro #(S.index groups) #(fun g ->
     chunk_group_sums n groups chunk terms (g <: nat) ==
     S.sum blocks (fun q -> rowsums q g)) one_group;
-  norm_spec [delta_once ["KPlay.Functional.partial_sum"]]
+  norm_spec [delta_once ["KPlay.Base.Functional.partial_sum"]]
     (partial_sum groups (chunk_group_sums n groups chunk terms));
   sum_ext groups
     (fun g -> chunk_group_sums n groups chunk terms (g <: nat))
@@ -1984,7 +1984,7 @@ let chunk_groups_sum
     (fun q -> S.sum (groups * chunk) (block_values blocks (groups * chunk) padded q))
     (fun q -> S.sum (groups * chunk) (fun i -> padded (q * (groups * chunk) + i)));
   zero_suffix_sum (blocks * (groups * chunk)) n padded;
-  norm_spec [delta_once ["KPlay.Functional.bounded_sum"]] (bounded_sum n padded);
+  norm_spec [delta_once ["KPlay.Base.Functional.bounded_sum"]] (bounded_sum n padded);
   sum_ext n (fun i -> padded (i <: nat)) terms
 
 inline_for_extraction noextract
@@ -2992,9 +2992,9 @@ let attention_unfold (position:nat) (queries:S.matrix 8 256)
     by (
       FStar.Tactics.V2.norm [delta_only [
         "KPlay.SharedSpec.attention";
-        "KPlay.Functional.attention_probabilities";
-        "KPlay.Functional.attention_scores";
-        "KPlay.Functional.score_dots"
+        "KPlay.Base.Functional.attention_probabilities";
+        "KPlay.Base.Functional.attention_scores";
+        "KPlay.Base.Functional.score_dots"
       ]];
       FStar.Tactics.V2.trefl ()
     )
@@ -3234,10 +3234,10 @@ let initial_history_equality
     by (
       Proof.norm [delta_only [
         "KPlay.SharedSpec.append_kv";
-        "KPlay.Functional.history_view";
-        "KPlay.Functional.old_history_view";
-        "KPlay.Functional.flatten_kv";
-        "KPlay.Functional.kv_view"
+        "KPlay.Base.Functional.history_view";
+        "KPlay.Base.Functional.old_history_view";
+        "KPlay.Base.Functional.flatten_kv";
+        "KPlay.Base.Functional.kv_view"
       ]];
       Proof.l_to_r [`decoded_head; `decoded_time; `decoded_channel];
       Proof.trefl ()
@@ -3266,9 +3266,9 @@ let positive_history_equality
       Proof.l_to_r [`positive_old_history];
       Proof.norm [delta_only [
         "KPlay.SharedSpec.append_kv";
-        "KPlay.Functional.history_view";
-        "KPlay.Functional.flatten_kv";
-        "KPlay.Functional.kv_view"
+        "KPlay.Base.Functional.history_view";
+        "KPlay.Base.Functional.flatten_kv";
+        "KPlay.Base.Functional.kv_view"
       ]];
       Proof.l_to_r [`decoded_head; `decoded_time; `decoded_channel];
       Proof.trefl ()
@@ -3372,8 +3372,8 @@ let replace_cache_frame
       composed_cache call frame old_keys old_values next)
     by (
       Proof.norm [delta_only [
-        "KPlay.SharedSpec.replace_kv"; "KPlay.Functional.cache_view";
-        "KPlay.Functional.composed_cache"; "KPlay.Functional.choose_kv"
+        "KPlay.SharedSpec.replace_kv"; "KPlay.Base.Functional.cache_view";
+        "KPlay.Base.Functional.composed_cache"; "KPlay.Base.Functional.choose_kv"
       ]];
       Proof.l_to_r [`cache_slot];
       Proof.trefl ()
@@ -3381,7 +3381,7 @@ let replace_cache_frame
   assert (composed_cache call frame old_keys old_values next == single_cache call frame next)
     by (
       Proof.norm [delta_only [
-        "KPlay.Functional.composed_cache"; "KPlay.Functional.single_cache"
+        "KPlay.Base.Functional.composed_cache"; "KPlay.Base.Functional.single_cache"
       ]];
       Proof.l_to_r [`choose_equal_conditions];
       Proof.trefl ()
@@ -3390,7 +3390,7 @@ let replace_cache_frame
     by (
       Proof.norm [delta_only [
         "KPlay.SharedSpec.replace_kv";
-        "KPlay.Functional.single_cache"; "KPlay.Functional.choose_kv"
+        "KPlay.Base.Functional.single_cache"; "KPlay.Base.Functional.choose_kv"
       ]];
       Proof.trefl ()
     )
@@ -3646,7 +3646,7 @@ let shared_decoder_cache
     by (
       Proof.norm [delta_only [
         "KPlay.SharedSpec.full_attention_decoder";
-        "KPlay.Functional.rotated_matrix"; "KPlay.Functional.head_vector"
+        "KPlay.Base.Functional.rotated_matrix"; "KPlay.Base.Functional.head_vector"
       ]];
       Proof.trefl ()
     )
@@ -3692,9 +3692,9 @@ let shared_decoder_hidden
     by (
       Proof.norm [nbe; unmeta; unascribe; delta_only [
         "KPlay.SharedSpec.full_attention_decoder";
-        "KPlay.Functional.rotated_matrix"; "KPlay.Functional.head_vector";
-        "KPlay.Functional.activation_vector"; "KPlay.Functional.activated_product";
-        "KPlay.Functional.flat_heads"
+        "KPlay.Base.Functional.rotated_matrix"; "KPlay.Base.Functional.head_vector";
+        "KPlay.Base.Functional.activation_vector"; "KPlay.Base.Functional.activated_product";
+        "KPlay.Base.Functional.flat_heads"
       ]];
       Proof.trefl ()
     )
