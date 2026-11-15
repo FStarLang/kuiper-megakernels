@@ -2391,6 +2391,10 @@
     },
     {
       "directory": "proofs/mirage-program/base",
+      "historical_entry_modules": {
+        "proofs/mirage-program/base/KPlay.Functional.fst": "748162007b868ff74811350ffd62010d5937385d4e21acf92e354089304e4673",
+        "proofs/mirage-program/base/KPlay.Functional.fsti": "23a4f2af4d01c9ffe7a92a96ae42923b65235726700ece5e14595607292264ce"
+      },
       "historical_receipt_sha256": "dd8edb9abdc92095e056667d50bc09f60fc06dff0436afd7f53d92aaf798550f",
       "id": "mirage-program-base",
       "kernel": "kernels/mirage-program-base.cu",
@@ -2403,13 +2407,17 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-program/base/KPlay.Functional.fst",
-        "proofs/mirage-program/base/KPlay.Functional.fsti",
+        "proofs/mirage-program/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-program/base/KPlay.Base.Functional.fsti",
         "proofs/mirage-program/KPlay.SharedSpec.fst"
       ]
     },
     {
       "directory": "proofs/mirage-program/optimized",
+      "historical_entry_modules": {
+        "proofs/mirage-program/optimized/KPlay.Functional.fst": "4907beb93087200c7e09d16c03b23bb2440966a6b0d355b1b595dd944f856d31",
+        "proofs/mirage-program/optimized/KPlay.Functional.fsti": "ce0051a62cd31d7cc511cd46145cd899f6bd7615428b131343898df56dfa366f"
+      },
       "historical_receipt_sha256": "19add31d31ff543a5fb48855d640bb0a15f2ee2dee6760daac5a5663b03b463c",
       "id": "mirage-program-optimized",
       "kernel": "kernels/mirage-program-optimized.cu",
@@ -2422,9 +2430,29 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-program/optimized/KPlay.Functional.fst",
-        "proofs/mirage-program/optimized/KPlay.Functional.fsti",
+        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst",
+        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti",
         "proofs/mirage-program/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/mirage-program",
+      "id": "mirage-program-review",
+      "implementation_cases": [
+        "mirage-program-base",
+        "mirage-program-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-program/KPlay.Review.fsti",
+        "proofs/mirage-program/KPlay.Review.fst",
+        "proofs/mirage-program/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-program/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-program/KPlay.SharedSpec.fst",
+        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst",
+        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti"
       ]
     },
     {
@@ -2815,11 +2843,13 @@
     "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti": "9c5371170c2b86071641e9f19c0014802ed567444a097fc4459f46b2c8dff3fc",
     "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst": "ca69b08497dca6b9a260b791c6439bf38b5f9ebee5dbaffa7eb12fd4a014129a",
     "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti": "32189cb59911f12694138a65d61f21d8c789ff92b33c1df0e79698d139ce3e8b",
+    "proofs/mirage-program/KPlay.Review.fst": "14304e85305fcc9365f4610da4f0b7c6339b823dfb91ffdecd673a8e3d421d2f",
+    "proofs/mirage-program/KPlay.Review.fsti": "41eeee44c849a88396a3e717ea14622ec90df5e0d52ca6694de89608443ac162",
     "proofs/mirage-program/KPlay.SharedSpec.fst": "94b3ca0becd032caf679ac2f8830331f4f8865acfee8975981979dd0808560ba",
-    "proofs/mirage-program/base/KPlay.Functional.fst": "748162007b868ff74811350ffd62010d5937385d4e21acf92e354089304e4673",
-    "proofs/mirage-program/base/KPlay.Functional.fsti": "23a4f2af4d01c9ffe7a92a96ae42923b65235726700ece5e14595607292264ce",
-    "proofs/mirage-program/optimized/KPlay.Functional.fst": "4907beb93087200c7e09d16c03b23bb2440966a6b0d355b1b595dd944f856d31",
-    "proofs/mirage-program/optimized/KPlay.Functional.fsti": "ce0051a62cd31d7cc511cd46145cd899f6bd7615428b131343898df56dfa366f",
+    "proofs/mirage-program/base/KPlay.Base.Functional.fst": "d8f0cd6748c0e9157279308be302111f88ef923f70fabcd3512f25178b69cedb",
+    "proofs/mirage-program/base/KPlay.Base.Functional.fsti": "ff120f45e220613a4b0eed95716f7c1cfc0eda0908c5d248ce0e08678d24d5a7",
+    "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst": "856cd64139b658df9ae9bd2d1703edf70fe0e6789c650e218e87a9be613e23f8",
+    "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti": "7fa23acedff67c346bc3642259fbbb6927bb46eff36193d557ea8dc2ad6df880",
     "proofs/mirage-program/shared/KPlay.Functional.fst": "0000e87872e907cffe2974e944d9686d874db3e730e385c8de935e4513a25f34",
     "proofs/mirage-program/shared/KPlay.Functional.fsti": "231fa482e69783537612b646044780ea6e76be8f6a5e867b0e8ee1eff73222e7",
     "support/flashmoe/Kuiper.Float.Casts.Base.fsti": "095a46de2ddefbacaae8f3eb323d06cda91f1a6a7299dcc26686cdb535517ae4",

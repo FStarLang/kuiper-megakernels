@@ -109,11 +109,11 @@ deduplicated. Archived paths and inventory fingerprints describe the original
 layout; case IDs and retained source bytes are unchanged. These measurements
 are not timings of the grouped layout.
 The later entry-module renamings, recurrent/full-attention/Mirage-decoder proof stabilization, and
-fourteen new review cases (FlashMoE program, FlashMoE argmax, FlashMoE projection/softmax,
+fifteen new review cases (FlashMoE program, FlashMoE argmax, FlashMoE projection/softmax,
 FlashMoE normalization/capacity, Mirage decoder, Mirage embedding/position, Mirage
 argmax, Mirage final norm/projection, LUCE argmax, LUCE final norm/projection, LUCE embedding, and LUCE
-recurrent decoder, LUCE full-attention decoder, and LUCE program) are outside these historical measurements; the current
-suite has 59 cases. Each review checks its own modules
+recurrent decoder, LUCE full-attention decoder, LUCE program, and Mirage program) are outside these historical measurements; the current
+suite has 60 cases. Each review checks its own modules
 and both implementations' roots.
 
 The sum of these 45 successful case wall times is **11,301.3 s (3 h 8 min)**,

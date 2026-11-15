@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus fourteen checked contract reviews.
+and 12 family-tightness proofs**, plus fifteen checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -152,6 +152,15 @@ same complete safety/history postcondition for both implementations. Base numeri
 correctness is unconditional; optimized numerical correctness retains its
 family-dependency and numerical-scope premises on the actual returned execution.
 Both enqueue one completion epoch and preserve allocation-failure behavior.
+
+The [Mirage program review](proofs/mirage-program/KPlay.Review.fsti) exposes both
+contracts using the shared mixed-observation specification and proves equivalence
+to the native result predicates. It checks pointwise equality of all input
+weights and preserves the actual returned-cell witnesses. Base completes at
+`start + 229`, optimized at `start + 256`; both return hidden tensors of shape
+`[7;1024]` (optimized decoder padding is internal). Optimized numerical
+correctness retains its attention-domain premise, and valid output tokens are
+guaranteed under the actual selector-score domain.
 
 All twelve family reviews use the same interface-and-dispatcher style:
 

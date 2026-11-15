@@ -32,7 +32,7 @@ The single proof-only replay adjustment is recorded separately with its
 original source hash and reversible diff; it is not misidentified as the
 original receipt-bound proof bytes.
 The FlashMoE complete-program, argmax, projection/softmax, and normalization/capacity,
-Mirage decoder, embedding/position, argmax, and
+Mirage complete-program, decoder, embedding/position, argmax, and
 final norm/projection, and LUCE
 complete-program, embedding, argmax, final norm/projection, recurrent-decoder, and full-attention-decoder entry
 modules were subsequently renamed to

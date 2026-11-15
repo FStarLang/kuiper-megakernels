@@ -1,4 +1,4 @@
-module KPlay.Functional
+module KPlay.Base.Functional
 
 #lang-pulse
 

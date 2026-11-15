@@ -53,6 +53,21 @@ is unconditional; the optimized numerical prefix is conditional on its
 The dispatcher does not claim unconditional numerical equivalence or equal
 generated tokens.
 
+The [Mirage program review](proofs/mirage-program/KPlay.Review.fsti) exposes the
+shared mixed structural, numerical, and selection predicates for both actual
+returned execution witnesses. The base legacy-observation conversion and the
+optimized result restatement are proved equivalent to their native predicates.
+`input_models_agree` proves equality of the prompt, decode count, and every
+packed parameter. Base uses FP32 rotary/layer/cache observations; optimized uses
+BF16, with FP32 rotary metadata and scores in both. Both retain their rotary
+domain; optimized additionally requires the actual execution's attention domain
+for numerical correctness. Optimized valid-token and typed-result guarantees
+are conditional: outside the actual selector domain its last token can be `-1`.
+The review retains raw structural/provenance facts even in that case.
+Completion is `start + 229` versus `start + 256`, not a difference in decode
+count: both generate one token. Both returned hidden tensors have metadata
+`[7;1024]`; the optimized decoder's eight-row padding is internal.
+
 Mirage's shared check includes its mixed-observation/legacy compatibility
 bridge. Both complete Mirage programs and that check import one
 [canonical specification module](proofs/mirage-program/KPlay.SharedSpec.fst);
