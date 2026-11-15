@@ -91,6 +91,15 @@ and requires finite, comparison-faithful logical score representations; its
 common postcondition permits the shared specification's tie choices.
 Neither review asserts equality of results from separate executions.
 
+The [Mirage final norm/projection review](proofs/mirage-final_norm_projection/KPlay.Review.fsti)
+uses one logical input for both roles and displays its physical representation:
+packed-weight offsets and residual-plus-delta for base, versus separate gamma,
+embedding, and prepared hidden buffers for optimized. Both prove the complete
+shared normalization/projection postcondition and projection of all seven rows.
+The optimized eighth input row is outside the logical task, and padded score
+columns represent zero. This does not establish bitwise equality or preservation
+of score comparisons between executions.
+
 The [LUCE argmax review](proofs/luce-argmax/KPlay.Review.fsti) preserves the
 stronger first-maximum base guarantee and proves it implies the optimized
 any-maximum guarantee for the same logical scores and output. The dispatcher

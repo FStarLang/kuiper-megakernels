@@ -1911,6 +1911,10 @@
     },
     {
       "directory": "proofs/mirage-final_norm_projection/base",
+      "historical_entry_modules": {
+        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fst": "6643fbd65bccc9d273c92a99db2a30b16d46f99bc81cf6180f2ba5c3c66badf9",
+        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fsti": "bd907c0722318fd134afd3bff6ec825755bc99d14f95366da124097a09d9d4a6"
+      },
       "historical_receipt_sha256": "b1ad16073a638d8c4849a12b1a3484a82ad8d795c63d8211260533248e8e1467",
       "historical_target_sha256": "4f982bde7311c7cee41027330e56fab77614b84300ca8fae811ed36dda2d00cd",
       "id": "mirage-final_norm_projection-base",
@@ -1926,8 +1930,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fsti",
-        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fst",
+        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst",
         "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1964,6 +1968,10 @@
     },
     {
       "directory": "proofs/mirage-final_norm_projection/optimized",
+      "historical_entry_modules": {
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fst": "3abac37ad122f9ce5b5b0be93e28592a69a4a82e9cd0f2264560afd94926eee5",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fsti": "f5180db79b2e673fe852ec007c3c8d62a2912139706d4b156d8a560e48bd69da"
+      },
       "historical_receipt_sha256": "7d394a75e454f20ed855d881abac4caed242da6bfd8442a9bf9d69940b4594e4",
       "historical_target_sha256": "914c93672bfc13a62b5f4d9aebfc50cb99526fec6a34d2e9e7327f0122f39d5a",
       "id": "mirage-final_norm_projection-optimized",
@@ -1977,8 +1985,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fsti",
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fst",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst",
         "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -2005,6 +2013,26 @@
             1024
           ]
         }
+      ]
+    },
+    {
+      "directory": "proofs/mirage-final_norm_projection",
+      "id": "mirage-final_norm_projection-review",
+      "implementation_cases": [
+        "mirage-final_norm_projection-base",
+        "mirage-final_norm_projection-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-final_norm_projection/KPlay.Review.fsti",
+        "proofs/mirage-final_norm_projection/KPlay.Review.fst",
+        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2433,11 +2461,13 @@
     "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fst": "4d95e3c6fdd515225adcab2a9fcf9dc0abd1c027834a1dd31812b66512870023",
     "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fsti": "c8071eab7830d0232c584d9ec053c1f45b30c0a27ce4e6716d729d7f073f2035",
     "proofs/mirage-final_norm_projection/KPlay.Proof.Tightness.fst": "18f1a4435b09c3803fa9b3efe7c3af72ba8ade76388696d007cc8745109ab64d",
+    "proofs/mirage-final_norm_projection/KPlay.Review.fst": "20712dcd2443af58fec3459610741d4697f45d48efc347ebbe8e99ceb96293f2",
+    "proofs/mirage-final_norm_projection/KPlay.Review.fsti": "76fb390df5d6425677516a010221c1ca23ba608baa31a76ef4fe427a1d8b8ed8",
     "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst": "9336c6573664f3faebfd75633f606525a9b9cb077012d3438615134d2491bb78",
-    "proofs/mirage-final_norm_projection/base/KPlay.Functional.fst": "6643fbd65bccc9d273c92a99db2a30b16d46f99bc81cf6180f2ba5c3c66badf9",
-    "proofs/mirage-final_norm_projection/base/KPlay.Functional.fsti": "bd907c0722318fd134afd3bff6ec825755bc99d14f95366da124097a09d9d4a6",
-    "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fst": "3abac37ad122f9ce5b5b0be93e28592a69a4a82e9cd0f2264560afd94926eee5",
-    "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fsti": "f5180db79b2e673fe852ec007c3c8d62a2912139706d4b156d8a560e48bd69da",
+    "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst": "6ffe906830c5d0980a02a8ddcdac5b515702d5bba55b7ca7d4a47c229c4be006",
+    "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti": "9c5371170c2b86071641e9f19c0014802ed567444a097fc4459f46b2c8dff3fc",
+    "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst": "ca69b08497dca6b9a260b791c6439bf38b5f9ebee5dbaffa7eb12fd4a014129a",
+    "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti": "32189cb59911f12694138a65d61f21d8c789ff92b33c1df0e79698d139ce3e8b",
     "proofs/mirage-program/KPlay.SharedSpec.fst": "94b3ca0becd032caf679ac2f8830331f4f8865acfee8975981979dd0808560ba",
     "proofs/mirage-program/base/KPlay.Functional.fst": "748162007b868ff74811350ffd62010d5937385d4e21acf92e354089304e4673",
     "proofs/mirage-program/base/KPlay.Functional.fsti": "23a4f2af4d01c9ffe7a92a96ae42923b65235726700ece5e14595607292264ce",

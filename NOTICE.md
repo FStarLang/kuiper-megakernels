@@ -31,7 +31,8 @@ role-specific historical source/acceptance identities are in `manifest.json`.
 The single proof-only replay adjustment is recorded separately with its
 original source hash and reversible diff; it is not misidentified as the
 original receipt-bound proof bytes.
-The FlashMoE complete-program and argmax, Mirage embedding/position and argmax, and LUCE
+The FlashMoE complete-program and argmax, Mirage embedding/position, argmax, and
+final norm/projection, and LUCE
 embedding, argmax, final norm/projection, and recurrent-decoder entry
 modules were subsequently renamed to
 `KPlay.Base.Functional` and `KPlay.Optimized.Functional` for their joint checked
