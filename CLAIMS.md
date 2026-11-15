@@ -149,6 +149,17 @@ compose into the batched shared postcondition; it is not a new batch executor.
 The dispatcher can choose either implementation for one row, and only optimized
 for a larger batch. All frame copies and actual best-buffer cells remain explicit.
 
+The [FlashMoE projection/softmax review](proofs/flashmoe-projection_softmax/KPlay.Review.fsti)
+gives both roles the same row-wise real projection/softmax target, related to
+every actual returned FP32 probability. Base processes one row and initializes
+or copies the routing frame, extending survival by a zero row; optimized
+processes the complete profile matrix without those auxiliary buffers.
+`base_batch_refines` connects collected base-row guarantees to the complete
+shared postcondition. The optimized postcondition additionally covers every
+represented input model, not just the canonical input denotation.
+Dispatch selects a role-specific call shape, not two interchangeable batch
+executors, and does not assert equality of floating-point outputs.
+
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
 models, or native termination proofs. A determinate but wrong task could still

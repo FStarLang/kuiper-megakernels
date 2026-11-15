@@ -414,6 +414,10 @@
     },
     {
       "directory": "proofs/flashmoe-projection_softmax/base",
+      "historical_entry_modules": {
+        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst": "b1b7c26dde2b8711923a6e9bfd5d29b256c674f6895cc2e2efb4bea2f82abddc",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti": "eaa4be124f93961656c8c47194406e6d63dd82abc63a8d21cf4147ff1c59756b"
+      },
       "historical_receipt_sha256": "171e9115bea47d3b3aba589cf60c8e66cd3b9e3f939abd124d407d783f1de4a9",
       "historical_target_sha256": "a1ba4c5d3feacc19aa8fbb52cbda6bdff12cc8887994b35bf0be0d37c1d146f9",
       "id": "flashmoe-projection_softmax-base",
@@ -431,8 +435,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti",
-        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst",
         "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -482,6 +486,10 @@
     },
     {
       "directory": "proofs/flashmoe-projection_softmax/optimized",
+      "historical_entry_modules": {
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fst": "5aceda926d62620b38d45b146cda9609482a18025bd16ec765fa6e1a35083e32",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fsti": "5d7b54ec2b887886236d8a2f5774b99a8ec6860391d8ddcbc01370bd0dc45d64"
+      },
       "historical_receipt_sha256": "ae3723b90277406304c7e5240f8c227dc544e1e725d8387034f6fe0b2f20627b",
       "historical_target_sha256": "c8c126284c2830d6f8054ce9cc1248c609571d2b0b75850f7b71b70ec6655448",
       "id": "flashmoe-projection_softmax-optimized",
@@ -494,8 +502,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fsti",
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst",
         "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -515,6 +523,26 @@
             512
           ]
         }
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-projection_softmax",
+      "id": "flashmoe-projection_softmax-review",
+      "implementation_cases": [
+        "flashmoe-projection_softmax-base",
+        "flashmoe-projection_softmax-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-projection_softmax/KPlay.Review.fsti",
+        "proofs/flashmoe-projection_softmax/KPlay.Review.fst",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst",
+        "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2219,11 +2247,13 @@
     "proofs/flashmoe-program/optimized/KPlay.Proof.SourceRouting.fst": "45b165a130414756eb383afa36ec84a999a17c39bfb76aee63e9d6d08abb8296",
     "proofs/flashmoe-program/optimized/KPlay.Proof.SourceSoftmax.fst": "18ac9156c5ec9335abbecd63db9af1c629fef2b4dc6b170805279033bca93af6",
     "proofs/flashmoe-projection_softmax/KPlay.Proof.Tightness.fst": "1401d707cf62e9aba5cc8f03f998dbd75ad4405813ef8fcf8bc631e18fd148f9",
+    "proofs/flashmoe-projection_softmax/KPlay.Review.fst": "792ea9fffb29b25620dc5e748df58ca6c32052a42c1bf795b9caa9a189a9c25d",
+    "proofs/flashmoe-projection_softmax/KPlay.Review.fsti": "9a23197ca4245dc01353d50268e22ab1a681a30b06b2019b7e85fa3217f08750",
     "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst": "1ba2c76b6c115889ebca0da4f837439199ebf1046743e9a327d99b364120dd2e",
-    "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst": "b1b7c26dde2b8711923a6e9bfd5d29b256c674f6895cc2e2efb4bea2f82abddc",
-    "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti": "eaa4be124f93961656c8c47194406e6d63dd82abc63a8d21cf4147ff1c59756b",
-    "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fst": "5aceda926d62620b38d45b146cda9609482a18025bd16ec765fa6e1a35083e32",
-    "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fsti": "5d7b54ec2b887886236d8a2f5774b99a8ec6860391d8ddcbc01370bd0dc45d64",
+    "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst": "1337d13e231deb5f18794a18b96e7f70cae98adbffbe177c80b69d09e3394761",
+    "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti": "6f5598e7c8c117f12c5217904e4f6ba8ce2cac246deae1b21d9ed26b22a9547b",
+    "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst": "a334e1f68631bae1ada67659bbbf59c4048229c4dd824ecbe937cadec557ba7b",
+    "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti": "78b395d973840e4b5c8104092a645ca675bd2d0c834152041d12de70387ddae2",
     "proofs/luce-argmax/KPlay.Proof.Tightness.fst": "5be169a982d8659c36cfce05e6d83cb17326c2f6f285712e20f4ae3c1c4a4d97",
     "proofs/luce-argmax/KPlay.Review.fst": "e89ae193c6ed239576ddcf91e70722787cdbac4e790109c5c2ebcae2c65d5864",
     "proofs/luce-argmax/KPlay.Review.fsti": "2c829fd44b884951d94a300b1cbdb613a47981adaf6ba3fb52dedce2aa721387",
