@@ -140,6 +140,10 @@
     },
     {
       "directory": "proofs/flashmoe-normalization_capacity/base",
+      "historical_entry_modules": {
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fst": "e216589ccd8ee97114fdcddffb7825defe2cbe8b7259b4f95a360230f589b78d",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fsti": "08af23a60aa97539b7e1ca37c1c38bb0ee2f8909dcf97e4b62687e560184d4ba"
+      },
       "historical_receipt_sha256": "211ec4db751820115bb789533d387aa1b6819e016313a49b827b94eb9bf56cc6",
       "historical_target_sha256": "bf1479450c755ff83486661e91099650a831c508a6925571bfd57330e4bbc126",
       "id": "flashmoe-normalization_capacity-base",
@@ -157,8 +161,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fsti",
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fst",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst",
         "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -212,6 +216,10 @@
     },
     {
       "directory": "proofs/flashmoe-normalization_capacity/optimized",
+      "historical_entry_modules": {
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fst": "835c0376134d331cd199fe4edeb399ce498da088fc8ed22198d4d9ec87b844a8",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fsti": "69ff8e60ef5a5aba5afae412f9d6ef793cf0ed2203090b5f9752850cb5bbf492"
+      },
       "historical_receipt_sha256": "94301e6d22993f7d9d9f01c949b89e4e8f5ff277099388237f8015583f2517c2",
       "historical_target_sha256": "9001ee0ddaac8e71e97966ebe43423a27d583c40d18ffbd54ab5cb4556f0d5f2",
       "id": "flashmoe-normalization_capacity-optimized",
@@ -226,8 +234,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fsti",
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst",
         "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -256,6 +264,26 @@
         {
           "kind": "int"
         }
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-normalization_capacity",
+      "id": "flashmoe-normalization_capacity-review",
+      "implementation_cases": [
+        "flashmoe-normalization_capacity-base",
+        "flashmoe-normalization_capacity-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-normalization_capacity/KPlay.Review.fsti",
+        "proofs/flashmoe-normalization_capacity/KPlay.Review.fst",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst",
+        "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -2199,11 +2227,13 @@
     "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst": "ef7dbd20554d0357849097610f2c7a285ce5a7538fe0a91e264182a20749958e",
     "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti": "0b5a1a6ef59f5c206929bde488883aa906f67bb85c7efedeb6e8bf7cf32d5c70",
     "proofs/flashmoe-normalization_capacity/KPlay.Proof.Tightness.fst": "288af3c12d5df55fd4e12a2a43e709491951b3fb18b58959d2a8cb849db12c8d",
+    "proofs/flashmoe-normalization_capacity/KPlay.Review.fst": "cdbc12b6294311100765659099e53c9fc80a1c87246397d2bcbe3b2a5a8325b1",
+    "proofs/flashmoe-normalization_capacity/KPlay.Review.fsti": "81732ca22198a997f6f41e695a0cdfb0c2b2da2499af3d06faf5b90f0963be1f",
     "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst": "0a9268fe77de43f3f58795bdadcce8be988a96bdb34ba889478e81ed74203cd5",
-    "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fst": "e216589ccd8ee97114fdcddffb7825defe2cbe8b7259b4f95a360230f589b78d",
-    "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fsti": "08af23a60aa97539b7e1ca37c1c38bb0ee2f8909dcf97e4b62687e560184d4ba",
-    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fst": "835c0376134d331cd199fe4edeb399ce498da088fc8ed22198d4d9ec87b844a8",
-    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fsti": "69ff8e60ef5a5aba5afae412f9d6ef793cf0ed2203090b5f9752850cb5bbf492",
+    "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst": "a7d4e03ad3594ec16c779f8dde609218699515607c50f732c6607028942f22bc",
+    "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti": "7bb532ce28a11c6d5ad82545226f33adad81046baa0b253a1b40eae801bfcaf6",
+    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst": "73e0c9a1f76b50a00f60c8e666762506d9b777a9a213fd53e043f399500ea305",
+    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti": "9a58ed79daf71821a2e2b7b241c767b484d570ee4f205c18ff19e41665895c95",
     "proofs/flashmoe-program/KPlay.Proof.Shared.Argmax.fst": "a2f8921fe1d063ff9c8aef26dffe1fe0ba3981c6de6bfd6f724aa9ed4b117fce",
     "proofs/flashmoe-program/KPlay.Proof.Shared.Capacity.fst": "3aef1e21a23f515ed557d06f39597899f4e7e270246508a245606fa679b872cc",
     "proofs/flashmoe-program/KPlay.Proof.Shared.Native.fst": "562cbdf71b6a2766a3fee386c5fe0d663f01c8a9c9da7c98d1133de6ce65e75c",

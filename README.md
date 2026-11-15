@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus eleven checked contract reviews.
+and 12 family-tightness proofs**, plus twelve checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -144,7 +144,7 @@ and proves `after_call i`; compatibility is checked at the dispatch site.
 python3 replay.py verify --case flashmoe-program-review --jobs 8
 ```
 
-Ten family reviews use the same interface-and-dispatcher style:
+Eleven family reviews use the same interface-and-dispatcher style:
 
 | Review interface | Explicit representation difference | Common guarantee |
 | --- | --- | --- |
@@ -158,6 +158,7 @@ Ten family reviews use the same interface-and-dispatcher style:
 | [LUCE full-attention decoder](proofs/luce-full_attention_decoder/KPlay.Review.fsti) | Compact time-major versus full head-major caches; external versus internal rotary computation | Complete shared decoder/cache transition; optimized numerical guarantee requires finite actual live scores, while physical cache retention is unconditional |
 | [FlashMoE argmax](proofs/flashmoe-argmax/KPlay.Review.fsti) | Base copies one row and routing frame; optimized selects a batch and returns gathered best probabilities | Identical stable-maximum/gather relation; explicit lemma lifts base row contracts to the batched shared postcondition |
 | [FlashMoE projection/softmax](proofs/flashmoe-projection_softmax/KPlay.Review.fsti) | One row plus routing-frame initialization/copy versus a complete profile matrix | Same projection/softmax target for every returned cell; base batch-lifting proof and optimized guarantee for every represented input model |
+| [FlashMoE normalization/capacity](proofs/flashmoe-normalization_capacity/KPlay.Review.fsti) | One prefix step with I64 counts versus complete routing with I32 demand; base emits eight I32 demand cells only at token 255 | Same represented shared prefix state, complete route postcondition on completion, and an explicit common full-route refinement lemma |
 
 Each `*-review` case checks the review **and all roots of both implementation cases**,
 including their bodies, not just their interfaces. The manifest validator rejects

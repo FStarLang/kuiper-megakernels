@@ -160,6 +160,18 @@ represented input model, not just the canonical input denotation.
 Dispatch selects a role-specific call shape, not two interchangeable batch
 executors, and does not assert equality of floating-point outputs.
 
+The [FlashMoE normalization/capacity review](proofs/flashmoe-normalization_capacity/KPlay.Review.fsti)
+exposes one base prefix transition versus complete optimized routing. Both use
+the same native selection boundary, with exact selected-row/gather correspondence.
+The common postcondition represents the complete shared state at the processed
+prefix and the full route on completion; `completed_refines_shared` makes that
+connection explicit for either representation. Base counts are I64, and its
+separate I32 demand buffer has eight cells only at token 255, including in Full.
+Thus final Full demand is a logical view of computed base counts, not a returned
+16-cell I32 buffer. Optimized returns all expert demands as actual I32 cells.
+Owners, normalized weights, unused zero slots, and every survival cell remain
+connected to the shared specification.
+
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
 models, or native termination proofs. A determinate but wrong task could still
