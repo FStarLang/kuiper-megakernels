@@ -31,6 +31,43 @@ stability, or a guarantee of equal selected tokens/experts. Each execution
 follows its own permitted numerical observations and selection history.
 Satisfaction of the numerical premises is not newly established by replay.
 
+FlashMoE's [`KPlay.Review.fsti`](proofs/flashmoe-program/KPlay.Review.fsti) is a
+compact checked review surface for this claim. Its `base` and `optimized` functions
+call the distinctly named verified entry modules, with a common precondition and
+postcondition parameterized only by the one-versus-three completion epochs.
+The corresponding `.fst` proves the adapters from the original role-specific postconditions
+to that common form. Allocation and result-construction failures, output
+ownership, input preservation and pending frame recovery remain explicit.
+The review does not equate native numerical observations or prove the two
+executions choose the same experts. The `flashmoe-program-review` case rechecks
+both implementation bodies and their helpers along with the review.
+
+The [LUCE program review](proofs/luce-program/KPlay.Review.fsti) proves that both
+packing maps describe the same 752393024 BF16 weights, parameter addresses and
+prompt cells. Both wrappers retain allocation failure, owning returned tensors,
+and the complete queued safety/history postcondition at the next epoch.
+Their actual execution witnesses remain distinct: base convolution/normalization
+observations are BF16, optimized observations FP32. Base numerical correctness
+is unconditional; the optimized numerical prefix is conditional on its
+`family_dependencies` and `numerical_scope` for that returned execution.
+The dispatcher does not claim unconditional numerical equivalence or equal
+generated tokens.
+
+The [Mirage program review](proofs/mirage-program/KPlay.Review.fsti) exposes the
+shared mixed structural, numerical, and selection predicates for both actual
+returned execution witnesses. The base legacy-observation conversion and the
+optimized result restatement are proved equivalent to their native predicates.
+`input_models_agree` proves equality of the prompt, decode count, and every
+packed parameter. Base uses FP32 rotary/layer/cache observations; optimized uses
+BF16, with FP32 rotary metadata and scores in both. Both retain their rotary
+domain; optimized additionally requires the actual execution's attention domain
+for numerical correctness. Optimized valid-token and typed-result guarantees
+are conditional: outside the actual selector domain its last token can be `-1`.
+The review retains raw structural/provenance facts even in that case.
+Completion is `start + 229` versus `start + 256`, not a difference in decode
+count: both generate one token. Both returned hidden tensors have metadata
+`[7;1024]`; the optimized decoder's eight-row padding is internal.
+
 Mirage's shared check includes its mixed-observation/legacy compatibility
 bridge. Both complete Mirage programs and that check import one
 [canonical specification module](proofs/mirage-program/KPlay.SharedSpec.fst);
@@ -70,6 +107,108 @@ Inspect `unique`, `full_contract`, `no_extra_results`, `fixed_choice_unique`,
 `fixed_choices_unique`, and `all_targets_unique` where present. Not every
 family has the same theorem shape. In particular, float-to-real approximation
 does **not** make two allowed floating-point bit patterns identical.
+
+Mirage's [embedding/position review](proofs/mirage-embedding_position/KPlay.Review.fsti)
+and [argmax review](proofs/mirage-argmax/KPlay.Review.fsti) additionally provide
+checked `base`, `optimized`, and implementation-indexed `switcher` contracts.
+Embedding compares the seven logical prompt positions, not optimized padding or
+unused rotary-table entries. Argmax exposes the different physical row strides
+and requires finite, comparison-faithful logical score representations; its
+common postcondition permits the shared specification's tie choices.
+Neither review asserts equality of results from separate executions.
+
+The [Mirage final norm/projection review](proofs/mirage-final_norm_projection/KPlay.Review.fsti)
+uses one logical input for both roles and displays its physical representation:
+packed-weight offsets and residual-plus-delta for base, versus separate gamma,
+embedding, and prepared hidden buffers for optimized. Both prove the complete
+shared normalization/projection postcondition and projection of all seven rows.
+The optimized eighth input row is outside the logical task, and padded score
+columns represent zero. This does not establish bitwise equality or preservation
+of score comparisons between executions.
+
+The [Mirage decoder review](proofs/mirage-decoder/KPlay.Review.fsti)
+uses one shared prefill input and the optimized canonical packed-weight layout
+for both wrappers; native base supports additional layouts outside this review.
+It exposes seven residual/delta rows versus eight hidden rows, both rotary
+representations, and the exact physical indices of observed keys and values.
+Canonical cache observations are unconditional. The complete shared task is
+unconditional for base and conditional on finite actual live MMA scores for
+optimized, whose eighth-row target is also explicit. The optimized receipt
+ties the returned observation and cells to the same consumed invocation.
+Cache observations are erased temporary snapshots, not returned persistent KV
+buffers. No equality of independent executions is claimed.
+
+The [LUCE argmax review](proofs/luce-argmax/KPlay.Review.fsti) preserves the
+stronger first-maximum base guarantee and proves it implies the optimized
+any-maximum guarantee for the same logical scores and output. The dispatcher
+establishes both its role's guarantee and the common any-maximum guarantee.
+Score representation preserves categories (including NaNs and infinities),
+signed-zero keys, ordering, and ties across the BF16/FP32 physical interfaces.
+Both contracts retain exact history updates and inactive empty histories.
+
+The [LUCE final norm/projection review](proofs/luce-final_norm_projection/KPlay.Review.fsti)
+uses identical input ownership and mathematical targets for both implementations,
+while exposing the BF16/FP32 score representation difference. Both append the
+exact unnormalized input hidden row on emitting calls, preserve prior history,
+and preserve input permissions. The common approximation target does not
+establish comparison preservation or bitwise equality between their scores.
+
+The [LUCE embedding review](proofs/luce-embedding/KPlay.Review.fsti) states the
+same exact BF16 embedding-row postcondition for both implementations. It also
+exposes the base-only rotary and initial-state outputs without implying that
+the optimized embedding call produces them. Half-permission input ownership
+supports the initial previous-token/prompt alias. The common domain requires
+valid prompt tokens and an explicitly identified selected token.
+
+The [LUCE recurrent-decoder review](proofs/luce-recurrent_decoder/KPlay.Review.fsti)
+exposes the BF16/FP32 convolution-state difference, transposed recurrent
+key/value axes, and optimized allocation-free initial state. Both return
+represented layer values satisfying the same complete shared decoder/cache
+postcondition, including installation of the layer state and cache framing.
+The base requires materialized buffers representing zero state on first use.
+This is common-task refinement, not equality of separate numerical executions.
+
+The [LUCE full-attention review](proofs/luce-full_attention_decoder/KPlay.Review.fsti)
+exposes compact time-major base caches versus full head-major optimized caches,
+null initial source buffers, and the base-only rotary input. Both return
+represented layer values satisfying the complete shared decoder/cache transition,
+but the optimized numerical guarantee requires finiteness of the actual returned
+live-score observation. This premise is visible in `numerical_premise`, not
+assumed or discharged by the dispatcher. Physical cache retention and ownership
+are unconditional. The review does not claim unconditional equivalence of the
+native numerical contracts or equality of independent executions.
+
+The [FlashMoE argmax review](proofs/flashmoe-argmax/KPlay.Review.fsti) gives
+both entry points the same stable-maximum/gather postcondition on finite FP32
+probabilities in [0,1]. It exposes that a base call processes one row and copies
+its routing frame, whereas an optimized call processes a batch and materializes
+the gathered probabilities. `base_batch_refines` proves that the row contracts
+compose into the batched shared postcondition; it is not a new batch executor.
+The dispatcher can choose either implementation for one row, and only optimized
+for a larger batch. All frame copies and actual best-buffer cells remain explicit.
+
+The [FlashMoE projection/softmax review](proofs/flashmoe-projection_softmax/KPlay.Review.fsti)
+gives both roles the same row-wise real projection/softmax target, related to
+every actual returned FP32 probability. Base processes one row and initializes
+or copies the routing frame, extending survival by a zero row; optimized
+processes the complete profile matrix without those auxiliary buffers.
+`base_batch_refines` connects collected base-row guarantees to the complete
+shared postcondition. The optimized postcondition additionally covers every
+represented input model, not just the canonical input denotation.
+Dispatch selects a role-specific call shape, not two interchangeable batch
+executors, and does not assert equality of floating-point outputs.
+
+The [FlashMoE normalization/capacity review](proofs/flashmoe-normalization_capacity/KPlay.Review.fsti)
+exposes one base prefix transition versus complete optimized routing. Both use
+the same native selection boundary, with exact selected-row/gather correspondence.
+The common postcondition represents the complete shared state at the processed
+prefix and the full route on completion; `completed_refines_shared` makes that
+connection explicit for either representation. Base counts are I64, and its
+separate I32 demand buffer has eight cells only at token 255, including in Full.
+Thus final Full demand is a logical view of computed base counts, not a returned
+16-cell I32 buffer. Optimized returns all expert demands as actual I32 cells.
+Owners, normalized weights, unused zero slots, and every survival cell remain
+connected to the shared specification.
 
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
@@ -123,3 +262,7 @@ real-division rewrite in `rms_radicand_at` during public-toolchain replay.
 explicit with a proved helper. The original source SHA-256 remains recorded in
 `manifest.json`. This changes proof presentation only: the theorem statement,
 specification, native operations, and trusted assumptions are unchanged.
+That historical patch retains its original `KPlay.Functional.fst` path and
+module declaration. Restore that filename and declaration before applying its
+reverse diff to the renamed optimized decoder; the new review namespace is
+not part of the historical patch.

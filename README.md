@@ -2,7 +2,8 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**. No RESOLVE installation, agent, DTester,
+and 12 family-tightness proofs**, plus fifteen checked contract reviews.
+No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
 This standalone repository was migrated from `FStarLang/kuiper`, branch
@@ -73,7 +74,14 @@ One proof-only replay adjustment is disclosed in
 [replay-adjustments.patch](replay-adjustments.patch): an explicit, proved
 real-division identity in Mirage's optimized decoder. Its original source hash
 is retained in `manifest.json`; contracts, executable operations, and CUDA are
-unchanged. All other retained proof sources preserve their historical bytes.
+unchanged. The reviewed kernels' entry modules additionally have distinct
+module names so the checked review can import both at once; only their filenames,
+module declarations, and qualified tactic self-references changed, except for
+explicit proof steps added to two recurrent-decoder lemmas, a full-attention
+cache-loop exit, and Mirage base rotary normalization after renaming exposed
+solver sensitivity. Contracts and executable operations are unchanged. Historical hashes are retained
+in `manifest.json` under `historical_entry_modules`. Other retained proof sources
+preserve their historical bytes.
 
 Each kernel has one directory containing its shared specification, its
 family-tightness proof where present, and separate implementations. For example:
@@ -82,8 +90,9 @@ family-tightness proof where present, and separate implementations. For example:
 proofs/mirage-decoder/
   KPlay.SharedSpec.fst
   KPlay.Proof.Tightness.fst
-  base/KPlay.Functional.{fst,fsti}
-  optimized/KPlay.Functional.{fst,fsti}
+  KPlay.Review.{fst,fsti}
+  base/KPlay.Base.Functional.{fst,fsti}
+  optimized/KPlay.Optimized.Functional.{fst,fsti}
 ```
 
 The three complete programs use the same layout under
@@ -98,11 +107,11 @@ The family specifications and the LUCE/FlashMoE program specifications were
 already byte-identical across roles. The complete Mirage programs use the
 unchanged former optimized/shared specification, whose prefix contains the
 entire former base specification. Only paths and duplicate files changed;
-theorem statements, numerical assumptions, and implementations are unchanged.
+theorem statements, numerical assumptions, and implementation bodies are unchanged.
 Existing case IDs and replay commands are unchanged.
 
 `--case` accepts a quoted pattern and is repeatable. `--kind` selects `family`,
-`program`, `shared`, or `tightness`; the default is `all`. A changed support
+`program`, `shared`, `tightness`, or `review`; the default is `all`. A changed support
 profile requires a new `--work` directory. The old compiler's packaged checked
 caches produced verification failures during preparation, so replay deliberately
 retains the historical cache-free checking policy.
@@ -114,6 +123,73 @@ To start over after an interrupted toolchain preparation, use a fresh directory:
 ```sh
 python3 replay.py verify --case mirage-argmax-tightness --jobs 2 --work .work/retry
 ```
+
+## Review the base/optimized correspondence
+
+Start with [`proofs/flashmoe-program/KPlay.Review.fsti`](proofs/flashmoe-program/KPlay.Review.fsti).
+It exposes the common caller precondition, the complete success/failure
+postcondition, the completion-epoch definition, and the `base`, `optimized`,
+and the implementation-indexed, dispatch-only `switcher` definition. The corresponding `.fst` keeps the adaptation
+proofs and wrappers that call the verified implementations directly. Their
+signatures are identical except for `BaseRole` versus `OptimizedRole`: completion
+is after one launch versus three. `input_models_agree` proves the input adapters
+identical; `allocation_failure_contracts_agree` and `returned_contracts_agree`
+prove postcondition equality, with completion epochs aligned for the latter.
+These are equalities of predicates on the same result, not of two executions'
+results. Both wrappers preserve the caller's input references,
+input cells and frame; successful returned cells satisfy the same
+`Shared.task_relation`. This is common-task refinement, not output equality.
+`switcher i` dispatches to the chosen implementation under that same precondition
+and proves `after_call i`; compatibility is checked at the dispatch site.
+
+```sh
+python3 replay.py verify --case flashmoe-program-review --jobs 8
+```
+
+The [LUCE program review](proofs/luce-program/KPlay.Review.fsti) uses the same
+dispatcher style. It proves equality of the packed input views and exposes the
+same complete safety/history postcondition for both implementations. Base numerical
+correctness is unconditional; optimized numerical correctness retains its
+family-dependency and numerical-scope premises on the actual returned execution.
+Both enqueue one completion epoch and preserve allocation-failure behavior.
+
+The [Mirage program review](proofs/mirage-program/KPlay.Review.fsti) exposes both
+contracts using the shared mixed-observation specification and proves equivalence
+to the native result predicates. It checks pointwise equality of all input
+weights and preserves the actual returned-cell witnesses. Base completes at
+`start + 229`, optimized at `start + 256`; both return hidden tensors of shape
+`[7;1024]` (optimized decoder padding is internal). Optimized numerical
+correctness retains its attention-domain premise, and valid output tokens are
+guaranteed under the actual selector-score domain.
+
+The [review catalog](proofs/REVIEW-CATALOG.md) compares all fifteen groups,
+assesses the significance of each contract difference, and distinguishes
+exact functionality, allowed choices, and conditional/relative numerical
+tightness. Each interface includes a more detailed comment at its visible
+`switcher` implementation.
+
+All twelve family reviews use the same interface-and-dispatcher style:
+
+| Review interface | Explicit representation difference | Common guarantee |
+| --- | --- | --- |
+| [Mirage embedding/position](proofs/mirage-embedding_position/KPlay.Review.fsti) | Seven versus eight hidden rows; seven versus 4096 rotary positions | Shared embedding/rotary postcondition on all seven prompt positions |
+| [Mirage argmax](proofs/mirage-argmax/KPlay.Review.fsti) | Vocabulary stride 151936 versus padded stride 153600 | Shared prompt/output and allowed-maximum relation, under explicit finite comparison-faithful input representation |
+| [Mirage final norm/projection](proofs/mirage-final_norm_projection/KPlay.Review.fsti) | Packed weights and residual+delta versus separate weights and prepared hidden input; optimized input/score padding | Same logical input, complete shared normalization/projection postcondition, all seven vocabulary-score rows, and explicit zero-modeled score padding |
+| [Mirage decoder](proofs/mirage-decoder/KPlay.Review.fsti) | Seven residual/delta rows versus eight hidden rows; compact versus full rotary storage; explicit observed cache indices | Same complete shared decoder/cache task on canonical packed weights; unconditional cache observations, optimized numerical finiteness premise and padding target, and an invocation-bound receipt |
+| [LUCE argmax](proofs/luce-argmax/KPlay.Review.fsti) | BF16 versus FP32 scores; first versus any maximum | Explicit proof that the base postcondition implies the optimized postcondition on the same represented logical scores and output; exact history update |
+| [LUCE final norm/projection](proofs/luce-final_norm_projection/KPlay.Review.fsti) | BF16 versus FP32 returned logits | Identical shared mathematical logit targets, exact hidden-history append, and preserved input ownership |
+| [LUCE embedding](proofs/luce-embedding/KPlay.Review.fsti) | Base additionally returns rotary data and initial recurrent/convolution state | Identical exact BF16 embedding-row postcondition; auxiliary outputs and initial-token alias ownership are explicit |
+| [LUCE recurrent decoder](proofs/luce-recurrent_decoder/KPlay.Review.fsti) | BF16 versus FP32 convolution state, transposed recurrent axes, and optimized allocation-free initial state | Same complete shared decoder/cache transition under explicit input/output representations |
+| [LUCE full-attention decoder](proofs/luce-full_attention_decoder/KPlay.Review.fsti) | Compact time-major versus full head-major caches; external versus internal rotary computation | Complete shared decoder/cache transition; optimized numerical guarantee requires finite actual live scores, while physical cache retention is unconditional |
+| [FlashMoE argmax](proofs/flashmoe-argmax/KPlay.Review.fsti) | Base copies one row and routing frame; optimized selects a batch and returns gathered best probabilities | Identical stable-maximum/gather relation; explicit lemma lifts base row contracts to the batched shared postcondition |
+| [FlashMoE projection/softmax](proofs/flashmoe-projection_softmax/KPlay.Review.fsti) | One row plus routing-frame initialization/copy versus a complete profile matrix | Same projection/softmax target for every returned cell; base batch-lifting proof and optimized guarantee for every represented input model |
+| [FlashMoE normalization/capacity](proofs/flashmoe-normalization_capacity/KPlay.Review.fsti) | One prefix step with I64 counts versus complete routing with I32 demand; base emits eight I32 demand cells only at token 255 | Same represented shared prefix state, complete route postcondition on completion, and an explicit common full-route refinement lemma |
+
+Each `*-review` case checks the review **and all roots of both implementation cases**,
+including their bodies, not just their interfaces. The manifest validator rejects
+a review that omits a referenced implementation's roots. It is also included in
+`--kind review` and the default full suite; the existing `shared` CI suite is
+unchanged.
 
 ## Continuous integration
 
@@ -182,8 +258,10 @@ Native extension builds may be reused on subsequent invocations; select a new
 | Tightness | Twelve constructive family-level proofs | Existence and full-observation determination, or the stated choice/approximation policy; not IEEE uniqueness |
 | Replay | Small standalone proof and CUDA runners | No discovery, agent orchestration, fuzzing pipeline, or DTester implementation |
 
-This repository is independent of Kuiper's source tree: cases reuse module
-names and must have isolated include paths. The replay runner provides that
+This repository is independent of Kuiper's source tree: most cases reuse module
+names and must have isolated include paths. Reviewed kernels' entry
+modules are named `KPlay.Base.Functional` and `KPlay.Optimized.Functional` to
+allow their joint review. The replay runner provides the required
 isolation and obtains its compiler from the pinned public release. No Kuiper
 checkout or submodule is required. Frozen payloads preserve their original
 whitespace and are excluded from formatting/whitespace cleanup.

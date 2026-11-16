@@ -51,6 +51,7 @@ def inventory():
     identifiers = [case["id"] for case in manifest["cases"]]
     if len(identifiers) != len(set(identifiers)):
         raise ValueError("Duplicate case IDs.")
+    cases_by_id = {case["id"]: case for case in manifest["cases"]}
     for case in manifest["cases"]:
         roots = case["roots"]
         if (
@@ -63,6 +64,16 @@ def inventory():
             )
         ):
             raise ValueError(f"Unindexed or misplaced proof root: {case['id']}")
+        if case["kind"] == "review":
+            implementations = case.get("implementation_cases", [])
+            if not implementations or any(
+                identifier not in cases_by_id
+                or cases_by_id[identifier]["kind"] not in ("program", "family")
+                or cases_by_id[identifier]["profile"] != case["profile"]
+                or not set(cases_by_id[identifier]["roots"]).issubset(roots)
+                for identifier in implementations
+            ):
+                raise ValueError(f"Review omits implementation checks: {case['id']}")
     return manifest
 
 
@@ -283,7 +294,7 @@ def main():
     parser.add_argument("action", choices=("setup", "list", "integrity", "verify"))
     parser.add_argument("--work", type=Path, default=ROOT / ".work/proofs")
     parser.add_argument("--jobs", type=int, default=4)
-    parser.add_argument("--kind", choices=("all", "program", "shared", "family", "tightness"), default="all")
+    parser.add_argument("--kind", choices=("all", "program", "shared", "family", "tightness", "review"), default="all")
     parser.add_argument("--case", action="append", help="Case ID or shell-style pattern; repeatable")
     args = parser.parse_args()
     args.work = args.work.resolve()

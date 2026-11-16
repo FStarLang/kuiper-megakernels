@@ -2,6 +2,10 @@
   "cases": [
     {
       "directory": "proofs/flashmoe-argmax/base",
+      "historical_entry_modules": {
+        "proofs/flashmoe-argmax/base/KPlay.Functional.fst": "982f27cbe0d64ac09eab0efe3a208f691fdb540fd045e598efbab5501032f53e",
+        "proofs/flashmoe-argmax/base/KPlay.Functional.fsti": "597c57b88f0caab7238510668d73aed14d6f495340d4ddd6d304b7f6aacff074"
+      },
       "historical_receipt_sha256": "30591d9bf342c097aaebf2a0884237b8a2be3aa8b70ef07f6d07c4b74c4f54bd",
       "historical_target_sha256": "e6eaf7d51130434eaa2c0f7a1186e7f677f8185a59ece1fb65528b34d99f1cf2",
       "id": "flashmoe-argmax-base",
@@ -18,8 +22,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-argmax/base/KPlay.Functional.fsti",
-        "proofs/flashmoe-argmax/base/KPlay.Functional.fst",
+        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst",
         "proofs/flashmoe-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -68,6 +72,10 @@
     },
     {
       "directory": "proofs/flashmoe-argmax/optimized",
+      "historical_entry_modules": {
+        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst": "7b18534206f9426b44c143ae905236136702ddb112be8a391da5677c4090c101",
+        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti": "059abd3943a086b39a9b3b5ad46440377c7cd73d0399a14c6d2824c1eba7e275"
+      },
       "historical_receipt_sha256": "7a04b475e4db9be44ffa20e8cacd09394a80467150d330485474d7701863f85f",
       "historical_target_sha256": "a05ba38e0ba22a2e6259c8f3155b8c0b0286d234ad4ad73963ffea1563357c1f",
       "id": "flashmoe-argmax-optimized",
@@ -79,8 +87,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti",
-        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst",
         "proofs/flashmoe-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -92,6 +100,26 @@
             8
           ]
         }
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-argmax",
+      "id": "flashmoe-argmax-review",
+      "implementation_cases": [
+        "flashmoe-argmax-base",
+        "flashmoe-argmax-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-argmax/KPlay.Review.fsti",
+        "proofs/flashmoe-argmax/KPlay.Review.fst",
+        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst",
+        "proofs/flashmoe-argmax/KPlay.SharedSpec.fst",
+        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -112,6 +140,10 @@
     },
     {
       "directory": "proofs/flashmoe-normalization_capacity/base",
+      "historical_entry_modules": {
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fst": "e216589ccd8ee97114fdcddffb7825defe2cbe8b7259b4f95a360230f589b78d",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fsti": "08af23a60aa97539b7e1ca37c1c38bb0ee2f8909dcf97e4b62687e560184d4ba"
+      },
       "historical_receipt_sha256": "211ec4db751820115bb789533d387aa1b6819e016313a49b827b94eb9bf56cc6",
       "historical_target_sha256": "bf1479450c755ff83486661e91099650a831c508a6925571bfd57330e4bbc126",
       "id": "flashmoe-normalization_capacity-base",
@@ -129,8 +161,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fsti",
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fst",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst",
         "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -184,6 +216,10 @@
     },
     {
       "directory": "proofs/flashmoe-normalization_capacity/optimized",
+      "historical_entry_modules": {
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fst": "835c0376134d331cd199fe4edeb399ce498da088fc8ed22198d4d9ec87b844a8",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fsti": "69ff8e60ef5a5aba5afae412f9d6ef793cf0ed2203090b5f9752850cb5bbf492"
+      },
       "historical_receipt_sha256": "94301e6d22993f7d9d9f01c949b89e4e8f5ff277099388237f8015583f2517c2",
       "historical_target_sha256": "9001ee0ddaac8e71e97966ebe43423a27d583c40d18ffbd54ab5cb4556f0d5f2",
       "id": "flashmoe-normalization_capacity-optimized",
@@ -198,8 +234,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fsti",
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst",
         "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -232,6 +268,26 @@
     },
     {
       "directory": "proofs/flashmoe-normalization_capacity",
+      "id": "flashmoe-normalization_capacity-review",
+      "implementation_cases": [
+        "flashmoe-normalization_capacity-base",
+        "flashmoe-normalization_capacity-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-normalization_capacity/KPlay.Review.fsti",
+        "proofs/flashmoe-normalization_capacity/KPlay.Review.fst",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst",
+        "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-normalization_capacity",
       "historical_receipts": {
         "base": "211ec4db751820115bb789533d387aa1b6819e016313a49b827b94eb9bf56cc6",
         "optimized": "94301e6d22993f7d9d9f01c949b89e4e8f5ff277099388237f8015583f2517c2"
@@ -248,6 +304,10 @@
     },
     {
       "directory": "proofs/flashmoe-program/base",
+      "historical_entry_modules": {
+        "proofs/flashmoe-program/base/KPlay.Functional.fst": "3ef7e93d0777ffedc7434caf2523a52dcac2a51cf2d6ce93528a5457075fa2df",
+        "proofs/flashmoe-program/base/KPlay.Functional.fsti": "46c4096c0a230978f69a4afbcac95bcb48de62288d7ff0e90349945b27a175d4"
+      },
       "historical_receipt_sha256": "62f978a35479592d21133bd418683d2ca319c29d6972e8bd0e9581c2b27878bd",
       "id": "flashmoe-program-base",
       "kernel": "kernels/flashmoe-program-base.cu",
@@ -259,8 +319,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-program/base/KPlay.Functional.fst",
-        "proofs/flashmoe-program/base/KPlay.Functional.fsti",
+        "proofs/flashmoe-program/base/KPlay.Base.Functional.fst",
+        "proofs/flashmoe-program/base/KPlay.Base.Functional.fsti",
         "proofs/flashmoe-program/base/KPlay.Proof.BaseCaller.fst",
         "proofs/flashmoe-program/base/KPlay.Proof.BaseCapacity.fst",
         "proofs/flashmoe-program/base/KPlay.Proof.BaseClassification.fst",
@@ -279,6 +339,10 @@
     },
     {
       "directory": "proofs/flashmoe-program/optimized",
+      "historical_entry_modules": {
+        "proofs/flashmoe-program/optimized/KPlay.Functional.fst": "b08ab47aadfcf83b73aab641120c4556debcbb13e74e61674364eff0bb524a37",
+        "proofs/flashmoe-program/optimized/KPlay.Functional.fsti": "9ca2a20f278578d581540703858056ee6f18022f25fbda8e0a9a7f91236cca7a"
+      },
       "historical_receipt_sha256": "c8669d6e838f8de0c2f014e241a10fbdf7e1fa644525d7855202fae0652645a8",
       "id": "flashmoe-program-optimized",
       "kernel": "kernels/flashmoe-program-optimized.cu",
@@ -290,8 +354,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-program/optimized/KPlay.Functional.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Functional.fsti",
+        "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fsti",
         "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyArgmax.fst",
         "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyCapacity.fst",
         "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyPacking.fst",
@@ -322,7 +386,66 @@
       ]
     },
     {
+      "directory": "proofs/flashmoe-program",
+      "id": "flashmoe-program-review",
+      "implementation_cases": [
+        "flashmoe-program-base",
+        "flashmoe-program-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-program/KPlay.Review.fsti",
+        "proofs/flashmoe-program/KPlay.Review.fst",
+        "proofs/flashmoe-program/base/KPlay.Base.Functional.fst",
+        "proofs/flashmoe-program/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-program/base/KPlay.Proof.BaseCaller.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.BaseCapacity.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.BaseClassification.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.BaseHistory.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.BaseNative.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.BaseProjection.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.BaseReturn.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.BaseStorage.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.SupportBoundary.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyArgmax.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyCapacity.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyPacking.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilySelection.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.NativeBindings.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.OnlineClassification.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.OnlineMath.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.OptimizedMMA.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.OutputAllocations.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.RouteSteps.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.RouteSteps.fsti",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceCaller.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceCapacity.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceDevice.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceHistory.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceLaunch.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceLayouts.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceProgram.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceProjection.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceResults.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceRouting.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceSoftmax.fst",
+        "proofs/flashmoe-program/KPlay.Proof.Shared.Argmax.fst",
+        "proofs/flashmoe-program/KPlay.Proof.Shared.Capacity.fst",
+        "proofs/flashmoe-program/KPlay.Proof.Shared.Native.fst",
+        "proofs/flashmoe-program/KPlay.Proof.Shared.ProjectionSoftmax.fst",
+        "proofs/flashmoe-program/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
       "directory": "proofs/flashmoe-projection_softmax/base",
+      "historical_entry_modules": {
+        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst": "b1b7c26dde2b8711923a6e9bfd5d29b256c674f6895cc2e2efb4bea2f82abddc",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti": "eaa4be124f93961656c8c47194406e6d63dd82abc63a8d21cf4147ff1c59756b"
+      },
       "historical_receipt_sha256": "171e9115bea47d3b3aba589cf60c8e66cd3b9e3f939abd124d407d783f1de4a9",
       "historical_target_sha256": "a1ba4c5d3feacc19aa8fbb52cbda6bdff12cc8887994b35bf0be0d37c1d146f9",
       "id": "flashmoe-projection_softmax-base",
@@ -340,8 +463,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti",
-        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst",
         "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -391,6 +514,10 @@
     },
     {
       "directory": "proofs/flashmoe-projection_softmax/optimized",
+      "historical_entry_modules": {
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fst": "5aceda926d62620b38d45b146cda9609482a18025bd16ec765fa6e1a35083e32",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fsti": "5d7b54ec2b887886236d8a2f5774b99a8ec6860391d8ddcbc01370bd0dc45d64"
+      },
       "historical_receipt_sha256": "ae3723b90277406304c7e5240f8c227dc544e1e725d8387034f6fe0b2f20627b",
       "historical_target_sha256": "c8c126284c2830d6f8054ce9cc1248c609571d2b0b75850f7b71b70ec6655448",
       "id": "flashmoe-projection_softmax-optimized",
@@ -403,8 +530,8 @@
       "profile": "flashmoe",
       "project": "flashmoe",
       "roots": [
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fsti",
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst",
         "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -424,6 +551,26 @@
             512
           ]
         }
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-projection_softmax",
+      "id": "flashmoe-projection_softmax-review",
+      "implementation_cases": [
+        "flashmoe-projection_softmax-base",
+        "flashmoe-projection_softmax-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-projection_softmax/KPlay.Review.fsti",
+        "proofs/flashmoe-projection_softmax/KPlay.Review.fst",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst",
+        "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -459,6 +606,10 @@
     },
     {
       "directory": "proofs/luce-argmax/base",
+      "historical_entry_modules": {
+        "proofs/luce-argmax/base/KPlay.Functional.fst": "153bca1a4d1647fc2a37192e716eb0eac7918b106299adae692854660b9543a2",
+        "proofs/luce-argmax/base/KPlay.Functional.fsti": "5c2567afe0a4bb91ce02b1cd4ec2faec7351a9aea4e365c825cb15f6f10e51e8"
+      },
       "historical_receipt_sha256": "c9028cdb821c17d6a86abaa7f9bf1d50f1274f48ae534240f4bf0329e59f85a0",
       "historical_target_sha256": "1e21641ddcb26f5231c197ac2f8662fe294baced3b3dcd2c1b3ba2c51f971b23",
       "id": "luce-argmax-base",
@@ -473,8 +624,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-argmax/base/KPlay.Functional.fsti",
-        "proofs/luce-argmax/base/KPlay.Functional.fst",
+        "proofs/luce-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-argmax/base/KPlay.Base.Functional.fst",
         "proofs/luce-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -502,6 +653,10 @@
     },
     {
       "directory": "proofs/luce-argmax/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-argmax/optimized/KPlay.Functional.fst": "c7461d4ec15d989d08b090f7dee1ec2b0a9e4bcf4635378e09e4be6c6c06ad0e",
+        "proofs/luce-argmax/optimized/KPlay.Functional.fsti": "4d922e9274b8040ff9208bc3b5fc3c89040e1cd07d058bc8b541f7a4a5bc17e1"
+      },
       "historical_receipt_sha256": "65e7b19e2412e6d97f219002e1f0bc76af1927ea29e3e435f2fec325052b0935",
       "historical_target_sha256": "21bfc0d500f920ad690b465a348f8158c177db6d75619613aec9c26e04946683",
       "id": "luce-argmax-optimized",
@@ -516,8 +671,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-argmax/optimized/KPlay.Functional.fsti",
-        "proofs/luce-argmax/optimized/KPlay.Functional.fst",
+        "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -545,6 +700,26 @@
     },
     {
       "directory": "proofs/luce-argmax",
+      "id": "luce-argmax-review",
+      "implementation_cases": [
+        "luce-argmax-base",
+        "luce-argmax-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-argmax/KPlay.Review.fsti",
+        "proofs/luce-argmax/KPlay.Review.fst",
+        "proofs/luce-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-argmax/base/KPlay.Base.Functional.fst",
+        "proofs/luce-argmax/KPlay.SharedSpec.fst",
+        "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/luce-argmax",
       "historical_receipts": {
         "base": "c9028cdb821c17d6a86abaa7f9bf1d50f1274f48ae534240f4bf0329e59f85a0",
         "optimized": "65e7b19e2412e6d97f219002e1f0bc76af1927ea29e3e435f2fec325052b0935"
@@ -561,6 +736,10 @@
     },
     {
       "directory": "proofs/luce-embedding/base",
+      "historical_entry_modules": {
+        "proofs/luce-embedding/base/KPlay.Functional.fst": "7c6d552105850e2af5e005806ec5d06f43392e5a276ce0d7854a475c037598cb",
+        "proofs/luce-embedding/base/KPlay.Functional.fsti": "1d10a0ecfa1abd11bfbca210dfd0cb21a81ae28eb0eff74eaea83e977bcb75c6"
+      },
       "historical_receipt_sha256": "a077aa1e9d5830b3483703fb63855050f8d391fc35038469ea9fd88d1f689a9d",
       "historical_target_sha256": "2db0284e6d6eab44d07774bde8962115831829d7b2af332207ad14519f6067da",
       "id": "luce-embedding-base",
@@ -575,8 +754,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-embedding/base/KPlay.Functional.fsti",
-        "proofs/luce-embedding/base/KPlay.Functional.fst",
+        "proofs/luce-embedding/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-embedding/base/KPlay.Base.Functional.fst",
         "proofs/luce-embedding/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -606,6 +785,10 @@
     },
     {
       "directory": "proofs/luce-embedding/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-embedding/optimized/KPlay.Functional.fst": "cb4ed4ce4828398973525086f65fd0f9ac4a7dbe929734975d5d17fbd6573d59",
+        "proofs/luce-embedding/optimized/KPlay.Functional.fsti": "d555df17b4ec3d1e0032d10f893aa79d173a8d46e4bb95326cd17a6f7b3b873f"
+      },
       "historical_receipt_sha256": "59bee00ac5e0a8f680eb52bba0918110213296da2cdcb5a6ce077b1593d812a1",
       "historical_target_sha256": "57cfd04870e98b1934d76a1b5b89bb4912a76d237284733520082ebf48810561",
       "id": "luce-embedding-optimized",
@@ -620,8 +803,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-embedding/optimized/KPlay.Functional.fsti",
-        "proofs/luce-embedding/optimized/KPlay.Functional.fst",
+        "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-embedding/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -651,6 +834,26 @@
     },
     {
       "directory": "proofs/luce-embedding",
+      "id": "luce-embedding-review",
+      "implementation_cases": [
+        "luce-embedding-base",
+        "luce-embedding-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-embedding/KPlay.Review.fsti",
+        "proofs/luce-embedding/KPlay.Review.fst",
+        "proofs/luce-embedding/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-embedding/base/KPlay.Base.Functional.fst",
+        "proofs/luce-embedding/KPlay.SharedSpec.fst",
+        "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/luce-embedding",
       "historical_receipts": {
         "base": "a077aa1e9d5830b3483703fb63855050f8d391fc35038469ea9fd88d1f689a9d",
         "optimized": "59bee00ac5e0a8f680eb52bba0918110213296da2cdcb5a6ce077b1593d812a1"
@@ -667,6 +870,10 @@
     },
     {
       "directory": "proofs/luce-final_norm_projection/base",
+      "historical_entry_modules": {
+        "proofs/luce-final_norm_projection/base/KPlay.Functional.fst": "c62f2709a6a8f6f9026ea147ca8b86b9c7b38d8b836ebb17a810e4b8a6dce353",
+        "proofs/luce-final_norm_projection/base/KPlay.Functional.fsti": "246b650331df897d17f9bcabe3661485f32939c97ed66555aa8d44afccd47233"
+      },
       "historical_receipt_sha256": "0d493ce571cad30b82e89f4e63fde94503fd82422538aa81a97952539013cf53",
       "historical_target_sha256": "ef8ebdd8ff272506fce7f421ccefd02afe31e779bd3457ff4caeca3340b62128",
       "id": "luce-final_norm_projection-base",
@@ -682,8 +889,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-final_norm_projection/base/KPlay.Functional.fsti",
-        "proofs/luce-final_norm_projection/base/KPlay.Functional.fst",
+        "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fst",
         "proofs/luce-final_norm_projection/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -719,6 +926,10 @@
     },
     {
       "directory": "proofs/luce-final_norm_projection/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fst": "12c442632f05bcd53c6f334634bc8d320c170498aa2554050651734d195540df",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fsti": "87a4d43f894d374be6501a0b1368e8e2fec3001fc6393e09e90f09acf1e7655a"
+      },
       "historical_receipt_sha256": "2e9888e808d656caa0905869a6615d074b1e3900ca1a49d931ad2fe148fe001c",
       "historical_target_sha256": "9ba6719aa10968a0b858ce6598e00fe9dc9750f044653269f7122f6d9f078c0b",
       "id": "luce-final_norm_projection-optimized",
@@ -734,8 +945,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fsti",
-        "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fst",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-final_norm_projection/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -771,6 +982,26 @@
     },
     {
       "directory": "proofs/luce-final_norm_projection",
+      "id": "luce-final_norm_projection-review",
+      "implementation_cases": [
+        "luce-final_norm_projection-base",
+        "luce-final_norm_projection-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-final_norm_projection/KPlay.Review.fsti",
+        "proofs/luce-final_norm_projection/KPlay.Review.fst",
+        "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fst",
+        "proofs/luce-final_norm_projection/KPlay.SharedSpec.fst",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/luce-final_norm_projection",
       "historical_receipts": {
         "base": "0d493ce571cad30b82e89f4e63fde94503fd82422538aa81a97952539013cf53",
         "optimized": "2e9888e808d656caa0905869a6615d074b1e3900ca1a49d931ad2fe148fe001c"
@@ -787,6 +1018,10 @@
     },
     {
       "directory": "proofs/luce-full_attention_decoder/base",
+      "historical_entry_modules": {
+        "proofs/luce-full_attention_decoder/base/KPlay.Functional.fst": "5959ae6316535299fc4ad2e114a346fee518d98e4d3eff08a0c0da151fd4dea5",
+        "proofs/luce-full_attention_decoder/base/KPlay.Functional.fsti": "b71e309db2b261fe248da9891d26cc0c5861a58ba3ad1470b85b24b8baa32a19"
+      },
       "historical_receipt_sha256": "60701444d66534f227a82f50a641ac4510764a6d073dc92f5a95f117fe31c637",
       "historical_target_sha256": "f5fe2653fdd4bd6dc833a15ccedfaaa64b2ddffaf28df0b8789f8d51db9fac69",
       "id": "luce-full_attention_decoder-base",
@@ -803,8 +1038,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-full_attention_decoder/base/KPlay.Functional.fsti",
-        "proofs/luce-full_attention_decoder/base/KPlay.Functional.fst",
+        "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fst",
         "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -852,6 +1087,10 @@
     },
     {
       "directory": "proofs/luce-full_attention_decoder/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fst": "8d225cbe507094493dcc1869bb031c96741d6386947da318d9797d87442cc80b",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fsti": "e6e92d126ea691bf1f4bc5f2bcf71a480ee75573f0689e43e689aa16714bf8a2"
+      },
       "historical_receipt_sha256": "4f90096aa4a0acbecf991e71ad0f5f69bded96791dd03b02ae7db04280911a76",
       "historical_target_sha256": "90e41bac91c5705a5062faac881f2d44adccebd22f0976950821e388e72887c1",
       "id": "luce-full_attention_decoder-optimized",
@@ -867,8 +1106,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fsti",
-        "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fst",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -907,6 +1146,26 @@
     },
     {
       "directory": "proofs/luce-full_attention_decoder",
+      "id": "luce-full_attention_decoder-review",
+      "implementation_cases": [
+        "luce-full_attention_decoder-base",
+        "luce-full_attention_decoder-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-full_attention_decoder/KPlay.Review.fsti",
+        "proofs/luce-full_attention_decoder/KPlay.Review.fst",
+        "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fst",
+        "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/luce-full_attention_decoder",
       "historical_receipts": {
         "base": "60701444d66534f227a82f50a641ac4510764a6d073dc92f5a95f117fe31c637",
         "optimized": "4f90096aa4a0acbecf991e71ad0f5f69bded96791dd03b02ae7db04280911a76"
@@ -923,6 +1182,10 @@
     },
     {
       "directory": "proofs/luce-program/base",
+      "historical_entry_modules": {
+        "proofs/luce-program/base/KPlay.Functional.fst": "922a2111a386f2106437701f93a2a06e06aa42fd0d9331d76c4034d05aa98e9d",
+        "proofs/luce-program/base/KPlay.Functional.fsti": "265cf582474e70c04d7783f2f6759e29fc6697fa7e31bf56b1ed61a72ea33a08"
+      },
       "historical_receipt_sha256": "8a249f7b3ceba0fd58e78013093ac0f1f35a0e054ab9ab47263f87ffba234711",
       "id": "luce-program-base",
       "kernel": "kernels/luce-program-base.cu",
@@ -935,8 +1198,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-program/base/KPlay.Functional.fst",
-        "proofs/luce-program/base/KPlay.Functional.fsti",
+        "proofs/luce-program/base/KPlay.Base.Functional.fst",
+        "proofs/luce-program/base/KPlay.Base.Functional.fsti",
         "proofs/luce-program/base/KPlay.Proof.Base.AffineMMA.fst",
         "proofs/luce-program/base/KPlay.Proof.Base.Algebra.fst",
         "proofs/luce-program/base/KPlay.Proof.Base.Allocator.fst",
@@ -1063,7 +1326,7 @@
         "proofs/luce-program/base/KPlay.Proof.Base.WarpHidden.fst",
         "proofs/luce-program/base/KPlay.Proof.Base.WarpState.fst",
         "proofs/luce-program/base/KPlay.Proof.Base.WeightFields.fst",
-        "proofs/luce-program/base/KPlay.Proof.NativeInput.fst",
+        "proofs/luce-program/KPlay.Proof.NativeInput.fst",
         "proofs/luce-program/base/KPlay.Proof.RoPE.Consumer.fst",
         "proofs/luce-program/base/KPlay.Proof.RoPE.Source.fst",
         "proofs/luce-program/KPlay.Proof.Shared.Attention.fst",
@@ -1079,6 +1342,10 @@
     },
     {
       "directory": "proofs/luce-program/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-program/optimized/KPlay.Functional.fst": "6344f1b9926c94e8a3a689d4955c4e52d860c95d2193452143b8d8f8d05861a3",
+        "proofs/luce-program/optimized/KPlay.Functional.fsti": "bc78e501a459d52c93f3fb902f52ec4c94567d3d0cbe7611aa02eaf2780fae48"
+      },
       "historical_receipt_sha256": "9bc3839ef3acb2c0be85540c3927f0f3fa4751c58cf1ad10f627fb1c460b0deb",
       "id": "luce-program-optimized",
       "kernel": "kernels/luce-program-optimized.cu",
@@ -1091,10 +1358,10 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-program/optimized/KPlay.Functional.fst",
-        "proofs/luce-program/optimized/KPlay.Functional.fsti",
+        "proofs/luce-program/optimized/KPlay.Optimized.Functional.fst",
+        "proofs/luce-program/optimized/KPlay.Optimized.Functional.fsti",
         "proofs/luce-program/optimized/KPlay.Proof.InputAlignment.fst",
-        "proofs/luce-program/optimized/KPlay.Proof.NativeInput.fst",
+        "proofs/luce-program/KPlay.Proof.NativeInput.fst",
         "proofs/luce-program/optimized/KPlay.Proof.Optimized.Algebra.fst",
         "proofs/luce-program/optimized/KPlay.Proof.Optimized.Attention.fst",
         "proofs/luce-program/optimized/KPlay.Proof.Optimized.AttentionFamily.fst",
@@ -1167,7 +1434,229 @@
       ]
     },
     {
+      "directory": "proofs/luce-program",
+      "id": "luce-program-review",
+      "implementation_cases": [
+        "luce-program-base",
+        "luce-program-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-program/KPlay.Review.fsti",
+        "proofs/luce-program/KPlay.Review.fst",
+        "proofs/luce-program/base/KPlay.Base.Functional.fst",
+        "proofs/luce-program/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-program/base/KPlay.Proof.Base.AffineMMA.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Algebra.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Allocator.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionAlgebra.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionBook.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionGateCopy.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionHeadStages.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionLayer.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionPipeline.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionPrepare.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionPrepareMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionProjection.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionRotation.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.AttentionStages.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Cache.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.CacheInvariant.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.CacheMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.CacheNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.CacheProjection.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Caller.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.ConditionalNumerics.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Convolution.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.ConvolutionLoop.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Embedding.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Entry.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.GhostWarp.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.GlobalCache.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Head.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.HistoryNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Initialization.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.InputOwnership.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Inputs.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelControls.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelDescriptor.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelEmbedding.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelHead.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelHeadResult.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelHeadResult.fsti",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelLayers.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelNativeHead.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelNativeLayers.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelNativePosition.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelOwnership.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelPosition.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelQueue.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelResult.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelSend.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelSetup.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelStart.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelState.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.KernelStorage.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.L2.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.L2Native.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LayerBinding.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LayerNumerics.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LayerTrace.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LinearBook.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LinearLayer.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LinearProjection.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LinearStages.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LocalArray.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LocalReductionMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.LocalScope.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Matmul.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Matvec.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.MatvecLayout.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.MatvecNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.MatvecWrites.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.NativeLayout.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.NativeProjection.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.NativeSelection.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Norm.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.NormNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Order.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.PackedOwnership.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.PhaseMMA.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Program.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.ProgramTypes.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RMS.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RMSConfigs.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RMSMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RMSNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentCore.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentDot.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentDotMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentGating.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentHead.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentHeadModel.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentHeads.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentMixer.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentModel.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentModelMatch.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentPipeline.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentPipelineBridge.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentScalars.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.RecurrentStateMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.ReductionMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.ReductionNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Rotary.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SIMT.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SIMTLocal.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SIMTMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SIMTNative.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Scalar.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Schedule.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.ScoreObservation.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Scratch.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.ScratchMath.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SelectionAlgebra.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Softmax.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SoftmaxLocal.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SoftmaxScale.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SoftmaxStripes.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SourceArrays.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.SourceProjection.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.StorageAdapters.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Trace.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Transfer.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.Vocabulary.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.WarpBook.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.WarpCache.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.WarpHidden.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.WarpState.fst",
+        "proofs/luce-program/base/KPlay.Proof.Base.WeightFields.fst",
+        "proofs/luce-program/KPlay.Proof.NativeInput.fst",
+        "proofs/luce-program/base/KPlay.Proof.RoPE.Consumer.fst",
+        "proofs/luce-program/base/KPlay.Proof.RoPE.Source.fst",
+        "proofs/luce-program/KPlay.Proof.Shared.Attention.fst",
+        "proofs/luce-program/KPlay.Proof.Shared.Embedding.fst",
+        "proofs/luce-program/KPlay.Proof.Shared.Model.fst",
+        "proofs/luce-program/KPlay.Proof.Shared.Observations.fst",
+        "proofs/luce-program/KPlay.Proof.Shared.Projection.fst",
+        "proofs/luce-program/KPlay.Proof.Shared.Recurrent.fst",
+        "proofs/luce-program/KPlay.Proof.Shared.Selection.fst",
+        "proofs/luce-program/KPlay.Proof.Shared.Storage.fst",
+        "proofs/luce-program/KPlay.SharedSpec.fst",
+        "proofs/luce-program/optimized/KPlay.Optimized.Functional.fst",
+        "proofs/luce-program/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-program/optimized/KPlay.Proof.InputAlignment.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Algebra.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Attention.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.AttentionFamily.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.AttentionMath.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.AttentionOps.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Block.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Cache.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Cache.fsti",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Caller.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Convolution.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Decay.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Delta.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.DeltaMath.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Descriptor.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Dot.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.DotMath.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Embedding.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Entry.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Execution.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.FamilyAttention.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.FamilyEmbedding.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.FamilyProjection.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.FamilyRecurrent.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.FamilySelection.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Final.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.FinalMath.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Head.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.History.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Initialization.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.InputOwnership.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Kernel.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Layer.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.LayerBook.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Layout.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Matrix.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Memory.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Norm.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.NormMath.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Numerical.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Online.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.PackedOwnership.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Program.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.ProgramMath.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Queue.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Recurrent.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.RecurrentFamily.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Return.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Scalar.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.ScoreMath.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.ScoreObservation.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Scores.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.SelectionMath.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Selector.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.State.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Step.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.StorageAdapters.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Strided.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Sum.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.Trace.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Optimized.WeightFields.fst"
+      ]
+    },
+    {
       "directory": "proofs/luce-recurrent_decoder/base",
+      "historical_entry_modules": {
+        "proofs/luce-recurrent_decoder/base/KPlay.Functional.fst": "4dd1413980ad57f206c2fc5d7266e1d450563f78d6d722e1fea04327a2ba0838",
+        "proofs/luce-recurrent_decoder/base/KPlay.Functional.fsti": "57aa3c6f1a1a3fe5efd29a4b8f2f0cf87be1d7c137fb0809db23e8a28b9ad3ab"
+      },
       "historical_receipt_sha256": "c5aa333936b28a43f736e7dab0ee6d08dcabee50418c90cf2f67ef63727b01dd",
       "historical_target_sha256": "57ddf33e508b2baa99bf7e54b23011090f8ef7b70afdfcb3329300f1b4137950",
       "id": "luce-recurrent_decoder-base",
@@ -1182,8 +1671,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-recurrent_decoder/base/KPlay.Functional.fsti",
-        "proofs/luce-recurrent_decoder/base/KPlay.Functional.fst",
+        "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fst",
         "proofs/luce-recurrent_decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1219,6 +1708,10 @@
     },
     {
       "directory": "proofs/luce-recurrent_decoder/optimized",
+      "historical_entry_modules": {
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fst": "68f794b8422afa5107957fe932d6f83c3b6a2ea3ba7cf0ed26c0a3b4147f926c",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fsti": "5235f8147eb4732f8a5d70006a81dc5ffba006a54fc01e7a89dbc2d17fe7666e"
+      },
       "historical_receipt_sha256": "bd224bb9bcf0d4a425bf3145a0632ea24608bb946269a7b90b29411b58d9d56d",
       "historical_target_sha256": "a60e1bc9197fd08f4708627ddacb3a6178c3f5441441e824f03e606a5a6f5bdb",
       "id": "luce-recurrent_decoder-optimized",
@@ -1234,8 +1727,8 @@
       "profile": "luce",
       "project": "luce",
       "roots": [
-        "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fsti",
-        "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fst",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fst",
         "proofs/luce-recurrent_decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1268,6 +1761,26 @@
         {
           "kind": "int"
         }
+      ]
+    },
+    {
+      "directory": "proofs/luce-recurrent_decoder",
+      "id": "luce-recurrent_decoder-review",
+      "implementation_cases": [
+        "luce-recurrent_decoder-base",
+        "luce-recurrent_decoder-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-recurrent_decoder/KPlay.Review.fsti",
+        "proofs/luce-recurrent_decoder/KPlay.Review.fst",
+        "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fst",
+        "proofs/luce-recurrent_decoder/KPlay.SharedSpec.fst",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fst"
       ]
     },
     {
@@ -1307,6 +1820,10 @@
     },
     {
       "directory": "proofs/mirage-argmax/base",
+      "historical_entry_modules": {
+        "proofs/mirage-argmax/base/KPlay.Functional.fst": "dd9d3d0b0e96676669d95bf5a692d6a44499186986708bd523d749a9e4ffb87a",
+        "proofs/mirage-argmax/base/KPlay.Functional.fsti": "dd6ece122481f845d4cfb76f3b36994dfd586ccd8302081c0eaa55adbcc7c180"
+      },
       "historical_receipt_sha256": "3181627a69c56bbc5c003b8108323564a885564f80179eb2414909baf1c2d313",
       "historical_target_sha256": "f3d9b600e460679c6449a43773b98d058bdd362f88ff05c31901b2e5aae4f512",
       "id": "mirage-argmax-base",
@@ -1320,8 +1837,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-argmax/base/KPlay.Functional.fsti",
-        "proofs/mirage-argmax/base/KPlay.Functional.fst",
+        "proofs/mirage-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-argmax/base/KPlay.Base.Functional.fst",
         "proofs/mirage-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1347,6 +1864,10 @@
     },
     {
       "directory": "proofs/mirage-argmax/optimized",
+      "historical_entry_modules": {
+        "proofs/mirage-argmax/optimized/KPlay.Functional.fst": "106a32b3a73a5f3ae22ef6560390e7466536dae93d17626f9b74aa568eb07f98",
+        "proofs/mirage-argmax/optimized/KPlay.Functional.fsti": "c185319aeb939708fba3c39e6e0b21fab868a9bd7f456438bdfcad793bbd2f92"
+      },
       "historical_receipt_sha256": "179b8c3ef656606b7dc0814ab58c0fc73bbea7d340880adedb7e9f571e77a8da",
       "historical_target_sha256": "7116f70722aa0571291d102b3afa12b248de4976711cb555c7703dbf86716537",
       "id": "mirage-argmax-optimized",
@@ -1360,8 +1881,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-argmax/optimized/KPlay.Functional.fsti",
-        "proofs/mirage-argmax/optimized/KPlay.Functional.fst",
+        "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fst",
         "proofs/mirage-argmax/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1387,6 +1908,26 @@
     },
     {
       "directory": "proofs/mirage-argmax",
+      "id": "mirage-argmax-review",
+      "implementation_cases": [
+        "mirage-argmax-base",
+        "mirage-argmax-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-argmax/KPlay.Review.fsti",
+        "proofs/mirage-argmax/KPlay.Review.fst",
+        "proofs/mirage-argmax/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-argmax/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-argmax/KPlay.SharedSpec.fst",
+        "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/mirage-argmax",
       "historical_receipts": {
         "base": "3181627a69c56bbc5c003b8108323564a885564f80179eb2414909baf1c2d313",
         "optimized": "179b8c3ef656606b7dc0814ab58c0fc73bbea7d340880adedb7e9f571e77a8da"
@@ -1403,6 +1944,10 @@
     },
     {
       "directory": "proofs/mirage-decoder/base",
+      "historical_entry_modules": {
+        "proofs/mirage-decoder/base/KPlay.Functional.fst": "55da98f34428fc84b4f499416779bdd260c82c378b7a32a8c9012c73a3cc873b",
+        "proofs/mirage-decoder/base/KPlay.Functional.fsti": "9c55da3c35d428c6d2a658eda0e6b05c7d6ed772715c842109896b1caa20d776"
+      },
       "historical_receipt_sha256": "29747107d3285be414fe1f642a0c755e162253d2a04835cfd4ebccec3d655adf",
       "historical_target_sha256": "9b044d9e7a54dc45ac1ed7bb004341bb1c6d38c8f81164223a93219f4ae34ece",
       "id": "mirage-decoder-base",
@@ -1425,8 +1970,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-decoder/base/KPlay.Functional.fsti",
-        "proofs/mirage-decoder/base/KPlay.Functional.fst",
+        "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-decoder/base/KPlay.Base.Functional.fst",
         "proofs/mirage-decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1490,6 +2035,10 @@
     },
     {
       "directory": "proofs/mirage-decoder/optimized",
+      "historical_entry_modules": {
+        "proofs/mirage-decoder/optimized/KPlay.Functional.fst": "a8f90d977d8fa8283941ea81f548f363ebc4e3629480b66ca6de7c0062f55537",
+        "proofs/mirage-decoder/optimized/KPlay.Functional.fsti": "35fbc888432da4663be1656b87c49495e5575604c7cda59a43183da3fb2a54ef"
+      },
       "historical_receipt_sha256": "ae133f2438bd0dd10fe31c000682854b513e1e6c78ad58d547b0abc3b06b0d45",
       "historical_source_sha256": {
         "KPlay.Functional.fst": "5006a9d1c416e426dab98133e2463b5845234910a4a557a18e4ed8c0898671b0"
@@ -1508,8 +2057,8 @@
       "project": "mirage",
       "replay_adjustment": "An explicit proved real-division identity makes the unchanged rms_radicand_at statement robust under cache-free replay; see replay-adjustments.patch. No contracts, executable operations, or assumptions changed.",
       "roots": [
-        "proofs/mirage-decoder/optimized/KPlay.Functional.fsti",
-        "proofs/mirage-decoder/optimized/KPlay.Functional.fst",
+        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst",
         "proofs/mirage-decoder/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1544,6 +2093,26 @@
     },
     {
       "directory": "proofs/mirage-decoder",
+      "id": "mirage-decoder-review",
+      "implementation_cases": [
+        "mirage-decoder-base",
+        "mirage-decoder-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-decoder/KPlay.Review.fsti",
+        "proofs/mirage-decoder/KPlay.Review.fst",
+        "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-decoder/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-decoder/KPlay.SharedSpec.fst",
+        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/mirage-decoder",
       "historical_receipts": {
         "base": "29747107d3285be414fe1f642a0c755e162253d2a04835cfd4ebccec3d655adf",
         "optimized": "ae133f2438bd0dd10fe31c000682854b513e1e6c78ad58d547b0abc3b06b0d45"
@@ -1560,6 +2129,10 @@
     },
     {
       "directory": "proofs/mirage-embedding_position/base",
+      "historical_entry_modules": {
+        "proofs/mirage-embedding_position/base/KPlay.Functional.fst": "04b285364b835095b7becb4d60cfd699793e648dea0ddd7af03f395034bdd3de",
+        "proofs/mirage-embedding_position/base/KPlay.Functional.fsti": "bf1c57fe127fbfe414f39741d8718306b6f884b4f22af8b810b94ea7710fda2f"
+      },
       "historical_receipt_sha256": "2a04b552ab3211c5fb6ff81fca9b5a161172f8cf8469b54f98c3f76730ead310",
       "historical_target_sha256": "d1433cd0a062d337f9d8491d9decea4386ff26f0460f5567e41464675b498bab",
       "id": "mirage-embedding_position-base",
@@ -1573,8 +2146,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-embedding_position/base/KPlay.Functional.fsti",
-        "proofs/mirage-embedding_position/base/KPlay.Functional.fst",
+        "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fst",
         "proofs/mirage-embedding_position/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1600,6 +2173,10 @@
     },
     {
       "directory": "proofs/mirage-embedding_position/optimized",
+      "historical_entry_modules": {
+        "proofs/mirage-embedding_position/optimized/KPlay.Functional.fst": "80edc867dcf7721cf971c9db8338620b2ca630b7185b5bc7a425ec3d056d9db3",
+        "proofs/mirage-embedding_position/optimized/KPlay.Functional.fsti": "8929213c19701438f85d7d7df70a574a3e5b33ef88182faca605488e4bed3a25"
+      },
       "historical_receipt_sha256": "402745d5cb5b5832a0831119e91c0a7e48cb9ed3025739059f5ead7a51d8d8ab",
       "historical_target_sha256": "ae1c1831d12e955291c75b7d79220d096b90e76de5934f8a62af2acd188affc9",
       "id": "mirage-embedding_position-optimized",
@@ -1612,8 +2189,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-embedding_position/optimized/KPlay.Functional.fsti",
-        "proofs/mirage-embedding_position/optimized/KPlay.Functional.fst",
+        "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fst",
         "proofs/mirage-embedding_position/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1636,6 +2213,26 @@
     },
     {
       "directory": "proofs/mirage-embedding_position",
+      "id": "mirage-embedding_position-review",
+      "implementation_cases": [
+        "mirage-embedding_position-base",
+        "mirage-embedding_position-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-embedding_position/KPlay.Review.fsti",
+        "proofs/mirage-embedding_position/KPlay.Review.fst",
+        "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-embedding_position/KPlay.SharedSpec.fst",
+        "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/mirage-embedding_position",
       "historical_receipts": {
         "base": "2a04b552ab3211c5fb6ff81fca9b5a161172f8cf8469b54f98c3f76730ead310",
         "optimized": "402745d5cb5b5832a0831119e91c0a7e48cb9ed3025739059f5ead7a51d8d8ab"
@@ -1652,6 +2249,10 @@
     },
     {
       "directory": "proofs/mirage-final_norm_projection/base",
+      "historical_entry_modules": {
+        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fst": "6643fbd65bccc9d273c92a99db2a30b16d46f99bc81cf6180f2ba5c3c66badf9",
+        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fsti": "bd907c0722318fd134afd3bff6ec825755bc99d14f95366da124097a09d9d4a6"
+      },
       "historical_receipt_sha256": "b1ad16073a638d8c4849a12b1a3484a82ad8d795c63d8211260533248e8e1467",
       "historical_target_sha256": "4f982bde7311c7cee41027330e56fab77614b84300ca8fae811ed36dda2d00cd",
       "id": "mirage-final_norm_projection-base",
@@ -1667,8 +2268,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fsti",
-        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fst",
+        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst",
         "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1705,6 +2306,10 @@
     },
     {
       "directory": "proofs/mirage-final_norm_projection/optimized",
+      "historical_entry_modules": {
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fst": "3abac37ad122f9ce5b5b0be93e28592a69a4a82e9cd0f2264560afd94926eee5",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fsti": "f5180db79b2e673fe852ec007c3c8d62a2912139706d4b156d8a560e48bd69da"
+      },
       "historical_receipt_sha256": "7d394a75e454f20ed855d881abac4caed242da6bfd8442a9bf9d69940b4594e4",
       "historical_target_sha256": "914c93672bfc13a62b5f4d9aebfc50cb99526fec6a34d2e9e7327f0122f39d5a",
       "id": "mirage-final_norm_projection-optimized",
@@ -1718,8 +2323,8 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fsti",
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fst",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst",
         "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst"
       ],
       "sample_inputs": [
@@ -1750,6 +2355,26 @@
     },
     {
       "directory": "proofs/mirage-final_norm_projection",
+      "id": "mirage-final_norm_projection-review",
+      "implementation_cases": [
+        "mirage-final_norm_projection-base",
+        "mirage-final_norm_projection-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-final_norm_projection/KPlay.Review.fsti",
+        "proofs/mirage-final_norm_projection/KPlay.Review.fst",
+        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
+        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst"
+      ]
+    },
+    {
+      "directory": "proofs/mirage-final_norm_projection",
       "historical_receipts": {
         "base": "b1ad16073a638d8c4849a12b1a3484a82ad8d795c63d8211260533248e8e1467",
         "optimized": "7d394a75e454f20ed855d881abac4caed242da6bfd8442a9bf9d69940b4594e4"
@@ -1766,6 +2391,10 @@
     },
     {
       "directory": "proofs/mirage-program/base",
+      "historical_entry_modules": {
+        "proofs/mirage-program/base/KPlay.Functional.fst": "748162007b868ff74811350ffd62010d5937385d4e21acf92e354089304e4673",
+        "proofs/mirage-program/base/KPlay.Functional.fsti": "23a4f2af4d01c9ffe7a92a96ae42923b65235726700ece5e14595607292264ce"
+      },
       "historical_receipt_sha256": "dd8edb9abdc92095e056667d50bc09f60fc06dff0436afd7f53d92aaf798550f",
       "id": "mirage-program-base",
       "kernel": "kernels/mirage-program-base.cu",
@@ -1778,13 +2407,17 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-program/base/KPlay.Functional.fst",
-        "proofs/mirage-program/base/KPlay.Functional.fsti",
+        "proofs/mirage-program/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-program/base/KPlay.Base.Functional.fsti",
         "proofs/mirage-program/KPlay.SharedSpec.fst"
       ]
     },
     {
       "directory": "proofs/mirage-program/optimized",
+      "historical_entry_modules": {
+        "proofs/mirage-program/optimized/KPlay.Functional.fst": "4907beb93087200c7e09d16c03b23bb2440966a6b0d355b1b595dd944f856d31",
+        "proofs/mirage-program/optimized/KPlay.Functional.fsti": "ce0051a62cd31d7cc511cd46145cd899f6bd7615428b131343898df56dfa366f"
+      },
       "historical_receipt_sha256": "19add31d31ff543a5fb48855d640bb0a15f2ee2dee6760daac5a5663b03b463c",
       "id": "mirage-program-optimized",
       "kernel": "kernels/mirage-program-optimized.cu",
@@ -1797,9 +2430,29 @@
       "profile": "mirage",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-program/optimized/KPlay.Functional.fst",
-        "proofs/mirage-program/optimized/KPlay.Functional.fsti",
+        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst",
+        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti",
         "proofs/mirage-program/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/mirage-program",
+      "id": "mirage-program-review",
+      "implementation_cases": [
+        "mirage-program-base",
+        "mirage-program-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-program/KPlay.Review.fsti",
+        "proofs/mirage-program/KPlay.Review.fst",
+        "proofs/mirage-program/base/KPlay.Base.Functional.fst",
+        "proofs/mirage-program/base/KPlay.Base.Functional.fsti",
+        "proofs/mirage-program/KPlay.SharedSpec.fst",
+        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst",
+        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti"
       ]
     },
     {
@@ -1847,25 +2500,32 @@
     "kernels/mirage-final_norm_projection-optimized.cu": "1a90b9e0755a4f43cee9a809199d5c99102a0b080b35328bd3ac8aa3a24a4c42",
     "kernels/mirage-program-base.cu": "dc1c365f9bef5c25df3ab839fec2ff2ee91f38c93a10dd8ea107a73889000149",
     "kernels/mirage-program-optimized.cu": "c0338eb766188a8831d25e760161a954bbb7bce0de66c89dfab18fbd29123626",
+    "proofs/REVIEW-CATALOG.md": "93d47699766f69a55cade51a0a5174ac3054edbeedf2cc43a0e5613fd662193b",
     "proofs/flashmoe-argmax/KPlay.Proof.Tightness.fst": "44bb186b409243d6d1adc9d72f7272c8a16106e71b83c1d9c094eada60788ded",
+    "proofs/flashmoe-argmax/KPlay.Review.fst": "74869a8bab273f5c1369fa5fed08065c211e4f1cd0d528accec40149e0062038",
+    "proofs/flashmoe-argmax/KPlay.Review.fsti": "f1f13c6fbe38c48b9c7ef3e94b82188c16b76958076ed6b239cbd4e6b72c5bc5",
     "proofs/flashmoe-argmax/KPlay.SharedSpec.fst": "abf2ce5a034c8297aa87f2452ab2901e2c0e89357315a53132ec7843666318a9",
-    "proofs/flashmoe-argmax/base/KPlay.Functional.fst": "982f27cbe0d64ac09eab0efe3a208f691fdb540fd045e598efbab5501032f53e",
-    "proofs/flashmoe-argmax/base/KPlay.Functional.fsti": "597c57b88f0caab7238510668d73aed14d6f495340d4ddd6d304b7f6aacff074",
-    "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst": "7b18534206f9426b44c143ae905236136702ddb112be8a391da5677c4090c101",
-    "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti": "059abd3943a086b39a9b3b5ad46440377c7cd73d0399a14c6d2824c1eba7e275",
+    "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst": "8e12fca2050d948747aec72856625b03f4a29c8043d8c4ace14c0f4a3cd63a05",
+    "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti": "0d6366e21450de2fecddff233f6c2ad79803c6cb429979585fd5fa10779c9ada",
+    "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst": "ef7dbd20554d0357849097610f2c7a285ce5a7538fe0a91e264182a20749958e",
+    "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti": "0b5a1a6ef59f5c206929bde488883aa906f67bb85c7efedeb6e8bf7cf32d5c70",
     "proofs/flashmoe-normalization_capacity/KPlay.Proof.Tightness.fst": "288af3c12d5df55fd4e12a2a43e709491951b3fb18b58959d2a8cb849db12c8d",
+    "proofs/flashmoe-normalization_capacity/KPlay.Review.fst": "53f958cf722f6233e55448c7f8b302ce1a213ecb81514f4008d1f1c0d7c460ff",
+    "proofs/flashmoe-normalization_capacity/KPlay.Review.fsti": "3da60c3c38e732799932dd21f2527e8f97a25770d10fe7b124aa35ceef3946f0",
     "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst": "0a9268fe77de43f3f58795bdadcce8be988a96bdb34ba889478e81ed74203cd5",
-    "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fst": "e216589ccd8ee97114fdcddffb7825defe2cbe8b7259b4f95a360230f589b78d",
-    "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fsti": "08af23a60aa97539b7e1ca37c1c38bb0ee2f8909dcf97e4b62687e560184d4ba",
-    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fst": "835c0376134d331cd199fe4edeb399ce498da088fc8ed22198d4d9ec87b844a8",
-    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fsti": "69ff8e60ef5a5aba5afae412f9d6ef793cf0ed2203090b5f9752850cb5bbf492",
+    "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst": "a7d4e03ad3594ec16c779f8dde609218699515607c50f732c6607028942f22bc",
+    "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti": "7bb532ce28a11c6d5ad82545226f33adad81046baa0b253a1b40eae801bfcaf6",
+    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst": "73e0c9a1f76b50a00f60c8e666762506d9b777a9a213fd53e043f399500ea305",
+    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti": "9a58ed79daf71821a2e2b7b241c767b484d570ee4f205c18ff19e41665895c95",
     "proofs/flashmoe-program/KPlay.Proof.Shared.Argmax.fst": "a2f8921fe1d063ff9c8aef26dffe1fe0ba3981c6de6bfd6f724aa9ed4b117fce",
     "proofs/flashmoe-program/KPlay.Proof.Shared.Capacity.fst": "3aef1e21a23f515ed557d06f39597899f4e7e270246508a245606fa679b872cc",
     "proofs/flashmoe-program/KPlay.Proof.Shared.Native.fst": "562cbdf71b6a2766a3fee386c5fe0d663f01c8a9c9da7c98d1133de6ce65e75c",
     "proofs/flashmoe-program/KPlay.Proof.Shared.ProjectionSoftmax.fst": "03ae5528f1882c0cf8ed97010c123bef40064f6789f42a71bcce36bd231aff50",
+    "proofs/flashmoe-program/KPlay.Review.fst": "44886127791dc4cab3955c203251b942d5acaa3bda118109bb5f93b80d124339",
+    "proofs/flashmoe-program/KPlay.Review.fsti": "4d6d9fad4d937b208f3f0235aeecdc8cbff974b98d2e936d67c31e14bea5fcc5",
     "proofs/flashmoe-program/KPlay.SharedSpec.fst": "d9192823f2b2c6ecc28117120b1c1ebc4d8d82a227524655f46cc7e777702c9a",
-    "proofs/flashmoe-program/base/KPlay.Functional.fst": "3ef7e93d0777ffedc7434caf2523a52dcac2a51cf2d6ce93528a5457075fa2df",
-    "proofs/flashmoe-program/base/KPlay.Functional.fsti": "46c4096c0a230978f69a4afbcac95bcb48de62288d7ff0e90349945b27a175d4",
+    "proofs/flashmoe-program/base/KPlay.Base.Functional.fst": "ba28980d2567600083618cf07f3ccb3cfa8f64f6d794cd6bd00db85a9ef1e60b",
+    "proofs/flashmoe-program/base/KPlay.Base.Functional.fsti": "83f765860f8353c9d21062328e622b7c38b985f4b1fa60fc3cde2e1213c40725",
     "proofs/flashmoe-program/base/KPlay.Proof.BaseCaller.fst": "a17654f5ecdfe6f1142a6af762971d395d95e2f7aa0e129fb9696df19c36b1a5",
     "proofs/flashmoe-program/base/KPlay.Proof.BaseCapacity.fst": "153c70a9e9c9f4fafacea55fefb6e7d0d47a8e86b0ce9baf19fb4e8b7a10425c",
     "proofs/flashmoe-program/base/KPlay.Proof.BaseClassification.fst": "1f30d5d90cfaf47eb022ac123bbff0959bedf2e99ac7a17a60a8fe571bf5b368",
@@ -1875,8 +2535,8 @@
     "proofs/flashmoe-program/base/KPlay.Proof.BaseReturn.fst": "56d68a9b0088793c001cea72bb155ef1266fcf83dfd444f454c666ca31d3243d",
     "proofs/flashmoe-program/base/KPlay.Proof.BaseStorage.fst": "c4eae100b5c0ed701c253f2d95992a870af17792720fce14b9506a3c6122a61c",
     "proofs/flashmoe-program/base/KPlay.Proof.SupportBoundary.fst": "7072fba2dd343104f9e664d0144f5781978de255f839fe31baf21bc4b982a54b",
-    "proofs/flashmoe-program/optimized/KPlay.Functional.fst": "b08ab47aadfcf83b73aab641120c4556debcbb13e74e61674364eff0bb524a37",
-    "proofs/flashmoe-program/optimized/KPlay.Functional.fsti": "9ca2a20f278578d581540703858056ee6f18022f25fbda8e0a9a7f91236cca7a",
+    "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fst": "c03015191e5dcac98c967f8baa4c20aaf42c612a70e350ba7d143bab946c69aa",
+    "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fsti": "a0883588f3040c6abc218689d719e1be4a17005c05b6c1fb038f11790fc6a69d",
     "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyArgmax.fst": "273da91c5cc4fabfbe79e1afeaeb4cc840d4ff121056c155b9485a010691cd82",
     "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyCapacity.fst": "e127ee3a6526a8826ea93fe937ed602c31f3c1ea9665bfa200729ca3e857052d",
     "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyPacking.fst": "a07e9c0f9220be6a9d9588c6c872d5df5d8c76173604afccde3345a99c2bf0b9",
@@ -1900,35 +2560,46 @@
     "proofs/flashmoe-program/optimized/KPlay.Proof.SourceRouting.fst": "45b165a130414756eb383afa36ec84a999a17c39bfb76aee63e9d6d08abb8296",
     "proofs/flashmoe-program/optimized/KPlay.Proof.SourceSoftmax.fst": "18ac9156c5ec9335abbecd63db9af1c629fef2b4dc6b170805279033bca93af6",
     "proofs/flashmoe-projection_softmax/KPlay.Proof.Tightness.fst": "1401d707cf62e9aba5cc8f03f998dbd75ad4405813ef8fcf8bc631e18fd148f9",
+    "proofs/flashmoe-projection_softmax/KPlay.Review.fst": "a83baaaf0e0f7423e7fd42e553ccd2c7fb1d4680ad64661178b12196a872fca8",
+    "proofs/flashmoe-projection_softmax/KPlay.Review.fsti": "f42f74ecf4ca267e8f7a3a1b2191c0e6611afbe8cc6779bafb78eac12f4d8476",
     "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst": "1ba2c76b6c115889ebca0da4f837439199ebf1046743e9a327d99b364120dd2e",
-    "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst": "b1b7c26dde2b8711923a6e9bfd5d29b256c674f6895cc2e2efb4bea2f82abddc",
-    "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti": "eaa4be124f93961656c8c47194406e6d63dd82abc63a8d21cf4147ff1c59756b",
-    "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fst": "5aceda926d62620b38d45b146cda9609482a18025bd16ec765fa6e1a35083e32",
-    "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fsti": "5d7b54ec2b887886236d8a2f5774b99a8ec6860391d8ddcbc01370bd0dc45d64",
+    "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst": "1337d13e231deb5f18794a18b96e7f70cae98adbffbe177c80b69d09e3394761",
+    "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti": "6f5598e7c8c117f12c5217904e4f6ba8ce2cac246deae1b21d9ed26b22a9547b",
+    "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst": "a334e1f68631bae1ada67659bbbf59c4048229c4dd824ecbe937cadec557ba7b",
+    "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti": "78b395d973840e4b5c8104092a645ca675bd2d0c834152041d12de70387ddae2",
     "proofs/luce-argmax/KPlay.Proof.Tightness.fst": "5be169a982d8659c36cfce05e6d83cb17326c2f6f285712e20f4ae3c1c4a4d97",
+    "proofs/luce-argmax/KPlay.Review.fst": "c3ed22ec1e70508685a5df4fa9ada19e414f309bdfd4ca37e343a4a319fe4b52",
+    "proofs/luce-argmax/KPlay.Review.fsti": "0ffc214bab571d0db7bf89100ecc787eb19bb04ee1da65c8f253314c10501207",
     "proofs/luce-argmax/KPlay.SharedSpec.fst": "64e604faa08cd6503abad960ad2e695389ccf4be836d80bddaeff4fed7b99fbf",
-    "proofs/luce-argmax/base/KPlay.Functional.fst": "153bca1a4d1647fc2a37192e716eb0eac7918b106299adae692854660b9543a2",
-    "proofs/luce-argmax/base/KPlay.Functional.fsti": "5c2567afe0a4bb91ce02b1cd4ec2faec7351a9aea4e365c825cb15f6f10e51e8",
-    "proofs/luce-argmax/optimized/KPlay.Functional.fst": "c7461d4ec15d989d08b090f7dee1ec2b0a9e4bcf4635378e09e4be6c6c06ad0e",
-    "proofs/luce-argmax/optimized/KPlay.Functional.fsti": "4d922e9274b8040ff9208bc3b5fc3c89040e1cd07d058bc8b541f7a4a5bc17e1",
+    "proofs/luce-argmax/base/KPlay.Base.Functional.fst": "e58c0fc0fd730e21d6aeeb8385ede6997e0af040769f37e34616b3d8b4337396",
+    "proofs/luce-argmax/base/KPlay.Base.Functional.fsti": "a2121fbb4d47811142c4b9672e8aed827133c76439a8ab644bfb42aa47cead3a",
+    "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fst": "1aa32f62baa9e8affe11366d0f373da87417eedb0ff2e23c5797b0f44aa6c2b6",
+    "proofs/luce-argmax/optimized/KPlay.Optimized.Functional.fsti": "4a06e165190c3f1f36a00ea732b3c89abf13d4d9b00945f6ae30c8df5349ad96",
     "proofs/luce-embedding/KPlay.Proof.Tightness.fst": "7a43d87d3cf84a94ab47131c0e2839038381410dcc42a45009b95ffe3ffd7752",
+    "proofs/luce-embedding/KPlay.Review.fst": "085f664737e84a37ee1eea43af5665f03fface5898de75ef23e5d0eab97a8299",
+    "proofs/luce-embedding/KPlay.Review.fsti": "35773c33ead74d8010a384caec7b82f53e7d8ec228a92db7f8a7e267fe02ce31",
     "proofs/luce-embedding/KPlay.SharedSpec.fst": "aacbce004448929092d1e12bae004b6b414395f0c7aef4c5637b8bf2b929e995",
-    "proofs/luce-embedding/base/KPlay.Functional.fst": "7c6d552105850e2af5e005806ec5d06f43392e5a276ce0d7854a475c037598cb",
-    "proofs/luce-embedding/base/KPlay.Functional.fsti": "1d10a0ecfa1abd11bfbca210dfd0cb21a81ae28eb0eff74eaea83e977bcb75c6",
-    "proofs/luce-embedding/optimized/KPlay.Functional.fst": "cb4ed4ce4828398973525086f65fd0f9ac4a7dbe929734975d5d17fbd6573d59",
-    "proofs/luce-embedding/optimized/KPlay.Functional.fsti": "d555df17b4ec3d1e0032d10f893aa79d173a8d46e4bb95326cd17a6f7b3b873f",
+    "proofs/luce-embedding/base/KPlay.Base.Functional.fst": "14104c07c70a4994190b91dce050a56373f6c98f0716f5c54f6cf51f377dba44",
+    "proofs/luce-embedding/base/KPlay.Base.Functional.fsti": "4759b27814d41e4237dc042c7787cc0e78330b2186a1fee0ada86dffaa2c4871",
+    "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fst": "e50d4f12da60c1728db29d8d2bcb46d34242997c4a2e69b736abf16601634b9a",
+    "proofs/luce-embedding/optimized/KPlay.Optimized.Functional.fsti": "4c313199846032bcb0c9e4af49d76a1aa893cdd5fc2fc1fa6fa724d61a648326",
     "proofs/luce-final_norm_projection/KPlay.Proof.Tightness.fst": "efb775ce42718cab60c21a5f7474351bb881030676c5dbc9398b775fa77006a6",
+    "proofs/luce-final_norm_projection/KPlay.Review.fst": "67afa7e40ec0990c925ba00c17122897c508ad2b5da660a0bc36061b6561af16",
+    "proofs/luce-final_norm_projection/KPlay.Review.fsti": "ca409e10df2322917cbac86504ba0e3c1b67e33672f2d69316e360ddfb614fa6",
     "proofs/luce-final_norm_projection/KPlay.SharedSpec.fst": "110aa570de1f6c69bbd9a4a68032833e4d9bcb1af66598f4c5cd6cf75b85c090",
-    "proofs/luce-final_norm_projection/base/KPlay.Functional.fst": "c62f2709a6a8f6f9026ea147ca8b86b9c7b38d8b836ebb17a810e4b8a6dce353",
-    "proofs/luce-final_norm_projection/base/KPlay.Functional.fsti": "246b650331df897d17f9bcabe3661485f32939c97ed66555aa8d44afccd47233",
-    "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fst": "12c442632f05bcd53c6f334634bc8d320c170498aa2554050651734d195540df",
-    "proofs/luce-final_norm_projection/optimized/KPlay.Functional.fsti": "87a4d43f894d374be6501a0b1368e8e2fec3001fc6393e09e90f09acf1e7655a",
+    "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fst": "f4453df4519a2272089c168d01b12758dba1ed272346d929aa728c5fc4775fa5",
+    "proofs/luce-final_norm_projection/base/KPlay.Base.Functional.fsti": "bf007c1e5592a552d82399fb84eaae61cd802888cba850c36f973b1947d714e3",
+    "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fst": "4b69ce246846303d1e9b1abb84ce3bb53f10f88a0e37ff3632dc4493934dedc2",
+    "proofs/luce-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti": "b96c586a05147b254ec0ef0c698ff1189508c32a0f93f777d1f4e9cca95ba4bd",
     "proofs/luce-full_attention_decoder/KPlay.Proof.Tightness.fst": "1e63a8f5e88436fae20b85c4253f2dfcdcb2c834da9a9dc7bf3ef48d4cc769c6",
+    "proofs/luce-full_attention_decoder/KPlay.Review.fst": "dca54aa0e7d26de109f54ccbdd388a423ade769fb76118173c35a9bcfa7e8d07",
+    "proofs/luce-full_attention_decoder/KPlay.Review.fsti": "aa7245e055675b068dbefe8cfe5e96bd92575c7b1ddba8f2fd99c3fbc7ac77c6",
     "proofs/luce-full_attention_decoder/KPlay.SharedSpec.fst": "e55b6c011749382e783ca51db42345151e5075e6c64769c8b110a45302461ff4",
-    "proofs/luce-full_attention_decoder/base/KPlay.Functional.fst": "5959ae6316535299fc4ad2e114a346fee518d98e4d3eff08a0c0da151fd4dea5",
-    "proofs/luce-full_attention_decoder/base/KPlay.Functional.fsti": "b71e309db2b261fe248da9891d26cc0c5861a58ba3ad1470b85b24b8baa32a19",
-    "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fst": "8d225cbe507094493dcc1869bb031c96741d6386947da318d9797d87442cc80b",
-    "proofs/luce-full_attention_decoder/optimized/KPlay.Functional.fsti": "e6e92d126ea691bf1f4bc5f2bcf71a480ee75573f0689e43e689aa16714bf8a2",
+    "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fst": "4b132969ec5a3548d348d08c52e35d47c7b15de4557d5f5e9daa77d62c8987c6",
+    "proofs/luce-full_attention_decoder/base/KPlay.Base.Functional.fsti": "8897aba6488311cb2f0c6c62005f80abc7093383b4d0be0efdd3473a50527fdc",
+    "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fst": "6f8bfd7599cf121a6a89fbfc830f97f3c9fd505b3ff09d25c25ac0b816b3c970",
+    "proofs/luce-full_attention_decoder/optimized/KPlay.Optimized.Functional.fsti": "b1f8ca562b27ebfaf19f8e639aa7a5626dc335cfd7c6ff2c990b06f87d2c9084",
+    "proofs/luce-program/KPlay.Proof.NativeInput.fst": "0984c87a89406e22e65253d8991142fbdc33f5f2d8fb8e9990816912e6652bbf",
     "proofs/luce-program/KPlay.Proof.Shared.Attention.fst": "0774222af42fd2e12d56353b855022dfd2c0c18f75a0d6392e2a845536951e27",
     "proofs/luce-program/KPlay.Proof.Shared.Embedding.fst": "0bc64e0b835654b11762ae3c179b66b3cfec7acc86e36bac9c58b566688997ee",
     "proofs/luce-program/KPlay.Proof.Shared.Model.fst": "7dbf92a07a5a23138f271da8bad61fd253e25b5b09b3021f8751e9faa1860e18",
@@ -1937,9 +2608,11 @@
     "proofs/luce-program/KPlay.Proof.Shared.Recurrent.fst": "f1051e8c2ff214fb08a38b07c7326fe2cd1fdb02cd4235a532bdd318d7ad9566",
     "proofs/luce-program/KPlay.Proof.Shared.Selection.fst": "77dcfdf4533f49596265a6575afddc6313c86d226c474a86480bfde0b53a4ffd",
     "proofs/luce-program/KPlay.Proof.Shared.Storage.fst": "6ae7b72a1262f2e09f65558b312d99e61f67d5d07be6d801941b1777f172a63d",
+    "proofs/luce-program/KPlay.Review.fst": "c42c3298faf367da9d1b7d4b5e74caf0b382e32dec000f1a141645367ad7e3c7",
+    "proofs/luce-program/KPlay.Review.fsti": "2ebb07fbf968c81caa69ce7142b37c53753953fe637c1589b4a20ef4c02a8150",
     "proofs/luce-program/KPlay.SharedSpec.fst": "be027c78a1b6ae926a61ee388b064c23000838adaef983923a1e50cffcff53f8",
-    "proofs/luce-program/base/KPlay.Functional.fst": "922a2111a386f2106437701f93a2a06e06aa42fd0d9331d76c4034d05aa98e9d",
-    "proofs/luce-program/base/KPlay.Functional.fsti": "265cf582474e70c04d7783f2f6759e29fc6697fa7e31bf56b1ed61a72ea33a08",
+    "proofs/luce-program/base/KPlay.Base.Functional.fst": "bbf574cebdae2938a8c8299f33cd3c8abac268a40a29d6c71bdaffea69dc9f0c",
+    "proofs/luce-program/base/KPlay.Base.Functional.fsti": "285e6c5dfe2323287c4a3dc141bd1c39328a067ca419590f9a45ce3a69cedf3c",
     "proofs/luce-program/base/KPlay.Proof.Base.AffineMMA.fst": "bc2b7fc892fcfebed62b53ec63e037a9cbe13b1aad6364e7ec2fea17fbd0691d",
     "proofs/luce-program/base/KPlay.Proof.Base.Algebra.fst": "67321deb1526df184c1b22cd59208efbdc1b945843b4ed14573cef749f90a0d3",
     "proofs/luce-program/base/KPlay.Proof.Base.Allocator.fst": "df118dd8e9cb3740529f88401a14b65533d4abf9e2464c4409c5beb33daf3e75",
@@ -2066,13 +2739,11 @@
     "proofs/luce-program/base/KPlay.Proof.Base.WarpHidden.fst": "4eed556e10abec09efbf4fdd4640369a3ed972924dea5949718ead28645aa381",
     "proofs/luce-program/base/KPlay.Proof.Base.WarpState.fst": "208395bed0d027f1f3287b85727581d4ff36d420d46bf6c8e21d776e4fb923e7",
     "proofs/luce-program/base/KPlay.Proof.Base.WeightFields.fst": "0f54f28c59739dedc6eb95c5616f9c73461005a4bde97a6642a4b1c0da5166a9",
-    "proofs/luce-program/base/KPlay.Proof.NativeInput.fst": "0984c87a89406e22e65253d8991142fbdc33f5f2d8fb8e9990816912e6652bbf",
     "proofs/luce-program/base/KPlay.Proof.RoPE.Consumer.fst": "c1c578d3be907cb7a1adff513329c42388b43af52152c05b844895c53a135dbc",
     "proofs/luce-program/base/KPlay.Proof.RoPE.Source.fst": "0a8c0f2fbfe5d0444e18587adfa3a3c7ce2ae4a362ab211ec48a4c548ce2a818",
-    "proofs/luce-program/optimized/KPlay.Functional.fst": "6344f1b9926c94e8a3a689d4955c4e52d860c95d2193452143b8d8f8d05861a3",
-    "proofs/luce-program/optimized/KPlay.Functional.fsti": "bc78e501a459d52c93f3fb902f52ec4c94567d3d0cbe7611aa02eaf2780fae48",
+    "proofs/luce-program/optimized/KPlay.Optimized.Functional.fst": "cd1a5ba1d49d23f38ca081d8b729d26047ebc063ae90ccb1d59fa172ebf9d018",
+    "proofs/luce-program/optimized/KPlay.Optimized.Functional.fsti": "998f252ff96d52e50df2017c5c9a53f296cb8828976ca5617ee1bcc29606f2b5",
     "proofs/luce-program/optimized/KPlay.Proof.InputAlignment.fst": "8093f4680034a9fd7db51b5a9982e74e88bb38cb0ed4a08815ab79739ec85e94",
-    "proofs/luce-program/optimized/KPlay.Proof.NativeInput.fst": "0984c87a89406e22e65253d8991142fbdc33f5f2d8fb8e9990816912e6652bbf",
     "proofs/luce-program/optimized/KPlay.Proof.Optimized.Algebra.fst": "32cb80a3f7b6df2e8fb208d2baddb246f02e8ac1cd0022513b56b52feb0593b2",
     "proofs/luce-program/optimized/KPlay.Proof.Optimized.Attention.fst": "d87ef9b86175005adc43db351006ea445be56ebe523934661d41fc0b963c305c",
     "proofs/luce-program/optimized/KPlay.Proof.Optimized.AttentionFamily.fst": "894a83ae63cafb674f6190806649649c8562339a48004e8b8778a3a86beb4aaf",
@@ -2134,40 +2805,52 @@
     "proofs/luce-program/optimized/KPlay.Proof.Optimized.Trace.fst": "69cd19bb56975b46fba1fd9c232f7d43d0f640bc41642c3668cb15e841ccc0f0",
     "proofs/luce-program/optimized/KPlay.Proof.Optimized.WeightFields.fst": "bbe81ae7d47703ac4c565312a1f59175e58344dcfcfd23f7102e0c02ec4e9323",
     "proofs/luce-recurrent_decoder/KPlay.Proof.Tightness.fst": "66d1b89453c15ebcc7875bbaca819a3aa677efce164ef6966e3807c5bb6c4863",
+    "proofs/luce-recurrent_decoder/KPlay.Review.fst": "e095f52f1d8ca480938fe5b799e46367f63663626ca85d183c26a9474ffd6f21",
+    "proofs/luce-recurrent_decoder/KPlay.Review.fsti": "5e4e35919ebbf87c1223db4f9f565fd2012d7a4366c0cc4b0b25961bacd1e51d",
     "proofs/luce-recurrent_decoder/KPlay.SharedSpec.fst": "6ce27da7d4e9d073c2443645bfcba033b62174bb1814b2df80a5ac1022891660",
-    "proofs/luce-recurrent_decoder/base/KPlay.Functional.fst": "4dd1413980ad57f206c2fc5d7266e1d450563f78d6d722e1fea04327a2ba0838",
-    "proofs/luce-recurrent_decoder/base/KPlay.Functional.fsti": "57aa3c6f1a1a3fe5efd29a4b8f2f0cf87be1d7c137fb0809db23e8a28b9ad3ab",
-    "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fst": "68f794b8422afa5107957fe932d6f83c3b6a2ea3ba7cf0ed26c0a3b4147f926c",
-    "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fsti": "5235f8147eb4732f8a5d70006a81dc5ffba006a54fc01e7a89dbc2d17fe7666e",
+    "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fst": "086be5e341467a5a34fd63dfc3a94d73c9161f0e5f56cac6454fa0dfb048c9d4",
+    "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fsti": "f3136d0de512bc9be68ff0c567f28ddf9e4b1be16b39a59a161549d68842cbe9",
+    "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fst": "940a98e83a58c7109ed7b6ba2a7462d07baadd534f32ce95c458279bbb8e9baa",
+    "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fsti": "dc880f5b0841f6c64ee8428c58e837034c5248eb68b522362af85bb0e10b4466",
     "proofs/mirage-argmax/KPlay.Proof.Tightness.fst": "228531b9d9a05e022cf9d9bb93b47b5ec7a026ad8c6b3c94daba8bab8a150c53",
+    "proofs/mirage-argmax/KPlay.Review.fst": "2a62800b806cf794af4a4594f3e62ef75c20b303f176d0cf36e6318f315a42c9",
+    "proofs/mirage-argmax/KPlay.Review.fsti": "7b5dd4fdd0d7b4d23f3dc072019685e540a32fca27c12557fae68937a2d3d862",
     "proofs/mirage-argmax/KPlay.SharedSpec.fst": "fa83c1e05b96b9e8ad14af7eb1c8df9248747fd78faec210e3e3ad8121c10d50",
-    "proofs/mirage-argmax/base/KPlay.Functional.fst": "dd9d3d0b0e96676669d95bf5a692d6a44499186986708bd523d749a9e4ffb87a",
-    "proofs/mirage-argmax/base/KPlay.Functional.fsti": "dd6ece122481f845d4cfb76f3b36994dfd586ccd8302081c0eaa55adbcc7c180",
-    "proofs/mirage-argmax/optimized/KPlay.Functional.fst": "106a32b3a73a5f3ae22ef6560390e7466536dae93d17626f9b74aa568eb07f98",
-    "proofs/mirage-argmax/optimized/KPlay.Functional.fsti": "c185319aeb939708fba3c39e6e0b21fab868a9bd7f456438bdfcad793bbd2f92",
+    "proofs/mirage-argmax/base/KPlay.Base.Functional.fst": "ac729ea5501907fd62cba7238aebc95d8bc3eabce25209a3b5ba2c5f6aab7493",
+    "proofs/mirage-argmax/base/KPlay.Base.Functional.fsti": "4e254eeb6424053568fdbbd89764870039698648d997587926e0bfebbd64e653",
+    "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fst": "8b5f70383956282abd84ca1280db8a01b8c391d55c375cce6324c4e61e3c3205",
+    "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fsti": "0218f6fe5b66d07341ef9968c7dc15ead6f8baed9a8f005ff3d9cda1ab3f85ec",
     "proofs/mirage-decoder/KPlay.Proof.Tightness.fst": "5c067a7ab43f29eebc87c4472e5c73df0bd0c0369c3dfb1131eb1bb72341b7bf",
+    "proofs/mirage-decoder/KPlay.Review.fst": "5a4ed41eabe17fe3b9e2bda90014214bcaa544afd1a82972e901383bfdb7618d",
+    "proofs/mirage-decoder/KPlay.Review.fsti": "e625e09011147f1d949ed8f180a60ae141f5d2858661432899e0bcd6c6efca4c",
     "proofs/mirage-decoder/KPlay.SharedSpec.fst": "25dc6788b3d19cf34924b2f30d5c38fe2ea8012318d2adf851743a75b7d5d057",
-    "proofs/mirage-decoder/base/KPlay.Functional.fst": "55da98f34428fc84b4f499416779bdd260c82c378b7a32a8c9012c73a3cc873b",
-    "proofs/mirage-decoder/base/KPlay.Functional.fsti": "9c55da3c35d428c6d2a658eda0e6b05c7d6ed772715c842109896b1caa20d776",
-    "proofs/mirage-decoder/optimized/KPlay.Functional.fst": "a8f90d977d8fa8283941ea81f548f363ebc4e3629480b66ca6de7c0062f55537",
-    "proofs/mirage-decoder/optimized/KPlay.Functional.fsti": "35fbc888432da4663be1656b87c49495e5575604c7cda59a43183da3fb2a54ef",
+    "proofs/mirage-decoder/base/KPlay.Base.Functional.fst": "837fd541bd97e80ec660e052862ec48f2ca430d7b443f35bf833d613debc7655",
+    "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti": "4a7dc2d0e151ca439fbafd634d25139357b91a0254209dbff974c663627dd430",
+    "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst": "302a6b73dfeb0620984070aa6a10cad620a6ba4d1f3c1f208c4f40f33fbf64b6",
+    "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti": "71724e2d16448e6a70a98fe81781b78c8b2ed25b8344ea66416e492ca59cea0c",
     "proofs/mirage-embedding_position/KPlay.Proof.Tightness.fst": "4a33561ed02ca5a8d1c5ab84731f2b1ab96dada693e6d77e66995cbf37bc6db5",
+    "proofs/mirage-embedding_position/KPlay.Review.fst": "1c8fad071f2311607e65e313fe676f118e283774d215659e0872968bc6c612c5",
+    "proofs/mirage-embedding_position/KPlay.Review.fsti": "78d5b3df7e5b4598a9ed2b45be2ffcd62b1a36412e26705da8cc8d5e570962ec",
     "proofs/mirage-embedding_position/KPlay.SharedSpec.fst": "e5327584304bdd5253afd297fa81915e08caee9681783992c05f630293893d85",
-    "proofs/mirage-embedding_position/base/KPlay.Functional.fst": "04b285364b835095b7becb4d60cfd699793e648dea0ddd7af03f395034bdd3de",
-    "proofs/mirage-embedding_position/base/KPlay.Functional.fsti": "bf1c57fe127fbfe414f39741d8718306b6f884b4f22af8b810b94ea7710fda2f",
-    "proofs/mirage-embedding_position/optimized/KPlay.Functional.fst": "80edc867dcf7721cf971c9db8338620b2ca630b7185b5bc7a425ec3d056d9db3",
-    "proofs/mirage-embedding_position/optimized/KPlay.Functional.fsti": "8929213c19701438f85d7d7df70a574a3e5b33ef88182faca605488e4bed3a25",
+    "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fst": "9ca927f59fcda8607e00850c210186ee1f4f0db99f46da78261b9cba86bffafe",
+    "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fsti": "d949fb6502c259eeb63caff364185a7a6a70ff5522a80db068641683cd03cfb7",
+    "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fst": "4d95e3c6fdd515225adcab2a9fcf9dc0abd1c027834a1dd31812b66512870023",
+    "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fsti": "c8071eab7830d0232c584d9ec053c1f45b30c0a27ce4e6716d729d7f073f2035",
     "proofs/mirage-final_norm_projection/KPlay.Proof.Tightness.fst": "18f1a4435b09c3803fa9b3efe7c3af72ba8ade76388696d007cc8745109ab64d",
+    "proofs/mirage-final_norm_projection/KPlay.Review.fst": "3826038ae2d55e32558803cc17ac2a4d419e38cfdb34dc88b0fb738ea48335c6",
+    "proofs/mirage-final_norm_projection/KPlay.Review.fsti": "fcae03d5ac823fd8a52a44ba8f0ee2918e24d6c4d16d1b9e7c2c85d69f0d1b46",
     "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst": "9336c6573664f3faebfd75633f606525a9b9cb077012d3438615134d2491bb78",
-    "proofs/mirage-final_norm_projection/base/KPlay.Functional.fst": "6643fbd65bccc9d273c92a99db2a30b16d46f99bc81cf6180f2ba5c3c66badf9",
-    "proofs/mirage-final_norm_projection/base/KPlay.Functional.fsti": "bd907c0722318fd134afd3bff6ec825755bc99d14f95366da124097a09d9d4a6",
-    "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fst": "3abac37ad122f9ce5b5b0be93e28592a69a4a82e9cd0f2264560afd94926eee5",
-    "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fsti": "f5180db79b2e673fe852ec007c3c8d62a2912139706d4b156d8a560e48bd69da",
+    "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst": "6ffe906830c5d0980a02a8ddcdac5b515702d5bba55b7ca7d4a47c229c4be006",
+    "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti": "9c5371170c2b86071641e9f19c0014802ed567444a097fc4459f46b2c8dff3fc",
+    "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst": "ca69b08497dca6b9a260b791c6439bf38b5f9ebee5dbaffa7eb12fd4a014129a",
+    "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti": "32189cb59911f12694138a65d61f21d8c789ff92b33c1df0e79698d139ce3e8b",
+    "proofs/mirage-program/KPlay.Review.fst": "97546fda05c71bc0c6ef4c5894a8c993194e48eb9dc808b4f75294cb95b1c582",
+    "proofs/mirage-program/KPlay.Review.fsti": "a02f4b7b99699dc057e40aac56f0fd2f61e9c486a0480158f3a314d93ef04f5e",
     "proofs/mirage-program/KPlay.SharedSpec.fst": "94b3ca0becd032caf679ac2f8830331f4f8865acfee8975981979dd0808560ba",
-    "proofs/mirage-program/base/KPlay.Functional.fst": "748162007b868ff74811350ffd62010d5937385d4e21acf92e354089304e4673",
-    "proofs/mirage-program/base/KPlay.Functional.fsti": "23a4f2af4d01c9ffe7a92a96ae42923b65235726700ece5e14595607292264ce",
-    "proofs/mirage-program/optimized/KPlay.Functional.fst": "4907beb93087200c7e09d16c03b23bb2440966a6b0d355b1b595dd944f856d31",
-    "proofs/mirage-program/optimized/KPlay.Functional.fsti": "ce0051a62cd31d7cc511cd46145cd899f6bd7615428b131343898df56dfa366f",
+    "proofs/mirage-program/base/KPlay.Base.Functional.fst": "d8f0cd6748c0e9157279308be302111f88ef923f70fabcd3512f25178b69cedb",
+    "proofs/mirage-program/base/KPlay.Base.Functional.fsti": "ff120f45e220613a4b0eed95716f7c1cfc0eda0908c5d248ce0e08678d24d5a7",
+    "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst": "856cd64139b658df9ae9bd2d1703edf70fe0e6789c650e218e87a9be613e23f8",
+    "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti": "7fa23acedff67c346bc3642259fbbb6927bb46eff36193d557ea8dc2ad6df880",
     "proofs/mirage-program/shared/KPlay.Functional.fst": "0000e87872e907cffe2974e944d9686d874db3e730e385c8de935e4513a25f34",
     "proofs/mirage-program/shared/KPlay.Functional.fsti": "231fa482e69783537612b646044780ea6e76be8f6a5e867b0e8ee1eff73222e7",
     "support/flashmoe/Kuiper.Float.Casts.Base.fsti": "095a46de2ddefbacaae8f3eb323d06cda91f1a6a7299dcc26686cdb535517ae4",

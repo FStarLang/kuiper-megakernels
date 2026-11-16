@@ -31,6 +31,31 @@ role-specific historical source/acceptance identities are in `manifest.json`.
 The single proof-only replay adjustment is recorded separately with its
 original source hash and reversible diff; it is not misidentified as the
 original receipt-bound proof bytes.
+The FlashMoE complete-program, argmax, projection/softmax, and normalization/capacity,
+Mirage complete-program, decoder, embedding/position, argmax, and
+final norm/projection, and LUCE
+complete-program, embedding, argmax, final norm/projection, recurrent-decoder, and full-attention-decoder entry
+modules were subsequently renamed to
+`KPlay.Base.Functional` and `KPlay.Optimized.Functional` for their joint checked
+review. Filenames, module declarations, and qualified tactic self-references
+(in LUCE final norm/projection, recurrent decoder, and full attention) changed; their
+historical hashes are retained as `historical_entry_modules` in `manifest.json`.
+Recurrent decoder additionally has an explicit erased product witness and
+intermediate approximation facts in base `gate_head`, and a pointwise sum proof in optimized
+`convolution_sum_shared`, resolving solver sensitivity exposed by renaming.
+Full attention additionally has an explicit ghost loop-exit index and equality
+in optimized `store_cache`. These proof stabilizations do not alter contracts
+or executable operations.
+Mirage base decoder additionally isolates machine-index and rotary-approximation
+lemmas and checks `normalize_rotate_kernel` with reduced unfolding and a fresh
+solver. Its executable operations and contracts are unchanged. The historical
+optimized-decoder replay patch still uses `KPlay.Functional.fst`; restore that
+filename and module declaration before applying its reverse diff.
+The `KPlay.Review.{fst,fsti}` files are new contract-adaptation proofs and review
+interfaces, not historical artifacts.
+LUCE complete-program's byte-identical `KPlay.Proof.NativeInput.fst` copies were
+also consolidated into its group directory; both implementation cases check
+that same unchanged source.
 No runtime source rewriting is performed by the smoke runner; its generated
 C++ file only adds a Python binding to the existing `kplay_run` function.
 
