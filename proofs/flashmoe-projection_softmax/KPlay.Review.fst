@@ -288,26 +288,4 @@ fn optimized
   fold after Optimized smoke aux;
 }
 
-fn switcher
-  (i:implementation) (smoke:bool)
-  (tokens:device_array bf16 (rows i smoke * Shared.hidden_count smoke))
-  (weights:device_array bf16 (Shared.expert_count smoke * Shared.hidden_count smoke))
-  (probabilities:device_array f32 (rows i smoke * Shared.expert_count smoke))
-  (aux:auxiliary i smoke)
-  (#x:erased (lseq bf16 (rows i smoke * Shared.hidden_count smoke)))
-  (#w:erased (lseq bf16 (Shared.expert_count smoke * Shared.hidden_count smoke)))
-  preserves cpu ** on gpu_loc (A.pts_to tokens x ** A.pts_to weights w)
-  requires pure (domain (rows i smoke) (Shared.hidden_count smoke) (Shared.expert_count smoke) x w) **
-    before i smoke aux **
-    (exists* (old:lseq f32 (rows i smoke * Shared.expert_count smoke)).
-      on gpu_loc (A.pts_to probabilities old))
-  ensures exists* (p:lseq f32 (rows i smoke * Shared.expert_count smoke)).
-    on gpu_loc (A.pts_to probabilities p) ** after i smoke aux ** pure (post i smoke x w p)
-{
-  match i {
-    Base -> { base smoke tokens weights probabilities aux #x #w }
-    Optimized -> { optimized smoke tokens weights probabilities aux #x #w }
-  }
-}
-
 #pop-options

@@ -248,22 +248,4 @@ fn optimized
   }
 }
 
-noextract
-fn switcher
-  (i:implementation) (call:Model.invocation) (inputs:NativeInput.arguments call.Model.prompt_length)
-  (steps:I64.t{I64.v steps == call.Model.decode_steps}) (stream:Stream.stream_t)
-  (#epoch:Epoch.epoch_t) (#w:erased packed)
-  (#physical:erased (lseq I64.t call.Model.prompt_length))
-  (#prompt:erased (D.vec (D.token 248320) call.Model.prompt_length)) (#permission:perm)
-  preserves cpu
-  requires pre call inputs stream epoch w physical prompt permission
-  returns result:outcome
-  ensures post i call inputs stream epoch w physical prompt permission result
-{
-  match i {
-    Base -> { base call inputs steps stream #epoch #w #physical #prompt #permission }
-    Optimized -> { optimized call inputs steps stream #epoch #w #physical #prompt #permission }
-  }
-}
-
 #pop-options

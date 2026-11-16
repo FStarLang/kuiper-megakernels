@@ -113,6 +113,32 @@ fn optimized
   returns result:outcome
   ensures after_call OptimizedRole stream epoch tokens weights xs ws fp fw x w frame result
 
+(*
+Signature relation: base and optimized have identical arguments,
+before_call, returned outcome type, input permissions/references, output
+ownership, and frame-recovery guarantees. after_call is indexed only to
+select completion: base advances one epoch, optimized three.
+AllocationFailed preserves the incoming epoch in both. Once enqueued, both
+result-construction failure and successful construction use their role's
+completion epoch; successful cells satisfy the identical
+Shared.task_relation, including demand, packed indices, normalized
+probabilities and survival.
+
+The .fst proves input_models_agree and the original-contract adapters.
+allocation_failure_contracts_agree equates failure predicates at the same
+start; returned_contracts_agree equates return predicates when the base
+start is two epochs later. These compare predicates on the SAME result, not
+outputs of two executions. Different allowed floating observations can
+change routing. The workload remains the retained 256-token, 512-channel,
+eight-expert router, not expert MLP execution or the larger family profile.
+
+Assessment: no difference in the mathematical task; low functional but
+operationally relevant scheduling difference. Callers must wait for the
+correct queue tail; three epochs do not prove three times the runtime. This
+is a complete relative task contract, not a unique native-output function or
+a separate whole-program tightness theorem. The body below performs only one
+role-selected wrapper call; all adaptation remains in those wrappers.
+*)
 inline_for_extraction noextract
 fn switcher
   (i:implementation)
@@ -124,3 +150,10 @@ fn switcher
   requires before_call stream epoch tokens weights xs ws fp fw x w frame
   returns result:outcome
   ensures after_call i stream epoch tokens weights xs ws fp fw x w frame result
+{
+  match i {
+    BaseRole -> { base tokens weights stream #epoch #fp #fw #xs #ws #x #w frame () }
+    OptimizedRole -> { optimized tokens weights stream #epoch #fp #fw #xs #ws #x #w frame () }
+  }
+}
+

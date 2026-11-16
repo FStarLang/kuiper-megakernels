@@ -219,39 +219,4 @@ fn optimized
   assert pure (post Optimized position w h r c nh nr nc);
 }
 
-fn switcher
-  (i:implementation) (position:position_t)
-  (weights:larray bf16 weight_count{is_global_array weights})
-  (hidden:larray bf16 hidden_count{is_global_array hidden})
-  (recurrent:state_buffer f32 (previous_count i position recurrent_count))
-  (convolution:state_buffer (convolution_type i) (previous_count i position convolution_count))
-  (out_hidden:larray bf16 hidden_count{is_global_array out_hidden})
-  (out_recurrent:larray f32 recurrent_count{is_global_array out_recurrent})
-  (out_convolution:larray (convolution_type i) convolution_count{is_global_array out_convolution})
-  (#w:erased (lseq bf16 weight_count)) (#h:erased (lseq bf16 hidden_count))
-  (#r:erased (lseq f32 (previous_count i position recurrent_count)))
-  (#c:erased (lseq (convolution_type i) (previous_count i position convolution_count)))
-  (#pw #ph #pr #pc:perm)
-  preserves cpu ** on gpu_loc (A.pts_to weights #pw w ** A.pts_to hidden #ph h) **
-    state_owns recurrent pr r ** state_owns convolution pc c
-  requires exists* (nh:lseq bf16 hidden_count) (nr:lseq f32 recurrent_count)
-    (nc:lseq (convolution_type i) convolution_count).
-    on gpu_loc (A.pts_to out_hidden nh ** A.pts_to out_recurrent nr ** A.pts_to out_convolution nc)
-  ensures exists* (nh:lseq bf16 hidden_count) (nr:lseq f32 recurrent_count)
-    (nc:lseq (convolution_type i) convolution_count).
-    on gpu_loc (A.pts_to out_hidden nh ** A.pts_to out_recurrent nr ** A.pts_to out_convolution nc) **
-    pure (post i position w h r c nh nr nc)
-{
-  match i {
-    Base -> {
-      base position weights hidden recurrent convolution out_hidden out_recurrent out_convolution
-        #w #h #r #c #pw #ph #pr #pc
-    }
-    Optimized -> {
-      optimized position weights hidden recurrent convolution out_hidden out_recurrent out_convolution
-        #w #h #r #c #pw #ph #pr #pc
-    }
-  }
-}
-
 #pop-options

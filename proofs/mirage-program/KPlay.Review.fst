@@ -184,19 +184,4 @@ fn optimized (#frame_t:Type0) (#frame:erased frame_t)
   }
 }
 
-noextract
-fn switcher (i:implementation) (#frame_t:Type0) (#frame:erased frame_t)
-  (a:addresses) (#input:erased inputs) (stream:Stream.stream_t)
-  (#start:Epoch.epoch_t) (ambient:slprop)
-  preserves cpu ** Stream.stream_live stream ** RT.runtime stream ** ambient
-  requires Epoch.epoch_live stream start ** input_cells a input
-  returns result:outcome
-  ensures post i a input stream start frame result
-{
-  match i {
-    Base -> { base #frame_t #frame a #input stream #start ambient }
-    Optimized -> { optimized #frame_t #frame a #input stream #start ambient }
-  }
-}
-
 #pop-options

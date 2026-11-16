@@ -155,6 +155,30 @@ fn optimized
   ensures exists* (p:lseq f32 (rows Optimized smoke * Shared.expert_count smoke)).
     on gpu_loc (A.pts_to probabilities p) ** after Optimized smoke aux ** pure (post Optimized smoke x w p)
 
+(*
+Signature relation: rows Base smoke is one, whereas rows Optimized smoke is
+the complete Shared.token_count profile. Weights, finite/bounded input
+domain, and the row-wise real matrix-product/softmax target are common. Base
+auxiliary buffers initialize counts/indices/probabilities at token zero or
+copy the previous routing frame, and extend survival with a zero row.
+Optimized auxiliary is unit and has no such frame-output obligation. The
+role-indexed lengths are therefore genuinely different caller APIs.
+
+post gives both roles an approximation guarantee for every returned
+probability cell. Optimized additionally guarantees the target for EVERY
+represented real input model, not just target's canonical denotation.
+base_batch_refines connects collected base-row guarantees to the whole
+Shared.postcondition; it is not a batch executor or a proof of the reverse,
+universally quantified optimized guarantee from base.
+
+Assessment: moderate significance for batching, frame management, and the
+extra quantified guarantee, not a changed row-wise mathematical operation.
+Tightness.witness/unique fix the shared real probability matrix, but the
+review relates native FP32 cells by qualitative approximation, so it is not
+a unique floating-output specification or an error bound. No bitwise
+equality or comparison preservation follows. The dispatch body forwards the
+role-dependent buffers unchanged and performs no batching or adaptation.
+*)
 fn switcher
   (i:implementation) (smoke:bool)
   (tokens:device_array bf16 (rows i smoke * Shared.hidden_count smoke))
@@ -170,5 +194,12 @@ fn switcher
       on gpu_loc (A.pts_to probabilities old))
   ensures exists* (p:lseq f32 (rows i smoke * Shared.expert_count smoke)).
     on gpu_loc (A.pts_to probabilities p) ** after i smoke aux ** pure (post i smoke x w p)
+{
+  match i {
+    Base -> { base smoke tokens weights probabilities aux #x #w }
+    Optimized -> { optimized smoke tokens weights probabilities aux #x #w }
+  }
+}
+
 
 #pop-options

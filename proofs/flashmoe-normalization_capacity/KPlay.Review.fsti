@@ -175,6 +175,30 @@ fn optimized
   ensures exists* (v:physical_state Optimized p (completed Optimized p step)).
     owns Optimized p (completed Optimized p step) output v ** after Optimized p step aux v ** pure (post Optimized p b step v)
 
+(*
+Signature relation: Base takes an I64 token index and advances a represented
+prefix by one row; Optimized takes unit and constructs the complete route.
+input_rows, completed, auxiliary and all output extents reflect that
+difference. Both refer to the same Shared.selected_boundary:
+input_represents ties selected IDs and probability rows to it, and optimized
+additionally ties its actual best-probability buffer to the gathered values.
+
+Base counts are I64; optimized counts/demand are I32. Base's separate
+emitted_demand has eight cells only when the token index is 255, even for
+Full. A final Full demand for every expert is a logical view of the computed
+I64 counts, NOT a promised 16-cell I32 output buffer. post represents every
+count, owner, weight and survival cell at the completed prefix, with exact
+zero weights in unused slots. completed_refines_shared exposes route_post
+when the whole prefix is complete; the dispatcher does not execute the
+missing base steps or materialize that logical demand view.
+
+Assessment: high API/composition significance, especially for Full demand
+consumers, although the completed routing task is shared. Tightness fixes
+demand, indices and survival for a fixed boundary and characterizes all
+probability targets; occupied floating weights retain approximation freedom.
+Thus the specification is exact on discrete routing and relative on numeric
+weights, not a unique complete native-output function.
+*)
 fn switcher
   (i:implementation) (p:Shared.model_profile) (#b:erased (Shared.selected_boundary p))
   (step:call_index i p)
@@ -188,5 +212,12 @@ fn switcher
     (exists* (old:physical_state i p (completed i p step)). owns i p (completed i p step) output old)
   ensures exists* (v:physical_state i p (completed i p step)).
     owns i p (completed i p step) output v ** after i p step aux v ** pure (post i p b step v)
+{
+  match i {
+    Base -> { base p #b step selected probabilities output aux #s #r }
+    Optimized -> { optimized p #b step selected probabilities output aux #s #r }
+  }
+}
+
 
 #pop-options

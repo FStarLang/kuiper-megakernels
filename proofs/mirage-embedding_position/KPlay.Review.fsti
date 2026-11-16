@@ -100,6 +100,30 @@ fn optimized
   ensures exists* (h:hidden_values Optimized) (r:table_values Optimized).
     on gpu_loc (hidden |-> h ** table |-> r) ** pure (post Optimized w t h r)
 
+(*
+Signature relation: both take the same packed embedding weights and seven
+valid prompt tokens. hidden_count is 7*1024 for Base versus 8*1024 for
+Optimized; table_count is 2*7*128 versus 2*4096*128. The sine offset follows
+table_positions, so the physical rotary layouts must not be interchanged.
+Both preserve the input cells and return output ownership without a pending
+epoch. post maps exactly the seven prompt rows to the same
+Shared.postcondition, including logical position/cache IDs, mask, rotary
+targets and initial decoder-state observations.
+
+The seven embedding rows are exact BF16 lookups. Rotary cells are related to
+their real targets by rotary_representation. The eighth optimized hidden row
+and unused rotary positions are outside this common observation; no equality
+or additional guarantee about them is obtained from post. Logical metadata
+in logical_output is not a claim that separate physical position/mask/cache
+buffers are returned.
+
+Assessment: low logical significance, moderate allocation/indexing impact.
+Tightness.unique fixes every stated shared observation for fixed logical
+input. The native review is exact for embedding rows and relative for rotary
+values, and deliberately not tight over the entire padded buffers. The
+dispatcher allocates or trims nothing and does not reindex data: its two
+branches simply call the wrappers with the role-indexed arrays.
+*)
 fn switcher
   (i:implementation)
   (weights:larray bf16 embedding_count{is_global_array weights})
@@ -113,3 +137,10 @@ fn switcher
     on gpu_loc (hidden |-> h ** table |-> r)
   ensures exists* (h:hidden_values i) (r:table_values i).
     on gpu_loc (hidden |-> h ** table |-> r) ** pure (post i w t h r)
+{
+  match i {
+    Base -> { base weights tokens hidden table #w #t }
+    Optimized -> { optimized weights tokens hidden table #w #t }
+  }
+}
+

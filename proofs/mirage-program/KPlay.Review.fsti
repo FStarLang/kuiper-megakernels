@@ -159,6 +159,34 @@ fn optimized (#frame_t:Type0) (#frame:erased frame_t)
   returns result:outcome
   ensures post Optimized a input stream start frame result
 
+(*
+Signature relation: both wrappers use the same packed inputs (596049920 BF16
+weights, seven prompt tokens, one decode step), addresses, stream, ambient
+frame and outcome. input_models_agree proves prompt/decode equality and
+pointwise equality of every weight. Both return token metadata [1;8] and
+hidden metadata [7;1024]; the optimized decoder's eight-row padding is
+INTERNAL. Success completes at start+229 for Base and start+256 for
+Optimized. Allocation failure preserves the starting epoch and input pledge
+in both.
+
+base_result converts native FP32 layer/rotary/cache observations through
+mixed_legacy_execution/state. optimized_typed_result uses BF16
+layer/rotary/cache observations, with FP32 metadata and scores in both. The
+exposed result equivalence lemmas relate these predicates exactly to the
+native contracts. Both numerical guarantees retain their rotary domains;
+optimized additionally requires pg_attention_domain of its actual returned
+snapshot. Its raw result guarantees valid tokens under the actual selector
+domain and gives the typed result when tokens are valid; outside that domain
+-1 remains possible.
+
+Assessment: high semantic significance for validity/numerical premises; the
+epoch difference is additionally relevant to scheduling, not decode count or
+a runtime ratio. Complete relative structural/execution correctness is
+proved, not a whole-program uniqueness/tightness certificate or equal tokens
+across runs. The body below only dispatches; frame adaptation, allocation
+and enqueuing belong to the checked wrappers and their native
+implementations.
+*)
 noextract
 fn switcher (i:implementation) (#frame_t:Type0) (#frame:erased frame_t)
   (a:addresses) (#input:erased inputs) (stream:Stream.stream_t)
@@ -167,5 +195,12 @@ fn switcher (i:implementation) (#frame_t:Type0) (#frame:erased frame_t)
   requires Epoch.epoch_live stream start ** input_cells a input
   returns result:outcome
   ensures post i a input stream start frame result
+{
+  match i {
+    Base -> { base #frame_t #frame a #input stream #start ambient }
+    Optimized -> { optimized #frame_t #frame a #input stream #start ambient }
+  }
+}
+
 
 #pop-options

@@ -187,24 +187,4 @@ fn optimized
   fold after Optimized p step aux v;
 }
 
-fn switcher
-  (i:implementation) (p:Shared.model_profile) (#b:erased (Shared.selected_boundary p))
-  (step:call_index i p)
-  (selected:device_array i32 (input_rows i p))
-  (probabilities:device_array f32 (input_rows i p * Shared.expert_count p))
-  (output:buffers i p (completed i p step)) (aux:auxiliary i p step)
-  (#s:erased (lseq i32 (input_rows i p)))
-  (#r:erased (lseq f32 (input_rows i p * Shared.expert_count p)))
-  preserves cpu ** on gpu_loc (A.pts_to selected s ** A.pts_to probabilities r)
-  requires pure (input_represents i p b step aux s r) ** before i p step aux **
-    (exists* (old:physical_state i p (completed i p step)). owns i p (completed i p step) output old)
-  ensures exists* (v:physical_state i p (completed i p step)).
-    owns i p (completed i p step) output v ** after i p step aux v ** pure (post i p b step v)
-{
-  match i {
-    Base -> { base p #b step selected probabilities output aux #s #r }
-    Optimized -> { optimized p #b step selected probabilities output aux #s #r }
-  }
-}
-
 #pop-options

@@ -111,7 +111,8 @@ fn base
     on gpu_loc (A.pts_to selected s) ** history emitted e
   ensures exists* (s:lseq i64 1) (e:lseq i64 (output_count position prompt)).
     on gpu_loc (A.pts_to selected s) ** history emitted e **
-    pure (post Base position prompt logical ps s e)
+    pure (post Base position prompt logical ps s e /\
+          post Optimized position prompt logical ps s e)
 
 fn optimized
   (position:position_t) (prompt:prompt_length_t)
@@ -130,6 +131,31 @@ fn optimized
     on gpu_loc (A.pts_to selected s) ** history emitted e **
     pure (post Optimized position prompt logical ps s e)
 
+(*
+Signature relation: score_type is BF16 for Base and FP32 for Optimized.
+represents_scores requires category, signed-zero key, ordering and tie
+correspondence to the SAME logical scores; numerical approximation alone
+would not suffice. Both preserve inputs and the previous history and write
+the selected token plus the exact conditional history append. Empty
+histories require no live allocation. NaNs and infinities are included by
+the shared priority policy rather than excluded by a finite-input premise.
+
+selection Base is first_maximum; selection Optimized is maximum.
+base_post_refines_optimized proves one-way implication on the same scores
+and result. The base wrapper now exposes both facts, so switcher can retain
+its original conjunction of role-specific post and common optimized post
+without executing even that ghost adaptation in the dispatcher. The converse
+does not hold for tied maxima. Different upstream BF16/FP32 producers are
+not proved to have comparison-equivalent scores.
+
+Assessment: high semantic significance for reproducible selected tokens:
+optimized tie freedom can change generated history. Base is an exact first-
+choice function on fixed logical scores; the common optimized contract is an
+exact allowed-choice relation, not a single-valued function.
+Tightness.full_contract/fixed_choices_unique characterize histories once
+choices and the model are fixed; they do not eliminate permitted ties. The
+two branches below do nothing except call base or optimized.
+*)
 fn switcher
   (i:implementation) (position:position_t) (prompt:prompt_length_t)
   (scores:larray (score_type i) vocabulary{is_global_array scores})
@@ -147,3 +173,14 @@ fn switcher
     on gpu_loc (A.pts_to selected s) ** history emitted e **
     pure (post i position prompt logical ps s e /\
           post Optimized position prompt logical ps s e)
+{
+  match i {
+    Base -> {
+      base position prompt scores previous selected emitted #xs #ps #logical;
+    }
+    Optimized -> {
+      optimized position prompt scores previous selected emitted #xs #ps #logical;
+    }
+  }
+}
+

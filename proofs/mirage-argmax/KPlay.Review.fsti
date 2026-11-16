@@ -86,6 +86,30 @@ fn optimized
   ensures exists* (result:physical_output).
     on gpu_loc (output |-> result) ** pure (post prompt logical result)
 
+(*
+Signature relation: the only role-indexed physical difference here is
+stride, 151936 vocabulary entries for Base versus 153600 padded entries for
+Optimized, over seven input rows. Both use the same prefix, selected row,
+eight-token output and post. represents_inputs requires finite native scores
+and preserves strict comparisons AND equality/ties with the same logical
+final logits. Padding is not additional vocabulary and numerical
+approximation by itself would not establish these premises.
+
+The common conclusion is Shared.postcondition for an allowed maximum and the
+exact original prompt followed by that token. It intentionally does not
+expose a common first-index tie rule or assert identical results from
+separate executions. Even when both inputs represent the same logits, ties
+can admit multiple tokens. Both wrappers preserve input ownership and return
+output cells without a pending completion epoch.
+
+Assessment: low significance for the stated allowed-maximum task, moderate
+layout impact; lack of cross-run tie equality matters to deterministic
+decoding but is a limitation of the common contract, not a new stride
+semantics. Tightness.choice_witness/no_extra_results characterize exactly
+the allowed results; fixed_choice_unique fixes the appended sequence. Thus
+this is a tight relation, not a single-valued function on tied inputs. The
+body below only chooses one wrapper, without repacking or selection work.
+*)
 fn switcher
   (i:implementation)
   (logits:larray bf16 (logits_size i){is_global_array logits})
@@ -99,3 +123,10 @@ fn switcher
   requires exists* old. on gpu_loc (output |-> old)
   ensures exists* (result:physical_output).
     on gpu_loc (output |-> result) ** pure (post prompt logical result)
+{
+  match i {
+    Base -> { base logits prefix row output #xs #ps #prompt #logical }
+    Optimized -> { optimized logits prefix row output #xs #ps #prompt #logical }
+  }
+}
+

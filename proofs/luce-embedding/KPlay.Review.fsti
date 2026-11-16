@@ -106,6 +106,30 @@ fn optimized
   ensures exists* (h:Shared.hidden_vector bf16).
     on gpu_loc (A.pts_to hidden h) ** auxiliary_after Optimized position extra ** pure (post w t h)
 
+(*
+Signature relation: both roles use the same weights, prompt, previous token,
+selected logical token and BF16 hidden-output shape. inputs identifies the
+token from the prompt while in prefill and from previous afterwards, and
+requires valid prompt tokens. post is literally the same embedding_post:
+every hidden cell is the selected BF16 weight row, not an approximation.
+Both preserve half-permission inputs, allowing the initial previous-token
+pointer to alias a prompt cell without assuming disjoint ownership.
+
+Only auxiliary_before/after and extra differ. Base produces 64 rotary
+components and, at position zero, zero-initialized FP32 recurrent state and
+BF16 convolution state. Those state extents are zero on later calls.
+Optimized takes unit for extra and makes no promise to provide those
+outputs. The common embedding theorem must not be read as replacing base's
+initialization work in an enclosing decoder.
+
+Assessment: no significance for the selected embedding values, but moderate
+integration significance if callers depend on base's rotary/state outputs.
+This is an exact functional specification of the common hidden row;
+Tightness.witness/unique apply even to BF16 datum equality. Auxiliary base
+contents are specified separately. The visible dispatcher does not
+synthesize missing initialization, copy data, or change permissions: it
+calls precisely one wrapper with its role-appropriate extra argument.
+*)
 fn switcher
   (i:implementation) (n:length_t) (position:position_t)
   (weights:larray bf16 weight_length{is_global_array weights})
@@ -121,3 +145,10 @@ fn switcher
   requires exists* (h:Shared.hidden_vector bf16). on gpu_loc (A.pts_to hidden h)
   ensures exists* (h:Shared.hidden_vector bf16).
     on gpu_loc (A.pts_to hidden h) ** auxiliary_after i position extra ** pure (post w t h)
+{
+  match i {
+    Base -> { base n position weights prompt previous hidden extra #w #q #p #t }
+    Optimized -> { optimized n position weights prompt previous hidden extra #w #q #p #t }
+  }
+}
+

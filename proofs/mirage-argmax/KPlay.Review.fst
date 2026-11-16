@@ -77,24 +77,4 @@ fn optimized
   assert pure (post prompt logical observed);
 }
 
-fn switcher
-  (i:implementation)
-  (logits:larray bf16 (logits_size i){is_global_array logits})
-  (prefix:larray I64.t Shared.prompt_length{is_global_array prefix})
-  (row:I64.t{0 <= I64.v row /\ I64.v row < Shared.prompt_length})
-  (output:larray I64.t Shared.sequence_length{is_global_array output})
-  (#xs:erased (physical_logits i)) (#ps:erased physical_prompt)
-  (#prompt:erased Shared.prompt_tokens) (#logical:erased Shared.prompt_logits)
-  preserves cpu ** on gpu_loc (logits |-> xs) ** on gpu_loc (prefix |-> ps)
-  requires pure (represents_inputs i xs ps (I64.v row) prompt logical)
-  requires exists* old. on gpu_loc (output |-> old)
-  ensures exists* (result:physical_output).
-    on gpu_loc (output |-> result) ** pure (post prompt logical result)
-{
-  match i {
-    Base -> { base logits prefix row output #xs #ps #prompt #logical }
-    Optimized -> { optimized logits prefix row output #xs #ps #prompt #logical }
-  }
-}
-
 #pop-options

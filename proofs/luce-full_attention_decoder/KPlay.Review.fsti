@@ -192,6 +192,32 @@ fn optimized
     on gpu_loc (A.pts_to out_hidden nh ** A.pts_to new_keys nk ** A.pts_to new_values nv) **
     pure (post Optimized input k v nh nk nv scores)
 
+(*
+Signature relation: Base uses compact time-major KV prefixes of position*512
+cells and returns (position+1)*512 cells; Optimized uses full head-major
+1048576-cell arrays after initialization. cache_index and history expose the
+common logical heads/time/coordinate view. Initial source buffers are null
+for both. Base additionally borrows a represented 64-cell rotary buffer;
+optimized computes rotary values internally and takes unit. retained
+specifies unchanged old cells, including optimized zero-filled noncurrent
+positions at initialization.
+
+The important semantic asymmetry is numerical_premise. Base returns an
+erased unit observation and the premise is True. Optimized returns its
+actual FP32 live-score observation and guarantees semantic_post only when
+all 8*(position+1) scores are finite. Ownership and retained are
+unconditional; the dispatcher neither assumes finiteness nor substitutes a
+different score witness. Under the premise, both represented outputs satisfy
+the complete shared hidden/cache transition and preserve other cache
+components.
+
+Assessment: high contract significance because dropping finiteness loses the
+optimized functional conclusion; layouts alone have moderate ABI impact.
+Tightness.unique determines the logical hidden/cache result, but does not
+make the conditional optimized guarantee unconditional or determine native
+floating bits. The dispatch body merely forwards role-specific buffers,
+permissions and the same invocation to one wrapper.
+*)
 fn switcher
   (i:implementation) (#input:erased (logical_inputs i))
   (position:i64{I64.v position == input.call.position})
@@ -213,3 +239,16 @@ fn switcher
   ensures exists* (nh:lseq bf16 1024) (nk nv:lseq bf16 (output_count i input.call.position)).
     on gpu_loc (A.pts_to out_hidden nh ** A.pts_to new_keys nk ** A.pts_to new_values nv) **
     pure (post i input k v nh nk nv scores)
+{
+  match i {
+    Base -> {
+      base #input position weights hidden old_keys old_values aux out_hidden new_keys new_values
+        #w #h #k #v #pw #ph #pk #pv #pr
+    }
+    Optimized -> {
+      optimized #input position weights hidden old_keys old_values aux out_hidden new_keys new_values
+        #w #h #k #v #pw #ph #pk #pv #pr
+    }
+  }
+}
+

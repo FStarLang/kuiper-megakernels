@@ -140,26 +140,4 @@ fn optimized
   fold auxiliary_after Optimized position extra;
 }
 
-fn switcher
-  (i:implementation) (n:length_t) (position:position_t)
-  (weights:larray bf16 weight_length{is_global_array weights})
-  (prompt:larray i64 (I64.v n){is_global_array prompt})
-  (previous:larray i64 1{is_global_array previous})
-  (hidden:larray bf16 Shared.hidden_size{is_global_array hidden})
-  (extra:auxiliary i position)
-  (#w:erased (lseq bf16 weight_length)) (#q:erased (lseq i64 (I64.v n)))
-  (#p:erased (lseq i64 1)) (#t:erased Shared.token_id)
-  preserves cpu ** on gpu_loc (
-    A.pts_to weights #0.5R w ** A.pts_to prompt #0.5R q ** A.pts_to previous #0.5R p)
-  requires pure (inputs n position q p t) ** auxiliary_before i position extra
-  requires exists* (h:Shared.hidden_vector bf16). on gpu_loc (A.pts_to hidden h)
-  ensures exists* (h:Shared.hidden_vector bf16).
-    on gpu_loc (A.pts_to hidden h) ** auxiliary_after i position extra ** pure (post w t h)
-{
-  match i {
-    Base -> { base n position weights prompt previous hidden extra #w #q #p #t }
-    Optimized -> { optimized n position weights prompt previous hidden extra #w #q #p #t }
-  }
-}
-
 #pop-options

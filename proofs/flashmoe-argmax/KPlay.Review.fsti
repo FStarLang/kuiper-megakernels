@@ -143,6 +143,30 @@ fn optimized
     after Optimized #(U64.v tokens) #(U64.v experts) aux values chosen **
     pure (post #(U64.v tokens) #(U64.v experts) values chosen)
 
+(*
+Signature relation: both roles preserve the same supplied FP32 probability
+cells and establish post, the shared stable-maximum/gather relation.
+batch_size Base forces one row; Optimized permits a positive batch within
+the indexed size bounds. auxiliary Base supplies input/output routing-frame
+buffers and a copied probability row. auxiliary Optimized is instead an
+actual gathered-best-probability buffer. after specifies each copied frame
+cell or gathered cell, not merely a logical selection.
+
+base_batch_refines proves that collected one-row guarantees imply the
+batched Shared.post for the same rows. It does not run a loop and is not a
+theorem that one base invocation handles the optimized batch. Selection
+equality concerns identical supplied native probabilities, not probabilities
+computed independently by two projection kernels. The finite [0,1]
+probability domain and stable tie rule are part of this comparison;
+ownership is returned without a pending epoch in these family interfaces.
+
+Assessment: moderate integration significance, but no stable-selection task
+change after row-wise composition. This is an exact functional selector on
+fixed native rows: Tightness.witness/unique determine the selected IDs and
+gathered denotations, and after fixes actual gathered cells. The dispatcher
+does not batch, allocate, gather, or copy by itself: each branch below calls
+exactly one already-adapted wrapper.
+*)
 fn switcher
   (i:implementation) (tokens:batch_size i) (experts:expert_count tokens)
   (rows:device_array f32 (U64.v experts * U64.v tokens))
@@ -156,3 +180,10 @@ fn switcher
     on gpu_loc (A.pts_to selected chosen) **
     after i #(U64.v tokens) #(U64.v experts) aux values chosen **
     pure (post #(U64.v tokens) #(U64.v experts) values chosen)
+{
+  match i {
+    Base -> { base tokens experts rows selected aux #values }
+    Optimized -> { optimized tokens experts rows selected aux #values }
+  }
+}
+

@@ -167,6 +167,32 @@ fn optimized
     on gpu_loc (A.pts_to out_hidden nh ** A.pts_to out_recurrent nr ** A.pts_to out_convolution nc) **
     pure (post Optimized position w h r c nh nr nc)
 
+(*
+Signature relation: both roles use the same packed weights, hidden shape,
+FP32 recurrent-state shape and complete Shared.postcondition for the
+represented layer/cache transition. convolution_type is BF16 for Base and
+FP32 for Optimized. recurrent_index transposes the key/value axes between
+the physical recurrent buffers; output_representation maps both back to the
+same logical head/key/value state. This is a representation theorem, not an
+in-place conversion of those arrays.
+
+previous_count Base always requires materialized input-state buffers. At
+position zero Optimized instead has empty input-state ownership; the logical
+cache domain supplies the initial state. For base's initial call,
+input_representation relates its materialized buffers to the shared zero
+state. post is quantified over represented logical calls and inputs: it
+guarantees call_postcondition for every such representation, not existence
+of a representation for arbitrary native cells. Input fractions are
+preserved.
+
+Assessment: moderate state-ABI/initialization and numerical significance,
+with no change to the complete logical transition. Tightness.unique fixes
+hidden, convolution, recurrent and framed KV components for fixed logical
+inputs. Native output cells still have qualitative approximation freedom;
+this is conditional relative functionality, not bitwise determinism. The
+dispatcher neither transposes nor initializes state: it only selects the
+wrapper whose types describe those obligations.
+*)
 fn switcher
   (i:implementation) (position:position_t)
   (weights:larray bf16 weight_count{is_global_array weights})
@@ -189,3 +215,16 @@ fn switcher
     (nc:lseq (convolution_type i) convolution_count).
     on gpu_loc (A.pts_to out_hidden nh ** A.pts_to out_recurrent nr ** A.pts_to out_convolution nc) **
     pure (post i position w h r c nh nr nc)
+{
+  match i {
+    Base -> {
+      base position weights hidden recurrent convolution out_hidden out_recurrent out_convolution
+        #w #h #r #c #pw #ph #pr #pc
+    }
+    Optimized -> {
+      optimized position weights hidden recurrent convolution out_hidden out_recurrent out_convolution
+        #w #h #r #c #pw #ph #pr #pc
+    }
+  }
+}
+

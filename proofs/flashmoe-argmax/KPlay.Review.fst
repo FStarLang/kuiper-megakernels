@@ -126,24 +126,4 @@ fn optimized
   fold after Optimized #(U64.v tokens) #(U64.v experts) aux values chosen;
 }
 
-fn switcher
-  (i:implementation) (tokens:batch_size i) (experts:expert_count tokens)
-  (rows:device_array f32 (U64.v experts * U64.v tokens))
-  (selected:device_array i32 (U64.v tokens))
-  (aux:auxiliary i (U64.v tokens) (U64.v experts))
-  (#values:erased (probabilities (U64.v experts * U64.v tokens)))
-  preserves cpu ** on gpu_loc (A.pts_to rows values)
-  requires before i #(U64.v tokens) #(U64.v experts) aux **
-    (exists* old. on gpu_loc (A.pts_to selected old))
-  ensures exists* (chosen:selections (U64.v tokens) (U64.v experts)).
-    on gpu_loc (A.pts_to selected chosen) **
-    after i #(U64.v tokens) #(U64.v experts) aux values chosen **
-    pure (post #(U64.v tokens) #(U64.v experts) values chosen)
-{
-  match i {
-    Base -> { base tokens experts rows selected aux #values }
-    Optimized -> { optimized tokens experts rows selected aux #values }
-  }
-}
-
 #pop-options

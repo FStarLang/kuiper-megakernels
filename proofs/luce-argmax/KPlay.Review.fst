@@ -123,7 +123,8 @@ fn base
     on gpu_loc (A.pts_to selected s) ** history emitted e
   ensures exists* (s:lseq i64 1) (e:lseq i64 (output_count position prompt)).
     on gpu_loc (A.pts_to selected s) ** history emitted e **
-    pure (post Base position prompt logical ps s e)
+    pure (post Base position prompt logical ps s e /\
+          post Optimized position prompt logical ps s e)
 {
   with old_selected old_emitted.
     assert on gpu_loc (A.pts_to selected old_selected) ** history emitted old_emitted;
@@ -140,6 +141,8 @@ fn base
   history_from_base emitted next_emitted;
   let _ = base_post position prompt xs ps logical next_selected next_emitted;
   assert pure (post Base position prompt logical ps next_selected next_emitted);
+  let _ = base_post_refines_optimized position prompt logical ps next_selected next_emitted;
+  assert pure (post Optimized position prompt logical ps next_selected next_emitted);
 }
 
 fn optimized
@@ -173,37 +176,6 @@ fn optimized
   rewrite O.history_ownership emitted next_emitted as history emitted next_emitted;
   let _ = optimized_post position prompt xs ps logical next_selected next_emitted;
   assert pure (post Optimized position prompt logical ps next_selected next_emitted);
-}
-
-fn switcher
-  (i:implementation) (position:position_t) (prompt:prompt_length_t)
-  (scores:larray (score_type i) vocabulary{is_global_array scores})
-  (previous:array i64{active_array (previous_count position prompt) previous})
-  (selected:larray i64 1{is_global_array selected})
-  (emitted:array i64{active_array (output_count position prompt) emitted})
-  (#xs:erased (lseq (score_type i) vocabulary))
-  (#ps:erased (lseq i64 (previous_count position prompt)))
-  (#logical:erased (Shared.vec Shared.score vocabulary))
-  preserves cpu ** on gpu_loc (A.pts_to scores xs) ** history previous ps
-  requires pure (represents_scores i xs logical)
-  requires exists* (s:lseq i64 1) (e:lseq i64 (output_count position prompt)).
-    on gpu_loc (A.pts_to selected s) ** history emitted e
-  ensures exists* (s:lseq i64 1) (e:lseq i64 (output_count position prompt)).
-    on gpu_loc (A.pts_to selected s) ** history emitted e **
-    pure (post i position prompt logical ps s e /\
-          post Optimized position prompt logical ps s e)
-{
-  match i {
-    Base -> {
-      base position prompt scores previous selected emitted #xs #ps #logical;
-      with s e. assert on gpu_loc (A.pts_to selected s) ** history emitted e;
-      let _ = base_post_refines_optimized position prompt logical ps s e;
-      assert pure (post Optimized position prompt logical ps s e);
-    }
-    Optimized -> {
-      optimized position prompt scores previous selected emitted #xs #ps #logical;
-    }
-  }
 }
 
 #pop-options

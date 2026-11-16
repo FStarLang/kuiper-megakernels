@@ -112,24 +112,4 @@ fn optimized
   assert pure (post Optimized w t next_hidden next_table);
 }
 
-fn switcher
-  (i:implementation)
-  (weights:larray bf16 embedding_count{is_global_array weights})
-  (tokens:larray I64.t Shared.prompt_length{is_global_array tokens})
-  (hidden:larray bf16 (hidden_count i){is_global_array hidden})
-  (table:larray bf16 (table_count i){is_global_array table})
-  (#w:erased embedding_values)
-  (#t:erased (lseq I64.t Shared.prompt_length){valid_tokens t})
-  preserves cpu ** on gpu_loc (weights |-> w ** Pulse.Lib.Array.pts_to tokens t)
-  requires exists* (h:hidden_values i) (r:table_values i).
-    on gpu_loc (hidden |-> h ** table |-> r)
-  ensures exists* (h:hidden_values i) (r:table_values i).
-    on gpu_loc (hidden |-> h ** table |-> r) ** pure (post i w t h r)
-{
-  match i {
-    Base -> { base weights tokens hidden table #w #t }
-    Optimized -> { optimized weights tokens hidden table #w #t }
-  }
-}
-
 #pop-options

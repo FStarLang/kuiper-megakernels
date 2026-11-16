@@ -266,38 +266,4 @@ fn optimized
   scores
 }
 
-fn switcher
-  (i:implementation) (#input:erased (logical_inputs i))
-  (position:i64{I64.v position == input.call.position})
-  (weights:device_array bf16 weight_count) (hidden:device_array bf16 1024)
-  (old_keys old_values:state_buffer i input.call.position) (aux:auxiliary i)
-  (out_hidden:device_array bf16 1024)
-  (new_keys new_values:device_array bf16 (output_count i input.call.position))
-  (#w:erased (lseq bf16 weight_count)) (#h:erased (lseq bf16 1024))
-  (#k #v:erased (lseq bf16 (previous_count i input.call.position)))
-  (#pw #ph #pk #pv #pr:perm)
-  preserves cpu ** on gpu_loc (A.pts_to weights #pw w ** A.pts_to hidden #ph h) **
-    state_owns i input.call.position old_keys pk k **
-    state_owns i input.call.position old_values pv v ** auxiliary_owns i pr aux
-  requires pure (represented i input w h k v /\ auxiliary_represents i input.call.position aux) **
-    on gpu_loc (A.pts_to_uninit out_hidden 1024 **
-      A.pts_to_uninit new_keys (output_count i input.call.position) **
-      A.pts_to_uninit new_values (output_count i input.call.position))
-  returns scores:erased (score_observation i input.call.position)
-  ensures exists* (nh:lseq bf16 1024) (nk nv:lseq bf16 (output_count i input.call.position)).
-    on gpu_loc (A.pts_to out_hidden nh ** A.pts_to new_keys nk ** A.pts_to new_values nv) **
-    pure (post i input k v nh nk nv scores)
-{
-  match i {
-    Base -> {
-      base #input position weights hidden old_keys old_values aux out_hidden new_keys new_values
-        #w #h #k #v #pw #ph #pk #pv #pr
-    }
-    Optimized -> {
-      optimized #input position weights hidden old_keys old_values aux out_hidden new_keys new_values
-        #w #h #k #v #pw #ph #pk #pv #pr
-    }
-  }
-}
-
 #pop-options

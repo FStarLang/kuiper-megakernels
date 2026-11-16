@@ -103,6 +103,31 @@ fn optimized
     on gpu_loc (A.pts_to scores s) ** history_owns history 1.0R e **
     pure (post Optimized position prompt w h p s e)
 
+(*
+Signature relation: inputs, permissions, vocabulary, hidden-history sizes
+and targets are identical. score_type and represents_score select BF16
+returned logits for Base and FP32 for Optimized. Every returned score
+approximates the SAME logical_logits target, which normalizes the input
+hidden row and applies the tied projection. On emitting calls the history
+append is the exact original, UNNORMALIZED BF16 hidden row; otherwise the
+history remains unchanged. Previous history and all input fractions are
+preserved, and empty histories need no live allocation.
+
+This comparison relates cells through a shared mathematical target. It
+neither casts one output into the other nor proves equal ordering, equal
+ties, equal next-token selections or bitwise-equal results. Different score
+types remain visible in the caller-owned score buffer, rather than being
+hidden by an erased common real view.
+
+Assessment: moderate representation and downstream numerical significance;
+the mathematical operation and exact history behavior are unchanged.
+Tightness.unique determines the logical target/history/state and
+full_contract characterizes the scalar approximation boundary. Thus this is
+tight relative to that boundary, not a single-valued native floating
+specification or quantitative accuracy guarantee. The body below makes one
+wrapper call, with no cast, conversion, history update or numerical proof
+performed by the dispatcher itself.
+*)
 fn switcher
   (i:implementation) (position:position_t) (prompt:prompt_length_t)
   (weights:larray bf16 weight_length{is_global_array weights})
@@ -122,3 +147,10 @@ fn switcher
     (e:lseq bf16 (output_rows position prompt * width)).
     on gpu_loc (A.pts_to scores s) ** history_owns history 1.0R e **
     pure (post i position prompt w h p s e)
+{
+  match i {
+    Base -> { base position prompt weights hidden previous scores history #w #h #p #pw #ph #pp }
+    Optimized -> { optimized position prompt weights hidden previous scores history #w #h #p #pw #ph #pp }
+  }
+}
+

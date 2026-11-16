@@ -260,22 +260,4 @@ fn optimized
   optimized_outcome result
 }
 
-inline_for_extraction noextract
-fn switcher
-  (i:implementation)
-  (tokens weights:Input.argument bf16)
-  (stream:Stream.stream_t) (#epoch:Epoch.epoch_t)
-  (#fp #fw:perm) (#xs:erased token_values) (#ws:erased weight_values)
-  (#x:erased Shared.token_matrix) (#w:erased Shared.weight_matrix)
-  (frame:slprop) {| is_send frame |} ()
-  requires before_call stream epoch tokens weights xs ws fp fw x w frame
-  returns result:outcome
-  ensures after_call i stream epoch tokens weights xs ws fp fw x w frame result
-{
-  match i {
-    BaseRole -> { base tokens weights stream #epoch #fp #fw #xs #ws #x #w frame () }
-    OptimizedRole -> { optimized tokens weights stream #epoch #fp #fw #xs #ws #x #w frame () }
-  }
-}
-
 #pop-options

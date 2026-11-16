@@ -134,21 +134,4 @@ fn optimized
   fold input_ownership Optimized p0 p1 p2 b;
 }
 
-fn switcher
-  (i:implementation) (b:inputs i) (#x:erased Shared.inputs) (#p0 #p1 #p2:perm)
-  (hidden:device_array bf16 (rows * width))
-  (scores:device_array bf16 (rows * stride i))
-  preserves cpu ** input_ownership i p0 p1 p2 b
-  requires pure (represented i b /\ logical_input i b == x) **
-    (exists* (h:lseq bf16 (rows * width)) (s:lseq bf16 (rows * stride i)).
-      on gpu_loc (A.pts_to hidden h ** A.pts_to scores s))
-  ensures exists* (h:lseq bf16 (rows * width)) (s:lseq bf16 (rows * stride i)).
-    on gpu_loc (A.pts_to hidden h ** A.pts_to scores s) ** pure (post i x h s)
-{
-  match i {
-    Base -> { base b #x #p0 #p1 #p2 hidden scores }
-    Optimized -> { optimized b #x #p0 #p1 #p2 hidden scores }
-  }
-}
-
 #pop-options

@@ -170,6 +170,32 @@ fn optimized
   returns result:outcome
   ensures post Optimized call inputs stream epoch w physical prompt permission result
 
+(*
+Signature relation: both wrappers have the same invocation, packed inputs,
+steps, stream, permissions, outcome and pre. input_views_agree proves
+equality of the two parameter-value, parameter-address and prompt-storage
+maps for all 752393024 packed BF16 weights. Success returns owning token and
+hidden tensors with the same decode-length metadata and queues the result at
+epoch_next epoch. Allocation failure retains the starting epoch and input
+pledge; neither branch silently synchronizes.
+
+observed_payload gives both the complete safety_caller_postcondition on the
+ACTUAL returned execution and physical token/hidden storage. Base uses
+completed BK.metadata and BF16 convolution/normalization observations, and
+has an unconditional numerical_prefix. Optimized uses completed
+Execution.prefix and FP32 observations; its numerical_prefix requires
+family_dependencies AND numerical_scope of that same witness. These are not
+proved by dispatch and cannot be replaced by premises about a chosen ideal
+execution.
+
+Assessment: high semantic significance despite identical ABI and epochs:
+base and optimized do not offer identical unconditional numerical
+guarantees. This is a complete relative execution/history contract, not an
+independent whole-program tightness certificate or unique token-history
+function. Numerical observations and permitted selections remain free within
+their relations. The visible dispatcher calls one wrapper and does no
+launch, allocation, pledge rewriting or additional proof adaptation itself.
+*)
 noextract
 fn switcher
   (i:implementation) (call:Model.invocation) (inputs:NativeInput.arguments call.Model.prompt_length)
@@ -181,5 +207,12 @@ fn switcher
   requires pre call inputs stream epoch w physical prompt permission
   returns result:outcome
   ensures post i call inputs stream epoch w physical prompt permission result
+{
+  match i {
+    Base -> { base call inputs steps stream #epoch #w #physical #prompt #permission }
+    Optimized -> { optimized call inputs steps stream #epoch #w #physical #prompt #permission }
+  }
+}
+
 
 #pop-options

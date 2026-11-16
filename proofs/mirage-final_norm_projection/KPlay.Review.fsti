@@ -137,6 +137,31 @@ fn optimized
   ensures exists* (h:lseq bf16 (rows * width)) (s:lseq bf16 (rows * stride Optimized)).
     on gpu_loc (A.pts_to hidden h ** A.pts_to scores s) ** pure (post Optimized x h s)
 
+(*
+Signature relation: inputs Base carries packed weights/offsets and two
+seven-row residual/delta buffers; inputs Optimized carries a prepared eight-
+row hidden buffer and separate gamma/embedding weights. represented and
+logical_input i b == x require these different physical inputs to describe
+the SAME logical hidden sum and weights. Both return seven normalized BF16
+rows. Score stride is 151936 for Base and 153600 for Optimized, with
+explicit fractional ownership preservation for each input.
+
+observation_post relates actual returned cells to Shared.postcondition and
+additionally fixes projection of ALL seven normalized rows, not only the
+last-row logits used for selection. Optimized padded score columns represent
+zero; that is an approximation target, not a promise of identical zero bit
+patterns. Its eighth incoming hidden row has no role in the seven-row
+logical task. The dispatcher does not compute residual addition, unpack
+weights, or prepare the optimized input.
+
+Assessment: moderate ABI/input-preparation significance; no different
+normalization/projection task once the logical-input relation holds.
+Tightness.unique fixes shared normalized rows, final logits and framed
+state; observation_post determines the other row targets too. Native BF16
+cells retain approximation freedom, so this is relative functional
+correctness, not bitwise equality or comparison preservation. Each visible
+branch does exactly one wrapper call.
+*)
 fn switcher
   (i:implementation) (b:inputs i) (#x:erased Shared.inputs) (#p0 #p1 #p2:perm)
   (hidden:device_array bf16 (rows * width))
@@ -147,3 +172,10 @@ fn switcher
       on gpu_loc (A.pts_to hidden h ** A.pts_to scores s))
   ensures exists* (h:lseq bf16 (rows * width)) (s:lseq bf16 (rows * stride i)).
     on gpu_loc (A.pts_to hidden h ** A.pts_to scores s) ** pure (post i x h s)
+{
+  match i {
+    Base -> { base b #x #p0 #p1 #p2 hidden scores }
+    Optimized -> { optimized b #x #p0 #p1 #p2 hidden scores }
+  }
+}
+

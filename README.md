@@ -129,7 +129,7 @@ python3 replay.py verify --case mirage-argmax-tightness --jobs 2 --work .work/re
 Start with [`proofs/flashmoe-program/KPlay.Review.fsti`](proofs/flashmoe-program/KPlay.Review.fsti).
 It exposes the common caller precondition, the complete success/failure
 postcondition, the completion-epoch definition, and the `base`, `optimized`,
-and implementation-indexed `switcher` signatures. The corresponding `.fst` keeps the adaptation
+and the implementation-indexed, dispatch-only `switcher` definition. The corresponding `.fst` keeps the adaptation
 proofs and wrappers that call the verified implementations directly. Their
 signatures are identical except for `BaseRole` versus `OptimizedRole`: completion
 is after one launch versus three. `input_models_agree` proves the input adapters
@@ -161,6 +161,12 @@ weights and preserves the actual returned-cell witnesses. Base completes at
 `[7;1024]` (optimized decoder padding is internal). Optimized numerical
 correctness retains its attention-domain premise, and valid output tokens are
 guaranteed under the actual selector-score domain.
+
+The [review catalog](proofs/REVIEW-CATALOG.md) compares all fifteen groups,
+assesses the significance of each contract difference, and distinguishes
+exact functionality, allowed choices, and conditional/relative numerical
+tightness. Each interface includes a more detailed comment at its visible
+`switcher` implementation.
 
 All twelve family reviews use the same interface-and-dispatcher style:
 

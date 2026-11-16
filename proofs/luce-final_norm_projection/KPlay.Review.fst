@@ -168,30 +168,4 @@ fn optimized
   assert pure (post Optimized position prompt w h p next_scores next_history);
 }
 
-fn switcher
-  (i:implementation) (position:position_t) (prompt:prompt_length_t)
-  (weights:larray bf16 weight_length{is_global_array weights})
-  (hidden:larray bf16 width{is_global_array hidden})
-  (previous:history_buffer (previous_rows position prompt * width))
-  (scores:larray (score_type i) vocabulary{is_global_array scores})
-  (history:history_buffer (output_rows position prompt * width))
-  (#w:erased (lseq bf16 weight_length)) (#h:erased (lseq bf16 width))
-  (#p:erased (lseq bf16 (previous_rows position prompt * width)))
-  (#pw #ph #pp:perm)
-  preserves cpu ** on gpu_loc (A.pts_to weights #pw w ** A.pts_to hidden #ph h) **
-    history_owns previous pp p
-  requires exists* (s:lseq (score_type i) vocabulary)
-    (e:lseq bf16 (output_rows position prompt * width)).
-    on gpu_loc (A.pts_to scores s) ** history_owns history 1.0R e
-  ensures exists* (s:lseq (score_type i) vocabulary)
-    (e:lseq bf16 (output_rows position prompt * width)).
-    on gpu_loc (A.pts_to scores s) ** history_owns history 1.0R e **
-    pure (post i position prompt w h p s e)
-{
-  match i {
-    Base -> { base position prompt weights hidden previous scores history #w #h #p #pw #ph #pp }
-    Optimized -> { optimized position prompt weights hidden previous scores history #w #h #p #pw #ph #pp }
-  }
-}
-
 #pop-options

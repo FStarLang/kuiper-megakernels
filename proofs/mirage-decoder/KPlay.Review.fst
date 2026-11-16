@@ -227,20 +227,4 @@ fn optimized
   o
 }
 
-fn switcher
-  (i:implementation) (#input:erased Shared.prefill_input) (weights:device_array bf16 weight_count)
-  (b:inputs i) (out:device_array bf16 (hidden_count i)) (aux:auxiliary i)
-  (#w:erased (lseq bf16 weight_count)) (#pw #ph #pr:perm)
-  preserves cpu ** on gpu_loc (A.pts_to weights #pw w) ** inputs_own i ph pr b
-  requires pure (weights_represent w input.Shared.weight /\ represented_inputs i input b) ** output_before i out aux
-  returns o:erased (observation i)
-  ensures exists* (cells:output_cells i).
-    output_owns i out aux cells ** receipt i input w b cells o ** pure (post i input b cells o)
-{
-  match i {
-    Base -> { base #input weights b out aux #w #pw #ph #pr }
-    Optimized -> { optimized #input weights b out aux #w #pw #ph #pr }
-  }
-}
-
 #pop-options

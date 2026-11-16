@@ -229,6 +229,32 @@ fn optimized
   ensures exists* (cells:output_cells Optimized).
     output_owns Optimized out aux cells ** receipt Optimized input w b cells o ** pure (post Optimized input b cells o)
 
+(*
+Signature relation: both wrappers restrict weights to the canonical
+15730944-cell packing and the same represented Shared.prefill_input; the
+native base entry permits additional offset layouts outside this review.
+Base consumes residual/delta plus a compact rotary table and returns two
+7168-cell residual/delta arrays. Optimized consumes padded hidden/full
+rotary storage and returns one 8192-cell hidden array. represented_inputs
+and hidden_represents expose the logical sum, seven active rows and rotary
+position mapping; padding_post gives the optimized eighth-row target.
+
+Both return erased observations of computed temporary key/value cells, at
+the explicit cache_represents indices, not persistent physical KV
+allocations. Their canonical key/value guarantee is unconditional. Base
+numerical_premise is True. Optimized semantic_post, including the complete
+shared hidden/cache transition and padding, requires finite actual live MMA
+scores. Its linear receipt ties cells and observation to this consumed
+invocation; no unrelated witness can discharge that premise.
+
+Assessment: high semantic significance for the conditional hidden result,
+and moderate ABI/observation differences. Tightness.unique/cache_contents
+fix logical hidden and all modeled cache contents, lengths and
+initialization, but do not remove the optimized premise or native
+approximation freedom. The dispatcher does not join residuals, convert
+rotary layouts, manufacture cache ownership or discharge finiteness: it only
+invokes the selected wrapper.
+*)
 fn switcher
   (i:implementation) (#input:erased Shared.prefill_input) (weights:device_array bf16 weight_count)
   (b:inputs i) (out:device_array bf16 (hidden_count i)) (aux:auxiliary i)
@@ -238,5 +264,12 @@ fn switcher
   returns o:erased (observation i)
   ensures exists* (cells:output_cells i).
     output_owns i out aux cells ** receipt i input w b cells o ** pure (post i input b cells o)
+{
+  match i {
+    Base -> { base #input weights b out aux #w #pw #ph #pr }
+    Optimized -> { optimized #input weights b out aux #w #pw #ph #pr }
+  }
+}
+
 
 #pop-options
