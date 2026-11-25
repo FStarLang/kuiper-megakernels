@@ -1819,13 +1819,17 @@
       ]
     },
     {
+      "directory": "proofs/mirage-shared",
+      "id": "mirage-shared",
+      "kind": "shared",
+      "profile": "mirage-cleanroom",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
       "directory": "proofs/mirage-argmax/base",
-      "historical_entry_modules": {
-        "proofs/mirage-argmax/base/KPlay.Functional.fst": "dd9d3d0b0e96676669d95bf5a692d6a44499186986708bd523d749a9e4ffb87a",
-        "proofs/mirage-argmax/base/KPlay.Functional.fsti": "dd6ece122481f845d4cfb76f3b36994dfd586ccd8302081c0eaa55adbcc7c180"
-      },
-      "historical_receipt_sha256": "3181627a69c56bbc5c003b8108323564a885564f80179eb2414909baf1c2d313",
-      "historical_target_sha256": "f3d9b600e460679c6449a43773b98d058bdd362f88ff05c31901b2e5aae4f512",
       "id": "mirage-argmax-base",
       "kernel": "kernels/mirage-argmax-base.cu",
       "kind": "family",
@@ -1834,122 +1838,33 @@
         "torch::Tensor",
         "int64_t"
       ],
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-argmax/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-argmax/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-argmax/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            7,
-            151936
-          ]
-        },
-        {
-          "dtype": "int64",
-          "kind": "tensor",
-          "shape": [
-            7
-          ]
-        },
-        {
-          "kind": "int"
-        }
+        "proofs/mirage-argmax/base/KPlay.Functional.fsti",
+        "proofs/mirage-argmax/base/KPlay.Functional.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
       "directory": "proofs/mirage-argmax/optimized",
-      "historical_entry_modules": {
-        "proofs/mirage-argmax/optimized/KPlay.Functional.fst": "106a32b3a73a5f3ae22ef6560390e7466536dae93d17626f9b74aa568eb07f98",
-        "proofs/mirage-argmax/optimized/KPlay.Functional.fsti": "c185319aeb939708fba3c39e6e0b21fab868a9bd7f456438bdfcad793bbd2f92"
-      },
-      "historical_receipt_sha256": "179b8c3ef656606b7dc0814ab58c0fc73bbea7d340880adedb7e9f571e77a8da",
-      "historical_target_sha256": "7116f70722aa0571291d102b3afa12b248de4976711cb555c7703dbf86716537",
       "id": "mirage-argmax-optimized",
       "kernel": "kernels/mirage-argmax-optimized.cu",
       "kind": "family",
       "parameters": [
         "torch::Tensor",
-        "torch::Tensor",
-        "int64_t"
+        "torch::Tensor"
       ],
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/mirage-argmax/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            7,
-            153600
-          ]
-        },
-        {
-          "dtype": "int64",
-          "kind": "tensor",
-          "shape": [
-            7
-          ]
-        },
-        {
-          "kind": "int"
-        }
-      ]
-    },
-    {
-      "directory": "proofs/mirage-argmax",
-      "id": "mirage-argmax-review",
-      "implementation_cases": [
-        "mirage-argmax-base",
-        "mirage-argmax-optimized"
-      ],
-      "kind": "review",
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-argmax/KPlay.Review.fsti",
-        "proofs/mirage-argmax/KPlay.Review.fst",
-        "proofs/mirage-argmax/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-argmax/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-argmax/KPlay.SharedSpec.fst",
-        "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fst"
-      ]
-    },
-    {
-      "directory": "proofs/mirage-argmax",
-      "historical_receipts": {
-        "base": "3181627a69c56bbc5c003b8108323564a885564f80179eb2414909baf1c2d313",
-        "optimized": "179b8c3ef656606b7dc0814ab58c0fc73bbea7d340880adedb7e9f571e77a8da"
-      },
-      "id": "mirage-argmax-tightness",
-      "kind": "tightness",
-      "paired_shared_sha256": "fa83c1e05b96b9e8ad14af7eb1c8df9248747fd78faec210e3e3ad8121c10d50",
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-argmax/KPlay.SharedSpec.fst",
-        "proofs/mirage-argmax/KPlay.Proof.Tightness.fst"
+        "proofs/mirage-argmax/optimized/KPlay.Functional.fsti",
+        "proofs/mirage-argmax/optimized/KPlay.Functional.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
       "directory": "proofs/mirage-decoder/base",
-      "historical_entry_modules": {
-        "proofs/mirage-decoder/base/KPlay.Functional.fst": "55da98f34428fc84b4f499416779bdd260c82c378b7a32a8c9012c73a3cc873b",
-        "proofs/mirage-decoder/base/KPlay.Functional.fsti": "9c55da3c35d428c6d2a658eda0e6b05c7d6ed772715c842109896b1caa20d776"
-      },
-      "historical_receipt_sha256": "29747107d3285be414fe1f642a0c755e162253d2a04835cfd4ebccec3d655adf",
-      "historical_target_sha256": "9b044d9e7a54dc45ac1ed7bb004341bb1c6d38c8f81164223a93219f4ae34ece",
       "id": "mirage-decoder-base",
       "kernel": "kernels/mirage-decoder-base.cu",
       "kind": "family",
@@ -1959,91 +1874,18 @@
         "torch::Tensor",
         "torch::Tensor",
         "int64_t",
-        "int64_t",
-        "int64_t",
-        "int64_t",
-        "int64_t",
-        "int64_t",
-        "int64_t",
-        "bool"
+        "int64_t"
       ],
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-decoder/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-decoder/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            15730944
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            7,
-            1024
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            7,
-            1024
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            2,
-            7,
-            128
-          ]
-        },
-        {
-          "kind": "int"
-        },
-        {
-          "kind": "int"
-        },
-        {
-          "kind": "int"
-        },
-        {
-          "kind": "int"
-        },
-        {
-          "kind": "int"
-        },
-        {
-          "kind": "int"
-        },
-        {
-          "kind": "int"
-        },
-        {
-          "kind": "bool"
-        }
+        "proofs/mirage-decoder/base/KPlay.Functional.fsti",
+        "proofs/mirage-decoder/base/KPlay.Functional.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
       "directory": "proofs/mirage-decoder/optimized",
-      "historical_entry_modules": {
-        "proofs/mirage-decoder/optimized/KPlay.Functional.fst": "a8f90d977d8fa8283941ea81f548f363ebc4e3629480b66ca6de7c0062f55537",
-        "proofs/mirage-decoder/optimized/KPlay.Functional.fsti": "35fbc888432da4663be1656b87c49495e5575604c7cda59a43183da3fb2a54ef"
-      },
-      "historical_receipt_sha256": "ae133f2438bd0dd10fe31c000682854b513e1e6c78ad58d547b0abc3b06b0d45",
-      "historical_source_sha256": {
-        "KPlay.Functional.fst": "5006a9d1c416e426dab98133e2463b5845234910a4a557a18e4ed8c0898671b0"
-      },
-      "historical_target_sha256": "228d2b016b930e823bd1a02a97c7a62a23a7990e053dc645513532929e13a70d",
       "id": "mirage-decoder-optimized",
       "kernel": "kernels/mirage-decoder-optimized.cu",
       "kind": "family",
@@ -2051,421 +1893,134 @@
         "torch::Tensor",
         "torch::Tensor",
         "torch::Tensor",
-        "int64_t"
-      ],
-      "profile": "mirage",
-      "project": "mirage",
-      "replay_adjustment": "An explicit proved real-division identity makes the unchanged rms_radicand_at statement robust under cache-free replay; see replay-adjustments.patch. No contracts, executable operations, or assumptions changed.",
-      "roots": [
-        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/mirage-decoder/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            8,
-            1024
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            15730944
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            2,
-            4096,
-            128
-          ]
-        },
-        {
-          "kind": "int"
-        }
-      ]
-    },
-    {
-      "directory": "proofs/mirage-decoder",
-      "id": "mirage-decoder-review",
-      "implementation_cases": [
-        "mirage-decoder-base",
-        "mirage-decoder-optimized"
-      ],
-      "kind": "review",
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-decoder/KPlay.Review.fsti",
-        "proofs/mirage-decoder/KPlay.Review.fst",
-        "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-decoder/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-decoder/KPlay.SharedSpec.fst",
-        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst"
-      ]
-    },
-    {
-      "directory": "proofs/mirage-decoder",
-      "historical_receipts": {
-        "base": "29747107d3285be414fe1f642a0c755e162253d2a04835cfd4ebccec3d655adf",
-        "optimized": "ae133f2438bd0dd10fe31c000682854b513e1e6c78ad58d547b0abc3b06b0d45"
-      },
-      "id": "mirage-decoder-tightness",
-      "kind": "tightness",
-      "paired_shared_sha256": "25dc6788b3d19cf34924b2f30d5c38fe2ea8012318d2adf851743a75b7d5d057",
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-decoder/KPlay.SharedSpec.fst",
-        "proofs/mirage-decoder/KPlay.Proof.Tightness.fst"
-      ]
-    },
-    {
-      "directory": "proofs/mirage-embedding_position/base",
-      "historical_entry_modules": {
-        "proofs/mirage-embedding_position/base/KPlay.Functional.fst": "04b285364b835095b7becb4d60cfd699793e648dea0ddd7af03f395034bdd3de",
-        "proofs/mirage-embedding_position/base/KPlay.Functional.fsti": "bf1c57fe127fbfe414f39741d8718306b6f884b4f22af8b810b94ea7710fda2f"
-      },
-      "historical_receipt_sha256": "2a04b552ab3211c5fb6ff81fca9b5a161172f8cf8469b54f98c3f76730ead310",
-      "historical_target_sha256": "d1433cd0a062d337f9d8491d9decea4386ff26f0460f5567e41464675b498bab",
-      "id": "mirage-embedding_position-base",
-      "kernel": "kernels/mirage-embedding_position-base.cu",
-      "kind": "family",
-      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
         "torch::Tensor",
         "torch::Tensor",
         "int64_t"
       ],
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-embedding_position/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            151936,
-            1024
-          ]
-        },
-        {
-          "dtype": "int64",
-          "kind": "tensor",
-          "shape": [
-            7
-          ]
-        },
-        {
-          "kind": "int"
-        }
+        "proofs/mirage-decoder/optimized/KPlay.Functional.fsti",
+        "proofs/mirage-decoder/optimized/KPlay.Functional.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
-      "directory": "proofs/mirage-embedding_position/optimized",
-      "historical_entry_modules": {
-        "proofs/mirage-embedding_position/optimized/KPlay.Functional.fst": "80edc867dcf7721cf971c9db8338620b2ca630b7185b5bc7a425ec3d056d9db3",
-        "proofs/mirage-embedding_position/optimized/KPlay.Functional.fsti": "8929213c19701438f85d7d7df70a574a3e5b33ef88182faca605488e4bed3a25"
-      },
-      "historical_receipt_sha256": "402745d5cb5b5832a0831119e91c0a7e48cb9ed3025739059f5ead7a51d8d8ab",
-      "historical_target_sha256": "ae1c1831d12e955291c75b7d79220d096b90e76de5934f8a62af2acd188affc9",
-      "id": "mirage-embedding_position-optimized",
-      "kernel": "kernels/mirage-embedding_position-optimized.cu",
+      "directory": "proofs/mirage-embedding/base",
+      "id": "mirage-embedding-base",
+      "kernel": "kernels/mirage-embedding-base.cu",
       "kind": "family",
       "parameters": [
-        "torch::Tensor",
-        "torch::Tensor"
-      ],
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/mirage-embedding_position/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            151936,
-            1024
-          ]
-        },
-        {
-          "dtype": "int64",
-          "kind": "tensor",
-          "shape": [
-            7
-          ]
-        }
-      ]
-    },
-    {
-      "directory": "proofs/mirage-embedding_position",
-      "id": "mirage-embedding_position-review",
-      "implementation_cases": [
-        "mirage-embedding_position-base",
-        "mirage-embedding_position-optimized"
-      ],
-      "kind": "review",
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-embedding_position/KPlay.Review.fsti",
-        "proofs/mirage-embedding_position/KPlay.Review.fst",
-        "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-embedding_position/KPlay.SharedSpec.fst",
-        "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fst"
-      ]
-    },
-    {
-      "directory": "proofs/mirage-embedding_position",
-      "historical_receipts": {
-        "base": "2a04b552ab3211c5fb6ff81fca9b5a161172f8cf8469b54f98c3f76730ead310",
-        "optimized": "402745d5cb5b5832a0831119e91c0a7e48cb9ed3025739059f5ead7a51d8d8ab"
-      },
-      "id": "mirage-embedding_position-tightness",
-      "kind": "tightness",
-      "paired_shared_sha256": "e5327584304bdd5253afd297fa81915e08caee9681783992c05f630293893d85",
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-embedding_position/KPlay.SharedSpec.fst",
-        "proofs/mirage-embedding_position/KPlay.Proof.Tightness.fst"
-      ]
-    },
-    {
-      "directory": "proofs/mirage-final_norm_projection/base",
-      "historical_entry_modules": {
-        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fst": "6643fbd65bccc9d273c92a99db2a30b16d46f99bc81cf6180f2ba5c3c66badf9",
-        "proofs/mirage-final_norm_projection/base/KPlay.Functional.fsti": "bd907c0722318fd134afd3bff6ec825755bc99d14f95366da124097a09d9d4a6"
-      },
-      "historical_receipt_sha256": "b1ad16073a638d8c4849a12b1a3484a82ad8d795c63d8211260533248e8e1467",
-      "historical_target_sha256": "4f982bde7311c7cee41027330e56fab77614b84300ca8fae811ed36dda2d00cd",
-      "id": "mirage-final_norm_projection-base",
-      "kernel": "kernels/mirage-final_norm_projection-base.cu",
-      "kind": "family",
-      "parameters": [
-        "torch::Tensor",
         "torch::Tensor",
         "torch::Tensor",
         "int64_t",
+        "int64_t",
         "int64_t"
       ],
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            155583488
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            7,
-            1024
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            7,
-            1024
-          ]
-        },
-        {
-          "kind": "int"
-        },
-        {
-          "kind": "int"
-        }
+        "proofs/mirage-embedding/base/KPlay.Functional.fsti",
+        "proofs/mirage-embedding/base/KPlay.Functional.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
-      "directory": "proofs/mirage-final_norm_projection/optimized",
-      "historical_entry_modules": {
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fst": "3abac37ad122f9ce5b5b0be93e28592a69a4a82e9cd0f2264560afd94926eee5",
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Functional.fsti": "f5180db79b2e673fe852ec007c3c8d62a2912139706d4b156d8a560e48bd69da"
-      },
-      "historical_receipt_sha256": "7d394a75e454f20ed855d881abac4caed242da6bfd8442a9bf9d69940b4594e4",
-      "historical_target_sha256": "914c93672bfc13a62b5f4d9aebfc50cb99526fec6a34d2e9e7327f0122f39d5a",
-      "id": "mirage-final_norm_projection-optimized",
-      "kernel": "kernels/mirage-final_norm_projection-optimized.cu",
+      "directory": "proofs/mirage-embedding/optimized",
+      "id": "mirage-embedding-optimized",
+      "kernel": "kernels/mirage-embedding-optimized.cu",
       "kind": "family",
       "parameters": [
         "torch::Tensor",
         "torch::Tensor",
         "torch::Tensor"
       ],
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            8,
-            1024
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            1024
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            151936,
-            1024
-          ]
-        }
+        "proofs/mirage-embedding/optimized/KPlay.Functional.fsti",
+        "proofs/mirage-embedding/optimized/KPlay.Functional.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
-      "directory": "proofs/mirage-final_norm_projection",
-      "id": "mirage-final_norm_projection-review",
-      "implementation_cases": [
-        "mirage-final_norm_projection-base",
-        "mirage-final_norm_projection-optimized"
+      "directory": "proofs/mirage-projection/base",
+      "id": "mirage-projection-base",
+      "kernel": "kernels/mirage-projection-base.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor",
+        "int64_t"
       ],
-      "kind": "review",
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-final_norm_projection/KPlay.Review.fsti",
-        "proofs/mirage-final_norm_projection/KPlay.Review.fst",
-        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst",
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst"
+        "proofs/mirage-projection/base/KPlay.Functional.fsti",
+        "proofs/mirage-projection/base/KPlay.Functional.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
-      "directory": "proofs/mirage-final_norm_projection",
-      "historical_receipts": {
-        "base": "b1ad16073a638d8c4849a12b1a3484a82ad8d795c63d8211260533248e8e1467",
-        "optimized": "7d394a75e454f20ed855d881abac4caed242da6bfd8442a9bf9d69940b4594e4"
-      },
-      "id": "mirage-final_norm_projection-tightness",
-      "kind": "tightness",
-      "paired_shared_sha256": "9336c6573664f3faebfd75633f606525a9b9cb077012d3438615134d2491bb78",
-      "profile": "mirage",
+      "directory": "proofs/mirage-projection/optimized",
+      "id": "mirage-projection-optimized",
+      "kernel": "kernels/mirage-projection-optimized.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor"
+      ],
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst",
-        "proofs/mirage-final_norm_projection/KPlay.Proof.Tightness.fst"
+        "proofs/mirage-projection/optimized/KPlay.Functional.fsti",
+        "proofs/mirage-projection/optimized/KPlay.Functional.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
       "directory": "proofs/mirage-program/base",
-      "historical_entry_modules": {
-        "proofs/mirage-program/base/KPlay.Functional.fst": "748162007b868ff74811350ffd62010d5937385d4e21acf92e354089304e4673",
-        "proofs/mirage-program/base/KPlay.Functional.fsti": "23a4f2af4d01c9ffe7a92a96ae42923b65235726700ece5e14595607292264ce"
-      },
-      "historical_receipt_sha256": "dd8edb9abdc92095e056667d50bc09f60fc06dff0436afd7f53d92aaf798550f",
       "id": "mirage-program-base",
       "kernel": "kernels/mirage-program-base.cu",
       "kind": "program",
       "parameters": [
         "torch::Tensor",
         "torch::Tensor",
-        "int64_t"
+        "double"
       ],
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-program/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-program/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-program/KPlay.SharedSpec.fst"
+        "proofs/mirage-program/base/KPlay.Proof.Program.Base.fsti",
+        "proofs/mirage-program/base/KPlay.Proof.Program.Base.fst",
+        "proofs/mirage-program/base/KPlay.Proof.Wiring.Base.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     },
     {
       "directory": "proofs/mirage-program/optimized",
-      "historical_entry_modules": {
-        "proofs/mirage-program/optimized/KPlay.Functional.fst": "4907beb93087200c7e09d16c03b23bb2440966a6b0d355b1b595dd944f856d31",
-        "proofs/mirage-program/optimized/KPlay.Functional.fsti": "ce0051a62cd31d7cc511cd46145cd899f6bd7615428b131343898df56dfa366f"
-      },
-      "historical_receipt_sha256": "19add31d31ff543a5fb48855d640bb0a15f2ee2dee6760daac5a5663b03b463c",
       "id": "mirage-program-optimized",
       "kernel": "kernels/mirage-program-optimized.cu",
       "kind": "program",
       "parameters": [
         "torch::Tensor",
         "torch::Tensor",
-        "int64_t"
+        "double"
       ],
-      "profile": "mirage",
+      "profile": "mirage-cleanroom",
       "project": "mirage",
       "roots": [
-        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/mirage-program/KPlay.SharedSpec.fst"
-      ]
-    },
-    {
-      "directory": "proofs/mirage-program",
-      "id": "mirage-program-review",
-      "implementation_cases": [
-        "mirage-program-base",
-        "mirage-program-optimized"
-      ],
-      "kind": "review",
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-program/KPlay.Review.fsti",
-        "proofs/mirage-program/KPlay.Review.fst",
-        "proofs/mirage-program/base/KPlay.Base.Functional.fst",
-        "proofs/mirage-program/base/KPlay.Base.Functional.fsti",
-        "proofs/mirage-program/KPlay.SharedSpec.fst",
-        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti"
-      ]
-    },
-    {
-      "directory": "proofs/mirage-program/shared",
-      "historical_receipt_sha256": "d01e60a57324f2f5954d7fece6870c0063197675ac7159f8a711339ca028c74c",
-      "id": "mirage-shared",
-      "kind": "shared",
-      "profile": "mirage",
-      "project": "mirage",
-      "roots": [
-        "proofs/mirage-program/KPlay.SharedSpec.fst",
-        "proofs/mirage-program/shared/KPlay.Functional.fst",
-        "proofs/mirage-program/shared/KPlay.Functional.fsti"
+        "proofs/mirage-program/optimized/KPlay.Proof.Program.Optimized.fsti",
+        "proofs/mirage-program/optimized/KPlay.Proof.Program.Optimized.fst",
+        "proofs/mirage-program/optimized/KPlay.Proof.Wiring.Optimized.fst",
+        "proofs/mirage-program/optimized/KPlay.Proof.SeqApprox.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst"
       ]
     }
   ],
@@ -2490,17 +2045,25 @@
     "kernels/luce-program-optimized.cu": "705d0c4173ca0d2ed8d0b148adaff20176f172665d4759a3c93fcd6033a3a60c",
     "kernels/luce-recurrent_decoder-base.cu": "bbbf622bba6cee40d753ccb7f0fada07ac7829850775edd6f86d329865eed8ba",
     "kernels/luce-recurrent_decoder-optimized.cu": "47cdf3ea63c8e6538a2c92ff9229b09bd38ce45798a18ef43e8e4c7fcdbaa5e8",
-    "kernels/mirage-argmax-base.cu": "97e38f5bdc3d51f9563d11a83e9bd0f0583d9ad50ead97e147b92ee6303fe6dc",
-    "kernels/mirage-argmax-optimized.cu": "73559e64ea5e56ffd36f1316eb1f6cc0aa4f613be52d6dab630bed0b05c7c3c0",
-    "kernels/mirage-decoder-base.cu": "6ea37aa67ea0acef7419b9997e291bb1b3aee6a479da7f8cac5a2965fd400a5a",
-    "kernels/mirage-decoder-optimized.cu": "01457418d638c1375aaed4d34265ceca42c6b5078c9847ea9b22770adbdc4712",
-    "kernels/mirage-embedding_position-base.cu": "22d35174ec38ba0d2e6223f3ec8f9386f20060eabb9bb2a52cd2f16cc85e1a52",
-    "kernels/mirage-embedding_position-optimized.cu": "79544796c34b8d49cd2fdf604aedbf37ba062699e9accaed899e116e72f2f6fb",
-    "kernels/mirage-final_norm_projection-base.cu": "2cdfc6f093275c9451ff06a813057cf6739afc9f546117ec1e896c320064813a",
-    "kernels/mirage-final_norm_projection-optimized.cu": "1a90b9e0755a4f43cee9a809199d5c99102a0b080b35328bd3ac8aa3a24a4c42",
-    "kernels/mirage-program-base.cu": "dc1c365f9bef5c25df3ab839fec2ff2ee91f38c93a10dd8ea107a73889000149",
-    "kernels/mirage-program-optimized.cu": "c0338eb766188a8831d25e760161a954bbb7bce0de66c89dfab18fbd29123626",
-    "proofs/REVIEW-CATALOG.md": "93d47699766f69a55cade51a0a5174ac3054edbeedf2cc43a0e5613fd662193b",
+    "kernels/mirage-argmax-base.cu": "70861b21d01e56f20abedcae4962aa623c2fcd21bda1cc4e63afc3f21803fd78",
+    "kernels/mirage-argmax-base.extracted.cu": "93bcb6f9e296a78786ced86d09add7b387b798d190bcb4c64b7c7a21c74ac70d",
+    "kernels/mirage-argmax-optimized.cu": "bc9ab4b81774731ba0c77c59dac82c336afee3c74210a8f2c5347212a047daa2",
+    "kernels/mirage-argmax-optimized.extracted.cu": "d4ee40389ed1ea574cd202f1c98769a3e726174f9ddc59b6ade35cfecc2f9e5e",
+    "kernels/mirage-decoder-base.cu": "149adfcb5d181a7e973f8f3906effb4f89e0981aa6a848d50e1be74f45c83b8d",
+    "kernels/mirage-decoder-base.extracted.cu": "f0e6b95599cd9661dd7bab0aca85d188f206e5a19bad66ba3444a1a3debf900b",
+    "kernels/mirage-decoder-optimized.cu": "ba11f3bd294b4613072b866b32dc5dccf8ff13d02ac627611f4598684e16be2e",
+    "kernels/mirage-decoder-optimized.extracted.cu": "97c6724e8744fdf68a66e84594513b9159c06ee20a2a83e1882316f7af057ac1",
+    "kernels/mirage-embedding-base.cu": "866cc8f95e9b3c98423f6b1ef5276e7d9a67fd74f1d990a22015a1801e8b543f",
+    "kernels/mirage-embedding-base.extracted.cu": "43885b56b32fee932124e3a68d8c698e61210bba53339d49d9e84f2da5016ae1",
+    "kernels/mirage-embedding-optimized.cu": "110334bec0b3c160eea26d5709b82dd9de0e7a9b364e8ea95a381dfc55f028f2",
+    "kernels/mirage-embedding-optimized.extracted.cu": "c1a5fbab6a71dab59d8e9eba68b6939080659ae7bcb9e3b811a814bbc4609bd7",
+    "kernels/mirage-program-base.cu": "04f1dd20558412edaecdb3cd2f11bd94aca17211b3c34ccb4b19743cba702d04",
+    "kernels/mirage-program-optimized.cu": "534f3a8c665e7707c030e0b690b4ed66c5337eb3edad821fda162a92f17557a8",
+    "kernels/mirage-projection-base.cu": "7455a3e886fe7e165f51bcfe97cd054a26bc330d89604c39ed7ba634e092511a",
+    "kernels/mirage-projection-base.extracted.cu": "94ff00e27ee4da572405258b273c853778680bbabe2197c7d740a7f0cef4c782",
+    "kernels/mirage-projection-optimized.cu": "e0bc74e947cda504076ecea02093f2cb56121e753236dfc4597ec5d691fcb2e7",
+    "kernels/mirage-projection-optimized.extracted.cu": "9571330d4f477d4a937d39c1f146f739b1fe9981b22807987875acf61455b252",
+    "proofs/REVIEW-CATALOG.md": "ca04811b5120b088d052f52cb7943e6ca8b4360317db92ad609215822649b0d7",
     "proofs/flashmoe-argmax/KPlay.Proof.Tightness.fst": "44bb186b409243d6d1adc9d72f7272c8a16106e71b83c1d9c094eada60788ded",
     "proofs/flashmoe-argmax/KPlay.Review.fst": "74869a8bab273f5c1369fa5fed08065c211e4f1cd0d528accec40149e0062038",
     "proofs/flashmoe-argmax/KPlay.Review.fsti": "f1f13c6fbe38c48b9c7ef3e94b82188c16b76958076ed6b239cbd4e6b72c5bc5",
@@ -2812,47 +2375,30 @@
     "proofs/luce-recurrent_decoder/base/KPlay.Base.Functional.fsti": "f3136d0de512bc9be68ff0c567f28ddf9e4b1be16b39a59a161549d68842cbe9",
     "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fst": "940a98e83a58c7109ed7b6ba2a7462d07baadd534f32ce95c458279bbb8e9baa",
     "proofs/luce-recurrent_decoder/optimized/KPlay.Optimized.Functional.fsti": "dc880f5b0841f6c64ee8428c58e837034c5248eb68b522362af85bb0e10b4466",
-    "proofs/mirage-argmax/KPlay.Proof.Tightness.fst": "228531b9d9a05e022cf9d9bb93b47b5ec7a026ad8c6b3c94daba8bab8a150c53",
-    "proofs/mirage-argmax/KPlay.Review.fst": "2a62800b806cf794af4a4594f3e62ef75c20b303f176d0cf36e6318f315a42c9",
-    "proofs/mirage-argmax/KPlay.Review.fsti": "7b5dd4fdd0d7b4d23f3dc072019685e540a32fca27c12557fae68937a2d3d862",
-    "proofs/mirage-argmax/KPlay.SharedSpec.fst": "fa83c1e05b96b9e8ad14af7eb1c8df9248747fd78faec210e3e3ad8121c10d50",
-    "proofs/mirage-argmax/base/KPlay.Base.Functional.fst": "ac729ea5501907fd62cba7238aebc95d8bc3eabce25209a3b5ba2c5f6aab7493",
-    "proofs/mirage-argmax/base/KPlay.Base.Functional.fsti": "4e254eeb6424053568fdbbd89764870039698648d997587926e0bfebbd64e653",
-    "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fst": "8b5f70383956282abd84ca1280db8a01b8c391d55c375cce6324c4e61e3c3205",
-    "proofs/mirage-argmax/optimized/KPlay.Optimized.Functional.fsti": "0218f6fe5b66d07341ef9968c7dc15ead6f8baed9a8f005ff3d9cda1ab3f85ec",
-    "proofs/mirage-decoder/KPlay.Proof.Tightness.fst": "5c067a7ab43f29eebc87c4472e5c73df0bd0c0369c3dfb1131eb1bb72341b7bf",
-    "proofs/mirage-decoder/KPlay.Review.fst": "5a4ed41eabe17fe3b9e2bda90014214bcaa544afd1a82972e901383bfdb7618d",
-    "proofs/mirage-decoder/KPlay.Review.fsti": "e625e09011147f1d949ed8f180a60ae141f5d2858661432899e0bcd6c6efca4c",
-    "proofs/mirage-decoder/KPlay.SharedSpec.fst": "25dc6788b3d19cf34924b2f30d5c38fe2ea8012318d2adf851743a75b7d5d057",
-    "proofs/mirage-decoder/base/KPlay.Base.Functional.fst": "837fd541bd97e80ec660e052862ec48f2ca430d7b443f35bf833d613debc7655",
-    "proofs/mirage-decoder/base/KPlay.Base.Functional.fsti": "4a7dc2d0e151ca439fbafd634d25139357b91a0254209dbff974c663627dd430",
-    "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fst": "302a6b73dfeb0620984070aa6a10cad620a6ba4d1f3c1f208c4f40f33fbf64b6",
-    "proofs/mirage-decoder/optimized/KPlay.Optimized.Functional.fsti": "71724e2d16448e6a70a98fe81781b78c8b2ed25b8344ea66416e492ca59cea0c",
-    "proofs/mirage-embedding_position/KPlay.Proof.Tightness.fst": "4a33561ed02ca5a8d1c5ab84731f2b1ab96dada693e6d77e66995cbf37bc6db5",
-    "proofs/mirage-embedding_position/KPlay.Review.fst": "1c8fad071f2311607e65e313fe676f118e283774d215659e0872968bc6c612c5",
-    "proofs/mirage-embedding_position/KPlay.Review.fsti": "78d5b3df7e5b4598a9ed2b45be2ffcd62b1a36412e26705da8cc8d5e570962ec",
-    "proofs/mirage-embedding_position/KPlay.SharedSpec.fst": "e5327584304bdd5253afd297fa81915e08caee9681783992c05f630293893d85",
-    "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fst": "9ca927f59fcda8607e00850c210186ee1f4f0db99f46da78261b9cba86bffafe",
-    "proofs/mirage-embedding_position/base/KPlay.Base.Functional.fsti": "d949fb6502c259eeb63caff364185a7a6a70ff5522a80db068641683cd03cfb7",
-    "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fst": "4d95e3c6fdd515225adcab2a9fcf9dc0abd1c027834a1dd31812b66512870023",
-    "proofs/mirage-embedding_position/optimized/KPlay.Optimized.Functional.fsti": "c8071eab7830d0232c584d9ec053c1f45b30c0a27ce4e6716d729d7f073f2035",
-    "proofs/mirage-final_norm_projection/KPlay.Proof.Tightness.fst": "18f1a4435b09c3803fa9b3efe7c3af72ba8ade76388696d007cc8745109ab64d",
-    "proofs/mirage-final_norm_projection/KPlay.Review.fst": "3826038ae2d55e32558803cc17ac2a4d419e38cfdb34dc88b0fb738ea48335c6",
-    "proofs/mirage-final_norm_projection/KPlay.Review.fsti": "fcae03d5ac823fd8a52a44ba8f0ee2918e24d6c4d16d1b9e7c2c85d69f0d1b46",
-    "proofs/mirage-final_norm_projection/KPlay.SharedSpec.fst": "9336c6573664f3faebfd75633f606525a9b9cb077012d3438615134d2491bb78",
-    "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fst": "6ffe906830c5d0980a02a8ddcdac5b515702d5bba55b7ca7d4a47c229c4be006",
-    "proofs/mirage-final_norm_projection/base/KPlay.Base.Functional.fsti": "9c5371170c2b86071641e9f19c0014802ed567444a097fc4459f46b2c8dff3fc",
-    "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fst": "ca69b08497dca6b9a260b791c6439bf38b5f9ebee5dbaffa7eb12fd4a014129a",
-    "proofs/mirage-final_norm_projection/optimized/KPlay.Optimized.Functional.fsti": "32189cb59911f12694138a65d61f21d8c789ff92b33c1df0e79698d139ce3e8b",
-    "proofs/mirage-program/KPlay.Review.fst": "97546fda05c71bc0c6ef4c5894a8c993194e48eb9dc808b4f75294cb95b1c582",
-    "proofs/mirage-program/KPlay.Review.fsti": "a02f4b7b99699dc057e40aac56f0fd2f61e9c486a0480158f3a314d93ef04f5e",
-    "proofs/mirage-program/KPlay.SharedSpec.fst": "94b3ca0becd032caf679ac2f8830331f4f8865acfee8975981979dd0808560ba",
-    "proofs/mirage-program/base/KPlay.Base.Functional.fst": "d8f0cd6748c0e9157279308be302111f88ef923f70fabcd3512f25178b69cedb",
-    "proofs/mirage-program/base/KPlay.Base.Functional.fsti": "ff120f45e220613a4b0eed95716f7c1cfc0eda0908c5d248ce0e08678d24d5a7",
-    "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fst": "856cd64139b658df9ae9bd2d1703edf70fe0e6789c650e218e87a9be613e23f8",
-    "proofs/mirage-program/optimized/KPlay.Optimized.Functional.fsti": "7fa23acedff67c346bc3642259fbbb6927bb46eff36193d557ea8dc2ad6df880",
-    "proofs/mirage-program/shared/KPlay.Functional.fst": "0000e87872e907cffe2974e944d9686d874db3e730e385c8de935e4513a25f34",
-    "proofs/mirage-program/shared/KPlay.Functional.fsti": "231fa482e69783537612b646044780ea6e76be8f6a5e867b0e8ee1eff73222e7",
+    "proofs/mirage-argmax/base/KPlay.Functional.fst": "f74b58c6b0bcd820978072bc393710c1b43d8d9e1055aaa26dd2a90acc6c64ee",
+    "proofs/mirage-argmax/base/KPlay.Functional.fsti": "f26af7319e8f17eb07a794cd4648ec735ca23d5523c2517d45c53382318aa277",
+    "proofs/mirage-argmax/optimized/KPlay.Functional.fst": "2735d6b74c555ea07213e82548d08f5c625be3a25aa94c264a4c7a125aa499ec",
+    "proofs/mirage-argmax/optimized/KPlay.Functional.fsti": "c412914bf9c8095107bdee5afbad8b0133ef7a8ef9a37be6cf6e28185fd312f1",
+    "proofs/mirage-decoder/base/KPlay.Functional.fst": "6df837b77bff789e0ceb373402d3861ee6ec51c73ac2632aadee89bbadb354be",
+    "proofs/mirage-decoder/base/KPlay.Functional.fsti": "7a6052b29691e5c9d30db9a22b104309b40a22583911647d23ee39f408013b7a",
+    "proofs/mirage-decoder/optimized/KPlay.Functional.fst": "e607046aeeb52b503d2a61f3e9ffeda18d8f98f539ee2f5c6b7850dd2a558e64",
+    "proofs/mirage-decoder/optimized/KPlay.Functional.fsti": "90b4fc74a91e1a4efdfb614254c63ac4880d036415284b7ff85aed6b334614ef",
+    "proofs/mirage-embedding/base/KPlay.Functional.fst": "d3f902717049288663f84fa117ebdd8881409a8ff89a74e814e36abf76050f0e",
+    "proofs/mirage-embedding/base/KPlay.Functional.fsti": "29e307d0cbce17e19e8624d0a35e49b7a34a0baec101e77ffa10bae34077b21f",
+    "proofs/mirage-embedding/optimized/KPlay.Functional.fst": "4ef54aa936eef97791aafdc4f3d467947238a4c574720eb2b24517b2babaa435",
+    "proofs/mirage-embedding/optimized/KPlay.Functional.fsti": "f5addf5d19ad56726ca88b6df3c4d3c53161cdf02bb4b781db33573365569781",
+    "proofs/mirage-program/base/KPlay.Proof.Program.Base.fst": "af82923f52859ecd593185de85aa23df3f9d96014c592558b5a90925bdc68748",
+    "proofs/mirage-program/base/KPlay.Proof.Program.Base.fsti": "283f511c42d80fe88fa898b925d51059052b0cf726d8dd14cba6b34fd1b8c9dd",
+    "proofs/mirage-program/base/KPlay.Proof.Wiring.Base.fst": "0f0c1b1962d4f13eb4a00a5405eb31ba5bdc81b5314ca2ddab908c80b3743cfd",
+    "proofs/mirage-program/optimized/KPlay.Proof.Program.Optimized.fst": "623514bfd1fa2001abf8713bd4cd34ea89c7755ea243018003f952dd46fadc55",
+    "proofs/mirage-program/optimized/KPlay.Proof.Program.Optimized.fsti": "d2abf1d2160e303a252b6b498ed409bcb2ffc33ddd4e84a14c40a62cb8321a17",
+    "proofs/mirage-program/optimized/KPlay.Proof.SeqApprox.fst": "c543e3a674d88fa502aaaaa0a059771098744e4baaf0735ac9d1c44192b54a54",
+    "proofs/mirage-program/optimized/KPlay.Proof.Wiring.Optimized.fst": "8de730f7ee287bd5677bd23fb6384eeb4f8ec85c5c6beda8c962c28f298d3317",
+    "proofs/mirage-projection/base/KPlay.Functional.fst": "28bd5ac740557d5bb28133df8c240382008a038fbfadbc0143e429bdfb36d351",
+    "proofs/mirage-projection/base/KPlay.Functional.fsti": "3af997e059183d4b477616cf65e3bf65202818844a401c495e7fd370ea79ab55",
+    "proofs/mirage-projection/optimized/KPlay.Functional.fst": "7ca2041da0795576ab1527cb7ff72aa328939680b1b9ed3a9e0420414c9eeb6a",
+    "proofs/mirage-projection/optimized/KPlay.Functional.fsti": "73db0b3323762b71d134d887ff01ae3d3e17e2bf17148a96682576e157c532f1",
+    "proofs/mirage-shared/KPlay.SharedSpec.fst": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
     "support/flashmoe/Kuiper.Float.Casts.Base.fsti": "095a46de2ddefbacaae8f3eb323d06cda91f1a6a7299dcc26686cdb535517ae4",
     "support/flashmoe/Kuiper.Float.Casts.fst": "ef244d3fb55e9cfc0e3eb1c6984b0eccaff3cccb8813171d2da1429465906025",
     "support/flashmoe/Kuiper.Float.Casts.fsti": "ab6aef33d6ca3fc3ffa7c672da3872ec806080624a73d6740a0649c16f8036c8",
@@ -2898,28 +2444,72 @@
     "support/luce/Luce.RoPE.fsti": "8e320bb858e31dc763f4d1b1a3faaa7e74fa4607368ed38bc80f69f9ee3e3cb0",
     "support/luce/Luce.Softplus.Fast.fst": "89167f9bc71fe7756ded18a8be9e814e13575f7f184400c6abb12408b53065eb",
     "support/luce/Luce.Softplus.fst": "f2319440ec22835d27a9d3ae7bb4671f5903f814bc51c2fa555e9e24c5c1b85a",
-    "support/mirage/Kuiper.Array.Core.fst": "e920146fd2201c63441bf4839619a7fecb80c86eaab0c7e67147a062651b5e8a",
-    "support/mirage/Kuiper.Array.Core.fsti": "0d4f9921c1b50a069854134af30561e382ccf864f274e83fdeeb32e7cdeff226",
-    "support/mirage/Kuiper.Base.fsti": "cd91a0a96b3912cb9a609d08e09013a8cee833e6a4a9396e892556b99fa6783e",
-    "support/mirage/Kuiper.Float32.Base.fsti": "8fadd03039055318b730460c732499dad42a51c3a52b657f602123718f095cdb",
-    "support/mirage/Kuiper.Float32.FastMath.fsti": "004082f61380df61ae2bfd98d24b493ec1d7c2fa955964808d1284780b734d47",
-    "support/mirage/Kuiper.Float32.Literals.fst": "8d6aec0584cfcab5e16f6ad59be1ff060940401a86f5df432192c0b7d4b41581",
-    "support/mirage/Kuiper.Float32.NativeNeg.Kind.fsti": "94217fefb5c1eff44c5677718c4addb22867ee5a9c15d7bf8bb401f8c9e97f47",
-    "support/mirage/Kuiper.Float32.NativeNeg.fsti": "33bca2e4713b5ccb01f97d13b3fd3c2788df65fa264e41b878d94f229e9b424f",
-    "support/mirage/Kuiper.Float32.fst": "e69f350874ec9be94e66ae9584bb63e5344626c4fba468d3fffbb5ffe4245313",
-    "support/mirage/Kuiper.Float32.fsti": "a401f79784072459089a77d0871e5114d755c4159310b7671dacadf80372d294",
-    "support/mirage/Kuiper.Locs.fsti": "c478438c74e4266635ffef5677e2ef6b77b93cd3860bf1ab2dc8f7184b154125",
-    "support/mirage/Kuiper.Real.Trigonometry.fsti": "77eff9987e5229f93afa637ceb7d4a16d478987fcaefe4c74b8d7234989c544f",
-    "support/mirage/Kuiper.Tensor.Runtime.Helpers.fst": "5c9077f36b6492e578462532039df206446faedf6f764c38ae2f15cabc0f54ec",
-    "support/mirage/Kuiper.Tensor.Runtime.Helpers.fsti": "12ddcd36661bea05f4e78eb6fcb6c98a832a381080955ffb72547555a617f675",
-    "support/mirage/Kuiper.Tensor.Runtime.fsti": "6bce914a6120cd5cf0a52e42c809088e5b66234dc981772061bbbbda5638af20",
-    "support/mirage/Kuiper.TensorCore.MMA.Gather.fsti": "0a67ccb142ba102beccf2a55d06004208aeb9c9229c7afea847e8691756028ab",
-    "support/mirage/Kuiper.TensorCore.MMA.Registers.fsti": "9a70f588779d43d684bfdec8e1679dcf39de4955f6856d92174c3cd40626d1a6",
-    "support/mirage/Kuiper.TensorCore.MMA.ZeroA.fsti": "30ea79982f56d66ca3f67836623c9c29adf04142429f826cfdc0f7c96565881e",
-    "support/mirage/Kuiper.TensorCore.MMA.fsti": "7221e4cac92e163778e345c020415af8647e8c042b668c6206d9aac7b49b8553",
-    "support/mirage/Kuiper_Float32_NativeNeg.h": "1a39161cd735074ea6714aa24adc359e920d16edad8b8a6fe043951c36401909",
-    "support/mirage/Kuiper_TensorCore_MMA_Gather.h": "f39b47760092a06c5c5a51da98c3e5b381774093f448525fdf0d08aa64cd0f11",
-    "support/mirage/Kuiper_TensorCore_MMA_ZeroA.h": "975971b58cfcf558bcf2b11ea7c46a66b4b69281ffd6edea2773abc85fe2c570"
+    "support/mirage-cleanroom/Kuiper.Approximates.Base.fst": "d4011de0aea17c56476bc5c2a42b5a29093ae7adc7007963b4e6a5a85418b78f",
+    "support/mirage-cleanroom/Kuiper.BFloat16.Base.fst": "05913ef75f8b5d12e0046fa6765be1a8062437f75707f91fe35fa6e4cdce945d",
+    "support/mirage-cleanroom/Kuiper.BFloat16.Base.fsti": "1a3388e16462dd2a328f49bdc62289d4949271d7e1e8e722fd899e4d205324c9",
+    "support/mirage-cleanroom/Kuiper.BFloat16.Raw.fsti": "00a5453510da0ce69554af8f8cc68e01ebcb8cc8b6d918007dc445334974d5bd",
+    "support/mirage-cleanroom/Kuiper.BFloat16.fst": "51b739382b6afc90eaa519fc268a35590515c07037aa51760741d585133191ae",
+    "support/mirage-cleanroom/Kuiper.BFloat16.fsti": "5d5be8b1b7eecc282af74b54b25e39e9c0864da1ff304f6b8ed45ada15e8235f",
+    "support/mirage-cleanroom/Kuiper.Float.Casts.Base.fst": "1c104636f749c6088825bc6d7331d08022637a89abf300e6d31963606f67bcd0",
+    "support/mirage-cleanroom/Kuiper.Float.Casts.Base.fsti": "614380d9ffd5715502171da208cfea6ad5fd1a4c87a349ee875172c7a19d3618",
+    "support/mirage-cleanroom/Kuiper.Float.Casts.Raw.fsti": "39f010eaec67e0f13c07e9a88021c9b80a400c68b66996145e46fb6799f46c9a",
+    "support/mirage-cleanroom/Kuiper.Float.Casts.fst": "62ce08bea86e1397eb62f128d426f526a5f61037d9db942f5df790d8e499e44a",
+    "support/mirage-cleanroom/Kuiper.Float.Casts.fsti": "e1074f172254083c449afa56a47dc1113fb05f6601af490f72978e1071c69619",
+    "support/mirage-cleanroom/Kuiper.Float.Model.fst": "296888464985ec85a52f075068d1c1ee98d6c49395cdb3fe63a0e713f95a6561",
+    "support/mirage-cleanroom/Kuiper.Float16.Base.fst": "7551910186173b7c3245f0dc80b8270be6c7b1d5adabb4f73b75b5ef0efc5e64",
+    "support/mirage-cleanroom/Kuiper.Float16.Base.fsti": "0183a18240adc5c4a18bad20228b6a8ced5f82676db21c6c7c5b93b0c85ea2ac",
+    "support/mirage-cleanroom/Kuiper.Float16.Raw.fsti": "444aed6c593b1a4086f7323bf252d00cdbbbfe20d01404ec109e4c94a211fbc8",
+    "support/mirage-cleanroom/Kuiper.Float16.fst": "2107932a1efe07ab039226d03b1e737ad6a204bda43b86a328c86bc69a4338cd",
+    "support/mirage-cleanroom/Kuiper.Float16.fsti": "81484e2f9472eebe266e1e17d2bf3d23a0d2c426579ff9c743b5efbab595f914",
+    "support/mirage-cleanroom/Kuiper.Float32.Base.fst": "aa4d530ce56a87fec897d6e248137e21df759f2c6a896a7e738e9685a48d2ba9",
+    "support/mirage-cleanroom/Kuiper.Float32.Base.fsti": "9e650c4949f6feb6f83e69b3522c7eff64df7274fb3bd6afeb54c8cd1118e297",
+    "support/mirage-cleanroom/Kuiper.Float32.ConstantFold.Certificates.fst": "49c24da81cc410dc9311ae698103868233e3d6abd806cdb1a6208a81893e15d9",
+    "support/mirage-cleanroom/Kuiper.Float32.ConstantFold.fsti": "88a452776eae33e147d40b6b3fceb4a5033c81ee50b582cab012bcd3123f9734",
+    "support/mirage-cleanroom/Kuiper.Float32.Extended.fst": "aed364f53c776313d4e827a0246708b859c304da1089f4834314aea8759504a4",
+    "support/mirage-cleanroom/Kuiper.Float32.Extended.fsti": "6d1504d70ccdfd90a9cbd83b195dbb941cbb260f9d93fef5eeb6a45dbe59ba7f",
+    "support/mirage-cleanroom/Kuiper.Float32.FastMath.Raw.fsti": "a665e57deb39573b6ab1de69f163a88b55885affa115b2306f166839c0959fbb",
+    "support/mirage-cleanroom/Kuiper.Float32.FastMath.fst": "d82d050157cdcd6b6a81073054de8980576a258734163e631cb89f5d569b0cbe",
+    "support/mirage-cleanroom/Kuiper.Float32.FastMath.fsti": "c1e284b0c11f9490335eb27690a2811acf2204454999923267dd8b530d3c6eed",
+    "support/mirage-cleanroom/Kuiper.Float32.Literals.fst": "d0d4a85d9873a9d53805ca30c9932420b16cc967d532731d8a267cc43416a517",
+    "support/mirage-cleanroom/Kuiper.Float32.Raw.fsti": "63a6f866023f0414b29d10283576ec948ba09513056635902f6fb25aa684da76",
+    "support/mirage-cleanroom/Kuiper.Float32.fst": "5fd7162d3fb436a449085a3f776bd7fce82b5351aac3d527fa8ce33a6a4ff86d",
+    "support/mirage-cleanroom/Kuiper.Float32.fsti": "93e846da269ac8b761ac109b1177da032effa6e5df3abd3a7474d55a056711b4",
+    "support/mirage-cleanroom/Kuiper.Float64.Base.fst": "1522809c536905de80bbfb815f3c2c02056e36037dbe0b4e983875c7594015c7",
+    "support/mirage-cleanroom/Kuiper.Float64.Base.fsti": "423a7736c50fd95cc6a66815fc54eb639ecdeabac040f969525b65f91c8d7717",
+    "support/mirage-cleanroom/Kuiper.Float64.Raw.fsti": "70f7893dbfa56c609039a7eb3df423da1afa64133879f92895b985bb4e6fe197",
+    "support/mirage-cleanroom/Kuiper.Float64.fst": "67d41d51a9280e8e9862aa9b4a13a87434d04b7bffafff44435ddf704fdd0a2d",
+    "support/mirage-cleanroom/Kuiper.Float64.fsti": "b7255db83cca84eb5b634d0a7a96fdf68dd4e7d6901f422acafde08309672722",
+    "support/mirage-cleanroom/Kuiper.Floating.Base.fsti": "fc0adf170cdb463f21a52f8cd328a739e0840b8f836398ed29b55218bbe21ec6",
+    "support/mirage-cleanroom/Kuiper.Floating.fsti": "0893815c3d039379387f094c3d73687f672e67cde438ba867f11c878c4a62499",
+    "support/mirage-cleanroom/Kuiper.KPlay.SwiGLU.fst": "9f44728ddc618d5e8996513a53ad713304d2e8d4e9762f70a1cf2e5d821d75f6",
+    "support/mirage-cleanroom/Kuiper.KPlay.SwiGLU.fsti": "9019df1b56f02bb78320706b295013f10f16febe6593d5e8a361f802286a001a",
+    "support/mirage-cleanroom/Kuiper.KPlay.Transcendentals.fst": "be8365b11e888fea95e8d1b4c765b09815f8199f70c062aceb6b5839fa7b7776",
+    "support/mirage-cleanroom/Kuiper.KPlay.Transcendentals.fsti": "4af15a682de940a3f1869e008c5f0ba2f3e0d2cf5c6a966934521c12aeb9115c",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.FragmentMMA.fst": "60d23027019cb66ab4a71b200fa6a56adc51824b73d28920b89a78ccfeb799f7",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.FragmentMMA.fsti": "b1c506f687773cc55402eab7d95879126aac7dc47ea58fd714f8e4df8651d754",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.KLoop.fst": "2ab810cf73c75649510b8dfda3755045520373a86050b7746d510631ce44b4e9",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.KLoop.fsti": "13656d785403578df798dc64afbaea317235f2da6c414ed448f77b97a3f06067",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.KernelLoop.fst": "4b66b3873fd00b4cd157387a16b759162a6a16f4c2da9575d044fa4569c95804",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.KernelLoop.fsti": "bb53c3692747616f51661648a3017f64b689fed11922b17eb6f41b0a901b9a89",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.Subproducts.fst": "37d587b3b2ac1f1f8527a171fc2be28e83c5e1358c250b910db3c1a1733708ff",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.Subproducts.fsti": "19fdf14e57552b6b1409718d7878b614395bb8ae6202feaf27241311c839f8af",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.To.Fragments.fst": "a2192a2e5435c444da977b20f116ee518d201eb2956c4850bc7794ed92deefce",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.To.Fragments.fsti": "291c035763cb31d2345dd8d7cc7345c0bb9bfa1859fb65add99f7c24229241cb",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.To.KLoop.fst": "cd2246d6ddc2ac03149e48c67530df2218a2c99d8d19f90eea5fc37d7addc644",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.To.KLoop.fsti": "6c9b0d55c19d083a9a14d4d09afeea39ef7c60d97557396f820de0f0b3b8f30c",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.To.KernelBody.fst": "ac8dfd043fe46fb0fd76695562fd0e40809666f27959bb6554ef3dbad3e83159",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.To.KernelBody.fsti": "afa9e9c2c06ff44b6fe775b4ce1d2edca06024d65ce01df6212aca62baefa08a",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.To.fst": "067417189cefd031a5f09c60594882fbe2ddff0da04b27ff62758d088c985c7c",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.To.fsti": "43641d94be8fd9d72a9f29d77c115a9fda2cca5e6f70e0a460b10ffd7a8abd47",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.fst": "ffa6dea4e4e6624e9e838c262349810232b502936a35a4e185ca99765efaec16",
+    "support/mirage-cleanroom/Kuiper.Kernel.GEMM.TensorCore2D.fsti": "0fcc980a66a76b3cdc9b7f627f780c9c3d1f0c021681d6e72e0bd6f510232271",
+    "support/mirage-cleanroom/Kuiper.Kernel.OnlineSoftmax.fst": "5c3b0c3334f7a6264a30aac418583b00dedcfb5a09af65881a2adc6d8bb600a3",
+    "support/mirage-cleanroom/Kuiper.Kernel.OnlineSoftmaxDotprod.fst": "447c940d9ab8480f8ada450d5b7765ddf0586a0994cc3fb1c4493da98246ea57",
+    "support/mirage-cleanroom/Kuiper.TensorCore.Base.fsti": "284b2ccfdd7a03ecf7bed40896cc246748b757c551ea2fa5afbd7a7baa795f87",
+    "support/mirage-cleanroom/Kuiper.TensorCore.MMA.fsti": "7221e4cac92e163778e345c020415af8647e8c042b668c6206d9aac7b49b8553",
+    "support/mirage-cleanroom/Kuiper.TensorCore.Model.fst": "9074db39ddcd072088b8541bb6bb6e694649265612c8559615e187b0479b21fa",
+    "support/mirage-cleanroom/Kuiper.TensorCore.Model.fsti": "acdd90c520250f1a49fc1818d0f8bfa0368be7b226035aed9ba41278ee804123",
+    "support/mirage-cleanroom/Kuiper.TensorCore.Raw.fsti": "edc82c6e70f56dcc3fa5899b3d792c34d8a99b5f027f2ad20596f1ce4a4a5604"
   },
   "profiles": {
     "flashmoe": [
@@ -2929,9 +2519,12 @@
     "luce": [
       "luce"
     ],
-    "mirage": [
-      "mirage"
+    "mirage-cleanroom": [
+      "mirage-cleanroom"
     ]
   },
-  "schema_version": 1
+  "schema_version": 1,
+  "toolchains": {
+    "mirage-cleanroom": "kuiper-nightly-2026-11-18"
+  }
 }

@@ -1,0 +1,470 @@
+{
+  "cache_policy": "force/cache_off for every module; setup support checks recorded separately",
+  "cases": [
+    {
+      "id": "mirage-shared",
+      "jobs": 8,
+      "kind": "shared",
+      "modules": [
+        {
+          "max_rss_kib": 634576,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.833515,
+          "user_seconds": 12.30805,
+          "wall_seconds": 13.119607852073386
+        }
+      ],
+      "requested_modules": 1,
+      "status": "passed",
+      "wall_seconds": 13.18101893691346
+    },
+    {
+      "id": "mirage-argmax-base",
+      "jobs": 8,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 694980,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "f26af7319e8f17eb07a794cd4648ec735ca23d5523c2517d45c53382318aa277",
+          "system_seconds": 0.387412,
+          "user_seconds": 15.733066,
+          "wall_seconds": 16.12068807403557
+        },
+        {
+          "max_rss_kib": 819908,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "f74b58c6b0bcd820978072bc393710c1b43d8d9e1055aaa26dd2a90acc6c64ee",
+          "system_seconds": 0.713208,
+          "user_seconds": 20.774715,
+          "wall_seconds": 21.453612716170028
+        },
+        {
+          "max_rss_kib": 634564,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.8015399999999999,
+          "user_seconds": 12.245618,
+          "wall_seconds": 13.027159271063283
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 21.514035477070138
+    },
+    {
+      "id": "mirage-argmax-optimized",
+      "jobs": 8,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 782020,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "c412914bf9c8095107bdee5afbad8b0133ef7a8ef9a37be6cf6e28185fd312f1",
+          "system_seconds": 0.454999,
+          "user_seconds": 19.444987,
+          "wall_seconds": 19.90104642882943
+        },
+        {
+          "max_rss_kib": 1181380,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "2735d6b74c555ea07213e82548d08f5c625be3a25aa94c264a4c7a125aa499ec",
+          "system_seconds": 2.409596,
+          "user_seconds": 55.391007,
+          "wall_seconds": 57.59391306480393
+        },
+        {
+          "max_rss_kib": 634564,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.8068259999999999,
+          "user_seconds": 12.274547,
+          "wall_seconds": 13.059176428010687
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 57.65564905805513
+    },
+    {
+      "id": "mirage-decoder-base",
+      "jobs": 8,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 782012,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "7a6052b29691e5c9d30db9a22b104309b40a22583911647d23ee39f408013b7a",
+          "system_seconds": 0.390991,
+          "user_seconds": 19.756561,
+          "wall_seconds": 20.149273768998682
+        },
+        {
+          "max_rss_kib": 1750424,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "6df837b77bff789e0ceb373402d3861ee6ec51c73ac2632aadee89bbadb354be",
+          "system_seconds": 5.767905,
+          "user_seconds": 259.411055,
+          "wall_seconds": 264.4344752940815
+        },
+        {
+          "max_rss_kib": 639684,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.7828379999999999,
+          "user_seconds": 12.328234,
+          "wall_seconds": 13.089921445120126
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 264.4932148458902
+    },
+    {
+      "id": "mirage-decoder-optimized",
+      "jobs": 8,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 783044,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "90b4fc74a91e1a4efdfb614254c63ac4880d036415284b7ff85aed6b334614ef",
+          "system_seconds": 0.45999199999999996,
+          "user_seconds": 20.810638,
+          "wall_seconds": 21.272002381971106
+        },
+        {
+          "max_rss_kib": 1769236,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "e607046aeeb52b503d2a61f3e9ffeda18d8f98f539ee2f5c6b7850dd2a558e64",
+          "system_seconds": 6.979512,
+          "user_seconds": 368.712697,
+          "wall_seconds": 374.9461731109768
+        },
+        {
+          "max_rss_kib": 636612,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.8654379999999999,
+          "user_seconds": 12.460443,
+          "wall_seconds": 13.304121857974678
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 375.00619132397696
+    },
+    {
+      "id": "mirage-embedding-base",
+      "jobs": 8,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 696008,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "29e307d0cbce17e19e8624d0a35e49b7a34a0baec101e77ffa10bae34077b21f",
+          "system_seconds": 0.404997,
+          "user_seconds": 15.956901,
+          "wall_seconds": 16.363060167059302
+        },
+        {
+          "max_rss_kib": 967364,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "d3f902717049288663f84fa117ebdd8881409a8ff89a74e814e36abf76050f0e",
+          "system_seconds": 2.053362,
+          "user_seconds": 200.58914,
+          "wall_seconds": 202.42615705286153
+        },
+        {
+          "max_rss_kib": 642756,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.8377669999999999,
+          "user_seconds": 12.285447,
+          "wall_seconds": 13.100456224987283
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 202.49727647705004
+    },
+    {
+      "id": "mirage-embedding-optimized",
+      "jobs": 8,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 696004,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "f5addf5d19ad56726ca88b6df3c4d3c53161cdf02bb4b781db33573365569781",
+          "system_seconds": 0.36798,
+          "user_seconds": 15.849152,
+          "wall_seconds": 16.21854626107961
+        },
+        {
+          "max_rss_kib": 947908,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "4ef54aa936eef97791aafdc4f3d467947238a4c574720eb2b24517b2babaa435",
+          "system_seconds": 2.035329,
+          "user_seconds": 53.046053,
+          "wall_seconds": 54.92503983201459
+        },
+        {
+          "max_rss_kib": 633540,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.897419,
+          "user_seconds": 12.350335,
+          "wall_seconds": 13.225667902966961
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 54.98596585309133
+    },
+    {
+      "id": "mirage-projection-base",
+      "jobs": 8,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 694980,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "3af997e059183d4b477616cf65e3bf65202818844a401c495e7fd370ea79ab55",
+          "system_seconds": 0.368967,
+          "user_seconds": 15.687616,
+          "wall_seconds": 16.057965737069026
+        },
+        {
+          "max_rss_kib": 1031876,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "28bd5ac740557d5bb28133df8c240382008a038fbfadbc0143e429bdfb36d351",
+          "system_seconds": 1.587678,
+          "user_seconds": 45.033684,
+          "wall_seconds": 46.52058756700717
+        },
+        {
+          "max_rss_kib": 635588,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.817885,
+          "user_seconds": 12.355082,
+          "wall_seconds": 13.151831658091396
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 46.58119113417342
+    },
+    {
+      "id": "mirage-projection-optimized",
+      "jobs": 8,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 782020,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "73db0b3323762b71d134d887ff01ae3d3e17e2bf17148a96682576e157c532f1",
+          "system_seconds": 0.510184,
+          "user_seconds": 19.944883,
+          "wall_seconds": 20.453321257140487
+        },
+        {
+          "max_rss_kib": 971460,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "7ca2041da0795576ab1527cb7ff72aa328939680b1b9ed3a9e0420414c9eeb6a",
+          "system_seconds": 1.6124429999999998,
+          "user_seconds": 44.806119,
+          "wall_seconds": 46.31901685311459
+        },
+        {
+          "max_rss_kib": 641736,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.850499,
+          "user_seconds": 12.568686,
+          "wall_seconds": 13.3951455228962
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 46.37998859304935
+    },
+    {
+      "id": "mirage-program-base",
+      "jobs": 8,
+      "kind": "program",
+      "modules": [
+        {
+          "max_rss_kib": 606920,
+          "module": "KPlay.Proof.Program.Base.fsti",
+          "returncode": 0,
+          "source_sha256": "283f511c42d80fe88fa898b925d51059052b0cf726d8dd14cba6b34fd1b8c9dd",
+          "system_seconds": 0.363979,
+          "user_seconds": 11.145374,
+          "wall_seconds": 11.510315872030333
+        },
+        {
+          "max_rss_kib": 655044,
+          "module": "KPlay.Proof.Program.Base.fst",
+          "returncode": 0,
+          "source_sha256": "af82923f52859ecd593185de85aa23df3f9d96014c592558b5a90925bdc68748",
+          "system_seconds": 0.7172219999999999,
+          "user_seconds": 39.030363,
+          "wall_seconds": 39.69909223495051
+        },
+        {
+          "max_rss_kib": 608964,
+          "module": "KPlay.Proof.Wiring.Base.fst",
+          "returncode": 0,
+          "source_sha256": "0f0c1b1962d4f13eb4a00a5405eb31ba5bdc81b5314ca2ddab908c80b3743cfd",
+          "system_seconds": 0.361095,
+          "user_seconds": 11.278437,
+          "wall_seconds": 11.63930297200568
+        },
+        {
+          "max_rss_kib": 636608,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.83995,
+          "user_seconds": 12.453181,
+          "wall_seconds": 13.270905385026708
+        }
+      ],
+      "requested_modules": 4,
+      "status": "passed",
+      "wall_seconds": 39.76291325408965
+    },
+    {
+      "id": "mirage-program-optimized",
+      "jobs": 8,
+      "kind": "program",
+      "modules": [
+        {
+          "max_rss_kib": 608964,
+          "module": "KPlay.Proof.Program.Optimized.fsti",
+          "returncode": 0,
+          "source_sha256": "d2abf1d2160e303a252b6b498ed409bcb2ffc33ddd4e84a14c40a62cb8321a17",
+          "system_seconds": 0.335008,
+          "user_seconds": 11.241289,
+          "wall_seconds": 11.577300794888288
+        },
+        {
+          "max_rss_kib": 674500,
+          "module": "KPlay.Proof.Program.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "623514bfd1fa2001abf8713bd4cd34ea89c7755ea243018003f952dd46fadc55",
+          "system_seconds": 0.88799,
+          "user_seconds": 98.586124,
+          "wall_seconds": 99.381457622163
+        },
+        {
+          "max_rss_kib": 613060,
+          "module": "KPlay.Proof.Wiring.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "8de730f7ee287bd5677bd23fb6384eeb4f8ec85c5c6beda8c962c28f298d3317",
+          "system_seconds": 0.357612,
+          "user_seconds": 11.553107,
+          "wall_seconds": 11.911151607055217
+        },
+        {
+          "max_rss_kib": 643784,
+          "module": "KPlay.Proof.SeqApprox.fst",
+          "returncode": 0,
+          "source_sha256": "c543e3a674d88fa502aaaaa0a059771098744e4baaf0735ac9d1c44192b54a54",
+          "system_seconds": 0.532385,
+          "user_seconds": 12.163249,
+          "wall_seconds": 12.686646900838241
+        },
+        {
+          "max_rss_kib": 637636,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+          "system_seconds": 0.8509629999999999,
+          "user_seconds": 12.304404,
+          "wall_seconds": 13.133734999923036
+        }
+      ],
+      "requested_modules": 5,
+      "status": "passed",
+      "wall_seconds": 99.44326948211528
+    }
+  ],
+  "completed_utc": "2026-11-25T11:18:57.471839+00:00",
+  "input_sha256": "bd59c4d114afd2aa9ececdd21e669afeaf9cee668e560ffb8b1734b038b0ee77",
+  "jobs": 8,
+  "logical_cpus": 128,
+  "machine": "x86_64",
+  "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+  "requested_cases": [
+    "mirage-shared",
+    "mirage-argmax-base",
+    "mirage-argmax-optimized",
+    "mirage-decoder-base",
+    "mirage-decoder-optimized",
+    "mirage-embedding-base",
+    "mirage-embedding-optimized",
+    "mirage-projection-base",
+    "mirage-projection-optimized",
+    "mirage-program-base",
+    "mirage-program-optimized"
+  ],
+  "started_utc": "2026-11-25T10:58:35.946953+00:00",
+  "status": "passed",
+  "toolchain": {
+    "fstar_version": {
+      "default": "F* 2026.09.13~dev\nplatform=Linux_x86_64\nsystem=Unix\ncompiler=OCaml 5.3.0\ndate=2026-09-18 15:14:44 -0700\ncommit=da21c3925bf09a0a1d9e7558170be82da5edb37c\n",
+      "kuiper-nightly-2026-11-18": "F* 2026.11.15~dev\nplatform=Linux_x86_64\nsystem=Unix\ncompiler=OCaml 5.3.0\ndate=2026-11-17 01:03:23 +0000\ncommit=049c07a0d9902cd39bf45a47a736be891297b79f\n"
+    },
+    "support_sha256": "2d422b8958ba12be86dcca9710dc8b2760bdfa63841c3ad328c2ac9c5aaa2b31",
+    "toolchain": {
+      "default": {
+        "foundation": true,
+        "fstar_commit": "da21c3925bf09a0a1d9e7558170be82da5edb37c",
+        "kuiper_commit": "fccc0b2cffdb785598f18f1a200c5228584f14fb",
+        "platform": "Linux-x86_64",
+        "sha256": "be6d162eea7ad75bb0d6c4b7e986da4ace1bf9ccb758e32d3b4139d6d7a772eb",
+        "url": "https://github.com/FStarLang/kuiper/releases/download/nightly-2026-09-19/kuiper-Linux-x86_64.tar.gz",
+        "z3_version": "4.13.3"
+      },
+      "kuiper-nightly-2026-11-18": {
+        "foundation": false,
+        "fstar_commit": "049c07a0d9902cd39bf45a47a736be891297b79f",
+        "kuiper_commit": "1623fb4ef144e530eaf0fb9f1c3f750d5249080b",
+        "platform": "Linux-x86_64",
+        "sha256": "37ab664feaa4d051ed2030ae9ca31857aec98dacbff3f970df4f7d55ac0da1f1",
+        "url": "https://github.com/FStarLang/kuiper/releases/download/nightly-2026-11-18/kuiper-Linux-x86_64.tar.gz",
+        "z3_version": "5.3.0"
+      }
+    }
+  },
+  "wall_seconds": 1221.5210973438807
+}

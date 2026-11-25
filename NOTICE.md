@@ -28,12 +28,8 @@ the release decision requires the appropriate rightsholders' approval.
 The CUDA files are **reductions/translations and repaired variants**, not
 verbatim claims about the upstream revisions. Their exact bytes and
 role-specific historical source/acceptance identities are in `manifest.json`.
-The single proof-only replay adjustment is recorded separately with its
-original source hash and reversible diff; it is not misidentified as the
-original receipt-bound proof bytes.
 The FlashMoE complete-program, argmax, projection/softmax, and normalization/capacity,
-Mirage complete-program, decoder, embedding/position, argmax, and
-final norm/projection, and LUCE
+and LUCE
 complete-program, embedding, argmax, final norm/projection, recurrent-decoder, and full-attention-decoder entry
 modules were subsequently renamed to
 `KPlay.Base.Functional` and `KPlay.Optimized.Functional` for their joint checked
@@ -46,11 +42,6 @@ intermediate approximation facts in base `gate_head`, and a pointwise sum proof 
 Full attention additionally has an explicit ghost loop-exit index and equality
 in optimized `store_cache`. These proof stabilizations do not alter contracts
 or executable operations.
-Mirage base decoder additionally isolates machine-index and rotary-approximation
-lemmas and checks `normalize_rotate_kernel` with reduced unfolding and a fresh
-solver. Its executable operations and contracts are unchanged. The historical
-optimized-decoder replay patch still uses `KPlay.Functional.fst`; restore that
-filename and module declaration before applying its reverse diff.
 The `KPlay.Review.{fst,fsti}` files are new contract-adaptation proofs and review
 interfaces, not historical artifacts.
 LUCE complete-program's byte-identical `KPlay.Proof.NativeInput.fst` copies were
@@ -59,9 +50,13 @@ that same unchanged source.
 No runtime source rewriting is performed by the smoke runner; its generated
 C++ file only adds a Python binding to the existing `kplay_run` function.
 
-Mirage includes its authorized finite-score/selection and reference/task
-repairs. Its current shared specification carries the checked
-mixed-observation compatibility bridge. LUCE's complete optimized program
+The Mirage proofs, kernels and `support/mirage-cleanroom` are output of the
+clean-room RESOLVE proof pipeline, which replaced the earlier Mirage
+artifacts. `kernels/mirage-*.cu` are RESOLVE's reduced Mirage CUDA, and
+`*.extracted.cu` are Kuiper extractions of the verified implementations.
+`support/mirage-cleanroom` is Kuiper library source from `nightly-2026-11-18`,
+including open Kuiper PRs #135 and #181 and RESOLVE's numeric additions.
+LUCE's complete optimized program
 replaces alignment-dependent `uint4`/`float4` reinterpretation reads with typed
 scalar reads while preserving indices, casts, FMA/FTZ operations and
 accumulation order. Its shared normalization/hidden type separation is a

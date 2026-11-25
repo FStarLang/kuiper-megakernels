@@ -133,6 +133,22 @@ class ReplayTests(unittest.TestCase):
                 replay.verify(args, self.manifest)
             setup.assert_not_called()
 
+    def test_profile_uses_its_named_toolchain(self):
+        pins = {"default": {"z3_version": "4.13.3"}, "newer": {"z3_version": "5.3.0"}}
+        replay.write_json(self.root / "toolchain.json", pins)
+        manifest = {"toolchains": {"profile": "newer"}}
+        work = self.root / "work"
+        with patch.object(replay, "ROOT", self.root):
+            name = replay.toolchain_name(manifest, "profile")
+            command = replay.command(work, "profile", work / "cache", [], name)
+            default = replay.command(work, "other", work / "cache",
+                                     [], replay.toolchain_name(manifest, "other"))
+        self.assertEqual(command[0], str(work / "toolchains/newer/toolchain/kuiper/inst/bin/fstar.exe"))
+        self.assertEqual(command[command.index("--z3version") + 1], "5.3.0")
+        self.assertIn(str(work / "toolchains/newer/stdlib"), command)
+        self.assertEqual(default[0], str(work / "toolchain/kuiper/inst/bin/fstar.exe"))
+        self.assertEqual(default[default.index("--z3version") + 1], "4.13.3")
+
     def test_failed_verifier_is_recorded_and_propagated(self):
         output = self.root / "output"
         output.mkdir()

@@ -1,52 +1,56 @@
 #include <torch/extension.h>
 #include <ATen/cuda/CUDAContext.h>
+#include <c10/cuda/CUDAException.h>
 #include <cuda_runtime.h>
 #include <cuda_bf16.h>
-#include <cmath>
 #include <cstdint>
 #include <vector>
 
 #include <c10/cuda/CUDAGuard.h>
-#include <c10/cuda/CUDAException.h>
-#include <limits>
+#include <climits>
 
-namespace {
-
-__global__ void select_token(const at::BFloat16* logits, const int64_t* tokens,
-                            int64_t* output, int score_row) {
-    for (int i = 0; i < 7; ++i) output[i] = tokens[i];
-    float best = float(logits[score_row * 151936]);
-    int index = 0;
-    for (int i = 1; i < 151936; ++i) {
-        float value = float(logits[score_row * 151936 + i]);
-        if (!isnan(best) && (isnan(value) || value > best)) {
+__global__ void select_token(const int64_t* prompt, const at::BFloat16* logits,
+                             int64_t* output, int64_t* selected,
+                             int columns, int prompt_length) {
+    for (int i = 0; i < prompt_length; ++i) output[i] = prompt[i];
+    float best = float(logits[0]);
+    int64_t index = 0;
+    for (int col = 1; col < columns; ++col) {
+        float value = float(logits[col]);
+        if (value > best || (isnan(value) && !isnan(best))) {
             best = value;
-            index = i;
+            index = col;
         }
     }
-    output[7] = index;
+    output[prompt_length] = index;
+    selected[0] = index;
 }
 
+static void check_tensor(const torch::Tensor& tensor, at::ScalarType dtype,
+                         c10::Device device, const char* name) {
+    TORCH_CHECK(tensor.is_cuda() && tensor.is_contiguous() &&
+                tensor.scalar_type() == dtype && tensor.device() == device,
+                name, " must be contiguous, have the declared dtype, and be on the selected CUDA device");
+}
 
-}  // namespace
-
-std::vector<torch::Tensor> kplay_run(torch::Tensor input0, torch::Tensor input1,
-                                    int64_t input2) {
-    TORCH_CHECK(input0.is_cuda() && input0.is_contiguous() &&
-                input0.scalar_type() == at::kBFloat16 &&
-                input0.dim() == 2 && input0.size(0) == 7 && input0.size(1) == 151936,
-                "Expected the complete contiguous CUDA BF16 [7, 151936] logits");
-    TORCH_CHECK(input1.is_cuda() && input1.is_contiguous() &&
-                input1.scalar_type() == at::kLong && input1.device() == input0.device() &&
-                input1.dim() == 1 && input1.size(0) == 7,
-                "Expected seven contiguous CUDA int64 prefix tokens on the logits device");
-    TORCH_CHECK(input2 >= 0 && input2 < 7, "The selected logits row must be in [0, 7)");
-    const c10::cuda::CUDAGuard guard(input0.device());
-    auto output = torch::empty({1, 8}, input1.options());
+std::vector<torch::Tensor> kplay_run(torch::Tensor input0, torch::Tensor input1, int64_t input2) {
+    check_tensor(input0, at::kLong, input0.device(), "input0 prompt");
+    check_tensor(input1, at::kBFloat16, input0.device(), "input1 scores");
+    TORCH_CHECK(input0.dim() == 1 && input0.numel() <= INT_MAX, "prompt must be a flat int64 tensor");
+    TORCH_CHECK(input1.dim() == 1 && input1.numel() > 0 && input1.numel() <= INT_MAX,
+                "scores must be a nonempty flat BF16 tensor");
+    TORCH_CHECK(input2 == 1, "the accepted generation contract requires decode_steps=1");
+    c10::cuda::CUDAGuard device_guard(input0.device());
+    int64_t output_length = input0.numel() + double(input2);
+    auto output_tokens = torch::empty({1, output_length}, input0.options());
+    auto selected = torch::empty({}, input0.options());
     auto stream = at::cuda::getCurrentCUDAStream();
+    C10_CUDA_CHECK(cudaDeviceSynchronize());
     select_token<<<1, 1, 0, stream>>>(
-        input0.data_ptr<at::BFloat16>(), input1.data_ptr<int64_t>(),
-        output.data_ptr<int64_t>(), static_cast<int>(input2));
-    C10_CUDA_KERNEL_LAUNCH_CHECK();
-    return {output};
+        input0.data_ptr<int64_t>(), input1.data_ptr<at::BFloat16>(),
+        output_tokens.data_ptr<int64_t>(), selected.data_ptr<int64_t>(),
+        int(input1.numel()), int(input0.numel()));
+    C10_CUDA_CHECK(cudaGetLastError());
+    C10_CUDA_CHECK(cudaStreamSynchronize(stream));
+    return {output_tokens, selected};
 }

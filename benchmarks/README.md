@@ -5,6 +5,11 @@ The source inventory, public toolchain pin, and individual source hashes bind
 the results. Measurements were taken on November 13, 2026; hardware and
 software details are in [environment.json](environment.json).
 
+> **Note:** the `mirage-*` rows below measure the **former** Mirage
+> artifacts, which the clean-room pipeline proof has since replaced. They are
+> kept as historical records. Timings for the current Mirage cases are in
+> [mirage-cleanroom-proof-checks.json](mirage-cleanroom-proof-checks.json).
+
 ## Measurement method
 
 ```sh

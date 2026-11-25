@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and 12 family-tightness proofs**, plus fifteen checked contract reviews.
+and eight family-tightness proofs**, plus ten checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -14,6 +14,61 @@ unchanged. Proofs are now grouped by kernel with one shared specification,
 as described below. See [NOTICE.md](NOTICE.md) for attribution and licensing
 boundaries.
 FlashMoE still has an explicitly unresolved original-candidate provenance gap.
+
+## Mirage: clean-room RESOLVE pipeline proof
+
+On this branch the Mirage artifacts are replaced by the proof produced by the
+clean-room RESOLVE proof pipeline
+([`src/KPlay/proof_pipeline`](https://github.com/msr-central/resolve/tree/main/src/KPlay/proof_pipeline)).
+The agents saw only the reduced CUDA, the PyTorch reference and the Kuiper
+library. They had no access to earlier Mirage proofs, including the former
+Mirage artifacts here. The selected Qwen3-0.6B kernel (seven-token prefill plus one greedy decode
+step) is proved for both roles, and the result then passed RESOLVE's normal
+final check.
+
+| Case | What F* checks |
+| --- | --- |
+| `mirage-shared` | [`KPlay.SharedSpec`](proofs/mirage-shared/KPlay.SharedSpec.fst): exact real reference math, the role-independent `program_postcondition`, and one quantified relation per role and family |
+| `mirage-{argmax,decoder,embedding,projection}-{base,optimized}` | Each Kuiper/Pulse implementation in `KPlay.Functional` ensures its family relation: for **all** reals that the inputs approximate, the outputs approximate the reference of those reals |
+| `mirage-program-{base,optimized}` | `KPlay.Proof.Program.<Role>.refines`: the family relations at every host call of the reduced program imply `program_postcondition`. That postcondition covers the prompt copied in front of the token, the final hidden rows approximating `final_hidden`, and the token being an allowed maximum of a score row that approximates `next_token_logits` |
+
+`kernels/mirage-<family>-<role>.cu` and `kernels/mirage-program-<role>.cu` are
+the reduced family and complete programs. `*.extracted.cu` is the CUDA that
+Kuiper extracted from each verified implementation. RESOLVE replayed it bitwise
+against the reduced family CUDA on recorded inputs.
+These cases use profile `mirage-cleanroom`. That profile is pinned to Kuiper
+`nightly-2026-11-18` (F* `049c07a`, Z3 5.3.0) plus the RESOLVE library overlay in
+[`support/mirage-cleanroom/`](support/mirage-cleanroom/). The overlay holds the
+66 `src/lib` modules that differ from or are absent in the stock package.
+
+> [!WARNING]
+> ### Trusted assumptions (Mirage)
+>
+> The Mirage proofs rely on the following **unproved** laws, in addition to
+> Kuiper's own IEEE/CUDA model. Each one is new compared with stock
+> `nightly-2026-11-18`; the diff is reproducible from `support/mirage-cleanroom/`.
+>
+> | Law (interface-only `val`) | Source | Statement |
+> | --- | --- | --- |
+> | `cast_bf16_to_f32_kind` (`Kuiper.Float.Casts.Raw`) | RESOLVE | BF16→F32 widening preserves the floating class (Finite / Infinite / NaN). Exact widening per PTX `cvt` and IEEE 754-2019 §5.4.2, §6.2; RESOLVE tested all 65,536 BF16 values on the GPU |
+> | `cast_bf16_to_f32_lte` (`Kuiper.Float.Casts.Raw`) | RESOLVE | BF16→F32 widening preserves native `<=`; tested on all 65,536² pairs against `__hle` |
+> | `literal_approx` (`Kuiper.Float32.ConstantFold`) | RESOLVE | A source literal certified as an exactly representable normal F32 value approximates its parsed real value |
+> | `reciprocal_literal_bit_eq` (`Kuiper.Float32.ConstantFold`) | RESOLVE | A certified correctly rounded reciprocal literal is bit-equal to `1 / input` |
+> | `bits_spec` (`Kuiper.{BFloat16,Float16,Float32,Float64}.Raw`) | Kuiper PR #181 (open) | Equal bit patterns have equal floating class and zero-ness |
+>
+> The remaining library changes in the overlay weaken stock laws or narrow their
+> scope; none strengthens a stock law:
+> - Kuiper PR #181: `bit_eq` no longer implies `==`.
+> - Kuiper PR #135: the tensor-core `emma_approx_lemma` is specialized to BF16 16×16×8.
+>
+> Outside F*, the guarantee also trusts:
+> - the generated host wiring `KPlay.Proof.Wiring.<Role>`, a mechanical
+>   translation of the reduced program's recorded host call plan;
+> - the finite bitwise replays linking the extracted family kernels to the
+>   reduced CUDA, and the reduced program to the original Mirage megakernel.
+>
+> The guarantee is relational (`%~`), not an error bound or bitwise equality
+> between roles. Optimized and base may choose different maximal tokens on ties.
 
 ## Quick start (CPU only)
 
@@ -31,11 +86,11 @@ sudo apt-get install -y git python3 make ca-certificates libgmp10 libzstd1 libst
 git clone https://github.com/FStarLang/kuiper-megakernels.git
 cd kuiper-megakernels
 make -j2 integrity test
-python3 replay.py verify --case mirage-argmax-tightness --jobs 2
+python3 replay.py verify --case luce-argmax-tightness --jobs 2
 ```
 
 The last command checks a small supplied proof. Its first run also prepares
-and checks the Mirage support library, which can take several minutes.
+and checks the support libraries, which can take several minutes.
 All commands below are run from the repository root.
 
 ## Check the proofs
@@ -61,8 +116,11 @@ interfaces and implementation bodies. Dependency checking is timed separately;
 download and extraction are not included. Subsequent invocations reuse that
 preparation, **not example proof results**. Every requested `.fst` and `.fsti`
 is checked afresh with
-`--force --cache_off --admit_smt_queries false`, F* commit
-`da21c3925bf09a0a1d9e7558170be82da5edb37c`, and Z3 4.13.3.
+`--force --cache_off --admit_smt_queries false`. LUCE and FlashMoE use F* commit
+`da21c3925bf09a0a1d9e7558170be82da5edb37c` and Z3 4.13.3. Mirage uses the
+`kuiper-nightly-2026-11-18` pin (F* `049c07a0d9902cd39bf45a47a736be891297b79f`,
+Z3 5.3.0). The manifest's `toolchains` map assigns profiles to pins, and every
+other profile uses `default`.
 
 Results and per-module logs go to `.work/proofs/runs/<run>/`. JSON records wall
 time, child CPU time, peak child RSS, source hashes, tool versions, and worker
@@ -70,16 +128,11 @@ count. This measures **checking the supplied proof**, not finding it. Existing
 native/numerical axioms are still trusted; disabling SMT admission does not
 turn those axioms into hardware proofs. See [CLAIMS.md](CLAIMS.md).
 
-One proof-only replay adjustment is disclosed in
-[replay-adjustments.patch](replay-adjustments.patch): an explicit, proved
-real-division identity in Mirage's optimized decoder. Its original source hash
-is retained in `manifest.json`; contracts, executable operations, and CUDA are
-unchanged. The reviewed kernels' entry modules additionally have distinct
+The reviewed kernels' entry modules additionally have distinct
 module names so the checked review can import both at once; only their filenames,
 module declarations, and qualified tactic self-references changed, except for
-explicit proof steps added to two recurrent-decoder lemmas, a full-attention
-cache-loop exit, and Mirage base rotary normalization after renaming exposed
-solver sensitivity. Contracts and executable operations are unchanged. Historical hashes are retained
+explicit proof steps added to two recurrent-decoder lemmas and a full-attention
+cache-loop exit after renaming exposed solver sensitivity. Contracts and executable operations are unchanged. Historical hashes are retained
 in `manifest.json` under `historical_entry_modules`. Other retained proof sources
 preserve their historical bytes.
 
@@ -87,7 +140,7 @@ Each kernel has one directory containing its shared specification, its
 family-tightness proof where present, and separate implementations. For example:
 
 ```text
-proofs/mirage-decoder/
+proofs/flashmoe-argmax/
   KPlay.SharedSpec.fst
   KPlay.Proof.Tightness.fst
   KPlay.Review.{fst,fsti}
@@ -95,18 +148,17 @@ proofs/mirage-decoder/
   optimized/KPlay.Optimized.Functional.{fst,fsti}
 ```
 
-The three complete programs use the same layout under
+The LUCE and FlashMoE programs use the same layout under
 `proofs/<project>-program/`, without whole-program tightness proofs.
-Their common `KPlay.Proof.Shared.*` helper modules also live at the group root;
-Mirage's additional shared-check implementation lives in `shared/`.
+Their common `KPlay.Proof.Shared.*` helper modules also live at the group root.
+Mirage instead uses one specification for all its cases,
+`proofs/mirage-shared/KPlay.SharedSpec.fst`, and `proofs/mirage-<family>/<role>/`.
 Every role imports the group's single `KPlay.SharedSpec` module. The manifest
 lists the common sources as roots of each case, and the runner includes their
 directory and checks them afresh with each selected case.
 
 The family specifications and the LUCE/FlashMoE program specifications were
-already byte-identical across roles. The complete Mirage programs use the
-unchanged former optimized/shared specification, whose prefix contains the
-entire former base specification. Only paths and duplicate files changed;
+already byte-identical across roles. Only paths and duplicate files changed;
 theorem statements, numerical assumptions, and implementation bodies are unchanged.
 Existing case IDs and replay commands are unchanged.
 
@@ -121,7 +173,7 @@ and the adjacent module logs. Interrupted runs are not reported as successful.
 To start over after an interrupted toolchain preparation, use a fresh directory:
 
 ```sh
-python3 replay.py verify --case mirage-argmax-tightness --jobs 2 --work .work/retry
+python3 replay.py verify --case luce-argmax-tightness --jobs 2 --work .work/retry
 ```
 
 ## Review the base/optimized correspondence
@@ -153,29 +205,16 @@ correctness is unconditional; optimized numerical correctness retains its
 family-dependency and numerical-scope premises on the actual returned execution.
 Both enqueue one completion epoch and preserve allocation-failure behavior.
 
-The [Mirage program review](proofs/mirage-program/KPlay.Review.fsti) exposes both
-contracts using the shared mixed-observation specification and proves equivalence
-to the native result predicates. It checks pointwise equality of all input
-weights and preserves the actual returned-cell witnesses. Base completes at
-`start + 229`, optimized at `start + 256`; both return hidden tensors of shape
-`[7;1024]` (optimized decoder padding is internal). Optimized numerical
-correctness retains its attention-domain premise, and valid output tokens are
-guaranteed under the actual selector-score domain.
-
-The [review catalog](proofs/REVIEW-CATALOG.md) compares all fifteen groups,
+The [review catalog](proofs/REVIEW-CATALOG.md) compares all ten groups,
 assesses the significance of each contract difference, and distinguishes
 exact functionality, allowed choices, and conditional/relative numerical
 tightness. Each interface includes a more detailed comment at its visible
 `switcher` implementation.
 
-All twelve family reviews use the same interface-and-dispatcher style:
+All eight family reviews use the same interface-and-dispatcher style:
 
 | Review interface | Explicit representation difference | Common guarantee |
 | --- | --- | --- |
-| [Mirage embedding/position](proofs/mirage-embedding_position/KPlay.Review.fsti) | Seven versus eight hidden rows; seven versus 4096 rotary positions | Shared embedding/rotary postcondition on all seven prompt positions |
-| [Mirage argmax](proofs/mirage-argmax/KPlay.Review.fsti) | Vocabulary stride 151936 versus padded stride 153600 | Shared prompt/output and allowed-maximum relation, under explicit finite comparison-faithful input representation |
-| [Mirage final norm/projection](proofs/mirage-final_norm_projection/KPlay.Review.fsti) | Packed weights and residual+delta versus separate weights and prepared hidden input; optimized input/score padding | Same logical input, complete shared normalization/projection postcondition, all seven vocabulary-score rows, and explicit zero-modeled score padding |
-| [Mirage decoder](proofs/mirage-decoder/KPlay.Review.fsti) | Seven residual/delta rows versus eight hidden rows; compact versus full rotary storage; explicit observed cache indices | Same complete shared decoder/cache task on canonical packed weights; unconditional cache observations, optimized numerical finiteness premise and padding target, and an invocation-bound receipt |
 | [LUCE argmax](proofs/luce-argmax/KPlay.Review.fsti) | BF16 versus FP32 scores; first versus any maximum | Explicit proof that the base postcondition implies the optimized postcondition on the same represented logical scores and output; exact history update |
 | [LUCE final norm/projection](proofs/luce-final_norm_projection/KPlay.Review.fsti) | BF16 versus FP32 returned logits | Identical shared mathematical logit targets, exact hidden-history append, and preserved input ownership |
 | [LUCE embedding](proofs/luce-embedding/KPlay.Review.fsti) | Base additionally returns rotary data and initial recurrent/convolution state | Identical exact BF16 embedding-row postcondition; auxiliary outputs and initial-token alias ownership are explicit |
@@ -255,7 +294,7 @@ Native extension builds may be reused on subsequent invocations; select a new
 | Original workload and task | Pinned upstream references and explicit mathematical specifications | Reference/task interpretation was reviewed, not proved by checking a Git hash |
 | Reduction and decomposition | Exact complete and family CUDA sources | Original/reduced correspondence is historical finite/reviewed evidence, not a universal equivalence theorem |
 | Specification and implementation | Shared contracts, interfaces, complete Pulse implementations and helper proofs | F* checks refinement under the stated numerical and native contracts |
-| Tightness | Twelve constructive family-level proofs | Existence and full-observation determination, or the stated choice/approximation policy; not IEEE uniqueness |
+| Tightness | Eight constructive LUCE/FlashMoE family-level proofs; Mirage has none | Existence and full-observation determination, or the stated choice/approximation policy; not IEEE uniqueness |
 | Replay | Small standalone proof and CUDA runners | No discovery, agent orchestration, fuzzing pipeline, or DTester implementation |
 
 This repository is independent of Kuiper's source tree: most cases reuse module

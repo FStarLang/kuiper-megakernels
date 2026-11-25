@@ -94,31 +94,29 @@ def support_fingerprint(manifest):
     })
 
 
-def prepare(work, manifest):
-    pin = read_json(ROOT / "toolchain.json")
-    if (platform.system(), platform.machine()) != ("Linux", "x86_64"):
-        raise ValueError("The pinned binary toolchain requires Linux x86_64.")
-    work.mkdir(parents=True, exist_ok=True)
-    state = work / "prepared.json"
-    fingerprint = support_fingerprint(manifest)
-    if state.exists():
-        if read_json(state)["support_sha256"] != fingerprint:
-            raise ValueError("Inputs changed; use a new --work directory for preparation.")
-        return
-    archive = work / "toolchain.tar.gz"
+def toolchain_name(manifest, profile):
+    return manifest.get("toolchains", {}).get(profile, "default")
+
+
+def toolchain_root(work, name):
+    return work if name == "default" else work / "toolchains" / name
+
+
+def prepare_toolchain(root, pin):
+    archive = root / "toolchain.tar.gz"
     if not archive.exists():
         temporary = archive.with_suffix(".part")
-        print("Downloading pinned Kuiper toolchain...", flush=True)
+        print(f"Downloading pinned Kuiper toolchain {pin['url']}...", flush=True)
         with urllib.request.urlopen(pin["url"], timeout=120) as response:
             with temporary.open("wb") as output:
                 shutil.copyfileobj(response, output)
         temporary.replace(archive)
     if sha256(archive) != pin["sha256"]:
         raise ValueError(f"Toolchain checksum mismatch: {archive}")
-    destination = work / "toolchain"
+    destination = root / "toolchain"
     if destination.exists():
         raise ValueError("Incomplete preparation; use a new --work directory.")
-    with tempfile.TemporaryDirectory(dir=work, prefix="unpack-") as temporary:
+    with tempfile.TemporaryDirectory(dir=root, prefix="unpack-") as temporary:
         with tarfile.open(archive) as source:
             source.extractall(temporary, filter="data")
         Path(temporary).rename(destination)
@@ -128,17 +126,39 @@ def prepare(work, manifest):
     )
     if f"commit={pin['fstar_commit']}" not in version:
         raise ValueError("Unexpected F* compiler commit in downloaded package.")
-    stdlib = work / "stdlib"
+    stdlib = root / "stdlib"
     shutil.copytree(package / "inst/lib/fstar", stdlib)
-    for source in source_files(ROOT / "support/foundation"):
-        matches = list(stdlib.rglob(source.name))
-        if len(matches) > 1:
-            raise ValueError(f"Ambiguous foundational source: {source.name}")
-        target = matches[0] if matches else stdlib / "ulib" / source.name
-        shutil.copyfile(source, target)
-        for checked in stdlib.rglob(source.name + ".checked"):
-            checked.unlink()
+    if pin.get("foundation"):
+        for source in source_files(ROOT / "support/foundation"):
+            matches = list(stdlib.rglob(source.name))
+            if len(matches) > 1:
+                raise ValueError(f"Ambiguous foundational source: {source.name}")
+            target = matches[0] if matches else stdlib / "ulib" / source.name
+            shutil.copyfile(source, target)
+            for checked in stdlib.rglob(source.name + ".checked"):
+                checked.unlink()
+    return version
+
+
+def prepare(work, manifest):
+    pins = read_json(ROOT / "toolchain.json")
+    if (platform.system(), platform.machine()) != ("Linux", "x86_64"):
+        raise ValueError("The pinned binary toolchain requires Linux x86_64.")
+    work.mkdir(parents=True, exist_ok=True)
+    state = work / "prepared.json"
+    fingerprint = support_fingerprint(manifest)
+    if state.exists():
+        if read_json(state)["support_sha256"] != fingerprint:
+            raise ValueError("Inputs changed; use a new --work directory for preparation.")
+        return
+    names = sorted({toolchain_name(manifest, profile) for profile in manifest["profiles"]})
+    versions = {}
+    for name in names:
+        root = toolchain_root(work, name)
+        root.mkdir(parents=True, exist_ok=True)
+        versions[name] = prepare_toolchain(root, pins[name])
     for profile, overlays in manifest["profiles"].items():
+        package = toolchain_root(work, toolchain_name(manifest, profile)) / "toolchain/kuiper"
         library = work / "support" / profile / "sources"
         library.mkdir(parents=True)
         for source in source_files(package / "src/lib"):
@@ -149,12 +169,15 @@ def prepare(work, manifest):
         for overlay in overlays:
             for source in source_files(ROOT / "support" / overlay):
                 shutil.copyfile(source, library / source.name)
-    write_json(state, {"support_sha256": fingerprint, "fstar_version": version, "toolchain": pin})
+    write_json(state, {"support_sha256": fingerprint, "fstar_version": versions,
+                       "toolchain": {name: pins[name] for name in names}})
 
 
-def command(work, profile, cache, source_directories):
-    package = work / "toolchain/kuiper"
-    stdlib = work / "stdlib"
+def command(work, profile, cache, source_directories, toolchain="default"):
+    root = toolchain_root(work, toolchain)
+    package = root / "toolchain/kuiper"
+    z3 = read_json(ROOT / "toolchain.json")[toolchain]["z3_version"]
+    stdlib = root / "stdlib"
     includes = [stdlib, stdlib / "pulse", stdlib / "fstarc"]
     includes += [work / "support" / profile / "sources"]
     includes += [*source_directories, cache]
@@ -163,7 +186,7 @@ def command(work, profile, cache, source_directories):
         "--no_default_includes", "--cache_dir", str(cache), "--odir", str(cache),
         "--force", "--cache_off",
         "--admit_smt_queries", "false",
-        "--smt", str(package / "inst/bin/z3-4.13.3"), "--z3version", "4.13.3",
+        "--smt", str(package / f"inst/bin/z3-{z3}"), "--z3version", z3,
         "--z3rlimit", "0", "--z3cliopt", "timeout=0",
         "--warn_error", "-274-291-249-321-288-271", "--warn_error", "@242@250",
         "--query_stats",
@@ -205,12 +228,12 @@ def check_module(config_path, source):
     return process.returncode
 
 
-def check_set(work, profile, sources, output, jobs):
+def check_set(work, profile, sources, output, jobs, toolchain="default"):
     output.mkdir(parents=True, exist_ok=True)
     cache = output / "checked"
     cache.mkdir(exist_ok=True)
     source_directories = list(dict.fromkeys(source.parent for source in sources))
-    cmd = command(work, profile, cache, source_directories)
+    cmd = command(work, profile, cache, source_directories, toolchain)
     config = output / "command.json"
     write_json(config, {"command": cmd, "output": str(output)})
     started = time.monotonic()
@@ -239,10 +262,13 @@ def setup(work, manifest, profiles, jobs):
         names = {p.name for overlay in manifest["profiles"][profile]
                  for p in source_files(ROOT / "support" / overlay)}
         sources = [output / "sources" / name for name in sorted(names)]
-        for source in source_files(ROOT / "support/foundation"):
-            sources += list((work / "stdlib").rglob(source.name))
+        toolchain = toolchain_name(manifest, profile)
+        if read_json(ROOT / "toolchain.json")[toolchain].get("foundation"):
+            stdlib = toolchain_root(work, toolchain) / "stdlib"
+            for source in source_files(ROOT / "support/foundation"):
+                sources += list(stdlib.rglob(source.name))
         print(f"Checking support library: {profile}", flush=True)
-        result = check_set(work, profile, sources, output, jobs)
+        result = check_set(work, profile, sources, output, jobs, toolchain)
         if result["status"] != "passed":
             raise RuntimeError(f"Support verification failed: {profile}")
 
@@ -275,7 +301,7 @@ def verify(args, manifest):
     for case in cases:
         print(f"Checking {case['id']}", flush=True)
         outcome = check_set(args.work, case["profile"], [ROOT / p for p in case["roots"]],
-                            run / case["id"], args.jobs)
+                            run / case["id"], args.jobs, toolchain_name(manifest, case["profile"]))
         results["cases"].append({"id": case["id"], "kind": case["kind"], **outcome})
         results["wall_seconds"] = time.monotonic() - started
         write_json(run / "results.json", results)

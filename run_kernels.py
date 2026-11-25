@@ -21,7 +21,7 @@ def compile_kernel(torch, case, work, jobs):
     directory = work / name
     directory.mkdir(parents=True, exist_ok=True)
     parameters = case["parameters"]
-    if any(parameter not in ("torch::Tensor", "int64_t", "bool") for parameter in parameters):
+    if any(parameter not in ("torch::Tensor", "int64_t", "double", "bool") for parameter in parameters):
         raise ValueError(f"Unsupported kernel parameter: {parameters}")
     binding = (
         "#include <torch/extension.h>\n"

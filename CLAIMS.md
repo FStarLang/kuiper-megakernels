@@ -9,19 +9,19 @@ replay script is not a verified CUDA parser, compiler, or reduction algorithm.
 ## Complete programs
 
 Complete proof sources: Mirage [base](proofs/mirage-program/base/) /
-[optimized](proofs/mirage-program/optimized/), LUCE
+[optimized](proofs/mirage-program/optimized/) (clean-room pipeline; see
+[below](#mirage-clean-room-pipeline-proof)), LUCE
 [base](proofs/luce-program/base/) / [optimized](proofs/luce-program/optimized/),
 and FlashMoE [base](proofs/flashmoe-program/base/) /
 [optimized](proofs/flashmoe-program/optimized/).
 Each implementation directory includes its contract and complete implementation;
-helper modules are checked too. Each program's shared specification and common
-`KPlay.Proof.Shared.*` helpers live once at `proofs/<project>-program/`.
-The shared-check case IDs remain `<project>-shared`; Mirage's additional
-shared-check implementation is in `proofs/mirage-program/shared/`.
+helper modules are checked too. Each LUCE/FlashMoE program's shared specification
+and common `KPlay.Proof.Shared.*` helpers live once at `proofs/<project>-program/`.
+The shared-check case IDs are `<project>-shared`.
 
 | Program | Covered workload and observations | Important boundary |
 | --- | --- | --- |
-| Mirage | Qwen3-0.6B; all 28 layers, prompt length 7, one decode step, hidden width 1024, vocabulary 151936. Complete prompt-plus-generated tokens and seven returned hidden rows, with the modeled caller/cache/resource chain. | Repaired/authorized retained programs; finite-score selection and bilateral numerical premises. Not arbitrary prompt/decode lengths. |
+| Mirage | Qwen3-0.6B; all 28 layers, prompt length 7, one decode step, hidden width 1024, vocabulary 151936. Prompt copied before the generated token; seven final normalized hidden rows; the token is an allowed maximum of a score row approximating the reference logits. | Composition over the generated host wiring of the reduced program; family kernels linked to the reduced CUDA by finite bitwise replay. Not arbitrary prompt/decode lengths. |
 | LUCE | Qwen3.5-0.8B; all 24 layers: 18 recurrent and six full-attention layers. Prompt lengths 1..520, decode counts 1/5/30/128, and `P+S-1<=2048`. Complete generated-token and pre-final-normalization BF16 hidden histories, recurrent/convolution/KV state, feedback, and caller ownership/lifetimes. | Repaired optimized scalar loads; stable, non-materializing inputs, including ordinary contiguous offset views. FP32 final-normalization observations are distinct from BF16 hidden/history observations. |
 | FlashMoE | Retained router only: `S=256,H=512,E=8,C=32,top_k=1`, finite BF16 tokens bounded by 32 and expert-major weights bounded by 4. Complete demand, packed indices, normalized probabilities, and survival. | No expert MLP or larger-profile claim. The exact original optimized candidate and its original-to-retained binding are unavailable. |
 
@@ -53,27 +53,7 @@ is unconditional; the optimized numerical prefix is conditional on its
 The dispatcher does not claim unconditional numerical equivalence or equal
 generated tokens.
 
-The [Mirage program review](proofs/mirage-program/KPlay.Review.fsti) exposes the
-shared mixed structural, numerical, and selection predicates for both actual
-returned execution witnesses. The base legacy-observation conversion and the
-optimized result restatement are proved equivalent to their native predicates.
-`input_models_agree` proves equality of the prompt, decode count, and every
-packed parameter. Base uses FP32 rotary/layer/cache observations; optimized uses
-BF16, with FP32 rotary metadata and scores in both. Both retain their rotary
-domain; optimized additionally requires the actual execution's attention domain
-for numerical correctness. Optimized valid-token and typed-result guarantees
-are conditional: outside the actual selector domain its last token can be `-1`.
-The review retains raw structural/provenance facts even in that case.
-Completion is `start + 229` versus `start + 256`, not a difference in decode
-count: both generate one token. Both returned hidden tensors have metadata
-`[7;1024]`; the optimized decoder's eight-row padding is internal.
-
-Mirage's shared check includes its mixed-observation/legacy compatibility
-bridge. Both complete Mirage programs and that check import one
-[canonical specification module](proofs/mirage-program/KPlay.SharedSpec.fst);
-there are no case-local copies of the complete-program specification.
-This deduplication does not change either program's contract or assumptions.
-LUCE's shared model similarly separates normalization and hidden
+LUCE's shared model separates normalization and hidden
 types. These representation changes do not identify unequal native types or
 change the real-valued equations. FlashMoE retains actual `q / (+0 + q)`
 normalization and the first capacity-eligible tokens in ascending token order;
@@ -81,7 +61,7 @@ it does not replace the computation with a literal one.
 
 ## Family contracts and their tightness proofs
 
-Each `proofs/<project>-<family>/` directory contains the single shared source
+Each LUCE/FlashMoE `proofs/<project>-<family>/` directory contains the single shared source
 used by its `base/` and `optimized/` implementations and a
 `KPlay.Proof.Tightness.fst` module. The shared source retains the exact bytes
 bound by both family acceptances.
@@ -90,10 +70,6 @@ appropriate uniqueness or complete allowed-result characterization.
 
 | Project | Family | Determined observations or retained freedom |
 | --- | --- | --- |
-| Mirage | [embedding_position](proofs/mirage-embedding_position/) | Embedding values and specified positional/rotary observations |
-| Mirage | [decoder](proofs/mirage-decoder/) | Complete hidden result and every modeled cache slot, including contents, length, and initialization |
-| Mirage | [final_norm_projection](proofs/mirage-final_norm_projection/) | Normalized values, projected scores, and the specified preserved state |
-| Mirage | [argmax](proofs/mirage-argmax/) | Prompt/output relation and allowed maxima of the same actual finite scores; uniqueness after fixing the permitted choice |
 | LUCE | [embedding](proofs/luce-embedding/) | Complete embedding vector |
 | LUCE | [recurrent_decoder](proofs/luce-recurrent_decoder/) | Hidden values and complete convolution/recurrent state |
 | LUCE | [full_attention_decoder](proofs/luce-full_attention_decoder/) | Hidden values and complete specified KV state |
@@ -107,36 +83,6 @@ Inspect `unique`, `full_contract`, `no_extra_results`, `fixed_choice_unique`,
 `fixed_choices_unique`, and `all_targets_unique` where present. Not every
 family has the same theorem shape. In particular, float-to-real approximation
 does **not** make two allowed floating-point bit patterns identical.
-
-Mirage's [embedding/position review](proofs/mirage-embedding_position/KPlay.Review.fsti)
-and [argmax review](proofs/mirage-argmax/KPlay.Review.fsti) additionally provide
-checked `base`, `optimized`, and implementation-indexed `switcher` contracts.
-Embedding compares the seven logical prompt positions, not optimized padding or
-unused rotary-table entries. Argmax exposes the different physical row strides
-and requires finite, comparison-faithful logical score representations; its
-common postcondition permits the shared specification's tie choices.
-Neither review asserts equality of results from separate executions.
-
-The [Mirage final norm/projection review](proofs/mirage-final_norm_projection/KPlay.Review.fsti)
-uses one logical input for both roles and displays its physical representation:
-packed-weight offsets and residual-plus-delta for base, versus separate gamma,
-embedding, and prepared hidden buffers for optimized. Both prove the complete
-shared normalization/projection postcondition and projection of all seven rows.
-The optimized eighth input row is outside the logical task, and padded score
-columns represent zero. This does not establish bitwise equality or preservation
-of score comparisons between executions.
-
-The [Mirage decoder review](proofs/mirage-decoder/KPlay.Review.fsti)
-uses one shared prefill input and the optimized canonical packed-weight layout
-for both wrappers; native base supports additional layouts outside this review.
-It exposes seven residual/delta rows versus eight hidden rows, both rotary
-representations, and the exact physical indices of observed keys and values.
-Canonical cache observations are unconditional. The complete shared task is
-unconditional for base and conditional on finite actual live MMA scores for
-optimized, whose eighth-row target is also explicit. The optimized receipt
-ties the returned observation and cells to the same consumed invocation.
-Cache observations are erased temporary snapshots, not returned persistent KV
-buffers. No equality of independent executions is claimed.
 
 The [LUCE argmax review](proofs/luce-argmax/KPlay.Review.fsti) preserves the
 stronger first-maximum base guarantee and proves it implies the optimized
@@ -234,10 +180,13 @@ the intended interpretation.
   proof checking establishes the supplied source theorems; hashes establish
   identity, not semantic correspondence.
 
-`support/mirage` and `support/luce` contain only changed/new source dependencies
-relative to the pinned public Kuiper package. FlashMoE layers its changes over
+`support/luce` contains only changed/new source dependencies relative to the
+default pinned public Kuiper package. `support/mirage-cleanroom` contains the
+66 `src/lib` modules that differ from or are absent in Kuiper
+`nightly-2026-11-18`; it is the library of the RESOLVE installation that
+checked the Mirage proofs. FlashMoE layers its changes over
 the LUCE support snapshot. `support/foundation` contains the five changed
-F*/Pulse source files. Unrelated sparse/GEMM patches were excluded using the
+F*/Pulse source files; it applies only to the default toolchain. Unrelated sparse/GEMM patches were excluded using the
 actual dependency closures. The historical compiler and the public replay
 compiler have the same F* commit but were built with OCaml 5.4.0 and 5.3.0,
 respectively; no historical binary-installation fingerprint is claimed.
@@ -256,13 +205,37 @@ redistributed private logs or review transcripts. Those hashes are provenance
 identifiers, not standalone proof of historical acceptance. New replay
 results are generated from the source files included here.
 
-The original Mirage optimized-decoder source returned SMT `unknown` on the
-real-division rewrite in `rms_radicand_at` during public-toolchain replay.
-[replay-adjustments.patch](replay-adjustments.patch) makes that algebraic step
-explicit with a proved helper. The original source SHA-256 remains recorded in
-`manifest.json`. This changes proof presentation only: the theorem statement,
-specification, native operations, and trusted assumptions are unchanged.
-That historical patch retains its original `KPlay.Functional.fst` path and
-module declaration. Restore that filename and declaration before applying its
-reverse diff to the renamed optimized decoder; the new review namespace is
-not part of the historical patch.
+## Mirage clean-room pipeline proof
+
+The Mirage cases come from the clean-room RESOLVE proof pipeline. Its agents
+had no access to earlier Mirage proofs, so they were proved fresh from the
+reduced CUDA and the PyTorch reference.
+One specification, [`proofs/mirage-shared/KPlay.SharedSpec.fst`](proofs/mirage-shared/KPlay.SharedSpec.fst),
+states:
+
+1. **Reference math over reals.** Each decoder layer is cut where the
+   implementation cuts it: `layer_residual`, then `rmsnorm_rows`.
+2. **`program_postcondition`.** Role independent. It states three things:
+   - the prompt is copied in front of the generated token;
+   - for every real weight vector that the BF16 weights approximate, the returned
+     hidden rows approximate `final_hidden`;
+   - some score row approximating `next_token_logits` exists, and the token is an
+     allowed maximum of that row (`argmax_choice`). That means the first NaN if the row
+     has one; otherwise any index whose value is `>=` every value.
+3. **One relation per role and family.** Each holds for all real inputs that
+   the actual inputs approximate; none is stated over the actual native values.
+
+`KPlay.Proof.Program.<Role>.refines` proves that the family relations at every
+host call of the reduced program imply `program_postcondition`. Each family's
+Kuiper implementation proves its relation.
+
+This guarantee is relational, not an error bound and not equality of base and
+optimized outputs. It has no tightness or review cases.
+
+It is conditional on the trusted assumptions listed prominently in the
+[README](README.md#trusted-assumptions-mirage):
+- the BF16 widening and literal laws added by RESOLVE;
+- the open Kuiper PR #181 `bits_spec` law;
+- the generated host wiring;
+- the finite bitwise replays that connect extracted kernels, reduced CUDA, and
+  the original megakernel.
