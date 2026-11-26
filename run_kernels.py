@@ -59,7 +59,7 @@ def flashmoe_smoke(torch, module, device):
     for fixture in ("ties-and-overflow", "balanced-routing"):
         # Contiguous offset-one BF16 views exercise the stated native input scope.
         tokens = torch.zeros(256 * 512 + 1, dtype=torch.bfloat16, device=device)[1:].view(256, 512)
-        weights = torch.zeros(8 * 512 + 1, dtype=torch.bfloat16, device=device)[1:].view(8, 512)
+        weights = torch.zeros(512 * 8 + 1, dtype=torch.bfloat16, device=device)[1:].view(512, 8)
         selected = torch.zeros(256, dtype=torch.int64, device=device)
         if fixture == "balanced-routing":
             selected = torch.arange(256, device=device) % 8

@@ -1,8 +1,8 @@
 # Kuiper megakernel proof artifacts
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
-program refinements, 24 family refinements, three shared-specification checks,
-and eight family-tightness proofs**, plus eleven checked contract reviews.
+program refinements, 26 family refinements, three shared-specification checks,
+and five family-tightness proofs**, plus eight checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -13,7 +13,9 @@ The support-library and CUDA payloads and historical timing records are
 unchanged. Proofs are now grouped by kernel with one shared specification,
 as described below. See [NOTICE.md](NOTICE.md) for attribution and licensing
 boundaries.
-FlashMoE still has an explicitly unresolved original-candidate provenance gap.
+On this branch the Mirage and FlashMoE artifacts are replaced by proofs from
+the clean-room RESOLVE proof pipeline (sections below); LUCE keeps its
+migrated artifacts.
 
 ## Mirage: clean-room RESOLVE pipeline proof
 
@@ -114,6 +116,140 @@ These cases use profile `mirage-cleanroom`. That profile is pinned to Kuiper
 > The guarantee is relational (`%~`), not an error bound or bitwise equality
 > between roles. Optimized and base may choose different maximal tokens on ties.
 
+## FlashMoE: clean-room RESOLVE pipeline proof
+
+The FlashMoE artifacts are likewise replaced by a proof from the clean-room
+RESOLVE proof pipeline. Its agents saw only the reduced CUDA, the PyTorch
+reference and the Kuiper library, not the former FlashMoE proofs. The subject
+is FlashMoE's capacity-pruned top-1 **router** in the smoke profile: BF16
+tokens `[256,512]` and router weights `[512,8]`, 8 experts, capacity 32. It
+returns the expert demand `[8]` (I32), the kept token indices `[8,32]` (I64),
+their combine probabilities `[8,32]` (F32) and the survival mask `[256,8]`
+(I32). Both roles are proved, and the result passed RESOLVE's normal final
+check (DTester and Kuiper both approved). The expert MLPs are not covered.
+
+> [!IMPORTANT]
+> ### What the optimized original is
+>
+> The optimized original is **FlashMoE with
+> [PR #32](https://github.com/osayamenja/FlashMoE/pull/32) applied**
+> (deterministic router; open at the time of writing):
+> `tyler-utah/FlashMoE@96ad271` = upstream `osayamenja/FlashMoE@9cc0c32` + PR #32.
+> Upstream reserves capacity slots in atomic arrival order, so its routing
+> outputs are not deterministic. PR #32 assigns capacity in input-token order.
+> The FlashMoE gate takes its weights as **`[E,H]`**; the case harness passes
+> `router_weights.t().contiguous()`. The reference and both reduced programs
+> take the logical `[H,E] = [512,8]` layout, and the reduced optimized program
+> folds the transpose into its indexing
+> ([`reference/flashmoe/LAYOUT.md`](reference/flashmoe/LAYOUT.md)).
+> See `sources.json`.
+
+Base and optimized decompose the router into **different families**, so
+family directories exist only for the roles that use them:
+
+| Role | Families (host calls per run) |
+| --- | --- |
+| base | `projection_softmax` (1), then per token `argmax` and `capacity_routing` with I64 prefix counts (256 each), then `expert_demand` (1, I64→I32) |
+| optimized | tensor-core `projection` (1), then per token `softmax`, `argmax` and `routing` with I32 counts (256 each) |
+
+| Case | What F* checks |
+| --- | --- |
+| `flashmoe-shared` | [`KPlay.SharedSpec`](proofs/flashmoe-shared/KPlay.SharedSpec.fst): exact real reference math (scores `x @ w`, softmax, first-maximum top-1, `p / p` combine weight, token-order capacity), the role-independent `program_postcondition`, and one relation per role and family |
+| `flashmoe-{projection_softmax,argmax,capacity_routing,expert_demand}-base`, `flashmoe-{projection,softmax,argmax,routing}-optimized` | Each Kuiper/Pulse implementation in `KPlay.Functional` ensures its family relation, for **all** reals that the inputs approximate |
+| `flashmoe-program-{base,optimized}` | `KPlay.Proof.Program.<Role>.refines`: the family relations at every host call imply `program_postcondition`. There exist softmax rows approximating the real softmax of `x @ w`; each token's expert is an allowed first maximum of its row; every kept token's combine weight approximates `p / p`; and demand, indices, probabilities and survival are **exactly** the token-order capacity routing of those selections |
+| `flashmoe-program-review` | [`KPlay.Review`](proofs/flashmoe-program/KPlay.Review.fsti): on the same inputs, **both** roles' outputs satisfy the same `program_postcondition` |
+
+Selection is over the native rows actually computed. The two roles may
+therefore pick different experts where real-valued scores are close, and their
+outputs need not be equal. `%~` is read as for Mirage above.
+
+These cases use profile `flashmoe-cleanroom`, pinned to the same Kuiper
+`nightly-2026-11-18` release as Mirage. RESOLVE's FlashMoE installation was
+built from that release (`archive_sha256` matches the pin); its library
+overlay is `support/mirage-cleanroom/` plus `Kuiper.KPlay.CpuExp`.
+
+> [!WARNING]
+> ### Trusted assumptions (FlashMoE)
+>
+> All proofs are F*. In addition to Kuiper's IEEE/CUDA model and the shared
+> overlay laws listed under [Mirage](#trusted-assumptions-mirage) (FlashMoE
+> uses the same library plus one module), the FlashMoE guarantee relies on the
+> following, recorded in RESOLVE's accepted specification (`M.json`, `trust`):
+>
+> - **`cpu_exp_f32_approx`** (`Kuiper.KPlay.CpuExp`, new,
+>   [`support/flashmoe-cleanroom/`](support/flashmoe-cleanroom/)): **TRUSTED,
+>   unproved**. `x %~ r ==> cpu_exp_f32 x %~ exp r`. `cpu_exp_f32` is an
+>   opaque Kuiper routine (`include/kplay_cpu_exp.cuh`), the scalar CUDA form
+>   of the AVX512 SLEEF `expf` used by PyTorch's CPU softmax, returning +0.0
+>   below −104. The base kernel's `softmax_exp` is source-identical to it
+>   (bit-identical), and `base_projection_softmax_relation` is proved with this
+>   law. It plays the role that Kuiper's trusted CUDA `expf` law plays for optimized.
+> - The base `int32_t(prefix[e])` demand conversion is exact for
+>   `0 <= prefix[e] <= 256`; this premise is discharged in the proof.
+> - **Not proved:** stability of the top-1 choice against rounding, i.e. that
+>   the native argmax equals the argmax of the real reference softmax. The
+>   postcondition selects over the native rows, which approximate the real softmax.
+> - Trusted Kuiper library laws (BF16→F32 cast, literal approximation, float
+>   bit specifications, fast-math intrinsics). `%~` is qualitative; there is no error bound.
+>
+> Outside F*, the guarantee also trusts:
+> - the generated host wiring `KPlay.Proof.Wiring.<Role>`, a mechanical
+>   translation of `proofs/flashmoe-program/<role>/plan.json`;
+> - the finite bitwise links from the extracted family kernels to the reduced
+>   CUDA, and from the reduced programs to the original sources. The latter is
+>   RESOLVE's same-role bitwise translation check on 8 samples
+>   (`universal_original_source_equivalence: false`), not an equivalence theorem.
+
+**Testing versus proof.** RESOLVE tested on **8 input samples**, one per
+category V0–V7 of the case's input generator. On each, the candidate was
+bit-equivalent to the original program. DTester then ran each sample 8 times:
+4 baseline runs plus 2 runs under each of two perturbations (unstructured
+scoped delays on global and on shared memory, 5000 cycles, p=0.8). All runs
+were **comparable (8/8 per sample)**, with no result mismatches, races or crashes.
+DTester reported 0 scope-instrumented sites, and there was no count/policy
+prepass and no structured scope, so this is weak evidence about schedules.
+Testing covers only these inputs and schedules. The proof covers **every**
+input in the stated domain (finite BF16, |tokens| ≤ 32, |weights| ≤ 4) for
+the reduced programs, under the trusted assumptions above. Neither covers the
+full-size FlashMoE profile or the expert computation.
+
+### FlashMoE files
+
+| Path | Contents |
+| --- | --- |
+| `reference/flashmoe/` | The PyTorch reference that `KPlay.SharedSpec` cites: `base.py` (`reference_route`), `input-domain.txt` and `LAYOUT.md`. [`provenance.json`](reference/flashmoe/provenance.json) lists their hashes. `base.py` imports the RESOLVE case adapter only for its profile; `flashmoe_check.py` stubs that import |
+| `kernels/flashmoe-program-<role>.cu` | The reduced complete program for each role |
+| `kernels/flashmoe-<family>-<role>.cu` | The reduced family kernels of that role |
+| `kernels/flashmoe-extracted/<family>-<role>/` | Kuiper's extraction of each verified implementation (`KPlay_Functional.{cu,h}`) plus a PyTorch binding (`binding.cu`). `include/` holds the four RESOLVE install headers that differ from or are absent in the release, including `kplay_cpu_exp.cuh` |
+| `proofs/flashmoe-program/<role>/plan.json` | The recorded host call plan (8 samples) behind `KPlay.Proof.Wiring.<Role>`; `accepted_cuda_sha256` binds it to the program CUDA |
+| `support/flashmoe-cleanroom/` | `Kuiper.KPlay.CpuExp.{fst,fsti}`. Profile `flashmoe-cleanroom` = `support/mirage-cleanroom` + this directory; together they are exactly the 68 `src/lib` modules of RESOLVE's install that differ from Kuiper `nightly-2026-11-18` |
+
+### Observing the FlashMoE kernels (GPU)
+
+[`flashmoe_check.py`](flashmoe_check.py) does for FlashMoE what
+`mirage_check.py` does for Mirage. It replays each role's plan call by call,
+running the reduced and the extracted family kernel on the same arguments and
+requiring bitwise equality. It then requires that the composition reproduce the
+complete program bitwise. Finally it compares the program outputs with
+`reference_route`.
+
+```bash
+.venv-gpu/bin/python flashmoe_check.py --seed 0 --seed 1 --seed 2
+```
+
+Results from 3 seeds on one H100 PCIe are in
+[benchmarks/flashmoe-plan-replay.json](benchmarks/flashmoe-plan-replay.json).
+For each seed, every recorded plan call was replayed against the extracted
+Kuiper kernel. Base has 514 calls (projection_softmax 1, argmax 256,
+capacity_routing 256, expert_demand 1) and optimized has 769 (projection 1,
+softmax 256, argmax 256, routing 256). Every call was bitwise equal. The
+composed extracted calls reproduced each complete program's outputs exactly.
+Both roles also matched the reference: same expert demand, token indices and
+survival, and a maximum absolute probability difference of 0.0. With the
+check's input generator (modelled on test category V0), all 256 tokens are
+routed to a single expert in each seed. These are finite observations, not
+proofs.
+
 ## Quick start (CPU only)
 
 Use **Linux x86_64 and Python 3.12+**; Ubuntu 24.04 is the tested environment.
@@ -148,7 +284,7 @@ Use a suitably large host, or select `tightness`/`shared`.
 python3 replay.py list
 python3 replay.py verify --kind tightness --jobs 2
 python3 replay.py verify --kind shared --jobs 2
-python3 replay.py verify --case flashmoe-program-base --jobs 4
+python3 replay.py verify --case 'flashmoe-*' --jobs 8
 python3 replay.py verify --kind family --jobs 4
 python3 replay.py verify --kind program --jobs 4
 python3 replay.py verify --jobs 4
@@ -160,8 +296,8 @@ interfaces and implementation bodies. Dependency checking is timed separately;
 download and extraction are not included. Subsequent invocations reuse that
 preparation, **not example proof results**. Every requested `.fst` and `.fsti`
 is checked afresh with
-`--force --cache_off --admit_smt_queries false`. LUCE and FlashMoE use F* commit
-`da21c3925bf09a0a1d9e7558170be82da5edb37c` and Z3 4.13.3. Mirage uses the
+`--force --cache_off --admit_smt_queries false`. LUCE uses F* commit
+`da21c3925bf09a0a1d9e7558170be82da5edb37c` and Z3 4.13.3. Mirage and FlashMoE use the
 `kuiper-nightly-2026-11-18` pin (F* `049c07a0d9902cd39bf45a47a736be891297b79f`,
 Z3 5.3.0). The manifest's `toolchains` map assigns profiles to pins, and every
 other profile uses `default`.
@@ -184,7 +320,7 @@ Each kernel has one directory containing its shared specification, its
 family-tightness proof where present, and separate implementations. For example:
 
 ```text
-proofs/flashmoe-argmax/
+proofs/luce-argmax/
   KPlay.SharedSpec.fst
   KPlay.Proof.Tightness.fst
   KPlay.Review.{fst,fsti}
@@ -192,16 +328,17 @@ proofs/flashmoe-argmax/
   optimized/KPlay.Optimized.Functional.{fst,fsti}
 ```
 
-The LUCE and FlashMoE programs use the same layout under
-`proofs/<project>-program/`, without whole-program tightness proofs.
-Their common `KPlay.Proof.Shared.*` helper modules also live at the group root.
-Mirage instead uses one specification for all its cases,
-`proofs/mirage-shared/KPlay.SharedSpec.fst`, and `proofs/mirage-<family>/<role>/`.
+The LUCE program uses the same layout under `proofs/luce-program/`, without a
+whole-program tightness proof. Its common `KPlay.Proof.Shared.*` helper modules
+also live at the group root. Mirage and FlashMoE instead use one specification
+for all their cases, `proofs/<project>-shared/KPlay.SharedSpec.fst`, and
+`proofs/<project>-<family>/<role>/`; FlashMoE family directories exist only
+for the roles that have that family.
 Every role imports the group's single `KPlay.SharedSpec` module. The manifest
 lists the common sources as roots of each case, and the runner includes their
 directory and checks them afresh with each selected case.
 
-The family specifications and the LUCE/FlashMoE program specifications were
+The LUCE family and program specifications were
 already byte-identical across roles. Only paths and duplicate files changed;
 theorem statements, numerical assumptions, and implementation bodies are unchanged.
 Existing case IDs and replay commands are unchanged.
@@ -222,40 +359,27 @@ python3 replay.py verify --case luce-argmax-tightness --jobs 2 --work .work/retr
 
 ## Review the base/optimized correspondence
 
-Start with [`proofs/flashmoe-program/KPlay.Review.fsti`](proofs/flashmoe-program/KPlay.Review.fsti).
-It exposes the common caller precondition, the complete success/failure
-postcondition, the completion-epoch definition, and the `base`, `optimized`,
-and the implementation-indexed, dispatch-only `switcher` definition. The corresponding `.fst` keeps the adaptation
-proofs and wrappers that call the verified implementations directly. Their
-signatures are identical except for `BaseRole` versus `OptimizedRole`: completion
-is after one launch versus three. `input_models_agree` proves the input adapters
-identical; `allocation_failure_contracts_agree` and `returned_contracts_agree`
-prove postcondition equality, with completion epochs aligned for the latter.
-These are equalities of predicates on the same result, not of two executions'
-results. Both wrappers preserve the caller's input references,
-input cells and frame; successful returned cells satisfy the same
-`Shared.task_relation`. This is common-task refinement, not output equality.
-`switcher i` dispatches to the chosen implementation under that same precondition
-and proves `after_call i`; compatibility is checked at the dispatch site.
+The Mirage and FlashMoE reviews (`mirage-program-review`,
+`flashmoe-program-review`) are described in their sections above: both roles
+satisfy the identical `program_postcondition` on the same inputs. The LUCE
+reviews below are migrated artifacts with role-indexed dispatchers.
 
-```sh
-python3 replay.py verify --case flashmoe-program-review --jobs 8
-```
-
-The [LUCE program review](proofs/luce-program/KPlay.Review.fsti) uses the same
-dispatcher style. It proves equality of the packed input views and exposes the
+Start with the [LUCE program review](proofs/luce-program/KPlay.Review.fsti).
+It exposes the common caller precondition, the complete postcondition, and the
+`base`, `optimized` and implementation-indexed, dispatch-only `switcher`
+definitions; the `.fst` keeps the adaptation proofs. It proves equality of the packed input views and exposes the
 same complete safety/history postcondition for both implementations. Base numerical
 correctness is unconditional; optimized numerical correctness retains its
 family-dependency and numerical-scope premises on the actual returned execution.
 Both enqueue one completion epoch and preserve allocation-failure behavior.
 
-The [review catalog](proofs/REVIEW-CATALOG.md) compares the ten LUCE and FlashMoE groups,
+The [review catalog](proofs/REVIEW-CATALOG.md) compares the six LUCE groups,
 assesses the significance of each contract difference, and distinguishes
 exact functionality, allowed choices, and conditional/relative numerical
 tightness. Each interface includes a more detailed comment at its visible
 `switcher` implementation.
 
-All eight family reviews use the same interface-and-dispatcher style:
+All five LUCE family reviews use the same interface-and-dispatcher style:
 
 | Review interface | Explicit representation difference | Common guarantee |
 | --- | --- | --- |
@@ -264,9 +388,6 @@ All eight family reviews use the same interface-and-dispatcher style:
 | [LUCE embedding](proofs/luce-embedding/KPlay.Review.fsti) | Base additionally returns rotary data and initial recurrent/convolution state | Identical exact BF16 embedding-row postcondition; auxiliary outputs and initial-token alias ownership are explicit |
 | [LUCE recurrent decoder](proofs/luce-recurrent_decoder/KPlay.Review.fsti) | BF16 versus FP32 convolution state, transposed recurrent axes, and optimized allocation-free initial state | Same complete shared decoder/cache transition under explicit input/output representations |
 | [LUCE full-attention decoder](proofs/luce-full_attention_decoder/KPlay.Review.fsti) | Compact time-major versus full head-major caches; external versus internal rotary computation | Complete shared decoder/cache transition; optimized numerical guarantee requires finite actual live scores, while physical cache retention is unconditional |
-| [FlashMoE argmax](proofs/flashmoe-argmax/KPlay.Review.fsti) | Base copies one row and routing frame; optimized selects a batch and returns gathered best probabilities | Identical stable-maximum/gather relation; explicit lemma lifts base row contracts to the batched shared postcondition |
-| [FlashMoE projection/softmax](proofs/flashmoe-projection_softmax/KPlay.Review.fsti) | One row plus routing-frame initialization/copy versus a complete profile matrix | Same projection/softmax target for every returned cell; base batch-lifting proof and optimized guarantee for every represented input model |
-| [FlashMoE normalization/capacity](proofs/flashmoe-normalization_capacity/KPlay.Review.fsti) | One prefix step with I64 counts versus complete routing with I32 demand; base emits eight I32 demand cells only at token 255 | Same represented shared prefix state, complete route postcondition on completion, and an explicit common full-route refinement lemma |
 
 Each `*-review` case checks the review **and all roots of both implementation cases**,
 including their bodies, not just their interfaces. The manifest validator rejects
@@ -310,15 +431,16 @@ python -m pip install -r requirements-gpu.txt
 python run_kernels.py --project all --device 0 --jobs 2
 python run_kernels.py --project all --kind family --compile-only --jobs 2
 python mirage_check.py   # Mirage plan replay and extracted-kernel links (see above)
+python flashmoe_check.py # FlashMoE plan replay, extracted-kernel links, reference
 ```
 
 The smoke runner builds **all six complete reduced programs** and checks their
 complete outputs on synthetic fixtures, including FlashMoE ties/capacity and
 LUCE's offset-one input repair. It does not demand identical tokens between
 implementations when their specifications permit different choices.
-The 24 family entry points can be compiled independently; execution requires
+The 26 family entry points can be compiled independently; execution requires
 their documented caller state, rather than arbitrary zero-filled arguments.
-Apart from `mirage_check.py`, these are reduced-CUDA checks, **not new extraction
+Apart from `mirage_check.py` and `flashmoe_check.py`, these are reduced-CUDA checks, **not new extraction
 of the Pulse witnesses** or replays of the original megakernels. No weights or tensors are downloaded.
 
 Full upstream pins, kernel/reference entry paths, model identities, and
@@ -339,7 +461,7 @@ Native extension builds may be reused on subsequent invocations; select a new
 | Original workload and task | Pinned upstream references and explicit mathematical specifications | Reference/task interpretation was reviewed, not proved by checking a Git hash |
 | Reduction and decomposition | Exact complete and family CUDA sources | Original/reduced correspondence is historical finite/reviewed evidence, not a universal equivalence theorem |
 | Specification and implementation | Shared contracts, interfaces, complete Pulse implementations and helper proofs | F* checks refinement under the stated numerical and native contracts |
-| Tightness | Eight constructive LUCE/FlashMoE family-level proofs; Mirage has none | Existence and full-observation determination, or the stated choice/approximation policy; not IEEE uniqueness |
+| Tightness | Five constructive LUCE family-level proofs; Mirage and FlashMoE have none | Existence and full-observation determination, or the stated choice/approximation policy; not IEEE uniqueness |
 | Replay | Small standalone proof and CUDA runners | No discovery, agent orchestration, fuzzing pipeline, or DTester implementation |
 
 This repository is independent of Kuiper's source tree: most cases reuse module

@@ -9,21 +9,22 @@ replay script is not a verified CUDA parser, compiler, or reduction algorithm.
 ## Complete programs
 
 Complete proof sources: Mirage [base](proofs/mirage-program/base/) /
-[optimized](proofs/mirage-program/optimized/) (clean-room pipeline; see
-[below](#mirage-clean-room-pipeline-proof)), LUCE
-[base](proofs/luce-program/base/) / [optimized](proofs/luce-program/optimized/),
-and FlashMoE [base](proofs/flashmoe-program/base/) /
-[optimized](proofs/flashmoe-program/optimized/).
+[optimized](proofs/mirage-program/optimized/) and FlashMoE
+[base](proofs/flashmoe-program/base/) / [optimized](proofs/flashmoe-program/optimized/)
+(clean-room pipeline; see [Mirage](#mirage-clean-room-pipeline-proof) and
+[FlashMoE](#flashmoe-clean-room-pipeline-proof) below), and LUCE
+[base](proofs/luce-program/base/) / [optimized](proofs/luce-program/optimized/).
 Each implementation directory includes its contract and complete implementation;
-helper modules are checked too. Each LUCE/FlashMoE program's shared specification
-and common `KPlay.Proof.Shared.*` helpers live once at `proofs/<project>-program/`.
+helper modules are checked too. The LUCE program's shared specification
+and common `KPlay.Proof.Shared.*` helpers live once at `proofs/luce-program/`;
+Mirage and FlashMoE each have one `proofs/<project>-shared/KPlay.SharedSpec.fst`.
 The shared-check case IDs are `<project>-shared`.
 
 | Program | Covered workload and observations | Important boundary |
 | --- | --- | --- |
 | Mirage | Qwen3-0.6B; all 28 layers, one forward pass over a seven-token prompt plus the greedy next token, hidden width 1024, vocabulary 151936. Prompt copied before the generated token; seven final normalized hidden rows; the token is an allowed maximum of a score row approximating the reference logits. | Composition over the generated host wiring of the reduced program; family kernels linked to the reduced CUDA by finite bitwise replay. Not arbitrary prompt/decode lengths. |
 | LUCE | Qwen3.5-0.8B; all 24 layers: 18 recurrent and six full-attention layers. Prompt lengths 1..520, decode counts 1/5/30/128, and `P+S-1<=2048`. Complete generated-token and pre-final-normalization BF16 hidden histories, recurrent/convolution/KV state, feedback, and caller ownership/lifetimes. | Repaired optimized scalar loads; stable, non-materializing inputs, including ordinary contiguous offset views. FP32 final-normalization observations are distinct from BF16 hidden/history observations. |
-| FlashMoE | Retained router only: `S=256,H=512,E=8,C=32,top_k=1`, finite BF16 tokens bounded by 32 and expert-major weights bounded by 4. Complete demand, packed indices, normalized probabilities, and survival. | No expert MLP or larger-profile claim. The exact original optimized candidate and its original-to-retained binding are unavailable. |
+| FlashMoE | Capacity-pruned top-1 router only, smoke profile `S=256,H=512,E=8,C=32,top_k=1`; finite BF16 tokens bounded by 32 and `[H,E]` weights bounded by 4. Complete demand, kept token indices, combine probabilities and survival: exact token-order capacity routing of first-maximum selections over softmax rows that approximate the real softmax of `x @ w`. | Optimized original is FlashMoE **with PR #32** (deterministic router); gate weights `[E,H]`. Trusts `cpu_exp_f32_approx`; top-1 stability against rounding not proved. Composition over generated host wiring; links to reduced/original CUDA are finite bitwise checks. No expert MLP or larger profile. |
 
 The base and optimized roles refine a common **relative algebraic task**.
 This is not bitwise equivalence, an IEEE error bound, proof of numerical
@@ -31,16 +32,8 @@ stability, or a guarantee of equal selected tokens/experts. Each execution
 follows its own permitted numerical observations and selection history.
 Satisfaction of the numerical premises is not newly established by replay.
 
-FlashMoE's [`KPlay.Review.fsti`](proofs/flashmoe-program/KPlay.Review.fsti) is a
-compact checked review surface for this claim. Its `base` and `optimized` functions
-call the distinctly named verified entry modules, with a common precondition and
-postcondition parameterized only by the one-versus-three completion epochs.
-The corresponding `.fst` proves the adapters from the original role-specific postconditions
-to that common form. Allocation and result-construction failures, output
-ownership, input preservation and pending frame recovery remain explicit.
-The review does not equate native numerical observations or prove the two
-executions choose the same experts. The `flashmoe-program-review` case rechecks
-both implementation bodies and their helpers along with the review.
+The Mirage and FlashMoE `KPlay.Review` modules state that both roles satisfy
+the identical role-independent `program_postcondition` on the same inputs.
 
 The [LUCE program review](proofs/luce-program/KPlay.Review.fsti) proves that both
 packing maps describe the same 752393024 BF16 weights, parameter addresses and
@@ -55,13 +48,11 @@ generated tokens.
 
 LUCE's shared model separates normalization and hidden
 types. These representation changes do not identify unequal native types or
-change the real-valued equations. FlashMoE retains actual `q / (+0 + q)`
-normalization and the first capacity-eligible tokens in ascending token order;
-it does not replace the computation with a literal one.
+change the real-valued equations.
 
 ## Family contracts and their tightness proofs
 
-Each LUCE/FlashMoE `proofs/<project>-<family>/` directory contains the single shared source
+Each LUCE `proofs/luce-<family>/` directory contains the single shared source
 used by its `base/` and `optimized/` implementations and a
 `KPlay.Proof.Tightness.fst` module. The shared source retains the exact bytes
 bound by both family acceptances.
@@ -75,9 +66,6 @@ appropriate uniqueness or complete allowed-result characterization.
 | LUCE | [full_attention_decoder](proofs/luce-full_attention_decoder/) | Hidden values and complete specified KV state |
 | LUCE | [final_norm_projection](proofs/luce-final_norm_projection/) | Mathematical normalization/projection targets and preserved state; native values remain subject to the declared relation |
 | LUCE | [argmax](proofs/luce-argmax/) | Complete output/history relation; NaN priority, infinities, and authorized any-maximum ties remain. Fixing choices determines the state history |
-| FlashMoE | [projection_softmax](proofs/flashmoe-projection_softmax/) | Complete mathematical projection/softmax targets under the declared native observation relation |
-| FlashMoE | [argmax](proofs/flashmoe-argmax/) | Selected IDs and gathered probabilities, including the native tie rule |
-| FlashMoE | [normalization_capacity](proofs/flashmoe-normalization_capacity/) | Exact demand, owners/indices and survival; complete mathematical probability targets with the existing approximation freedom |
 
 Inspect `unique`, `full_contract`, `no_extra_results`, `fixed_choice_unique`,
 `fixed_choices_unique`, and `all_targets_unique` where present. Not every
@@ -124,38 +112,6 @@ assumed or discharged by the dispatcher. Physical cache retention and ownership
 are unconditional. The review does not claim unconditional equivalence of the
 native numerical contracts or equality of independent executions.
 
-The [FlashMoE argmax review](proofs/flashmoe-argmax/KPlay.Review.fsti) gives
-both entry points the same stable-maximum/gather postcondition on finite FP32
-probabilities in [0,1]. It exposes that a base call processes one row and copies
-its routing frame, whereas an optimized call processes a batch and materializes
-the gathered probabilities. `base_batch_refines` proves that the row contracts
-compose into the batched shared postcondition; it is not a new batch executor.
-The dispatcher can choose either implementation for one row, and only optimized
-for a larger batch. All frame copies and actual best-buffer cells remain explicit.
-
-The [FlashMoE projection/softmax review](proofs/flashmoe-projection_softmax/KPlay.Review.fsti)
-gives both roles the same row-wise real projection/softmax target, related to
-every actual returned FP32 probability. Base processes one row and initializes
-or copies the routing frame, extending survival by a zero row; optimized
-processes the complete profile matrix without those auxiliary buffers.
-`base_batch_refines` connects collected base-row guarantees to the complete
-shared postcondition. The optimized postcondition additionally covers every
-represented input model, not just the canonical input denotation.
-Dispatch selects a role-specific call shape, not two interchangeable batch
-executors, and does not assert equality of floating-point outputs.
-
-The [FlashMoE normalization/capacity review](proofs/flashmoe-normalization_capacity/KPlay.Review.fsti)
-exposes one base prefix transition versus complete optimized routing. Both use
-the same native selection boundary, with exact selected-row/gather correspondence.
-The common postcondition represents the complete shared state at the processed
-prefix and the full route on completion; `completed_refines_shared` makes that
-connection explicit for either representation. Base counts are I64, and its
-separate I32 demand buffer has eight cells only at token 255, including in Full.
-Thus final Full demand is a logical view of computed base counts, not a returned
-16-cell I32 buffer. Optimized returns all expert demands as actual I32 cells.
-Owners, normalized weights, unused zero slots, and every survival cell remain
-connected to the shared specification.
-
 These are **family-level** tightness proofs. They are not additional
 whole-program tightness certificates, task-correctness proofs, hardware
 models, or native termination proofs. A determinate but wrong task could still
@@ -184,8 +140,9 @@ the intended interpretation.
 default pinned public Kuiper package. `support/mirage-cleanroom` contains the
 66 `src/lib` modules that differ from or are absent in Kuiper
 `nightly-2026-11-18`; it is the library of the RESOLVE installation that
-checked the Mirage proofs. FlashMoE layers its changes over
-the LUCE support snapshot. `support/foundation` contains the five changed
+checked the Mirage proofs. `support/flashmoe-cleanroom` adds the two
+`Kuiper.KPlay.CpuExp` modules; with `support/mirage-cleanroom` it is exactly the
+library of the RESOLVE installation that checked the FlashMoE proofs. `support/foundation` contains the five changed
 F*/Pulse source files; it applies only to the default toolchain. Unrelated sparse/GEMM patches were excluded using the
 actual dependency closures. The historical compiler and the public replay
 compiler have the same F* commit but were built with OCaml 5.4.0 and 5.3.0,
@@ -195,7 +152,7 @@ respectively; no historical binary-installation fingerprint is claimed.
 
 The complete-program smoke tests use synthetic, non-secret inputs. FlashMoE
 checks all four outputs for both a tie/overflow case and a balanced-routing
-case. Mirage and LUCE check complete token/hidden output shapes, token range,
+case (weights in the `[512,8]` layout). Mirage and LUCE check complete token/hidden output shapes, token range,
 zero-weight hidden results, and input preservation; LUCE also uses offset-one
 BF16 weights. These are finite diagnostics, not the universal theorem.
 Compilation of a family entry point is not execution or numerical validation.
@@ -252,3 +209,64 @@ It is conditional on the trusted assumptions listed prominently in the
 - the generated host wiring (a translation of `plan.json`);
 - the finite bitwise replays that connect extracted kernels, reduced CUDA, and
   the original megakernel.
+
+## FlashMoE clean-room pipeline proof
+
+The FlashMoE cases also come from the clean-room RESOLVE proof pipeline; its
+agents had no access to the former FlashMoE proofs. The subject is the
+capacity-pruned top-1 router. **The optimized original is FlashMoE with
+[PR #32](https://github.com/osayamenja/FlashMoE/pull/32) applied**
+(`tyler-utah/FlashMoE@96ad271` = `osayamenja/FlashMoE@9cc0c32` + PR #32),
+which makes capacity assignment deterministic in input-token order. Its gate
+takes weights as `[E,H]`; the reference and both reduced programs take the
+logical `[H,E] = [512,8]` layout. One specification,
+[`proofs/flashmoe-shared/KPlay.SharedSpec.fst`](proofs/flashmoe-shared/KPlay.SharedSpec.fst),
+states:
+
+1. **Reference math over reals** (`reference/flashmoe/base.py` `reference_route`):
+   scores `x @ w`, row softmax, first-maximum top-1, the `p / p` combine
+   weight, and capacity in input-token order as closed forms (`count_upto`,
+   `rank`, `kept`, `slot_token`).
+2. **`program_postcondition`.** Role independent. For inputs of the stated
+   lengths there exist softmax rows, selections and combine weights such that:
+   - every row approximates, for all reals the inputs approximate, the real
+     softmax of that row of `x @ w`;
+   - each selection is an allowed first maximum of its native row
+     (`allowed_choice`);
+   - each kept token's combine weight approximates `p / p` of its selected probability;
+   - demand, token indices, probabilities and survival are **exactly** the
+     token-order capacity routing of those selections (`routing_state`,
+     `survival_rows`), with unfilled slots `-1` / `+0.0`.
+3. **One relation per role and family.** The roles use different families:
+   base `projection_softmax`, `argmax`, `capacity_routing` (I64 counts),
+   `expert_demand`; optimized `projection`, `softmax`, `argmax`, `routing`
+   (I32 counts).
+
+`KPlay.Proof.Program.<Role>.refines` proves that the family relations at every
+host call imply `program_postcondition`; each family's Kuiper implementation
+proves its relation. `KPlay.Review` (case `flashmoe-program-review`) checks
+that both roles, on the same inputs, satisfy this same postcondition. There
+are no tightness cases.
+
+The guarantee is relational. Selections are over the native rows each role
+computes, so base and optimized may select different experts where scores are
+close. The routing outputs are then exact functions of those selections.
+
+It is conditional on the trusted assumptions listed in the
+[README](README.md#trusted-assumptions-flashmoe):
+- **`cpu_exp_f32_approx`**, the single trusted law of the opaque
+  `Kuiper.KPlay.CpuExp.cpu_exp_f32` (`support/flashmoe-cleanroom/`). The base
+  `softmax_exp` is bit-identical to this routine (the scalar CUDA form of
+  PyTorch's CPU SLEEF AVX512 `expf`);
+- the Kuiper library laws of `support/mirage-cleanroom` (BF16→F32 cast,
+  literal approximation, float bit specifications, fast-math intrinsics);
+- the generated host wiring (a translation of `plan.json`);
+- the finite bitwise links between extracted kernels, reduced CUDA and the
+  original programs. RESOLVE's original-to-reduced link is a same-role bitwise
+  translation check on 8 samples, not a universal equivalence.
+
+Stability of the top-1 choice against rounding (native argmax = real argmax)
+is **not** proved; it is recorded as a separate obligation. RESOLVE's testing
+(8 samples, DTester 8/8 comparable runs per sample under unstructured
+global/shared delays) is finite evidence about the original and reduced
+programs; the proof is about the reduced programs on every input in the domain.

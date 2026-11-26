@@ -1,0 +1,607 @@
+{
+  "cache_policy": "force/cache_off for every module; setup support checks recorded separately",
+  "cases": [
+    {
+      "id": "flashmoe-shared",
+      "jobs": 16,
+      "kind": "shared",
+      "modules": [
+        {
+          "max_rss_kib": 730824,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.7413109999999999,
+          "user_seconds": 16.858935,
+          "wall_seconds": 17.575640765950084
+        }
+      ],
+      "requested_modules": 1,
+      "status": "passed",
+      "wall_seconds": 17.63286078092642
+    },
+    {
+      "id": "flashmoe-argmax-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 687812,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "220e338ba187d23ce8c154d1d1296178475f7c605b5a9b7dfb55e0b144b3fab9",
+          "system_seconds": 0.386993,
+          "user_seconds": 15.442741,
+          "wall_seconds": 15.830735732801259
+        },
+        {
+          "max_rss_kib": 769732,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "a87b8443911cbc8ec127b2a0d80fe56aa437a2a554871329567b31adf71426ca",
+          "system_seconds": 0.48614799999999997,
+          "user_seconds": 17.630151,
+          "wall_seconds": 18.10504042287357
+        },
+        {
+          "max_rss_kib": 729796,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.7138559999999999,
+          "user_seconds": 16.765103,
+          "wall_seconds": 17.4546778711956
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 18.16340349521488
+    },
+    {
+      "id": "flashmoe-capacity_routing-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 692932,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "7766e8fae7c5216c76466d2dec01600e7651e2cb07d2af0892094940f36f52a8",
+          "system_seconds": 0.366987,
+          "user_seconds": 15.842479,
+          "wall_seconds": 16.210384557023644
+        },
+        {
+          "max_rss_kib": 853700,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "4fbf046280beeb04d721aef903892b0702a1354a9a7b029f9ae3e8af669a5e5c",
+          "system_seconds": 0.728619,
+          "user_seconds": 26.804653,
+          "wall_seconds": 27.491587243042886
+        },
+        {
+          "max_rss_kib": 730820,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.7344649999999999,
+          "user_seconds": 16.724214,
+          "wall_seconds": 17.43452646001242
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 27.55074653099291
+    },
+    {
+      "id": "flashmoe-expert_demand-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 780996,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "781976bf71075f52f69a3333acbc3143ff11eaf2bbb9e0d0a56105688c8543cb",
+          "system_seconds": 0.449989,
+          "user_seconds": 19.339548,
+          "wall_seconds": 19.79064299282618
+        },
+        {
+          "max_rss_kib": 837312,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "6e2910cf5da51d27c199698739fd41e7c06eda521286825f5886232e77fff32b",
+          "system_seconds": 0.532026,
+          "user_seconds": 21.543118,
+          "wall_seconds": 22.070931527996436
+        },
+        {
+          "max_rss_kib": 730820,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.772104,
+          "user_seconds": 16.846965,
+          "wall_seconds": 17.595870213815942
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 22.129455310991034
+    },
+    {
+      "id": "flashmoe-projection_softmax-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 690884,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "97cae07a724a28add8fd873246f45a4694104aaf70b6444405eda743809a1854",
+          "system_seconds": 0.319995,
+          "user_seconds": 15.6948,
+          "wall_seconds": 16.01617818395607
+        },
+        {
+          "max_rss_kib": 935620,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "403c8f7bd4dd8e60dd2e2a53d1f29fa3bfc54cfcddbdf311a6d7b7533a25b756",
+          "system_seconds": 1.41709,
+          "user_seconds": 52.805076,
+          "wall_seconds": 54.085839136037976
+        },
+        {
+          "max_rss_kib": 730820,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.7613099999999999,
+          "user_seconds": 16.74859,
+          "wall_seconds": 17.48646424198523
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 54.14534231903963
+    },
+    {
+      "id": "flashmoe-argmax-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 688836,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "360d3612213e18c56dae19036c43c12e7f294f787f190a38d532f41cc877b908",
+          "system_seconds": 0.35799,
+          "user_seconds": 15.477588,
+          "wall_seconds": 15.836793900933117
+        },
+        {
+          "max_rss_kib": 770756,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "664f572e0804f8ad754177cc342b1ebd2d4c90321257459a82c174ee5c92604b",
+          "system_seconds": 0.502966,
+          "user_seconds": 18.108668,
+          "wall_seconds": 18.598717737942934
+        },
+        {
+          "max_rss_kib": 731844,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.752491,
+          "user_seconds": 16.740246,
+          "wall_seconds": 17.468860727967694
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 18.657442132011056
+    },
+    {
+      "id": "flashmoe-projection-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 783044,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "57466a8e5aff4ebe6f0f5724a7daeb053625ecc6d09509688ffef90ae1e0e18f",
+          "system_seconds": 0.454003,
+          "user_seconds": 19.991038,
+          "wall_seconds": 20.443484619027004
+        },
+        {
+          "max_rss_kib": 969412,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "4e299eb730b5a6577d9bca5bddf17e613c64c3b26e36f2e420f9efc8ebd211d5",
+          "system_seconds": 1.162976,
+          "user_seconds": 41.407669,
+          "wall_seconds": 42.48689376702532
+        },
+        {
+          "max_rss_kib": 729800,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.789098,
+          "user_seconds": 16.74652,
+          "wall_seconds": 17.51113889599219
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 42.54517970304005
+    },
+    {
+      "id": "flashmoe-routing-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 692932,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "bef21696074a6bff8d5f16372b770140f48c5ef763fac1e1f6dc6dec65d9a880",
+          "system_seconds": 0.374994,
+          "user_seconds": 15.880761,
+          "wall_seconds": 16.256934639066458
+        },
+        {
+          "max_rss_kib": 800452,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "c0004c49bb5f7c7190ed59b3deeb307fe0d1f1099465160c2b5f8d93905df994",
+          "system_seconds": 0.59768,
+          "user_seconds": 20.647072,
+          "wall_seconds": 21.226684157038108
+        },
+        {
+          "max_rss_kib": 729796,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.7734479999999999,
+          "user_seconds": 16.901048,
+          "wall_seconds": 17.65051095490344
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 21.284793847939
+    },
+    {
+      "id": "flashmoe-softmax-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 687812,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "4b3f73f19cf68bac1d23ffb8d875cebe7d09fdd6be20c0d046f3fd8cfd18b98e",
+          "system_seconds": 0.380975,
+          "user_seconds": 15.510004,
+          "wall_seconds": 15.89215753809549
+        },
+        {
+          "max_rss_kib": 779972,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "db2ab0488dada5202a66f3b47bb7d5ff53094d16fe6fd21c686e47e10f55dccf",
+          "system_seconds": 0.7651859999999999,
+          "user_seconds": 22.898274999999998,
+          "wall_seconds": 23.628197971032932
+        },
+        {
+          "max_rss_kib": 730824,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.75325,
+          "user_seconds": 16.767788,
+          "wall_seconds": 17.497577872127295
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 23.685325556900352
+    },
+    {
+      "id": "flashmoe-program-base",
+      "jobs": 16,
+      "kind": "program",
+      "modules": [
+        {
+          "max_rss_kib": 687812,
+          "module": "KPlay.Proof.Program.Base.fsti",
+          "returncode": 0,
+          "source_sha256": "3012d14878450404b88c0eda31b07e6aeb0b6e0c845e88ffcfd3b83f7d6146f2",
+          "system_seconds": 0.387966,
+          "user_seconds": 15.469667,
+          "wall_seconds": 15.858903902117163
+        },
+        {
+          "max_rss_kib": 765636,
+          "module": "KPlay.Proof.Program.Base.fst",
+          "returncode": 0,
+          "source_sha256": "c03748f3916b44063fd4bf1a9245fe27d6b8c20cb24497dee8ea898b877dde8d",
+          "system_seconds": 0.814383,
+          "user_seconds": 20.861459,
+          "wall_seconds": 21.64721455005929
+        },
+        {
+          "max_rss_kib": 687812,
+          "module": "KPlay.Proof.Wiring.Base.fst",
+          "returncode": 0,
+          "source_sha256": "7111a38ddaee670fe3ab081c82ee957e4dfaed3863cb8d7dbe5e74061e02c9db",
+          "system_seconds": 0.41452999999999995,
+          "user_seconds": 15.434344,
+          "wall_seconds": 15.84864774090238
+        },
+        {
+          "max_rss_kib": 748228,
+          "module": "KPlay.Proof.Base.Chain.fst",
+          "returncode": 0,
+          "source_sha256": "e422ca894b5fcfe740443bbc66ea21e2fe53d83aa3665ec9bec2c28f5be5014e",
+          "system_seconds": 0.873405,
+          "user_seconds": 46.580215,
+          "wall_seconds": 47.39891512785107
+        },
+        {
+          "max_rss_kib": 699076,
+          "module": "KPlay.Proof.Base.Select.fst",
+          "returncode": 0,
+          "source_sha256": "8fa7ce2a82fa8230fd911302b6e56875fac9cb5a3fccdf7bd1951e2a96dd2af9",
+          "system_seconds": 0.480355,
+          "user_seconds": 16.237714,
+          "wall_seconds": 16.710686169099063
+        },
+        {
+          "max_rss_kib": 729796,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.752056,
+          "user_seconds": 16.708031,
+          "wall_seconds": 17.43691848195158
+        }
+      ],
+      "requested_modules": 6,
+      "status": "passed",
+      "wall_seconds": 47.45896712504327
+    },
+    {
+      "id": "flashmoe-program-optimized",
+      "jobs": 16,
+      "kind": "program",
+      "modules": [
+        {
+          "max_rss_kib": 687812,
+          "module": "KPlay.Proof.Program.Optimized.fsti",
+          "returncode": 0,
+          "source_sha256": "b4e7f4b6d2859dba9361f2833d514c2109199af77d0a99d9401af6af4ed4458f",
+          "system_seconds": 0.38398299999999996,
+          "user_seconds": 15.513337,
+          "wall_seconds": 15.89850032213144
+        },
+        {
+          "max_rss_kib": 800452,
+          "module": "KPlay.Proof.Program.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "8ed2403d4a3f36f3b5374230947a3b05381f86bbcf15536571c7557145fc54c3",
+          "system_seconds": 1.482353,
+          "user_seconds": 43.144434,
+          "wall_seconds": 44.52144218492322
+        },
+        {
+          "max_rss_kib": 688836,
+          "module": "KPlay.Proof.Wiring.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "0e6c317a0ac819fcd5f1eae203370a68476ca4632741f3107918ae0df9c9628c",
+          "system_seconds": 0.41219999999999996,
+          "user_seconds": 15.50531,
+          "wall_seconds": 15.918044622056186
+        },
+        {
+          "max_rss_kib": 694980,
+          "module": "KPlay.Proof.OptScan.fst",
+          "returncode": 0,
+          "source_sha256": "e3375254254455460aa2c42e250469ffe6b6cf431a2bbf7f012a7b7a1db1f57b",
+          "system_seconds": 0.458692,
+          "user_seconds": 16.06166,
+          "wall_seconds": 16.513654214097187
+        },
+        {
+          "max_rss_kib": 730812,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.737893,
+          "user_seconds": 16.727321,
+          "wall_seconds": 17.441765389870852
+        }
+      ],
+      "requested_modules": 5,
+      "status": "passed",
+      "wall_seconds": 44.580292768077925
+    },
+    {
+      "id": "flashmoe-program-review",
+      "jobs": 16,
+      "kind": "review",
+      "modules": [
+        {
+          "max_rss_kib": 698056,
+          "module": "KPlay.Review.fsti",
+          "returncode": 0,
+          "source_sha256": "7e8d0230fa6de0d6c1d602255fa0935ba0edb7423993493b613981a62cd37dbf",
+          "system_seconds": 0.386988,
+          "user_seconds": 15.742546,
+          "wall_seconds": 16.13059396808967
+        },
+        {
+          "max_rss_kib": 723652,
+          "module": "KPlay.Review.fst",
+          "returncode": 0,
+          "source_sha256": "7812d88e138907caf4fecddce227d6706542fece190dc759e6e6db262b28c542",
+          "system_seconds": 0.44206399999999996,
+          "user_seconds": 16.924042,
+          "wall_seconds": 17.362349465023726
+        },
+        {
+          "max_rss_kib": 687804,
+          "module": "KPlay.Proof.Program.Base.fsti",
+          "returncode": 0,
+          "source_sha256": "3012d14878450404b88c0eda31b07e6aeb0b6e0c845e88ffcfd3b83f7d6146f2",
+          "system_seconds": 0.346973,
+          "user_seconds": 16.056757,
+          "wall_seconds": 16.404826170997694
+        },
+        {
+          "max_rss_kib": 765636,
+          "module": "KPlay.Proof.Program.Base.fst",
+          "returncode": 0,
+          "source_sha256": "c03748f3916b44063fd4bf1a9245fe27d6b8c20cb24497dee8ea898b877dde8d",
+          "system_seconds": 0.7838999999999999,
+          "user_seconds": 20.967633,
+          "wall_seconds": 21.72261968301609
+        },
+        {
+          "max_rss_kib": 688840,
+          "module": "KPlay.Proof.Wiring.Base.fst",
+          "returncode": 0,
+          "source_sha256": "7111a38ddaee670fe3ab081c82ee957e4dfaed3863cb8d7dbe5e74061e02c9db",
+          "system_seconds": 0.389694,
+          "user_seconds": 16.236584,
+          "wall_seconds": 16.62640792201273
+        },
+        {
+          "max_rss_kib": 751876,
+          "module": "KPlay.Proof.Base.Chain.fst",
+          "returncode": 0,
+          "source_sha256": "e422ca894b5fcfe740443bbc66ea21e2fe53d83aa3665ec9bec2c28f5be5014e",
+          "system_seconds": 0.911979,
+          "user_seconds": 46.305252,
+          "wall_seconds": 47.162860214011744
+        },
+        {
+          "max_rss_kib": 699068,
+          "module": "KPlay.Proof.Base.Select.fst",
+          "returncode": 0,
+          "source_sha256": "8fa7ce2a82fa8230fd911302b6e56875fac9cb5a3fccdf7bd1951e2a96dd2af9",
+          "system_seconds": 0.506342,
+          "user_seconds": 17.091961,
+          "wall_seconds": 17.58973241597414
+        },
+        {
+          "max_rss_kib": 730820,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+          "system_seconds": 0.7743479999999999,
+          "user_seconds": 17.341711,
+          "wall_seconds": 18.092064287047833
+        },
+        {
+          "max_rss_kib": 688836,
+          "module": "KPlay.Proof.Program.Optimized.fsti",
+          "returncode": 0,
+          "source_sha256": "b4e7f4b6d2859dba9361f2833d514c2109199af77d0a99d9401af6af4ed4458f",
+          "system_seconds": 0.37998699999999996,
+          "user_seconds": 16.176451,
+          "wall_seconds": 16.55760225886479
+        },
+        {
+          "max_rss_kib": 801476,
+          "module": "KPlay.Proof.Program.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "8ed2403d4a3f36f3b5374230947a3b05381f86bbcf15536571c7557145fc54c3",
+          "system_seconds": 1.555262,
+          "user_seconds": 44.07972,
+          "wall_seconds": 45.53226346382871
+        },
+        {
+          "max_rss_kib": 688832,
+          "module": "KPlay.Proof.Wiring.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "0e6c317a0ac819fcd5f1eae203370a68476ca4632741f3107918ae0df9c9628c",
+          "system_seconds": 0.38329599999999997,
+          "user_seconds": 16.231165,
+          "wall_seconds": 16.614898768952116
+        },
+        {
+          "max_rss_kib": 698052,
+          "module": "KPlay.Proof.OptScan.fst",
+          "returncode": 0,
+          "source_sha256": "e3375254254455460aa2c42e250469ffe6b6cf431a2bbf7f012a7b7a1db1f57b",
+          "system_seconds": 0.46198999999999996,
+          "user_seconds": 16.137243,
+          "wall_seconds": 16.592642907984555
+        }
+      ],
+      "requested_modules": 12,
+      "status": "passed",
+      "wall_seconds": 47.22422852809541
+    }
+  ],
+  "completed_utc": "2026-11-26T08:35:45.460232+00:00",
+  "input_sha256": "f62b91d86cd7c728c2e271f35ac45ca99d291e2803dc7eba810fa015e78f2a3a",
+  "jobs": 16,
+  "logical_cpus": 128,
+  "machine": "x86_64",
+  "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+  "requested_cases": [
+    "flashmoe-shared",
+    "flashmoe-argmax-base",
+    "flashmoe-capacity_routing-base",
+    "flashmoe-expert_demand-base",
+    "flashmoe-projection_softmax-base",
+    "flashmoe-argmax-optimized",
+    "flashmoe-projection-optimized",
+    "flashmoe-routing-optimized",
+    "flashmoe-softmax-optimized",
+    "flashmoe-program-base",
+    "flashmoe-program-optimized",
+    "flashmoe-program-review"
+  ],
+  "started_utc": "2026-11-26T08:29:20.372347+00:00",
+  "status": "passed",
+  "toolchain": {
+    "fstar_version": {
+      "default": "F* 2026.09.13~dev\nplatform=Linux_x86_64\nsystem=Unix\ncompiler=OCaml 5.3.0\ndate=2026-09-18 15:14:44 -0700\ncommit=da21c3925bf09a0a1d9e7558170be82da5edb37c\n",
+      "kuiper-nightly-2026-11-18": "F* 2026.11.15~dev\nplatform=Linux_x86_64\nsystem=Unix\ncompiler=OCaml 5.3.0\ndate=2026-11-17 01:03:23 +0000\ncommit=049c07a0d9902cd39bf45a47a736be891297b79f\n"
+    },
+    "support_sha256": "3dfc2fc406035622bc0158a9b257e2619173bd4accbb4f873f040c56b6104fc9",
+    "toolchain": {
+      "default": {
+        "foundation": true,
+        "fstar_commit": "da21c3925bf09a0a1d9e7558170be82da5edb37c",
+        "kuiper_commit": "fccc0b2cffdb785598f18f1a200c5228584f14fb",
+        "platform": "Linux-x86_64",
+        "sha256": "be6d162eea7ad75bb0d6c4b7e986da4ace1bf9ccb758e32d3b4139d6d7a772eb",
+        "url": "https://github.com/FStarLang/kuiper/releases/download/nightly-2026-09-19/kuiper-Linux-x86_64.tar.gz",
+        "z3_version": "4.13.3"
+      },
+      "kuiper-nightly-2026-11-18": {
+        "foundation": false,
+        "fstar_commit": "049c07a0d9902cd39bf45a47a736be891297b79f",
+        "kuiper_commit": "1623fb4ef144e530eaf0fb9f1c3f750d5249080b",
+        "platform": "Linux-x86_64",
+        "sha256": "37ab664feaa4d051ed2030ae9ca31857aec98dacbff3f970df4f7d55ac0da1f1",
+        "url": "https://github.com/FStarLang/kuiper/releases/download/nightly-2026-11-18/kuiper-Linux-x86_64.tar.gz",
+        "z3_version": "5.3.0"
+      }
+    }
+  },
+  "wall_seconds": 385.08276372705586
+}

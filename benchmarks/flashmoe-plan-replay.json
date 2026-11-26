@@ -1,0 +1,292 @@
+{
+  "command": "CUDA_VISIBLE_DEVICES=<gpu> python flashmoe_check.py --seed 0 --seed 1 --seed 2",
+  "plan_replay": {
+    "completed_utc": "2026-11-26T08:41:07.530191+00:00",
+    "gpu": "NVIDIA H100 PCIe",
+    "samples": [
+      {
+        "reference": {
+          "base": {
+            "expert_demand": [
+              0,
+              256,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "expert_demand_equal": true,
+            "probabilities_max_abs_difference": 0.0,
+            "survival_equal": true,
+            "token_indices_equal": true
+          },
+          "optimized": {
+            "expert_demand": [
+              0,
+              256,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "expert_demand_equal": true,
+            "probabilities_max_abs_difference": 0.0,
+            "survival_equal": true,
+            "token_indices_equal": true
+          }
+        },
+        "roles": [
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 514,
+            "composed_equals_program": true,
+            "extracted_family_cuda_ms_total": 50.015839733183384,
+            "families": {
+              "argmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "capacity_routing": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "expert_demand": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "projection_softmax": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              }
+            },
+            "program_cuda_ms": 12.022368431091309,
+            "reduced_family_cuda_ms_total": 42.21596848592162,
+            "role": "base"
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 769,
+            "composed_equals_program": true,
+            "extracted_family_cuda_ms_total": 60.528416000306606,
+            "families": {
+              "argmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "projection": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "routing": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "softmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              }
+            },
+            "program_cuda_ms": 0.8002880215644836,
+            "reduced_family_cuda_ms_total": 96.36646496877074,
+            "role": "optimized"
+          }
+        ],
+        "seed": 0
+      },
+      {
+        "reference": {
+          "base": {
+            "expert_demand": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              256
+            ],
+            "expert_demand_equal": true,
+            "probabilities_max_abs_difference": 0.0,
+            "survival_equal": true,
+            "token_indices_equal": true
+          },
+          "optimized": {
+            "expert_demand": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              256
+            ],
+            "expert_demand_equal": true,
+            "probabilities_max_abs_difference": 0.0,
+            "survival_equal": true,
+            "token_indices_equal": true
+          }
+        },
+        "roles": [
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 514,
+            "composed_equals_program": true,
+            "extracted_family_cuda_ms_total": 47.836991760879755,
+            "families": {
+              "argmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "capacity_routing": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "expert_demand": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "projection_softmax": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              }
+            },
+            "program_cuda_ms": 11.285856246948242,
+            "reduced_family_cuda_ms_total": 40.88912013173103,
+            "role": "base"
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 769,
+            "composed_equals_program": true,
+            "extracted_family_cuda_ms_total": 55.22214395739138,
+            "families": {
+              "argmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "projection": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "routing": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "softmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              }
+            },
+            "program_cuda_ms": 0.32051199674606323,
+            "reduced_family_cuda_ms_total": 47.05030404776335,
+            "role": "optimized"
+          }
+        ],
+        "seed": 1
+      },
+      {
+        "reference": {
+          "base": {
+            "expert_demand": [
+              0,
+              0,
+              0,
+              0,
+              256,
+              0,
+              0,
+              0
+            ],
+            "expert_demand_equal": true,
+            "probabilities_max_abs_difference": 0.0,
+            "survival_equal": true,
+            "token_indices_equal": true
+          },
+          "optimized": {
+            "expert_demand": [
+              0,
+              0,
+              0,
+              0,
+              256,
+              0,
+              0,
+              0
+            ],
+            "expert_demand_equal": true,
+            "probabilities_max_abs_difference": 0.0,
+            "survival_equal": true,
+            "token_indices_equal": true
+          }
+        },
+        "roles": [
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 514,
+            "composed_equals_program": true,
+            "extracted_family_cuda_ms_total": 47.62809631228447,
+            "families": {
+              "argmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "capacity_routing": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "expert_demand": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "projection_softmax": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              }
+            },
+            "program_cuda_ms": 11.28649616241455,
+            "reduced_family_cuda_ms_total": 40.7520961984992,
+            "role": "base"
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 769,
+            "composed_equals_program": true,
+            "extracted_family_cuda_ms_total": 55.01487988233566,
+            "families": {
+              "argmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "projection": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "routing": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              },
+              "softmax": {
+                "calls": 256,
+                "extracted_bitwise_equal": 256
+              }
+            },
+            "program_cuda_ms": 0.315744012594223,
+            "reduced_family_cuda_ms_total": 47.06988807208836,
+            "role": "optimized"
+          }
+        ],
+        "seed": 2
+      }
+    ],
+    "scope": "finite observations on the chosen inputs; not proofs",
+    "started_utc": "2026-11-26T08:29:27.163405+00:00",
+    "status": "passed",
+    "torch_version": "2.14.0+cu130"
+  }
+}

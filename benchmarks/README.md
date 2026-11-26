@@ -12,6 +12,16 @@ software details are in [environment.json](environment.json).
 > The Mirage GPU plan replay (extracted vs. reduced kernels, composed plan vs.
 > program, and the Transformers reference comparison) is in
 > [mirage-plan-replay.json](mirage-plan-replay.json).
+>
+> Likewise the `flashmoe-*` rows below measure the **former** FlashMoE
+> artifacts (some case IDs, e.g. `flashmoe-program-base`, are reused by the
+> new proof for different sources). Timings for the current FlashMoE cases are in
+> [flashmoe-cleanroom-proof-checks.json](flashmoe-cleanroom-proof-checks.json):
+> all 12 cases passed in 385 s elapsed with `--jobs 16` (largest case
+> `flashmoe-projection_softmax-base`, 54 s; peak child RSS under 1 GiB),
+> after a 117 s support check of the 68-module `flashmoe-cleanroom` profile.
+> The FlashMoE GPU plan replay is in
+> [flashmoe-plan-replay.json](flashmoe-plan-replay.json).
 
 ## Measurement method
 
@@ -162,6 +172,10 @@ and synthetic smoke tests of all six complete reduced programs.
 [gpu-families.json](gpu-families.json) records successful independent
 compilation of all 24 family entry points; those entries were **not executed**.
 Both used two compiler workers, PyTorch 2.14.0+cu130, nvcc 13.0.88, and an H100.
+These two files predate the current Mirage and FlashMoE proofs; their FlashMoE
+entries describe the former artifacts. The current FlashMoE programs passed the
+`run_kernels.py --project flashmoe` smoke test again, and their per-call replay
+is in [flashmoe-plan-replay.json](flashmoe-plan-replay.json).
 
 The complete-program builds took 41.7--93.7 s each. Recorded CUDA-event and host
 wall times are single synthetic smoke observations, **not performance

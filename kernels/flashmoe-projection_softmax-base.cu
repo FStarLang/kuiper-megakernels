@@ -1,134 +1,119 @@
 #include <torch/extension.h>
 #include <ATen/cuda/CUDAContext.h>
-#include <c10/cuda/CUDAGuard.h>
 #include <c10/cuda/CUDAException.h>
+#include <c10/cuda/CUDAGuard.h>
 #include <cuda_runtime.h>
 #include <cmath>
 #include <cstdint>
 #include <vector>
 
-namespace {
-
-void check_tensor(
-    const torch::Tensor& value,
-    at::ScalarType dtype,
-    at::IntArrayRef shape,
-    const c10::Device& device,
-    const char* name) {
-    TORCH_CHECK(value.is_cuda() && value.device() == device,
-                name, " must be on the token's CUDA device");
-    TORCH_CHECK(value.scalar_type() == dtype && value.is_contiguous() && value.sizes() == shape,
-                name, " has an invalid dtype, shape or layout");
+__device__ float softmax_exp(float value) {
+    // Scalar form of the installed CPU SLEEF AVX512 exponential, for value <= 0.
+    if (value < -104.0f) {
+        return 0.0f;
+    }
+    int exponent = __float2int_rn(__fmul_rn(value, 0x1.715476p+0f));
+    float reduced = __fmaf_rn(float(exponent), -0x1.62e4p-1f, value);
+    reduced = __fmaf_rn(float(exponent), -0x1.7f7d1cp-20f, reduced);
+    float square = __fmul_rn(reduced, reduced);
+    float polynomial = __fmaf_rn(0x1.a057b4p-13f, reduced, 0x1.6d2d92p-10f);
+    polynomial = __fmaf_rn(polynomial, reduced, 0x1.11114cp-7f);
+    polynomial = __fmaf_rn(polynomial, reduced, 0x1.5554f4p-5f);
+    polynomial = __fmaf_rn(polynomial, reduced, 0x1.555556p-3f);
+    polynomial = __fmaf_rn(polynomial, reduced, 0.5f);
+    float result = __fadd_rn(__fmaf_rn(square, polynomial, reduced), 1.0f);
+    int half_exponent = exponent >> 1;
+    result = __fmul_rn(result, __int_as_float((half_exponent + 127) << 23));
+    return __fmul_rn(
+        result, __int_as_float((exponent - half_exponent + 127) << 23));
 }
 
-__global__ void projection_softmax(
-    const at::BFloat16* token_values,
-    const at::BFloat16* weights,
-    const int64_t* previous_counts,
-    const int64_t* previous_indices,
-    const float* previous_probabilities,
-    const int32_t* previous_survival,
-    int token,
-    float* output_row,
-    int64_t* prefix_counts,
+__global__ void router_scores(
+    const at::BFloat16* tokens,
+    const at::BFloat16* router_weights,
+    float* scores) {
+    for (int token = 0; token < 256; ++token) {
+        for (int expert = 0; expert < 8; ++expert) {
+            float score = 0.0f;
+            for (int hidden = 0; hidden < 512; ++hidden) {
+                score = __fmaf_rn(
+                    float(tokens[token * 512 + hidden]),
+                    float(router_weights[hidden * 8 + expert]), score);
+            }
+            scores[token * 8 + expert] = score;
+        }
+    }
+}
+
+__global__ void router_softmax(const float* scores, float* softmax) {
+    for (int token = 0; token < 256; ++token) {
+        float maximum = scores[token * 8];
+        for (int expert = 1; expert < 8; ++expert) {
+            maximum = fmaxf(maximum, scores[token * 8 + expert]);
+        }
+        float exponentials[8];
+        for (int expert = 0; expert < 8; ++expert) {
+            exponentials[expert] =
+                softmax_exp(__fsub_rn(scores[token * 8 + expert], maximum));
+        }
+        float denominator = exponentials[0];
+        for (int expert = 1; expert < 8; ++expert) {
+            denominator = __fadd_rn(denominator, exponentials[expert]);
+        }
+        float inverse = __fdiv_rn(1.0f, denominator);
+        for (int expert = 0; expert < 8; ++expert) {
+            softmax[token * 8 + expert] =
+                __fmul_rn(exponentials[expert], inverse);
+        }
+    }
+}
+
+__global__ void router_capacity_init(
+    int64_t* initial_prefix,
     int64_t* token_indices,
-    float* probabilities,
-    int32_t* survival) {
-    if (token == 0) {
-        for (int expert = 0; expert < 8; ++expert) {
-            prefix_counts[expert] = 0;
-        }
-        for (int i = 0; i < 256; ++i) {
-            token_indices[i] = -1;
-            probabilities[i] = 0.0f;
-        }
-    } else {
-        for (int expert = 0; expert < 8; ++expert) {
-            prefix_counts[expert] = previous_counts[expert];
-        }
-        for (int i = 0; i < 256; ++i) {
-            token_indices[i] = previous_indices[i];
-            probabilities[i] = previous_probabilities[i];
-        }
-        for (int i = 0; i < token * 8; ++i) {
-            survival[i] = previous_survival[i];
-        }
-    }
-
-    float row[8];
-    for (int expert = 0; expert < 8; ++expert) {
-        float score = 0.0f;
-        for (int hidden = 0; hidden < 512; ++hidden) {
-            const float x = static_cast<float>(token_values[hidden]);
-            const float w = static_cast<float>(weights[expert * 512 + hidden]);
-            score = __fmaf_rn(x, w, score);
-        }
-        row[expert] = score;
-        survival[token * 8 + expert] = 0;
-    }
-
-    float maximum = row[0];
-    for (int expert = 1; expert < 8; ++expert) {
-        if (row[expert] > maximum) {
-            maximum = row[expert];
-        }
-    }
-
-    float exponential_sum = 0.0f;
-    for (int expert = 0; expert < 8; ++expert) {
-        row[expert] = expf(__fsub_rn(row[expert], maximum));
-        exponential_sum = __fadd_rn(exponential_sum, row[expert]);
-    }
-    const float inverse_sum = __fdiv_rn(1.0f, exponential_sum);
-    for (int expert = 0; expert < 8; ++expert) {
-        row[expert] = __fmul_rn(row[expert], inverse_sum);
+    float* probabilities) {
+    int64_t prefix[8] = {};
+    for (int slot = 0; slot < 256; ++slot) {
+        token_indices[slot] = -1;
+        probabilities[slot] = 0.0f;
     }
     for (int expert = 0; expert < 8; ++expert) {
-        output_row[expert] = row[expert];
+        initial_prefix[expert] = prefix[expert];
     }
 }
 
-} // namespace
-
-std::vector<torch::Tensor> kplay_run(
-    torch::Tensor input0,
-    torch::Tensor input1,
-    torch::Tensor input2,
-    torch::Tensor input3,
-    torch::Tensor input4,
-    torch::Tensor input5,
-    int64_t input6) {
-    TORCH_CHECK(input6 >= 0 && input6 < 256, "token position must be in [0, 256)");
-    check_tensor(input0, at::kBFloat16, {512}, input0.device(), "input0");
-    check_tensor(input1, at::kBFloat16, {8, 512}, input0.device(), "input1");
-    if (input6 == 0) {
-        for (const auto& state : {input2, input3, input4, input5}) {
-            TORCH_CHECK(state.is_cuda() && state.device() == input0.device()
-                        && state.is_contiguous() && state.numel() == 0,
-                        "initial-state arguments must be empty CUDA tensors on the token's device");
-        }
-    } else {
-        check_tensor(input2, at::kLong, {8}, input0.device(), "input2");
-        check_tensor(input3, at::kLong, {8, 32}, input0.device(), "input3");
-        check_tensor(input4, at::kFloat, {8, 32}, input0.device(), "input4");
-        check_tensor(input5, at::kInt, {input6, 8}, input0.device(), "input5");
-    }
-    const c10::cuda::CUDAGuard guard(input0.device());
-    auto row = torch::empty({8}, input0.options().dtype(at::kFloat));
-    auto prefix_counts = torch::empty({8}, input0.options().dtype(at::kLong));
+std::vector<torch::Tensor> kplay_run(torch::Tensor input0, torch::Tensor input1) {
+    TORCH_CHECK(input0.is_cuda() && input0.is_contiguous() &&
+                    input0.scalar_type() == at::kBFloat16 &&
+                    input0.sizes() == at::IntArrayRef({256, 512}),
+                "input0 must be a contiguous CUDA bfloat16 tensor of shape [256, 512]");
+    TORCH_CHECK(input1.is_cuda() && input1.device() == input0.device() &&
+                    input1.is_contiguous() && input1.scalar_type() == at::kBFloat16 &&
+                    input1.sizes() == at::IntArrayRef({512, 8}),
+                "input1 must be a contiguous bfloat16 tensor of shape [512, 8] on input0's device");
+    c10::cuda::CUDAGuard device_guard(input0.device());
+    auto scores = torch::empty({256, 8}, input0.options().dtype(at::kFloat));
+    auto softmax = torch::empty({256, 8}, input0.options().dtype(at::kFloat));
+    auto prefix = torch::empty({8}, input0.options().dtype(at::kLong));
     auto token_indices = torch::empty({8, 32}, input0.options().dtype(at::kLong));
     auto probabilities = torch::empty({8, 32}, input0.options().dtype(at::kFloat));
-    auto survival = torch::empty({input6 + 1, 8}, input0.options().dtype(at::kInt));
+    // No survival row is live before the first token has been routed.
+    auto survival = torch::empty({0, 8}, input0.options().dtype(at::kInt));
     auto stream = at::cuda::getCurrentCUDAStream();
-    projection_softmax<<<1, 1, 0, stream>>>(
+    C10_CUDA_CHECK(cudaDeviceSynchronize());
+    router_scores<<<1, 1, 0, stream>>>(
         input0.data_ptr<at::BFloat16>(), input1.data_ptr<at::BFloat16>(),
-        input6 == 0 ? nullptr : input2.data_ptr<int64_t>(),
-        input6 == 0 ? nullptr : input3.data_ptr<int64_t>(),
-        input6 == 0 ? nullptr : input4.data_ptr<float>(),
-        input6 == 0 ? nullptr : input5.data_ptr<int32_t>(),
-        static_cast<int>(input6), row.data_ptr<float>(), prefix_counts.data_ptr<int64_t>(),
-        token_indices.data_ptr<int64_t>(), probabilities.data_ptr<float>(),
-        survival.data_ptr<int32_t>());
-    C10_CUDA_KERNEL_LAUNCH_CHECK();
-    return {row, prefix_counts, token_indices, probabilities, survival};
+        scores.data_ptr<float>());
+    C10_CUDA_CHECK(cudaGetLastError());
+    C10_CUDA_CHECK(cudaStreamSynchronize(stream));
+    router_softmax<<<1, 1, 0, stream>>>(
+        scores.data_ptr<float>(), softmax.data_ptr<float>());
+    C10_CUDA_CHECK(cudaGetLastError());
+    C10_CUDA_CHECK(cudaStreamSynchronize(stream));
+    router_capacity_init<<<1, 1, 0, stream>>>(
+        prefix.data_ptr<int64_t>(), token_indices.data_ptr<int64_t>(),
+        probabilities.data_ptr<float>());
+    C10_CUDA_CHECK(cudaGetLastError());
+    C10_CUDA_CHECK(cudaStreamSynchronize(stream));
+    return {softmax, prefix, token_indices, probabilities, survival};
 }

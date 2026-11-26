@@ -1,0 +1,22 @@
+{
+  "description": "PyTorch reference cited by proofs/flashmoe-shared/KPlay.SharedSpec.fst as inputs/reference/*. Files are byte-identical to the ones RESOLVE used.",
+  "files": [
+    {
+      "file": "base.py",
+      "sha256": "80db9a542aa891b4631c5c2d4f9b21f3f9b12db10c37915b34cba0b1b76ad7de",
+      "origin": "RESOLVE FlashMoE task reference (reference_route; imports the E8 case adapter for its profile)"
+    },
+    {
+      "file": "input-domain.txt",
+      "sha256": "bba76f99f776a0cab0fc72e2b6b2452fc1216405f49708f6a48099fd98293aef",
+      "origin": "RESOLVE FlashMoE trusted input-domain excerpt of the E8 case adapter"
+    },
+    {
+      "file": "LAYOUT.md",
+      "sha256": "c127435b84537a363e7fb12a92affa1b961099ea1dd08338c5092ed1ec45fee3",
+      "origin": "RESOLVE FlashMoE input layout note"
+    }
+  ],
+  "reference_authority": "proof/reference-authority/base.py is the reference_route/Model prefix of base.py (without get_inputs); input-domain.txt is the trusted excerpt of the adapter's Profile, profile, validate_inputs declarations.",
+  "profile": "smoke: tokens 256, hidden 512, experts 8, capacity 32, top_k 1"
+}

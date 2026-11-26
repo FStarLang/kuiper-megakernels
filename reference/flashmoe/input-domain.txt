@@ -1,0 +1,52 @@
+# Exact trusted-reference declarations; this is a source excerpt, not a runnable module.
+# Original source SHA-256: 5b100a4c87766bcd3b173e6780e8fe5bd655cf49b775576cdd4dd562062e4297
+
+CASE_ID = "flashmoe_capacity_drop"
+
+
+@dataclass(frozen=True)
+class Profile:
+    tokens: int
+    hidden: int
+    ffn: int
+    experts: int
+    capacity: int
+    top_k: int = 1
+    tile_m: int = 128
+
+
+def profile(smoke: bool = False) -> Profile:
+    return Profile(256, 512, 1024, 8, 32) if smoke else Profile(1024, 5120, 8192, 16, 64)
+
+
+def environment_profile() -> Profile:
+    check_case(os.environ.get("RESOLVE_MEGA_CASE_ID", CASE_ID))
+    smoke = os.environ.get("RESOLVE_MEGA_SMOKE", "0")
+    if smoke not in {"0", "1"}:
+        raise CaseUnavailable("RESOLVE_MEGA_SMOKE must be 0 or 1", kind="invalid_workload")
+    return profile(smoke == "1")
+
+
+def check_case(case_id: str) -> None:
+    if case_id != CASE_ID:
+        raise CaseUnavailable(f"FlashMoE adapter does not implement {case_id!r}", kind="invalid_workload")
+
+
+def validate_inputs(tokens, router_weights, p: Profile) -> None:
+    import torch
+
+    for name, value, expected, bound in (
+        ("tokens", tokens, (p.tokens, p.hidden), 32),
+        ("router_weights", router_weights, (p.hidden, p.experts), 4),
+    ):
+        if not isinstance(value, torch.Tensor) or tuple(value.shape) != expected:
+            raise CaseUnavailable(f"{name} must be a tensor with shape {expected}", kind="invalid_workload")
+        if value.dtype != torch.bfloat16 or not value.is_contiguous():
+            raise CaseUnavailable(f"{name} must be contiguous BF16", kind="invalid_workload")
+        if not bool(torch.isfinite(value).all()):
+            raise CaseUnavailable(f"{name} contains nonfinite values", kind="invalid_workload")
+        if not bool((value.abs() <= bound).all()):
+            raise CaseUnavailable(f"{name} exceeds the declared magnitude bound {bound}", kind="invalid_workload")
+    if tokens.device != router_weights.device:
+        raise CaseUnavailable("FlashMoE operands must be on the same device", kind="invalid_workload")
+

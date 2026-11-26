@@ -1,7 +1,7 @@
 PYTHON ?= python3
 JOBS ?= 4
 
-.PHONY: list integrity test setup proofs tightness gpu mirage-check sources
+.PHONY: list integrity test setup proofs tightness gpu mirage-check flashmoe-check sources
 
 list:
 	$(PYTHON) replay.py list
@@ -26,6 +26,9 @@ gpu:
 
 mirage-check:
 	$(PYTHON) mirage_check.py --jobs $(JOBS)
+
+flashmoe-check:
+	$(PYTHON) flashmoe_check.py --jobs $(JOBS)
 
 sources:
 	$(PYTHON) fetch_sources.py

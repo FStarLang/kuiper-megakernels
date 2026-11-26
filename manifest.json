@@ -1,610 +1,6 @@
 {
   "cases": [
     {
-      "directory": "proofs/flashmoe-argmax/base",
-      "historical_entry_modules": {
-        "proofs/flashmoe-argmax/base/KPlay.Functional.fst": "982f27cbe0d64ac09eab0efe3a208f691fdb540fd045e598efbab5501032f53e",
-        "proofs/flashmoe-argmax/base/KPlay.Functional.fsti": "597c57b88f0caab7238510668d73aed14d6f495340d4ddd6d304b7f6aacff074"
-      },
-      "historical_receipt_sha256": "30591d9bf342c097aaebf2a0884237b8a2be3aa8b70ef07f6d07c4b74c4f54bd",
-      "historical_target_sha256": "e6eaf7d51130434eaa2c0f7a1186e7f677f8185a59ece1fb65528b34d99f1cf2",
-      "id": "flashmoe-argmax-base",
-      "kernel": "kernels/flashmoe-argmax-base.cu",
-      "kind": "family",
-      "parameters": [
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "int64_t"
-      ],
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti",
-        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst",
-        "proofs/flashmoe-argmax/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "float32",
-          "kind": "tensor",
-          "shape": [
-            8
-          ]
-        },
-        {
-          "dtype": "int64",
-          "kind": "tensor",
-          "shape": [
-            8
-          ]
-        },
-        {
-          "dtype": "int64",
-          "kind": "tensor",
-          "shape": [
-            8,
-            32
-          ]
-        },
-        {
-          "dtype": "float32",
-          "kind": "tensor",
-          "shape": [
-            8,
-            32
-          ]
-        },
-        {
-          "dtype": "int32",
-          "kind": "tensor",
-          "shape": [
-            1,
-            8
-          ]
-        },
-        {
-          "kind": "int"
-        }
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-argmax/optimized",
-      "historical_entry_modules": {
-        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst": "7b18534206f9426b44c143ae905236136702ddb112be8a391da5677c4090c101",
-        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti": "059abd3943a086b39a9b3b5ad46440377c7cd73d0399a14c6d2824c1eba7e275"
-      },
-      "historical_receipt_sha256": "7a04b475e4db9be44ffa20e8cacd09394a80467150d330485474d7701863f85f",
-      "historical_target_sha256": "a05ba38e0ba22a2e6259c8f3155b8c0b0286d234ad4ad73963ffea1563357c1f",
-      "id": "flashmoe-argmax-optimized",
-      "kernel": "kernels/flashmoe-argmax-optimized.cu",
-      "kind": "family",
-      "parameters": [
-        "torch::Tensor"
-      ],
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/flashmoe-argmax/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "float32",
-          "kind": "tensor",
-          "shape": [
-            256,
-            8
-          ]
-        }
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-argmax",
-      "id": "flashmoe-argmax-review",
-      "implementation_cases": [
-        "flashmoe-argmax-base",
-        "flashmoe-argmax-optimized"
-      ],
-      "kind": "review",
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-argmax/KPlay.Review.fsti",
-        "proofs/flashmoe-argmax/KPlay.Review.fst",
-        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti",
-        "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst",
-        "proofs/flashmoe-argmax/KPlay.SharedSpec.fst",
-        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-argmax",
-      "historical_receipts": {
-        "base": "30591d9bf342c097aaebf2a0884237b8a2be3aa8b70ef07f6d07c4b74c4f54bd",
-        "optimized": "7a04b475e4db9be44ffa20e8cacd09394a80467150d330485474d7701863f85f"
-      },
-      "id": "flashmoe-argmax-tightness",
-      "kind": "tightness",
-      "paired_shared_sha256": "abf2ce5a034c8297aa87f2452ab2901e2c0e89357315a53132ec7843666318a9",
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-argmax/KPlay.SharedSpec.fst",
-        "proofs/flashmoe-argmax/KPlay.Proof.Tightness.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-normalization_capacity/base",
-      "historical_entry_modules": {
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fst": "e216589ccd8ee97114fdcddffb7825defe2cbe8b7259b4f95a360230f589b78d",
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Functional.fsti": "08af23a60aa97539b7e1ca37c1c38bb0ee2f8909dcf97e4b62687e560184d4ba"
-      },
-      "historical_receipt_sha256": "211ec4db751820115bb789533d387aa1b6819e016313a49b827b94eb9bf56cc6",
-      "historical_target_sha256": "bf1479450c755ff83486661e91099650a831c508a6925571bfd57330e4bbc126",
-      "id": "flashmoe-normalization_capacity-base",
-      "kernel": "kernels/flashmoe-normalization_capacity-base.cu",
-      "kind": "family",
-      "parameters": [
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "int64_t"
-      ],
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti",
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst",
-        "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "int32",
-          "kind": "tensor",
-          "shape": []
-        },
-        {
-          "dtype": "float32",
-          "kind": "tensor",
-          "shape": [
-            8
-          ]
-        },
-        {
-          "dtype": "int64",
-          "kind": "tensor",
-          "shape": [
-            8
-          ]
-        },
-        {
-          "dtype": "int64",
-          "kind": "tensor",
-          "shape": [
-            8,
-            32
-          ]
-        },
-        {
-          "dtype": "float32",
-          "kind": "tensor",
-          "shape": [
-            8,
-            32
-          ]
-        },
-        {
-          "dtype": "int32",
-          "kind": "tensor",
-          "shape": [
-            1,
-            8
-          ]
-        },
-        {
-          "kind": "int"
-        }
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-normalization_capacity/optimized",
-      "historical_entry_modules": {
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fst": "835c0376134d331cd199fe4edeb399ce498da088fc8ed22198d4d9ec87b844a8",
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Functional.fsti": "69ff8e60ef5a5aba5afae412f9d6ef793cf0ed2203090b5f9752850cb5bbf492"
-      },
-      "historical_receipt_sha256": "94301e6d22993f7d9d9f01c949b89e4e8f5ff277099388237f8015583f2517c2",
-      "historical_target_sha256": "9001ee0ddaac8e71e97966ebe43423a27d583c40d18ffbd54ab5cb4556f0d5f2",
-      "id": "flashmoe-normalization_capacity-optimized",
-      "kernel": "kernels/flashmoe-normalization_capacity-optimized.cu",
-      "kind": "family",
-      "parameters": [
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "int64_t"
-      ],
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "float32",
-          "kind": "tensor",
-          "shape": [
-            256,
-            8
-          ]
-        },
-        {
-          "dtype": "int32",
-          "kind": "tensor",
-          "shape": [
-            256
-          ]
-        },
-        {
-          "dtype": "float32",
-          "kind": "tensor",
-          "shape": [
-            256
-          ]
-        },
-        {
-          "kind": "int"
-        }
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-normalization_capacity",
-      "id": "flashmoe-normalization_capacity-review",
-      "implementation_cases": [
-        "flashmoe-normalization_capacity-base",
-        "flashmoe-normalization_capacity-optimized"
-      ],
-      "kind": "review",
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-normalization_capacity/KPlay.Review.fsti",
-        "proofs/flashmoe-normalization_capacity/KPlay.Review.fst",
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti",
-        "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst",
-        "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst",
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-normalization_capacity",
-      "historical_receipts": {
-        "base": "211ec4db751820115bb789533d387aa1b6819e016313a49b827b94eb9bf56cc6",
-        "optimized": "94301e6d22993f7d9d9f01c949b89e4e8f5ff277099388237f8015583f2517c2"
-      },
-      "id": "flashmoe-normalization_capacity-tightness",
-      "kind": "tightness",
-      "paired_shared_sha256": "0a9268fe77de43f3f58795bdadcce8be988a96bdb34ba889478e81ed74203cd5",
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst",
-        "proofs/flashmoe-normalization_capacity/KPlay.Proof.Tightness.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-program/base",
-      "historical_entry_modules": {
-        "proofs/flashmoe-program/base/KPlay.Functional.fst": "3ef7e93d0777ffedc7434caf2523a52dcac2a51cf2d6ce93528a5457075fa2df",
-        "proofs/flashmoe-program/base/KPlay.Functional.fsti": "46c4096c0a230978f69a4afbcac95bcb48de62288d7ff0e90349945b27a175d4"
-      },
-      "historical_receipt_sha256": "62f978a35479592d21133bd418683d2ca319c29d6972e8bd0e9581c2b27878bd",
-      "id": "flashmoe-program-base",
-      "kernel": "kernels/flashmoe-program-base.cu",
-      "kind": "program",
-      "parameters": [
-        "torch::Tensor",
-        "torch::Tensor"
-      ],
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-program/base/KPlay.Base.Functional.fst",
-        "proofs/flashmoe-program/base/KPlay.Base.Functional.fsti",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseCaller.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseCapacity.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseClassification.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseHistory.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseNative.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseProjection.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseReturn.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseStorage.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Argmax.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Capacity.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Native.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.ProjectionSoftmax.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.SupportBoundary.fst",
-        "proofs/flashmoe-program/KPlay.SharedSpec.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-program/optimized",
-      "historical_entry_modules": {
-        "proofs/flashmoe-program/optimized/KPlay.Functional.fst": "b08ab47aadfcf83b73aab641120c4556debcbb13e74e61674364eff0bb524a37",
-        "proofs/flashmoe-program/optimized/KPlay.Functional.fsti": "9ca2a20f278578d581540703858056ee6f18022f25fbda8e0a9a7f91236cca7a"
-      },
-      "historical_receipt_sha256": "c8669d6e838f8de0c2f014e241a10fbdf7e1fa644525d7855202fae0652645a8",
-      "id": "flashmoe-program-optimized",
-      "kernel": "kernels/flashmoe-program-optimized.cu",
-      "kind": "program",
-      "parameters": [
-        "torch::Tensor",
-        "torch::Tensor"
-      ],
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyArgmax.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyCapacity.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyPacking.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilySelection.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.NativeBindings.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.OnlineClassification.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.OnlineMath.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.OptimizedMMA.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.OutputAllocations.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.RouteSteps.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.RouteSteps.fsti",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Argmax.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Capacity.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Native.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.ProjectionSoftmax.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceCaller.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceCapacity.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceDevice.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceHistory.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceLaunch.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceLayouts.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceProgram.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceProjection.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceResults.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceRouting.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceSoftmax.fst",
-        "proofs/flashmoe-program/KPlay.SharedSpec.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-program",
-      "id": "flashmoe-program-review",
-      "implementation_cases": [
-        "flashmoe-program-base",
-        "flashmoe-program-optimized"
-      ],
-      "kind": "review",
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-program/KPlay.Review.fsti",
-        "proofs/flashmoe-program/KPlay.Review.fst",
-        "proofs/flashmoe-program/base/KPlay.Base.Functional.fst",
-        "proofs/flashmoe-program/base/KPlay.Base.Functional.fsti",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseCaller.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseCapacity.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseClassification.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseHistory.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseNative.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseProjection.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseReturn.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.BaseStorage.fst",
-        "proofs/flashmoe-program/base/KPlay.Proof.SupportBoundary.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyArgmax.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyCapacity.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyPacking.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.FamilySelection.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.NativeBindings.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.OnlineClassification.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.OnlineMath.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.OptimizedMMA.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.OutputAllocations.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.RouteSteps.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.RouteSteps.fsti",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceCaller.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceCapacity.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceDevice.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceHistory.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceLaunch.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceLayouts.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceProgram.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceProjection.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceResults.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceRouting.fst",
-        "proofs/flashmoe-program/optimized/KPlay.Proof.SourceSoftmax.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Argmax.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Capacity.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Native.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.ProjectionSoftmax.fst",
-        "proofs/flashmoe-program/KPlay.SharedSpec.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-projection_softmax/base",
-      "historical_entry_modules": {
-        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst": "b1b7c26dde2b8711923a6e9bfd5d29b256c674f6895cc2e2efb4bea2f82abddc",
-        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti": "eaa4be124f93961656c8c47194406e6d63dd82abc63a8d21cf4147ff1c59756b"
-      },
-      "historical_receipt_sha256": "171e9115bea47d3b3aba589cf60c8e66cd3b9e3f939abd124d407d783f1de4a9",
-      "historical_target_sha256": "a1ba4c5d3feacc19aa8fbb52cbda6bdff12cc8887994b35bf0be0d37c1d146f9",
-      "id": "flashmoe-projection_softmax-base",
-      "kernel": "kernels/flashmoe-projection_softmax-base.cu",
-      "kind": "family",
-      "parameters": [
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "torch::Tensor",
-        "int64_t"
-      ],
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti",
-        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst",
-        "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            512
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            8,
-            512
-          ]
-        },
-        {
-          "kind": "tensor",
-          "shape": [
-            0
-          ]
-        },
-        {
-          "kind": "tensor",
-          "shape": [
-            0
-          ]
-        },
-        {
-          "kind": "tensor",
-          "shape": [
-            0
-          ]
-        },
-        {
-          "kind": "tensor",
-          "shape": [
-            0
-          ]
-        },
-        {
-          "kind": "int"
-        }
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-projection_softmax/optimized",
-      "historical_entry_modules": {
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fst": "5aceda926d62620b38d45b146cda9609482a18025bd16ec765fa6e1a35083e32",
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Functional.fsti": "5d7b54ec2b887886236d8a2f5774b99a8ec6860391d8ddcbc01370bd0dc45d64"
-      },
-      "historical_receipt_sha256": "ae3723b90277406304c7e5240f8c227dc544e1e725d8387034f6fe0b2f20627b",
-      "historical_target_sha256": "c8c126284c2830d6f8054ce9cc1248c609571d2b0b75850f7b71b70ec6655448",
-      "id": "flashmoe-projection_softmax-optimized",
-      "kernel": "kernels/flashmoe-projection_softmax-optimized.cu",
-      "kind": "family",
-      "parameters": [
-        "torch::Tensor",
-        "torch::Tensor"
-      ],
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst",
-        "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst"
-      ],
-      "sample_inputs": [
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            256,
-            512
-          ]
-        },
-        {
-          "dtype": "bfloat16",
-          "kind": "tensor",
-          "shape": [
-            8,
-            512
-          ]
-        }
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-projection_softmax",
-      "id": "flashmoe-projection_softmax-review",
-      "implementation_cases": [
-        "flashmoe-projection_softmax-base",
-        "flashmoe-projection_softmax-optimized"
-      ],
-      "kind": "review",
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-projection_softmax/KPlay.Review.fsti",
-        "proofs/flashmoe-projection_softmax/KPlay.Review.fst",
-        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti",
-        "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst",
-        "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst",
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti",
-        "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-projection_softmax",
-      "historical_receipts": {
-        "base": "171e9115bea47d3b3aba589cf60c8e66cd3b9e3f939abd124d407d783f1de4a9",
-        "optimized": "ae3723b90277406304c7e5240f8c227dc544e1e725d8387034f6fe0b2f20627b"
-      },
-      "id": "flashmoe-projection_softmax-tightness",
-      "kind": "tightness",
-      "paired_shared_sha256": "1ba2c76b6c115889ebca0da4f837439199ebf1046743e9a327d99b364120dd2e",
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst",
-        "proofs/flashmoe-projection_softmax/KPlay.Proof.Tightness.fst"
-      ]
-    },
-    {
-      "directory": "proofs/flashmoe-program",
-      "historical_receipt_sha256": "f43c697e188b1b19c69af630ff0408beb90bc8fe9da865c2a85d3c42e9f954bb",
-      "id": "flashmoe-shared",
-      "kind": "shared",
-      "profile": "flashmoe",
-      "project": "flashmoe",
-      "roots": [
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Argmax.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Capacity.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.Native.fst",
-        "proofs/flashmoe-program/KPlay.Proof.Shared.ProjectionSoftmax.fst",
-        "proofs/flashmoe-program/KPlay.SharedSpec.fst"
-      ]
-    },
-    {
       "directory": "proofs/luce-argmax/base",
       "historical_entry_modules": {
         "proofs/luce-argmax/base/KPlay.Functional.fst": "153bca1a4d1647fc2a37192e716eb0eac7918b106299adae692854660b9543a2",
@@ -2045,17 +1441,265 @@
         "proofs/mirage-program/optimized/KPlay.Proof.Wiring.Optimized.fst",
         "proofs/mirage-program/optimized/KPlay.Proof.SeqApprox.fst"
       ]
+    },
+    {
+      "directory": "proofs/flashmoe-shared",
+      "id": "flashmoe-shared",
+      "kind": "shared",
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-argmax/base",
+      "id": "flashmoe-argmax-base",
+      "kernel": "kernels/flashmoe-argmax-base.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-argmax/base/KPlay.Functional.fsti",
+        "proofs/flashmoe-argmax/base/KPlay.Functional.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-capacity_routing/base",
+      "id": "flashmoe-capacity_routing-base",
+      "kernel": "kernels/flashmoe-capacity_routing-base.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "int64_t"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-capacity_routing/base/KPlay.Functional.fsti",
+        "proofs/flashmoe-capacity_routing/base/KPlay.Functional.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-expert_demand/base",
+      "id": "flashmoe-expert_demand-base",
+      "kernel": "kernels/flashmoe-expert_demand-base.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-expert_demand/base/KPlay.Functional.fsti",
+        "proofs/flashmoe-expert_demand/base/KPlay.Functional.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-projection_softmax/base",
+      "id": "flashmoe-projection_softmax-base",
+      "kernel": "kernels/flashmoe-projection_softmax-base.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti",
+        "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-argmax/optimized",
+      "id": "flashmoe-argmax-optimized",
+      "kernel": "kernels/flashmoe-argmax-optimized.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti",
+        "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-projection/optimized",
+      "id": "flashmoe-projection-optimized",
+      "kernel": "kernels/flashmoe-projection-optimized.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-projection/optimized/KPlay.Functional.fsti",
+        "proofs/flashmoe-projection/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-routing/optimized",
+      "id": "flashmoe-routing-optimized",
+      "kernel": "kernels/flashmoe-routing-optimized.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "torch::Tensor",
+        "int64_t"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-routing/optimized/KPlay.Functional.fsti",
+        "proofs/flashmoe-routing/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-softmax/optimized",
+      "id": "flashmoe-softmax-optimized",
+      "kernel": "kernels/flashmoe-softmax-optimized.cu",
+      "kind": "family",
+      "parameters": [
+        "torch::Tensor",
+        "int64_t"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-softmax/optimized/KPlay.Functional.fsti",
+        "proofs/flashmoe-softmax/optimized/KPlay.Functional.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-program/base",
+      "id": "flashmoe-program-base",
+      "kernel": "kernels/flashmoe-program-base.cu",
+      "kind": "program",
+      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-program/base/KPlay.Proof.Program.Base.fsti",
+        "proofs/flashmoe-program/base/KPlay.Proof.Program.Base.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Wiring.Base.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Base.Chain.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Base.Select.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-program/optimized",
+      "id": "flashmoe-program-optimized",
+      "kernel": "kernels/flashmoe-program-optimized.cu",
+      "kind": "program",
+      "parameters": [
+        "torch::Tensor",
+        "torch::Tensor"
+      ],
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Program.Optimized.fsti",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Program.Optimized.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Wiring.Optimized.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.OptScan.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst"
+      ]
+    },
+    {
+      "directory": "proofs/flashmoe-program",
+      "id": "flashmoe-program-review",
+      "implementation_cases": [
+        "flashmoe-program-base",
+        "flashmoe-program-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-program/KPlay.Review.fsti",
+        "proofs/flashmoe-program/KPlay.Review.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Program.Base.fsti",
+        "proofs/flashmoe-program/base/KPlay.Proof.Program.Base.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Wiring.Base.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Base.Chain.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Base.Select.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Program.Optimized.fsti",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Program.Optimized.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Wiring.Optimized.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.OptScan.fst"
+      ]
     }
   ],
   "files": {
-    "kernels/flashmoe-argmax-base.cu": "118a0072ad270e19afa9227183fdccf17e4d975e991eb621ce9f729c96b20820",
-    "kernels/flashmoe-argmax-optimized.cu": "ac0d9ea293ecbe4eec7e92679db20661935cc9b4d97a14c6214aace62217371e",
-    "kernels/flashmoe-normalization_capacity-base.cu": "8428ea147f29b6991bb83110af3bb97bf33f4c05c3724ecd3757cba8c7c4e8a4",
-    "kernels/flashmoe-normalization_capacity-optimized.cu": "a09cce4cf6dd38105584a2871443cf3682e154c5a41d6a9da72670696a0f2f61",
-    "kernels/flashmoe-program-base.cu": "160cec486205458b24d4c82aff36e4112a3338abae7d662fd3c9f51937a59fd9",
-    "kernels/flashmoe-program-optimized.cu": "f8b2a73db1ba939e58ec461a42ac67afe9bb6019197c2065ba51af87e266afbb",
-    "kernels/flashmoe-projection_softmax-base.cu": "907562d8e3e642fd96b41ad673eed9c27d8521fd9d9c3a02f6d8b0fa5158c88e",
-    "kernels/flashmoe-projection_softmax-optimized.cu": "57722e8a6ade9e899e29431275a2276b7f410b2c0bc838b59db356c1a73786b5",
+    "kernels/flashmoe-argmax-base.cu": "21a4ee442e08912644ac713e49efe295359e109f17740c5ec7666be89efafefd",
+    "kernels/flashmoe-argmax-optimized.cu": "4fdcb9cc929dd3d103eea3160d56be3839213e4a590de7b760da7228b046f044",
+    "kernels/flashmoe-capacity_routing-base.cu": "205241d49dc3b81047e147592218155f530b5bd0b6e073f29b98d5ab46f23ad3",
+    "kernels/flashmoe-expert_demand-base.cu": "a9edd362464c7715b74bf40c71704656025b49fa017e432076beec904854eefc",
+    "kernels/flashmoe-extracted/argmax-base/KPlay_Functional.cu": "c5304c7b02ea1cf216fc7b209d1a71d046c27ba7a4e19a92f2bfd9593f937e30",
+    "kernels/flashmoe-extracted/argmax-base/KPlay_Functional.h": "296eef32ea2482959b3e2725948a19fd3555165d4d1dba5ce8864920db7601c9",
+    "kernels/flashmoe-extracted/argmax-base/binding.cu": "5c9031d06b59114a9b8e2542f044a64feddddbf2570ae321ccc9032877293c05",
+    "kernels/flashmoe-extracted/argmax-optimized/KPlay_Functional.cu": "2d59ad1975a7cbe7be3b713fafcb5eeaf01acfd90c79b0e2f43aaf414a2e4086",
+    "kernels/flashmoe-extracted/argmax-optimized/KPlay_Functional.h": "26ce2f4ccdf044c5fca4ba628ba9d49b627d14b9544ee5999f7435008daf9e09",
+    "kernels/flashmoe-extracted/argmax-optimized/binding.cu": "5c9031d06b59114a9b8e2542f044a64feddddbf2570ae321ccc9032877293c05",
+    "kernels/flashmoe-extracted/capacity_routing-base/KPlay_Functional.cu": "55dae9f671940f9c2532429df613f9fa2f7204295e7b9fd227e9a665c48a2e77",
+    "kernels/flashmoe-extracted/capacity_routing-base/KPlay_Functional.h": "82bedff28eb5da5855276aa325b8d4d3a39f2b321761d02682a26d67aed6b30f",
+    "kernels/flashmoe-extracted/capacity_routing-base/binding.cu": "7469e7079ee9de512ab23c602559643b41cbd46f5fc037bc1032792eea2707dd",
+    "kernels/flashmoe-extracted/expert_demand-base/KPlay_Functional.cu": "8da72534124d10479c1f11339fc5d5b0946afe120edee4b0a41dfaffdf88ac9e",
+    "kernels/flashmoe-extracted/expert_demand-base/KPlay_Functional.h": "b02bbe1c7453dda841589bc667007ce984cde843f7e5cd17741354acc2590623",
+    "kernels/flashmoe-extracted/expert_demand-base/binding.cu": "9d8896090cf4c1f03e4d3f7b8bce283a5ef7b2a94846c9152d1ffb3538f6d10a",
+    "kernels/flashmoe-extracted/include/kplay_cpu_exp.cuh": "e7276893774c6c2e5699af0044f7886a05d8c1bfbe75699ff194382189702994",
+    "kernels/flashmoe-extracted/include/kplay_transcendentals.cuh": "46a77a46dd8073c7d524202ca7e5a7661bb24080d19d5d2e845a9abeaeace4d0",
+    "kernels/flashmoe-extracted/include/kuiper/mma.h": "522e3e26ebb8c731d1c65205233c1e71fa50761ec9a32f9145c85b8f960048ee",
+    "kernels/flashmoe-extracted/include/kuiper/tensorcores.h": "8837bf41aa9dd80af745954a1f8ed2208648ea1e2a184e9b7227acc6d3f59d60",
+    "kernels/flashmoe-extracted/projection-optimized/KPlay_Functional.cu": "9aee469e631229b7e4784928dead955b551cd4b9f1377f826a3f27a47d37807a",
+    "kernels/flashmoe-extracted/projection-optimized/KPlay_Functional.h": "954fa07097949fd0ffa8493ac8c8b6e47fdfc01486118deaea49f41aa0e53bae",
+    "kernels/flashmoe-extracted/projection-optimized/binding.cu": "800b111fbadbfc926b70048ffbf17f84fb6a00694ebcca01da8d74cb34003471",
+    "kernels/flashmoe-extracted/projection_softmax-base/KPlay_Functional.cu": "da34972107d97747cd56c927219b763e9cca08dc01a720ad0dc44e3bf9f9b8d8",
+    "kernels/flashmoe-extracted/projection_softmax-base/KPlay_Functional.h": "144de1aca92fd28e7ffd133a784082f6997460fc057a8e9f4bd52e323de94fed",
+    "kernels/flashmoe-extracted/projection_softmax-base/binding.cu": "a6a6dc050380ce3d7bfcdb4acc72b83a413cfb7087fe5e29571f739e34f79405",
+    "kernels/flashmoe-extracted/routing-optimized/KPlay_Functional.cu": "a26e66cb61563bb918c2e168d316c7df8e7d67f8fcd83d2575ef7f4369cca757",
+    "kernels/flashmoe-extracted/routing-optimized/KPlay_Functional.h": "57e5b7243bdca80c4f42b8b1c0c636de22ab4107f4b7c3c6b98fb8dd9a995547",
+    "kernels/flashmoe-extracted/routing-optimized/binding.cu": "84721dc12c2fe8042742fef93d065a2bb4057d57dd1a53ddf19a6c199740f7ff",
+    "kernels/flashmoe-extracted/softmax-optimized/KPlay_Functional.cu": "70f084f3463c5b1c659200adce9be31c270b91b304b5e8281f15d4f9790b10fe",
+    "kernels/flashmoe-extracted/softmax-optimized/KPlay_Functional.h": "001613c8b12446a180246dd0147b3730f37e95a845720c073507e6e489315e0a",
+    "kernels/flashmoe-extracted/softmax-optimized/binding.cu": "3c1de13c9354f684a02f6bab22584c87a81f9f03aa056617014c0bb21a3b08fb",
+    "kernels/flashmoe-program-base.cu": "85d2e386b3ebfbec943ea0ff01d2a47774baf05a829ec9091165dbc76c2c85eb",
+    "kernels/flashmoe-program-optimized.cu": "52e8902e3c6ff9eded48a3063739702b3191bd898f73a8fb86569f3ba8aa6e62",
+    "kernels/flashmoe-projection-optimized.cu": "57529d56584f1ac1d7a65283ed3ac39242dbee697f6c2e2ebbe3c46dcbc0cc41",
+    "kernels/flashmoe-projection_softmax-base.cu": "dbfc06e20d9a9fd6cba20f108615a04c942f8ff0408efa6a335dda708a133fe3",
+    "kernels/flashmoe-routing-optimized.cu": "bed4732bbe71609069fd8fbe2a4eaa21814065ad0f3992280ac444525bde4ea6",
+    "kernels/flashmoe-softmax-optimized.cu": "97b87f4415109973106b68fdbf63a128662ff7bf61ae5193f87a05d3372e24bc",
     "kernels/luce-argmax-base.cu": "e62ccbfc627f078fa4f89e25cc6d788d1c70c38daae895f130d60602f8d0dd44",
     "kernels/luce-argmax-optimized.cu": "d9bba0cf6c3f0d185e1c91f9691849c29f033419f4de1c4aba195b85862545e6",
     "kernels/luce-embedding-base.cu": "0f66cc3b2efc1e8823ee9399c1cad10cab1fd762406f84fbc48acc8a376fbb73",
@@ -2105,73 +1749,37 @@
     "kernels/mirage-program-optimized.cu": "534f3a8c665e7707c030e0b690b4ed66c5337eb3edad821fda162a92f17557a8",
     "kernels/mirage-projection-base.cu": "7455a3e886fe7e165f51bcfe97cd054a26bc330d89604c39ed7ba634e092511a",
     "kernels/mirage-projection-optimized.cu": "e0bc74e947cda504076ecea02093f2cb56121e753236dfc4597ec5d691fcb2e7",
-    "proofs/REVIEW-CATALOG.md": "6fa8caf60f96ba877aa0af289a48c3a26770bea57b12ba8dd510e62d7e55ece9",
-    "proofs/flashmoe-argmax/KPlay.Proof.Tightness.fst": "44bb186b409243d6d1adc9d72f7272c8a16106e71b83c1d9c094eada60788ded",
-    "proofs/flashmoe-argmax/KPlay.Review.fst": "74869a8bab273f5c1369fa5fed08065c211e4f1cd0d528accec40149e0062038",
-    "proofs/flashmoe-argmax/KPlay.Review.fsti": "f1f13c6fbe38c48b9c7ef3e94b82188c16b76958076ed6b239cbd4e6b72c5bc5",
-    "proofs/flashmoe-argmax/KPlay.SharedSpec.fst": "abf2ce5a034c8297aa87f2452ab2901e2c0e89357315a53132ec7843666318a9",
-    "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fst": "8e12fca2050d948747aec72856625b03f4a29c8043d8c4ace14c0f4a3cd63a05",
-    "proofs/flashmoe-argmax/base/KPlay.Base.Functional.fsti": "0d6366e21450de2fecddff233f6c2ad79803c6cb429979585fd5fa10779c9ada",
-    "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fst": "ef7dbd20554d0357849097610f2c7a285ce5a7538fe0a91e264182a20749958e",
-    "proofs/flashmoe-argmax/optimized/KPlay.Optimized.Functional.fsti": "0b5a1a6ef59f5c206929bde488883aa906f67bb85c7efedeb6e8bf7cf32d5c70",
-    "proofs/flashmoe-normalization_capacity/KPlay.Proof.Tightness.fst": "288af3c12d5df55fd4e12a2a43e709491951b3fb18b58959d2a8cb849db12c8d",
-    "proofs/flashmoe-normalization_capacity/KPlay.Review.fst": "53f958cf722f6233e55448c7f8b302ce1a213ecb81514f4008d1f1c0d7c460ff",
-    "proofs/flashmoe-normalization_capacity/KPlay.Review.fsti": "3da60c3c38e732799932dd21f2527e8f97a25770d10fe7b124aa35ceef3946f0",
-    "proofs/flashmoe-normalization_capacity/KPlay.SharedSpec.fst": "0a9268fe77de43f3f58795bdadcce8be988a96bdb34ba889478e81ed74203cd5",
-    "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fst": "a7d4e03ad3594ec16c779f8dde609218699515607c50f732c6607028942f22bc",
-    "proofs/flashmoe-normalization_capacity/base/KPlay.Base.Functional.fsti": "7bb532ce28a11c6d5ad82545226f33adad81046baa0b253a1b40eae801bfcaf6",
-    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fst": "73e0c9a1f76b50a00f60c8e666762506d9b777a9a213fd53e043f399500ea305",
-    "proofs/flashmoe-normalization_capacity/optimized/KPlay.Optimized.Functional.fsti": "9a58ed79daf71821a2e2b7b241c767b484d570ee4f205c18ff19e41665895c95",
-    "proofs/flashmoe-program/KPlay.Proof.Shared.Argmax.fst": "a2f8921fe1d063ff9c8aef26dffe1fe0ba3981c6de6bfd6f724aa9ed4b117fce",
-    "proofs/flashmoe-program/KPlay.Proof.Shared.Capacity.fst": "3aef1e21a23f515ed557d06f39597899f4e7e270246508a245606fa679b872cc",
-    "proofs/flashmoe-program/KPlay.Proof.Shared.Native.fst": "562cbdf71b6a2766a3fee386c5fe0d663f01c8a9c9da7c98d1133de6ce65e75c",
-    "proofs/flashmoe-program/KPlay.Proof.Shared.ProjectionSoftmax.fst": "03ae5528f1882c0cf8ed97010c123bef40064f6789f42a71bcce36bd231aff50",
-    "proofs/flashmoe-program/KPlay.Review.fst": "44886127791dc4cab3955c203251b942d5acaa3bda118109bb5f93b80d124339",
-    "proofs/flashmoe-program/KPlay.Review.fsti": "4d6d9fad4d937b208f3f0235aeecdc8cbff974b98d2e936d67c31e14bea5fcc5",
-    "proofs/flashmoe-program/KPlay.SharedSpec.fst": "d9192823f2b2c6ecc28117120b1c1ebc4d8d82a227524655f46cc7e777702c9a",
-    "proofs/flashmoe-program/base/KPlay.Base.Functional.fst": "ba28980d2567600083618cf07f3ccb3cfa8f64f6d794cd6bd00db85a9ef1e60b",
-    "proofs/flashmoe-program/base/KPlay.Base.Functional.fsti": "83f765860f8353c9d21062328e622b7c38b985f4b1fa60fc3cde2e1213c40725",
-    "proofs/flashmoe-program/base/KPlay.Proof.BaseCaller.fst": "a17654f5ecdfe6f1142a6af762971d395d95e2f7aa0e129fb9696df19c36b1a5",
-    "proofs/flashmoe-program/base/KPlay.Proof.BaseCapacity.fst": "153c70a9e9c9f4fafacea55fefb6e7d0d47a8e86b0ce9baf19fb4e8b7a10425c",
-    "proofs/flashmoe-program/base/KPlay.Proof.BaseClassification.fst": "1f30d5d90cfaf47eb022ac123bbff0959bedf2e99ac7a17a60a8fe571bf5b368",
-    "proofs/flashmoe-program/base/KPlay.Proof.BaseHistory.fst": "f25586db1673763e9d890cc035a6974511b94374d39b3f13a19cb952e87e63d9",
-    "proofs/flashmoe-program/base/KPlay.Proof.BaseNative.fst": "13dfcfb044c6d7a6b07ccffad010fdea89b7daa57fde35642fdec9683938968a",
-    "proofs/flashmoe-program/base/KPlay.Proof.BaseProjection.fst": "bc1a22e04b498d410142ca099459b5a15b5a750f33ca277c1f913d311ef0559e",
-    "proofs/flashmoe-program/base/KPlay.Proof.BaseReturn.fst": "56d68a9b0088793c001cea72bb155ef1266fcf83dfd444f454c666ca31d3243d",
-    "proofs/flashmoe-program/base/KPlay.Proof.BaseStorage.fst": "c4eae100b5c0ed701c253f2d95992a870af17792720fce14b9506a3c6122a61c",
-    "proofs/flashmoe-program/base/KPlay.Proof.SupportBoundary.fst": "7072fba2dd343104f9e664d0144f5781978de255f839fe31baf21bc4b982a54b",
-    "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fst": "c03015191e5dcac98c967f8baa4c20aaf42c612a70e350ba7d143bab946c69aa",
-    "proofs/flashmoe-program/optimized/KPlay.Optimized.Functional.fsti": "a0883588f3040c6abc218689d719e1be4a17005c05b6c1fb038f11790fc6a69d",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyArgmax.fst": "273da91c5cc4fabfbe79e1afeaeb4cc840d4ff121056c155b9485a010691cd82",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyCapacity.fst": "e127ee3a6526a8826ea93fe937ed602c31f3c1ea9665bfa200729ca3e857052d",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.FamilyPacking.fst": "a07e9c0f9220be6a9d9588c6c872d5df5d8c76173604afccde3345a99c2bf0b9",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.FamilySelection.fst": "a78a4e7aeffe336cc96b8009ffe8a7978fe0502aa74ac7617ca1242a3faba5c5",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.NativeBindings.fst": "8ca94b0275f673836869266cddcf8c6cae1b78bd36398f18ca199fe9796f278e",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.OnlineClassification.fst": "ffe9c3d4a5cea1a99b5255cc79404537e8dc799746f6302be6a5efc367edf440",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.OnlineMath.fst": "fae673532f327929e181246151e14521ccb1f76b87817575908a0e94d2b0e1fc",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.OptimizedMMA.fst": "52bd8c1881aa3dd6096cba5677dd148acc28c64fa6be8b27957b4618447042e0",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.OutputAllocations.fst": "aa4ca2031f18a20e5e6a8688cdd2cab6882b9e88be622d4a0a6a4292fce269b5",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.RouteSteps.fst": "5ff7cf3b9ef789fec02b67eceeb0d538e8dcf91a4d2f37cef62087b43bc27e8d",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.RouteSteps.fsti": "5c985440ec4e22b1a0ddbdc74375d767a241dba9ee63a1b335c36ad920367db4",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceCaller.fst": "15bf32cc6309a7cb790b68addb7d0943b11990af2b5ad220d780766c3a0073e6",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceCapacity.fst": "bff59b4ebef82f8d09812c8dde6b9001e54e6b40b699eeda21a79522b56092e3",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceDevice.fst": "0cf9495ba8b7081793fd2fc60d609c1b28132ffa1f7b465ca8720ba4df215852",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceHistory.fst": "475fd4facb5dba6ac619a571847508c8a1ba6c945d6ce2740c3e0cfe8c5f5cf8",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceLaunch.fst": "bea79d12dd9759d37ffe9cc5677f09a38f2ccf066138eab9706d265ce5fa1175",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceLayouts.fst": "4ce95e38fa1044d6d1e3cc70144a08bd6cc325ba5fcad5b6c79774b6a5610102",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceProgram.fst": "8b6b06f1c9b14070070b310486788a5c97fee3d96073f0b8152c7f90572c1ad7",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceProjection.fst": "da27c8f83f6b2aab4673d432857088d9c9eaee28b874e5f20cd9ace58588f840",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceResults.fst": "4bed208ef03ff32e7829aa9cfb6f2acad592bac9b14a47323dc59e0a2b8e654d",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceRouting.fst": "45b165a130414756eb383afa36ec84a999a17c39bfb76aee63e9d6d08abb8296",
-    "proofs/flashmoe-program/optimized/KPlay.Proof.SourceSoftmax.fst": "18ac9156c5ec9335abbecd63db9af1c629fef2b4dc6b170805279033bca93af6",
-    "proofs/flashmoe-projection_softmax/KPlay.Proof.Tightness.fst": "1401d707cf62e9aba5cc8f03f998dbd75ad4405813ef8fcf8bc631e18fd148f9",
-    "proofs/flashmoe-projection_softmax/KPlay.Review.fst": "a83baaaf0e0f7423e7fd42e553ccd2c7fb1d4680ad64661178b12196a872fca8",
-    "proofs/flashmoe-projection_softmax/KPlay.Review.fsti": "f42f74ecf4ca267e8f7a3a1b2191c0e6611afbe8cc6779bafb78eac12f4d8476",
-    "proofs/flashmoe-projection_softmax/KPlay.SharedSpec.fst": "1ba2c76b6c115889ebca0da4f837439199ebf1046743e9a327d99b364120dd2e",
-    "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fst": "1337d13e231deb5f18794a18b96e7f70cae98adbffbe177c80b69d09e3394761",
-    "proofs/flashmoe-projection_softmax/base/KPlay.Base.Functional.fsti": "6f5598e7c8c117f12c5217904e4f6ba8ce2cac246deae1b21d9ed26b22a9547b",
-    "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fst": "a334e1f68631bae1ada67659bbbf59c4048229c4dd824ecbe937cadec557ba7b",
-    "proofs/flashmoe-projection_softmax/optimized/KPlay.Optimized.Functional.fsti": "78b395d973840e4b5c8104092a645ca675bd2d0c834152041d12de70387ddae2",
+    "proofs/REVIEW-CATALOG.md": "a1d7925afc34c7da72bc7d160c5c6bd024018a9deee7b75e2440c33fff5b6330",
+    "proofs/flashmoe-argmax/base/KPlay.Functional.fst": "a87b8443911cbc8ec127b2a0d80fe56aa437a2a554871329567b31adf71426ca",
+    "proofs/flashmoe-argmax/base/KPlay.Functional.fsti": "220e338ba187d23ce8c154d1d1296178475f7c605b5a9b7dfb55e0b144b3fab9",
+    "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst": "664f572e0804f8ad754177cc342b1ebd2d4c90321257459a82c174ee5c92604b",
+    "proofs/flashmoe-argmax/optimized/KPlay.Functional.fsti": "360d3612213e18c56dae19036c43c12e7f294f787f190a38d532f41cc877b908",
+    "proofs/flashmoe-capacity_routing/base/KPlay.Functional.fst": "4fbf046280beeb04d721aef903892b0702a1354a9a7b029f9ae3e8af669a5e5c",
+    "proofs/flashmoe-capacity_routing/base/KPlay.Functional.fsti": "7766e8fae7c5216c76466d2dec01600e7651e2cb07d2af0892094940f36f52a8",
+    "proofs/flashmoe-expert_demand/base/KPlay.Functional.fst": "6e2910cf5da51d27c199698739fd41e7c06eda521286825f5886232e77fff32b",
+    "proofs/flashmoe-expert_demand/base/KPlay.Functional.fsti": "781976bf71075f52f69a3333acbc3143ff11eaf2bbb9e0d0a56105688c8543cb",
+    "proofs/flashmoe-program/KPlay.Review.fst": "7812d88e138907caf4fecddce227d6706542fece190dc759e6e6db262b28c542",
+    "proofs/flashmoe-program/KPlay.Review.fsti": "7e8d0230fa6de0d6c1d602255fa0935ba0edb7423993493b613981a62cd37dbf",
+    "proofs/flashmoe-program/base/KPlay.Proof.Base.Chain.fst": "e422ca894b5fcfe740443bbc66ea21e2fe53d83aa3665ec9bec2c28f5be5014e",
+    "proofs/flashmoe-program/base/KPlay.Proof.Base.Select.fst": "8fa7ce2a82fa8230fd911302b6e56875fac9cb5a3fccdf7bd1951e2a96dd2af9",
+    "proofs/flashmoe-program/base/KPlay.Proof.Program.Base.fst": "c03748f3916b44063fd4bf1a9245fe27d6b8c20cb24497dee8ea898b877dde8d",
+    "proofs/flashmoe-program/base/KPlay.Proof.Program.Base.fsti": "3012d14878450404b88c0eda31b07e6aeb0b6e0c845e88ffcfd3b83f7d6146f2",
+    "proofs/flashmoe-program/base/KPlay.Proof.Wiring.Base.fst": "7111a38ddaee670fe3ab081c82ee957e4dfaed3863cb8d7dbe5e74061e02c9db",
+    "proofs/flashmoe-program/base/plan.json": "0fbeb82cb5bd60c9cbd7bb348f69f633707bbc2d27d5618fcb8821aff358fdac",
+    "proofs/flashmoe-program/optimized/KPlay.Proof.OptScan.fst": "e3375254254455460aa2c42e250469ffe6b6cf431a2bbf7f012a7b7a1db1f57b",
+    "proofs/flashmoe-program/optimized/KPlay.Proof.Program.Optimized.fst": "8ed2403d4a3f36f3b5374230947a3b05381f86bbcf15536571c7557145fc54c3",
+    "proofs/flashmoe-program/optimized/KPlay.Proof.Program.Optimized.fsti": "b4e7f4b6d2859dba9361f2833d514c2109199af77d0a99d9401af6af4ed4458f",
+    "proofs/flashmoe-program/optimized/KPlay.Proof.Wiring.Optimized.fst": "0e6c317a0ac819fcd5f1eae203370a68476ca4632741f3107918ae0df9c9628c",
+    "proofs/flashmoe-program/optimized/plan.json": "385c5f7e903cc263fea57aa52ad49134da4654af7d09913e9ee61252f2150642",
+    "proofs/flashmoe-projection/optimized/KPlay.Functional.fst": "4e299eb730b5a6577d9bca5bddf17e613c64c3b26e36f2e420f9efc8ebd211d5",
+    "proofs/flashmoe-projection/optimized/KPlay.Functional.fsti": "57466a8e5aff4ebe6f0f5724a7daeb053625ecc6d09509688ffef90ae1e0e18f",
+    "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fst": "403c8f7bd4dd8e60dd2e2a53d1f29fa3bfc54cfcddbdf311a6d7b7533a25b756",
+    "proofs/flashmoe-projection_softmax/base/KPlay.Functional.fsti": "97cae07a724a28add8fd873246f45a4694104aaf70b6444405eda743809a1854",
+    "proofs/flashmoe-routing/optimized/KPlay.Functional.fst": "c0004c49bb5f7c7190ed59b3deeb307fe0d1f1099465160c2b5f8d93905df994",
+    "proofs/flashmoe-routing/optimized/KPlay.Functional.fsti": "bef21696074a6bff8d5f16372b770140f48c5ef763fac1e1f6dc6dec65d9a880",
+    "proofs/flashmoe-shared/KPlay.SharedSpec.fst": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
+    "proofs/flashmoe-softmax/optimized/KPlay.Functional.fst": "db2ab0488dada5202a66f3b47bb7d5ff53094d16fe6fd21c686e47e10f55dccf",
+    "proofs/flashmoe-softmax/optimized/KPlay.Functional.fsti": "4b3f73f19cf68bac1d23ffb8d875cebe7d09fdd6be20c0d046f3fd8cfd18b98e",
     "proofs/luce-argmax/KPlay.Proof.Tightness.fst": "5be169a982d8659c36cfce05e6d83cb17326c2f6f285712e20f4ae3c1c4a4d97",
     "proofs/luce-argmax/KPlay.Review.fst": "c3ed22ec1e70508685a5df4fa9ada19e414f309bdfd4ca37e343a4a319fe4b52",
     "proofs/luce-argmax/KPlay.Review.fsti": "0ffc214bab571d0db7bf89100ecc787eb19bb04ee1da65c8f253314c10501207",
@@ -2445,6 +2053,10 @@
     "proofs/mirage-projection/optimized/KPlay.Functional.fst": "7ca2041da0795576ab1527cb7ff72aa328939680b1b9ed3a9e0420414c9eeb6a",
     "proofs/mirage-projection/optimized/KPlay.Functional.fsti": "73db0b3323762b71d134d887ff01ae3d3e17e2bf17148a96682576e157c532f1",
     "proofs/mirage-shared/KPlay.SharedSpec.fst": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+    "reference/flashmoe/LAYOUT.md": "c127435b84537a363e7fb12a92affa1b961099ea1dd08338c5092ed1ec45fee3",
+    "reference/flashmoe/base.py": "80db9a542aa891b4631c5c2d4f9b21f3f9b12db10c37915b34cba0b1b76ad7de",
+    "reference/flashmoe/input-domain.txt": "bba76f99f776a0cab0fc72e2b6b2452fc1216405f49708f6a48099fd98293aef",
+    "reference/flashmoe/provenance.json": "db5af06b7d1c0ca56c64a965b3a9ca5fab16055e33ae951a32a3804455b98586",
     "reference/mirage/activations.py": "3dd5a81b1e5e0c5371256f00efec19df52255420318737db1e03430a98cf4264",
     "reference/mirage/base.py": "f80b1933b125751beffad6ed62617dc085e63f66fda772ac3b6494b90179fa5b",
     "reference/mirage/cache_utils.py": "f4e11caf14c75bdefa5e3003b93ef0e8b97fb6103375705ad944b0b344d7da8a",
@@ -2455,15 +2067,8 @@
     "reference/mirage/modeling_qwen3.py": "4b95c371fd26d40c69083dab36ac1eafd8cf82b415a0bb827275097c5ad2305b",
     "reference/mirage/modeling_rope_utils.py": "55cc0c8cb76f592ab178b4662adcbdf4ad5012bb0b4249c0a96603141f18e9ac",
     "reference/mirage/provenance.json": "aed18c5ba5e0ae4fe73d63c4bc2f1ca138a6668a1a960c322f1f76f28f400d3c",
-    "support/flashmoe/Kuiper.Float.Casts.Base.fsti": "095a46de2ddefbacaae8f3eb323d06cda91f1a6a7299dcc26686cdb535517ae4",
-    "support/flashmoe/Kuiper.Float.Casts.fst": "ef244d3fb55e9cfc0e3eb1c6984b0eccaff3cccb8813171d2da1429465906025",
-    "support/flashmoe/Kuiper.Float.Casts.fsti": "ab6aef33d6ca3fc3ffa7c672da3872ec806080624a73d6740a0649c16f8036c8",
-    "support/flashmoe/Kuiper.Float32.Bounds.fsti": "7ed5f25a6c3e8372c29e0c6760cb28b785a9dd9c06b949daa292253dfe8e7734",
-    "support/flashmoe/Kuiper.Float32.FastMath.fsti": "a3db29152908fb20aa4136abe9f2833953e35a93109fc086d3715ebe5c7742ca",
-    "support/flashmoe/Kuiper.Floating.Bounds.fsti": "3f66d3e2871e636dfdfbd76ea155b87255cb16299333c1859bf81745ad5d241f",
-    "support/flashmoe/Kuiper.Tensor.Results.fsti": "4782bd5de0228e1e9a88dd93b195f7246b261ab1754755078462c84e14398dfc",
-    "support/flashmoe/Kuiper.Tensor.Runtime.fsti": "3322f8d76eaf5217bb90f33b1ca1fcf6d2080239426c4ee029f43b343a9fb4f0",
-    "support/flashmoe/Kuiper.TensorCore.MMA.Bounds.fsti": "680c192c2e3b6fd6bebc4036e0f238d1e58d2a5015ce0bc2fb0f5986c14aa100",
+    "support/flashmoe-cleanroom/Kuiper.KPlay.CpuExp.fst": "4d4258ae8f3f4c0927a635875f387a8073452c43a50a083431b533f12c5953f3",
+    "support/flashmoe-cleanroom/Kuiper.KPlay.CpuExp.fsti": "7528fcd1507268bcf95fcee9639f8bb8d75d4150df1f56cc93a78708bd4819ea",
     "support/foundation/FStar.Math.Exp.fst": "f41798588645f069bfeecfb4725deafa4f32734a94eacbdeb9f898eaa00a7956",
     "support/foundation/FStar.Math.Exp.fsti": "90e8e10da75c1859ac1b3bd64ddd4aaaed0b8c01b327aaf48f3a683a8ab85e28",
     "support/foundation/FStar.Math.LogSeries.fst": "23bb57949d53a0314077b0e99b13d0ff24cee2d4f326b5d14cc7b33192326966",
@@ -2568,9 +2173,9 @@
     "support/mirage-cleanroom/Kuiper.TensorCore.Raw.fsti": "edc82c6e70f56dcc3fa5899b3d792c34d8a99b5f027f2ad20596f1ce4a4a5604"
   },
   "profiles": {
-    "flashmoe": [
-      "luce",
-      "flashmoe"
+    "flashmoe-cleanroom": [
+      "mirage-cleanroom",
+      "flashmoe-cleanroom"
     ],
     "luce": [
       "luce"
@@ -2581,6 +2186,7 @@
   },
   "schema_version": 1,
   "toolchains": {
+    "flashmoe-cleanroom": "kuiper-nightly-2026-11-18",
     "mirage-cleanroom": "kuiper-nightly-2026-11-18"
   }
 }

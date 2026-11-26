@@ -7,12 +7,17 @@ The corresponding `.fst` proves the adaptations and calls the native verified
 implementations. Each manifest review case includes **all roots of both native
 implementation cases**, not merely their interfaces.
 
-The Mirage proofs in this repository come from the clean-room RESOLVE proof
-pipeline (see the [README](../README.md#mirage-clean-room-resolve-pipeline-proof)).
-Their one review, [`mirage-program`](mirage-program/KPlay.Review.fsti), is simpler than
+The Mirage and FlashMoE proofs in this repository come from the clean-room
+RESOLVE proof pipeline (see the README sections on
+[Mirage](../README.md#mirage-clean-room-resolve-pipeline-proof) and
+[FlashMoE](../README.md#flashmoe-clean-room-resolve-pipeline-proof)).
+Their reviews, [`mirage-program`](mirage-program/KPlay.Review.fsti) and
+[`flashmoe-program`](flashmoe-program/KPlay.Review.fsti), are simpler than
 the ones below: both roles take identical inputs and satisfy the identical shared
-`program_postcondition`, so there is no representation difference to assess. Mirage
-has no tightness cases. The detailed assessments below cover LUCE and FlashMoE.
+`program_postcondition`, so there is no representation difference to assess.
+FlashMoE's roles use different family decompositions, which is visible only in
+their wiring, not in the reviewed postcondition. Neither project has tightness
+cases. The detailed assessments below cover LUCE.
 
 ## How to read the assessments
 
@@ -43,7 +48,7 @@ premises.
   does not discharge those premises. In particular, a universal implication over
   representations does not prove that arbitrary native inputs have one.
 
-The eight family `KPlay.Proof.Tightness.fst` files provide witnesses and
+The five LUCE family `KPlay.Proof.Tightness.fst` files provide witnesses and
 uniqueness or allowed-result characterizations at their **shared-specification**
 boundary. They do not automatically certify every padding cell, every auxiliary
 native output, or a composed whole program. The program reviews provide checked
@@ -65,16 +70,7 @@ equality of outputs from independently executed base and optimized programs**.
 
 | Review | Signature relation and what it means | Significance judgment | Is the proven specification tight functional? |
 | --- | --- | --- | --- |
-| [flashmoe-program](flashmoe-program/KPlay.Review.fsti) | Identical `before_call`, outcome, ownership, frame recovery and `Shared.task_relation`; `after_call` differs only by `completion`: **one epoch versus three**. Allocation failure keeps the original epoch. Once enqueued, construction failure and success use the role's completion epoch. The `.fst` proves failure equality and return-predicate equality after aligning epochs. | **No functional-task difference; low operational significance.** A consumer must wait for the correct queue tail. The epoch count is not a runtime ratio. Scope is the retained router, not expert MLP execution. | **Complete relative task, not a single-valued native function or separately certified whole-program tightness.** Every routing output is connected to the actual returned cells, but permitted projection/softmax observations and selections can differ between executions. Epoch alignment equates predicates on one result, not two computed results. |
 | [luce-program](luce-program/KPlay.Review.fsti) | `input_views_agree` equates packed values, addresses and prompt storage. Both have the same precondition, output shapes, allocation-failure contract and **next-epoch** completion. `observed_payload` gives common complete safety/history; base numerical prefix is unconditional, optimized requires **`family_dependencies /\ numerical_scope` of its actual execution**. Observation types include BF16 versus FP32 convolution/normalization. | **High semantic significance.** The same caller ABI and epoch do not make the unconditional numerical guarantees interchangeable. Dispatch does not establish the optimized premises. | **Complete relative execution/history relation; conditional numerical functionality for optimized, not whole-program uniqueness.** Actual token/hidden cells, feedback and caller state are linked to execution witnesses. Numerical/selection freedom remains; family tightness results do not imply a uniquely determined generated history here. |
-
-## FlashMoE families
-
-| Review | Signature relation and what it means | Significance judgment | Is the proven specification tight functional? |
-| --- | --- | --- | --- |
-| [flashmoe-projection_softmax](flashmoe-projection_softmax/KPlay.Review.fsti) | `rows Base = 1`, versus a full profile matrix for optimized. Base initializes/copies routing auxiliaries; optimized has none. Both approximate the same row-wise projection/softmax target; optimized additionally covers **every represented input model**. `base_batch_refines` lifts collected row guarantees, but `switcher` does not execute that batch. | **Moderate:** batching, auxiliary state and the additional quantified guarantee prevent literal one-call substitution. The underlying row-wise mathematical task is unchanged. | **Relative functional target, not unique FP32 outputs.** [Tightness `witness`/`unique`](flashmoe-projection_softmax/KPlay.Proof.Tightness.fst) fixes the shared real matrix and preserved inputs. The review's `%~` relation still allows native numerical freedom and does not establish equal score comparisons. |
-| [flashmoe-argmax](flashmoe-argmax/KPlay.Review.fsti) | Base permits only one row and copies routing-frame/row buffers; optimized permits a batch and materializes gathered-best cells. Both prove the **same stable maximum/gather relation on the supplied finite FP32 probabilities**. `base_batch_refines` is a composition proof, not a new executor. | **Moderate API significance; no selector-task difference on identical rows.** Batch size and auxiliary ownership differ. This does not equate the outputs of upstream probability producers. | **Yes: exact functional selector on fixed native input rows.** [Tightness `witness`/`unique`](flashmoe-argmax/KPlay.Proof.Tightness.fst) fixes IDs and gathered denotations; `after` also fixes actual optimized gathered cells. Stable ties are specified rather than left arbitrary. |
-| [flashmoe-normalization_capacity](flashmoe-normalization_capacity/KPlay.Review.fsti) | Base advances one represented prefix; optimized returns the full route. Counts are I64 versus I32. Base emits **eight I32 demand cells only at token 255, even in Full**; final Full demand for all experts is a logical view of I64 counts, not a returned 16-cell I32 buffer. `completed_refines_shared` connects completion to `route_post`. | **High integration/output significance.** A full-route or Full-demand consumer cannot replace optimized with one base call or assume a missing physical demand array. The completed logical routing task remains common. | **Exact discrete routing; relative numerical weights.** [Tightness `full_contract`, `exact_outputs_unique`, `all_targets_unique`](flashmoe-normalization_capacity/KPlay.Proof.Tightness.fst) fixes demand, owners and survival for the selected boundary and characterizes weight targets. Occupied float weights retain approximation freedom; the review additionally fixes unused weights to native zero. |
 
 ## LUCE families
 

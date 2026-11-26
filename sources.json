@@ -29,15 +29,18 @@
     "redistribution_note": "No LICENSE, COPYING, or NOTICE file was found in the complete pinned tree. Included CUDA consists of reduced implementations produced during the case study; the upstream checkout is not bundled. This metadata asserts neither an upstream license nor a separately documented permission grant."
   },
   "flashmoe": {
-    "repository": "https://github.com/osayamenja/FlashMoE",
-    "commit": "9cc0c32443d2a2da6825a68af5ef83060329483b",
-    "scope": "Production upstream reference only. The original optimized candidate binding is unavailable; the proved subject is the retained router.",
-    "original_optimized_candidate_binding_established": false,
+    "repository": "https://github.com/tyler-utah/FlashMoE",
+    "commit": "96ad271ef1aae56e89ca1c9f3950275652088dc1",
+    "upstream_base": "https://github.com/osayamenja/FlashMoE@9cc0c32443d2a2da6825a68af5ef83060329483b",
+    "pull_request": "https://github.com/osayamenja/FlashMoE/pull/32",
+    "pull_request_note": "The optimized original is upstream FlashMoE with PR #32 (open; head 96ad271) applied: deterministic capacity in input-token order ([E,S] staging, then a stream-ordered GPU prefix/compaction pass), replacing the arrival-order guardedAtomicAdd reservation.",
+    "gate_weights_layout": "The FlashMoE gate consumes router weights as [E,H] (the RESOLVE case passes router_weights.t().contiguous()); the reference and both reduced programs take logical [H,E] = [512,8]. The reduced optimized program folds the transpose into its indexing.",
+    "profile": "smoke: S=256, H=512, E=8, capacity 32, top_k 1; GateReductionLevel::singleBlock",
     "upstream_paths": {
       "router": "csrc/include/flashmoe/gate.cuh",
-      "router_diagnostic_reference": "csrc/tests/gate.cu",
       "full_moe_not_proved_here": "csrc/include/flashmoe/moe.cuh"
     },
+    "scope": "Source of the original optimized program. The proved subjects are the reduced router programs in kernels/flashmoe-program-*.cu; their link to this source is RESOLVE's finite same-role bitwise translation check on 8 samples, not a universal equivalence theorem.",
     "license": "BSD-3-Clause"
   }
 }
