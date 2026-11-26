@@ -8,8 +8,8 @@
     },
     {
       "file": "input-domain.txt",
-      "sha256": "bba76f99f776a0cab0fc72e2b6b2452fc1216405f49708f6a48099fd98293aef",
-      "origin": "RESOLVE FlashMoE trusted input-domain excerpt of the E8 case adapter"
+      "sha256": "d1da811432c83da27ba9d06334ccf4e5fb9793737dd03d560bcc5cd55a43931e",
+      "origin": "Plain-language restatement, written for this repository, of RESOLVE's trusted FlashMoE input domain (profiles, profile selection, operand checks); same meaning as the excerpt RESOLVE used"
     },
     {
       "file": "LAYOUT.md",
@@ -37,7 +37,7 @@
       "origin": "New standalone publication shim (not RESOLVE code), written from input-domain.txt so base.py runs unmodified"
     }
   ],
-  "reference_authority": "proof/reference-authority/base.py is the reference_route/Model prefix of base.py (without get_inputs); input-domain.txt is the trusted excerpt of the adapter's Profile, profile, validate_inputs declarations.",
+  "reference_authority": "proof/reference-authority/base.py is the reference_route/Model prefix of base.py (without get_inputs); input-domain.txt states the trusted input domain (the case adapter's profiles, profile selection and input validation) in plain language; RESOLVE used a source excerpt with the same meaning.",
   "profile": "smoke: tokens 256, hidden 512, experts 8, capacity 32, top_k 1",
   "usage": "Run with reference/flashmoe on PYTHONPATH (e.g. PYTHONPATH=reference/flashmoe python -c 'import base'). The RESOLVE case adapter that base.py was written against is not published; the E8_mega_kernel_h100 package here is a standalone shim providing the imported names (CASE_ID, Profile/profile, environment_profile, validate_inputs per input-domain.txt, and this repository's own make_inputs, which ignores the category)."
 }

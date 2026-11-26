@@ -80,7 +80,9 @@ router CUDA; the optimized original is upstream FlashMoE with PR #32 applied
 its `include/` holds four headers from RESOLVE's Kuiper installation,
 including the new `kplay_cpu_exp.cuh`. `proofs/flashmoe-program/*/plan.json`
 are RESOLVE's recorded host call plans. `reference/flashmoe/` holds the
-RESOLVE FlashMoE task reference (`base.py`, `input-domain.txt`, `LAYOUT.md`).
+RESOLVE FlashMoE task reference (`base.py`, `LAYOUT.md`) and `input-domain.txt`,
+a plain-language restatement of its trusted input domain written for this
+repository.
 The RESOLVE case adapter that `base.py` imports is not published;
 `reference/flashmoe/E8_mega_kernel_h100/` is a new standalone shim, written
 for this repository from `input-domain.txt`, so that `base.py` runs unmodified.
