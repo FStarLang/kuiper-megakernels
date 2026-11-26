@@ -18,12 +18,10 @@ These are finite observations on the chosen inputs, not proofs.
 import argparse
 import datetime
 import hashlib
-import importlib.util
 import os
 from pathlib import Path
 import shutil
 import sys
-import types
 
 from mirage_check import kuiper_headers, resolve, run, same_bits
 from replay import ROOT, inventory, read_json, sha256, write_json
@@ -33,34 +31,18 @@ EXTRACTED = ROOT / "kernels/flashmoe-extracted"
 TOKENS, HIDDEN, EXPERTS, CAPACITY = 256, 512, 8, 32
 
 
+sys.path.insert(0, str(ROOT / "reference/flashmoe"))
+
+
 def make_inputs(torch, seed, device):
-    """Small dyadic BF16 inputs inside input-domain.txt (|x| <= 32, |w| <= 4) with one hot expert."""
-    generator = torch.Generator().manual_seed(int.from_bytes(hashlib.sha256(f"flashmoe-check|{seed}".encode()).digest()[:8], "little"))
-    x = torch.randint(-4, 5, (TOKENS, HIDDEN), generator=generator).float() / 16
-    w = torch.randint(-4, 5, (HIDDEN, EXPERTS), generator=generator).float() / 4096
-    hot = int(torch.randint(EXPERTS, (), generator=generator))
-    x[:, 0] = 1
-    w[0] = 0
-    w[0, hot] = 4
-    ids = torch.arange(TOKENS)
-    x[:, -2] = (ids % 128).float() / 128
-    x[:, -1] = (ids // 128).float() / 8
-    w[-2:] = 0
-    return [value.to(torch.bfloat16).to(device).contiguous() for value in (x, w)]
+    """The reference shim's spread-expert generator (dyadic BF16, FP32-exact dot products)."""
+    from E8_mega_kernel_h100.cases.flashmoe.adapter import CASE_ID, make_inputs as shim_inputs
+    return [value.to(device) for value in shim_inputs(CASE_ID, seed=seed, smoke=True)]
 
 
 def reference_route():
-    """reference/flashmoe/base.py reference_route, with its case-adapter import stubbed out."""
-    adapter = types.ModuleType("E8_mega_kernel_h100.cases.flashmoe.adapter")
-    for name in ("CASE_ID", "environment_profile", "make_inputs", "profile", "validate_inputs"):
-        setattr(adapter, name, None)
-    for name in ("E8_mega_kernel_h100", "E8_mega_kernel_h100.cases", "E8_mega_kernel_h100.cases.flashmoe"):
-        sys.modules.setdefault(name, types.ModuleType(name))
-    sys.modules[adapter.__name__] = adapter
-    spec = importlib.util.spec_from_file_location("flashmoe_reference", ROOT / "reference/flashmoe/base.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module.reference_route
+    from base import reference_route as route
+    return route
 
 
 def check_role(torch, role, cases, work, jobs, headers, inputs):
@@ -123,6 +105,7 @@ def compare_reference(torch, outputs, expected):
         "survival_equal": bool(torch.equal(survival.cpu(), expected["survival"].cpu())),
         "probabilities_max_abs_difference": difference.max().item(),
         "expert_demand": demand.cpu().tolist(),
+        "expert_survivors": survival.cpu().sum(dim=0).tolist(),
     }
 
 
@@ -160,7 +143,9 @@ def main():
     for seed in seeds:
         inputs = make_inputs(torch, seed, device)
         expected = route(inputs[0], inputs[1], CAPACITY)
-        sample = {"seed": seed, "roles": [], "reference": {}}
+        sample = {"seed": seed, "generator": "spread (reference/flashmoe shim make_inputs)",
+                  "expert_histogram": expected["expert_demand"].cpu().tolist(), "roles": [], "reference": {}}
+        print(f"[seed {seed}] reference expert histogram {sample['expert_histogram']}", flush=True)
         for role in roles:
             result, outputs = check_role(torch, role, cases, args.work, args.jobs, headers, inputs)
             sample["roles"].append(result)

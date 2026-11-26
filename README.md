@@ -217,7 +217,7 @@ full-size FlashMoE profile or the expert computation.
 
 | Path | Contents |
 | --- | --- |
-| `reference/flashmoe/` | The PyTorch reference that `KPlay.SharedSpec` cites: `base.py` (`reference_route`), `input-domain.txt` and `LAYOUT.md`. [`provenance.json`](reference/flashmoe/provenance.json) lists their hashes. `base.py` imports the RESOLVE case adapter only for its profile; `flashmoe_check.py` stubs that import |
+| `reference/flashmoe/` | The PyTorch reference that `KPlay.SharedSpec` cites: `base.py` (`reference_route`), `input-domain.txt` and `LAYOUT.md`. [`provenance.json`](reference/flashmoe/provenance.json) lists their hashes. `base.py` (unmodified) imports RESOLVE's case adapter, which is not published; `E8_mega_kernel_h100/` is a standalone shim written from `input-domain.txt` (profiles, input checks and this repository's own spread-expert `make_inputs`). Run with `PYTHONPATH=reference/flashmoe` |
 | `kernels/flashmoe-program-<role>.cu` | The reduced complete program for each role |
 | `kernels/flashmoe-<family>-<role>.cu` | The reduced family kernels of that role |
 | `kernels/flashmoe-extracted/<family>-<role>/` | Kuiper's extraction of each verified implementation (`KPlay_Functional.{cu,h}`) plus a PyTorch binding (`binding.cu`). `include/` holds the four RESOLVE install headers that differ from or are absent in the release, including `kplay_cpu_exp.cuh` |
@@ -245,10 +245,19 @@ capacity_routing 256, expert_demand 1) and optimized has 769 (projection 1,
 softmax 256, argmax 256, routing 256). Every call was bitwise equal. The
 composed extracted calls reproduced each complete program's outputs exactly.
 Both roles also matched the reference: same expert demand, token indices and
-survival, and a maximum absolute probability difference of 0.0. With the
-check's input generator (modelled on test category V0), all 256 tokens are
-routed to a single expert in each seed. These are finite observations, not
-proofs.
+survival, and a maximum absolute probability difference of 0.0. The default
+generator draws dyadic tokens and router weights whose dot products are exact
+in FP32, so tokens spread over the experts and some experts overflow the
+capacity of 32. Per-seed expert demand (survivors) was:
+
+| Seed | Expert demand | Survivors (capacity 32) |
+| --- | --- | --- |
+| 0 | 41, 24, 35, 30, 27, 39, 28, 32 | 32, 24, 32, 30, 27, 32, 28, 32 |
+| 1 | 28, 30, 39, 47, 30, 20, 36, 26 | 28, 30, 32, 32, 30, 20, 32, 26 |
+| 2 | 26, 30, 44, 35, 30, 34, 23, 34 | 26, 30, 32, 32, 30, 32, 23, 32 |
+
+The generator is `make_inputs` of the reference shim. RESOLVE's DTester input
+categories V0-V7 are not published. These are finite observations, not proofs.
 
 ## Quick start (CPU only)
 

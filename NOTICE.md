@@ -81,6 +81,9 @@ its `include/` holds four headers from RESOLVE's Kuiper installation,
 including the new `kplay_cpu_exp.cuh`. `proofs/flashmoe-program/*/plan.json`
 are RESOLVE's recorded host call plans. `reference/flashmoe/` holds the
 RESOLVE FlashMoE task reference (`base.py`, `input-domain.txt`, `LAYOUT.md`).
+The RESOLVE case adapter that `base.py` imports is not published;
+`reference/flashmoe/E8_mega_kernel_h100/` is a new standalone shim, written
+for this repository from `input-domain.txt`, so that `base.py` runs unmodified.
 `support/flashmoe-cleanroom` (`Kuiper.KPlay.CpuExp`) is RESOLVE Kuiper library
 source. `flashmoe_check.py` is new. The link from the reduced programs to the
 original source is RESOLVE's finite same-role bitwise translation check, not

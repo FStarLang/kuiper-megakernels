@@ -15,8 +15,29 @@
       "file": "LAYOUT.md",
       "sha256": "c127435b84537a363e7fb12a92affa1b961099ea1dd08338c5092ed1ec45fee3",
       "origin": "RESOLVE FlashMoE input layout note"
+    },
+    {
+      "file": "E8_mega_kernel_h100/__init__.py",
+      "sha256": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",
+      "origin": "New standalone publication shim (not RESOLVE code), written from input-domain.txt so base.py runs unmodified"
+    },
+    {
+      "file": "E8_mega_kernel_h100/cases/__init__.py",
+      "sha256": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",
+      "origin": "New standalone publication shim (not RESOLVE code), written from input-domain.txt so base.py runs unmodified"
+    },
+    {
+      "file": "E8_mega_kernel_h100/cases/flashmoe/__init__.py",
+      "sha256": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",
+      "origin": "New standalone publication shim (not RESOLVE code), written from input-domain.txt so base.py runs unmodified"
+    },
+    {
+      "file": "E8_mega_kernel_h100/cases/flashmoe/adapter.py",
+      "sha256": "4f3e87e644e57fb7481a08ab1c371f934d2b45cf971e80646d4984db16a2e92c",
+      "origin": "New standalone publication shim (not RESOLVE code), written from input-domain.txt so base.py runs unmodified"
     }
   ],
   "reference_authority": "proof/reference-authority/base.py is the reference_route/Model prefix of base.py (without get_inputs); input-domain.txt is the trusted excerpt of the adapter's Profile, profile, validate_inputs declarations.",
-  "profile": "smoke: tokens 256, hidden 512, experts 8, capacity 32, top_k 1"
+  "profile": "smoke: tokens 256, hidden 512, experts 8, capacity 32, top_k 1",
+  "usage": "Run with reference/flashmoe on PYTHONPATH (e.g. PYTHONPATH=reference/flashmoe python -c 'import base'). The RESOLVE case adapter that base.py was written against is not published; the E8_mega_kernel_h100 package here is a standalone shim providing the imported names (CASE_ID, Profile/profile, environment_profile, validate_inputs per input-domain.txt, and this repository's own make_inputs, which ignores the category)."
 }
