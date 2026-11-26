@@ -1,0 +1,1042 @@
+{
+  "command": "python mirage_check.py [--prompt IDS --checkpoint model.safetensors --reference]",
+  "synthetic_weights": {
+    "completed_utc": "2026-11-25T23:39:53.380252+00:00",
+    "gpu": "NVIDIA H100 PCIe",
+    "prompt": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "roles": [
+      {
+        "all_extracted_bitwise_equal": true,
+        "composed_equals_program": true,
+        "program_cuda_ms": 1194.495849609375,
+        "role": "base",
+        "steps": [
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 0.9302399754524231,
+            "family": "embedding",
+            "id": "embedding_setup",
+            "reduced_cuda_ms": 1.0171200037002563
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.5088500976562,
+            "family": "decoder",
+            "id": "decoder_00",
+            "reduced_cuda_ms": 33.343711853027344
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.9894409179688,
+            "family": "decoder",
+            "id": "decoder_01",
+            "reduced_cuda_ms": 34.131744384765625
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.9569091796875,
+            "family": "decoder",
+            "id": "decoder_02",
+            "reduced_cuda_ms": 33.93840026855469
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 627.6165771484375,
+            "family": "decoder",
+            "id": "decoder_03",
+            "reduced_cuda_ms": 33.721153259277344
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.6010131835938,
+            "family": "decoder",
+            "id": "decoder_04",
+            "reduced_cuda_ms": 34.09539031982422
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 628.6702880859375,
+            "family": "decoder",
+            "id": "decoder_05",
+            "reduced_cuda_ms": 33.69491195678711
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.1799926757812,
+            "family": "decoder",
+            "id": "decoder_06",
+            "reduced_cuda_ms": 33.78646469116211
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.88671875,
+            "family": "decoder",
+            "id": "decoder_07",
+            "reduced_cuda_ms": 33.957183837890625
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 629.0905151367188,
+            "family": "decoder",
+            "id": "decoder_08",
+            "reduced_cuda_ms": 33.84291076660156
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 627.1707153320312,
+            "family": "decoder",
+            "id": "decoder_09",
+            "reduced_cuda_ms": 33.90883255004883
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 627.4136352539062,
+            "family": "decoder",
+            "id": "decoder_10",
+            "reduced_cuda_ms": 33.951454162597656
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.8203735351562,
+            "family": "decoder",
+            "id": "decoder_11",
+            "reduced_cuda_ms": 33.725406646728516
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.9409790039062,
+            "family": "decoder",
+            "id": "decoder_12",
+            "reduced_cuda_ms": 33.714942932128906
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.4522705078125,
+            "family": "decoder",
+            "id": "decoder_13",
+            "reduced_cuda_ms": 33.746238708496094
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.665771484375,
+            "family": "decoder",
+            "id": "decoder_14",
+            "reduced_cuda_ms": 33.91392135620117
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.8111572265625,
+            "family": "decoder",
+            "id": "decoder_15",
+            "reduced_cuda_ms": 34.160865783691406
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 627.115966796875,
+            "family": "decoder",
+            "id": "decoder_16",
+            "reduced_cuda_ms": 33.97129440307617
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 628.1033325195312,
+            "family": "decoder",
+            "id": "decoder_17",
+            "reduced_cuda_ms": 33.823551177978516
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.9381103515625,
+            "family": "decoder",
+            "id": "decoder_18",
+            "reduced_cuda_ms": 34.0687370300293
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.8560791015625,
+            "family": "decoder",
+            "id": "decoder_19",
+            "reduced_cuda_ms": 33.682655334472656
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.7109375,
+            "family": "decoder",
+            "id": "decoder_20",
+            "reduced_cuda_ms": 33.743553161621094
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 628.1237182617188,
+            "family": "decoder",
+            "id": "decoder_21",
+            "reduced_cuda_ms": 33.918209075927734
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 628.0128784179688,
+            "family": "decoder",
+            "id": "decoder_22",
+            "reduced_cuda_ms": 33.85001754760742
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.7590942382812,
+            "family": "decoder",
+            "id": "decoder_23",
+            "reduced_cuda_ms": 34.0873908996582
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.3704833984375,
+            "family": "decoder",
+            "id": "decoder_24",
+            "reduced_cuda_ms": 33.94233703613281
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.5626220703125,
+            "family": "decoder",
+            "id": "decoder_25",
+            "reduced_cuda_ms": 33.79420852661133
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 627.4561157226562,
+            "family": "decoder",
+            "id": "decoder_26",
+            "reduced_cuda_ms": 33.84070587158203
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 623.8822021484375,
+            "family": "decoder",
+            "id": "decoder_27",
+            "reduced_cuda_ms": 32.3460807800293
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 193.45811462402344,
+            "family": "projection",
+            "id": "final_projection",
+            "reduced_cuda_ms": 256.67840576171875
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 4.787424087524414,
+            "family": "argmax",
+            "id": "select_next_token",
+            "reduced_cuda_ms": 5.985087871551514
+          }
+        ],
+        "tokens": [
+          [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9478
+          ]
+        ]
+      },
+      {
+        "all_extracted_bitwise_equal": true,
+        "composed_equals_program": true,
+        "program_cuda_ms": 1171.153076171875,
+        "role": "optimized",
+        "steps": [
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 103.48499298095703,
+            "family": "embedding",
+            "id": "s0000_embedding",
+            "reduced_cuda_ms": 28.325439453125
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 35.466400146484375,
+            "family": "decoder",
+            "id": "s0000_decoder_00",
+            "reduced_cuda_ms": 31.080032348632812
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.86697769165039,
+            "family": "decoder",
+            "id": "s0000_decoder_01",
+            "reduced_cuda_ms": 30.616575241088867
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.851295471191406,
+            "family": "decoder",
+            "id": "s0000_decoder_02",
+            "reduced_cuda_ms": 29.895423889160156
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.87782287597656,
+            "family": "decoder",
+            "id": "s0000_decoder_03",
+            "reduced_cuda_ms": 29.995712280273438
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.86550521850586,
+            "family": "decoder",
+            "id": "s0000_decoder_04",
+            "reduced_cuda_ms": 29.93731117248535
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.87200164794922,
+            "family": "decoder",
+            "id": "s0000_decoder_05",
+            "reduced_cuda_ms": 29.94051170349121
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.847774505615234,
+            "family": "decoder",
+            "id": "s0000_decoder_06",
+            "reduced_cuda_ms": 29.968416213989258
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.89231872558594,
+            "family": "decoder",
+            "id": "s0000_decoder_07",
+            "reduced_cuda_ms": 29.997888565063477
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.92345428466797,
+            "family": "decoder",
+            "id": "s0000_decoder_08",
+            "reduced_cuda_ms": 30.000192642211914
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.84630584716797,
+            "family": "decoder",
+            "id": "s0000_decoder_09",
+            "reduced_cuda_ms": 29.907712936401367
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.87385559082031,
+            "family": "decoder",
+            "id": "s0000_decoder_10",
+            "reduced_cuda_ms": 30.002975463867188
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.86956787109375,
+            "family": "decoder",
+            "id": "s0000_decoder_11",
+            "reduced_cuda_ms": 30.29840087890625
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.86934280395508,
+            "family": "decoder",
+            "id": "s0000_decoder_12",
+            "reduced_cuda_ms": 29.942176818847656
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.87123107910156,
+            "family": "decoder",
+            "id": "s0000_decoder_13",
+            "reduced_cuda_ms": 29.94758415222168
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.86393737792969,
+            "family": "decoder",
+            "id": "s0000_decoder_14",
+            "reduced_cuda_ms": 29.949440002441406
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.92707061767578,
+            "family": "decoder",
+            "id": "s0000_decoder_15",
+            "reduced_cuda_ms": 29.983808517456055
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.86582565307617,
+            "family": "decoder",
+            "id": "s0000_decoder_16",
+            "reduced_cuda_ms": 29.957120895385742
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.86265563964844,
+            "family": "decoder",
+            "id": "s0000_decoder_17",
+            "reduced_cuda_ms": 29.94054412841797
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.86867141723633,
+            "family": "decoder",
+            "id": "s0000_decoder_18",
+            "reduced_cuda_ms": 29.963071823120117
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.8633918762207,
+            "family": "decoder",
+            "id": "s0000_decoder_19",
+            "reduced_cuda_ms": 29.97113609313965
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.889888763427734,
+            "family": "decoder",
+            "id": "s0000_decoder_20",
+            "reduced_cuda_ms": 29.943552017211914
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.84588623046875,
+            "family": "decoder",
+            "id": "s0000_decoder_21",
+            "reduced_cuda_ms": 29.934751510620117
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.872894287109375,
+            "family": "decoder",
+            "id": "s0000_decoder_22",
+            "reduced_cuda_ms": 29.956480026245117
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.855552673339844,
+            "family": "decoder",
+            "id": "s0000_decoder_23",
+            "reduced_cuda_ms": 30.016864776611328
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.90208053588867,
+            "family": "decoder",
+            "id": "s0000_decoder_24",
+            "reduced_cuda_ms": 29.986719131469727
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.85356903076172,
+            "family": "decoder",
+            "id": "s0000_decoder_25",
+            "reduced_cuda_ms": 29.950176239013672
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.84291076660156,
+            "family": "decoder",
+            "id": "s0000_decoder_26",
+            "reduced_cuda_ms": 29.976736068725586
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.83356857299805,
+            "family": "decoder",
+            "id": "s0000_decoder_27",
+            "reduced_cuda_ms": 30.186656951904297
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 289.0118713378906,
+            "family": "projection",
+            "id": "s0000_projection",
+            "reduced_cuda_ms": 253.955078125
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 10.70860767364502,
+            "family": "argmax",
+            "id": "s0000_argmax",
+            "reduced_cuda_ms": 10.229344367980957
+          }
+        ],
+        "tokens": [
+          [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            46319
+          ]
+        ]
+      }
+    ],
+    "scope": "finite observations on one input; not proofs",
+    "started_utc": "2026-11-25T23:31:53.485598+00:00",
+    "status": "passed",
+    "torch_version": "2.14.0+cu130",
+    "weights": {
+      "kind": "synthetic",
+      "seed": 0
+    }
+  },
+  "qwen3_checkpoint_with_reference": {
+    "completed_utc": "2026-11-25T23:40:42.602390+00:00",
+    "gpu": "NVIDIA H100 PCIe",
+    "prompt": [
+      785,
+      3974,
+      13876,
+      38835,
+      34208,
+      916,
+      279
+    ],
+    "reference": {
+      "roles": {
+        "base": {
+          "hidden_max_abs_difference": 0.0,
+          "hidden_mean_abs_difference": 0.0,
+          "hidden_reference_max_abs": 60.75,
+          "reference_tokens": [
+            [
+              785,
+              3974,
+              13876,
+              38835,
+              34208,
+              916,
+              279,
+              15678
+            ]
+          ],
+          "tokens_equal": true
+        },
+        "optimized": {
+          "hidden_max_abs_difference": 3.0,
+          "hidden_mean_abs_difference": 0.13252826035022736,
+          "hidden_reference_max_abs": 60.75,
+          "reference_tokens": [
+            [
+              785,
+              3974,
+              13876,
+              38835,
+              34208,
+              916,
+              279,
+              15678
+            ]
+          ],
+          "tokens_equal": true
+        }
+      },
+      "seconds": 2.3885647458955646
+    },
+    "roles": [
+      {
+        "all_extracted_bitwise_equal": true,
+        "composed_equals_program": true,
+        "program_cuda_ms": 1193.3516845703125,
+        "role": "base",
+        "steps": [
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 0.9405440092086792,
+            "family": "embedding",
+            "id": "embedding_setup",
+            "reduced_cuda_ms": 1.015071988105774
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 628.0066528320312,
+            "family": "decoder",
+            "id": "decoder_00",
+            "reduced_cuda_ms": 33.51232147216797
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 627.6476440429688,
+            "family": "decoder",
+            "id": "decoder_01",
+            "reduced_cuda_ms": 33.959232330322266
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.3858642578125,
+            "family": "decoder",
+            "id": "decoder_02",
+            "reduced_cuda_ms": 34.072608947753906
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.6865844726562,
+            "family": "decoder",
+            "id": "decoder_03",
+            "reduced_cuda_ms": 33.73593521118164
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.7462768554688,
+            "family": "decoder",
+            "id": "decoder_04",
+            "reduced_cuda_ms": 33.900447845458984
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.428466796875,
+            "family": "decoder",
+            "id": "decoder_05",
+            "reduced_cuda_ms": 33.86697769165039
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 628.3630981445312,
+            "family": "decoder",
+            "id": "decoder_06",
+            "reduced_cuda_ms": 33.63382339477539
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.2586059570312,
+            "family": "decoder",
+            "id": "decoder_07",
+            "reduced_cuda_ms": 34.150272369384766
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.335693359375,
+            "family": "decoder",
+            "id": "decoder_08",
+            "reduced_cuda_ms": 33.98089599609375
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.3328857421875,
+            "family": "decoder",
+            "id": "decoder_09",
+            "reduced_cuda_ms": 33.783233642578125
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.5895385742188,
+            "family": "decoder",
+            "id": "decoder_10",
+            "reduced_cuda_ms": 33.897918701171875
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 628.7679443359375,
+            "family": "decoder",
+            "id": "decoder_11",
+            "reduced_cuda_ms": 33.857791900634766
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 627.9119873046875,
+            "family": "decoder",
+            "id": "decoder_12",
+            "reduced_cuda_ms": 33.703617095947266
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.8311157226562,
+            "family": "decoder",
+            "id": "decoder_13",
+            "reduced_cuda_ms": 33.857791900634766
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.3881225585938,
+            "family": "decoder",
+            "id": "decoder_14",
+            "reduced_cuda_ms": 33.86479949951172
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.907470703125,
+            "family": "decoder",
+            "id": "decoder_15",
+            "reduced_cuda_ms": 34.17679977416992
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.2724609375,
+            "family": "decoder",
+            "id": "decoder_16",
+            "reduced_cuda_ms": 33.96588897705078
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.5379028320312,
+            "family": "decoder",
+            "id": "decoder_17",
+            "reduced_cuda_ms": 33.84422302246094
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.387939453125,
+            "family": "decoder",
+            "id": "decoder_18",
+            "reduced_cuda_ms": 33.93996810913086
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.3526000976562,
+            "family": "decoder",
+            "id": "decoder_19",
+            "reduced_cuda_ms": 33.86851119995117
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 627.9702758789062,
+            "family": "decoder",
+            "id": "decoder_20",
+            "reduced_cuda_ms": 33.63353729248047
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.7959594726562,
+            "family": "decoder",
+            "id": "decoder_21",
+            "reduced_cuda_ms": 34.06288146972656
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.9368286132812,
+            "family": "decoder",
+            "id": "decoder_22",
+            "reduced_cuda_ms": 33.985504150390625
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 628.29052734375,
+            "family": "decoder",
+            "id": "decoder_23",
+            "reduced_cuda_ms": 33.87839889526367
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.0897827148438,
+            "family": "decoder",
+            "id": "decoder_24",
+            "reduced_cuda_ms": 34.10732650756836
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 626.69091796875,
+            "family": "decoder",
+            "id": "decoder_25",
+            "reduced_cuda_ms": 33.789215087890625
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 625.034912109375,
+            "family": "decoder",
+            "id": "decoder_26",
+            "reduced_cuda_ms": 33.80739212036133
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 624.4556274414062,
+            "family": "decoder",
+            "id": "decoder_27",
+            "reduced_cuda_ms": 32.46694564819336
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 193.39981079101562,
+            "family": "projection",
+            "id": "final_projection",
+            "reduced_cuda_ms": 256.3948669433594
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 4.8052802085876465,
+            "family": "argmax",
+            "id": "select_next_token",
+            "reduced_cuda_ms": 5.991519927978516
+          }
+        ],
+        "tokens": [
+          [
+            785,
+            3974,
+            13876,
+            38835,
+            34208,
+            916,
+            279,
+            15678
+          ]
+        ]
+      },
+      {
+        "all_extracted_bitwise_equal": true,
+        "composed_equals_program": true,
+        "program_cuda_ms": 1171.268310546875,
+        "role": "optimized",
+        "steps": [
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 103.9945297241211,
+            "family": "embedding",
+            "id": "s0000_embedding",
+            "reduced_cuda_ms": 28.336383819580078
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 35.5483512878418,
+            "family": "decoder",
+            "id": "s0000_decoder_00",
+            "reduced_cuda_ms": 30.98134422302246
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.214847564697266,
+            "family": "decoder",
+            "id": "s0000_decoder_01",
+            "reduced_cuda_ms": 30.453216552734375
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.127872467041016,
+            "family": "decoder",
+            "id": "s0000_decoder_02",
+            "reduced_cuda_ms": 30.07040023803711
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.042686462402344,
+            "family": "decoder",
+            "id": "s0000_decoder_03",
+            "reduced_cuda_ms": 29.968448638916016
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.037025451660156,
+            "family": "decoder",
+            "id": "s0000_decoder_04",
+            "reduced_cuda_ms": 30.037439346313477
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.012672424316406,
+            "family": "decoder",
+            "id": "s0000_decoder_05",
+            "reduced_cuda_ms": 30.018367767333984
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.10435104370117,
+            "family": "decoder",
+            "id": "s0000_decoder_06",
+            "reduced_cuda_ms": 30.055583953857422
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.04025650024414,
+            "family": "decoder",
+            "id": "s0000_decoder_07",
+            "reduced_cuda_ms": 30.01692771911621
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.040958404541016,
+            "family": "decoder",
+            "id": "s0000_decoder_08",
+            "reduced_cuda_ms": 30.077503204345703
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.941184997558594,
+            "family": "decoder",
+            "id": "s0000_decoder_09",
+            "reduced_cuda_ms": 29.92697525024414
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.03395080566406,
+            "family": "decoder",
+            "id": "s0000_decoder_10",
+            "reduced_cuda_ms": 30.00092887878418
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.03772735595703,
+            "family": "decoder",
+            "id": "s0000_decoder_11",
+            "reduced_cuda_ms": 30.320127487182617
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.95417785644531,
+            "family": "decoder",
+            "id": "s0000_decoder_12",
+            "reduced_cuda_ms": 29.98182487487793
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.1343994140625,
+            "family": "decoder",
+            "id": "s0000_decoder_13",
+            "reduced_cuda_ms": 30.0765438079834
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.02934265136719,
+            "family": "decoder",
+            "id": "s0000_decoder_14",
+            "reduced_cuda_ms": 29.953407287597656
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.02870559692383,
+            "family": "decoder",
+            "id": "s0000_decoder_15",
+            "reduced_cuda_ms": 30.035104751586914
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.09052658081055,
+            "family": "decoder",
+            "id": "s0000_decoder_16",
+            "reduced_cuda_ms": 30.07916831970215
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.03606414794922,
+            "family": "decoder",
+            "id": "s0000_decoder_17",
+            "reduced_cuda_ms": 30.016063690185547
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.077728271484375,
+            "family": "decoder",
+            "id": "s0000_decoder_18",
+            "reduced_cuda_ms": 30.101152420043945
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.016448974609375,
+            "family": "decoder",
+            "id": "s0000_decoder_19",
+            "reduced_cuda_ms": 29.954463958740234
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.05187225341797,
+            "family": "decoder",
+            "id": "s0000_decoder_20",
+            "reduced_cuda_ms": 29.960607528686523
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.06476974487305,
+            "family": "decoder",
+            "id": "s0000_decoder_21",
+            "reduced_cuda_ms": 29.995264053344727
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 33.97993469238281,
+            "family": "decoder",
+            "id": "s0000_decoder_22",
+            "reduced_cuda_ms": 29.981504440307617
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.024513244628906,
+            "family": "decoder",
+            "id": "s0000_decoder_23",
+            "reduced_cuda_ms": 30.046815872192383
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.022335052490234,
+            "family": "decoder",
+            "id": "s0000_decoder_24",
+            "reduced_cuda_ms": 30.045183181762695
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.03852844238281,
+            "family": "decoder",
+            "id": "s0000_decoder_25",
+            "reduced_cuda_ms": 30.049055099487305
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.07900619506836,
+            "family": "decoder",
+            "id": "s0000_decoder_26",
+            "reduced_cuda_ms": 30.066560745239258
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 34.03577423095703,
+            "family": "decoder",
+            "id": "s0000_decoder_27",
+            "reduced_cuda_ms": 30.289152145385742
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 288.90057373046875,
+            "family": "projection",
+            "id": "s0000_projection",
+            "reduced_cuda_ms": 253.98538208007812
+          },
+          {
+            "extracted_bitwise_equal": true,
+            "extracted_cuda_ms": 10.721759796142578,
+            "family": "argmax",
+            "id": "s0000_argmax",
+            "reduced_cuda_ms": 10.223456382751465
+          }
+        ],
+        "tokens": [
+          [
+            785,
+            3974,
+            13876,
+            38835,
+            34208,
+            916,
+            279,
+            15678
+          ]
+        ]
+      }
+    ],
+    "scope": "finite observations on one input; not proofs",
+    "started_utc": "2026-11-25T23:40:15.688418+00:00",
+    "status": "passed",
+    "torch_version": "2.14.0+cu130",
+    "weights": {
+      "kind": "checkpoint",
+      "model": "Qwen/Qwen3-0.6B",
+      "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+      "sha256": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b"
+    },
+    "prompt_text": "The quick brown fox jumps over the",
+    "next_token_text": " lazy"
+  }
+}

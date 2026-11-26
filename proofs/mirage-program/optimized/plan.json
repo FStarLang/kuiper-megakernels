@@ -1,0 +1,8418 @@
+{
+  "accepted_cuda_sha256": "534f3a8c665e7707c030e0b690b4ed66c5337eb3edad821fda162a92f17557a8",
+  "cases": {
+    "sample-0000": {
+      "outputs": [
+        {
+          "output": 1,
+          "step": "s0000_argmax"
+        },
+        {
+          "output": 1,
+          "step": "s0000_projection"
+        }
+      ],
+      "steps": [
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 0,
+                "shape": [
+                  151936,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 1
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155583488,
+                "shape": [
+                  1024
+                ]
+              }
+            }
+          ],
+          "family": "embedding",
+          "id": "s0000_embedding",
+          "observations": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 155585536,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 161876992,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 159779840,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155584512,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 161877248,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 168168704,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 171314432,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 1,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_00",
+          "observations": [
+            6,
+            7
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 171316480,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 177607936,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 175510784,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 171315456,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 177608192,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 183899648,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 187045376,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_00"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_00"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_01",
+          "observations": [
+            8,
+            9
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 187047424,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 193338880,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 191241728,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 187046400,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 193339136,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 199630592,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 202776320,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_01"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_01"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_02",
+          "observations": [
+            10,
+            11
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 202778368,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 209069824,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 206972672,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 202777344,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 209070080,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 215361536,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 218507264,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_02"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_02"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_03",
+          "observations": [
+            12,
+            13
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 218509312,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 224800768,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 222703616,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 218508288,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 224801024,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 231092480,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 234238208,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_03"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_03"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_04",
+          "observations": [
+            14,
+            15
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 234240256,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 240531712,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 238434560,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 234239232,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 240531968,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 246823424,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 249969152,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_04"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_04"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_05",
+          "observations": [
+            16,
+            17
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 249971200,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 256262656,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 254165504,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 249970176,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 256262912,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 262554368,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 265700096,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_05"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_05"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_06",
+          "observations": [
+            18,
+            19
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 265702144,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 271993600,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 269896448,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 265701120,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 271993856,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 278285312,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 281431040,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_06"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_06"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_07",
+          "observations": [
+            20,
+            21
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 281433088,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 287724544,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 285627392,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 281432064,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 287724800,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 294016256,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 297161984,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_07"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_07"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_08",
+          "observations": [
+            22,
+            23
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 297164032,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 303455488,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 301358336,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 297163008,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 303455744,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 309747200,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 312892928,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_08"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_08"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_09",
+          "observations": [
+            24,
+            25
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 312894976,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 319186432,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 317089280,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 312893952,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 319186688,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 325478144,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 328623872,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_09"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_09"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_10",
+          "observations": [
+            26,
+            27
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 328625920,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 334917376,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 332820224,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 328624896,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 334917632,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 341209088,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 344354816,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_10"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_10"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_11",
+          "observations": [
+            28,
+            29
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 344356864,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 350648320,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 348551168,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 344355840,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 350648576,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 356940032,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 360085760,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_11"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_11"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_12",
+          "observations": [
+            30,
+            31
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 360087808,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 366379264,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 364282112,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 360086784,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 366379520,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 372670976,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 375816704,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_12"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_12"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_13",
+          "observations": [
+            32,
+            33
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 375818752,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 382110208,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 380013056,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 375817728,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 382110464,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 388401920,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 391547648,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_13"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_13"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_14",
+          "observations": [
+            34,
+            35
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 391549696,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 397841152,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 395744000,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 391548672,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 397841408,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 404132864,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 407278592,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_14"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_14"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_15",
+          "observations": [
+            36,
+            37
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 407280640,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 413572096,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 411474944,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 407279616,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 413572352,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 419863808,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 423009536,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_15"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_15"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_16",
+          "observations": [
+            38,
+            39
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 423011584,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 429303040,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 427205888,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 423010560,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 429303296,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 435594752,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 438740480,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_16"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_16"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_17",
+          "observations": [
+            40,
+            41
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 438742528,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 445033984,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 442936832,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 438741504,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 445034240,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 451325696,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 454471424,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_17"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_17"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_18",
+          "observations": [
+            42,
+            43
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 454473472,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 460764928,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 458667776,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 454472448,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 460765184,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 467056640,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 470202368,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_18"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_18"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_19",
+          "observations": [
+            44,
+            45
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 470204416,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 476495872,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 474398720,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 470203392,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 476496128,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 482787584,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 485933312,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_19"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_19"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_20",
+          "observations": [
+            46,
+            47
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 485935360,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 492226816,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 490129664,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 485934336,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 492227072,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 498518528,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 501664256,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_20"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_20"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_21",
+          "observations": [
+            48,
+            49
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 501666304,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 507957760,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 505860608,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 501665280,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 507958016,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 514249472,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 517395200,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_21"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_21"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_22",
+          "observations": [
+            50,
+            51
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 517397248,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 523688704,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 521591552,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 517396224,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 523688960,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 529980416,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 533126144,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_22"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_22"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_23",
+          "observations": [
+            52,
+            53
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 533128192,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 539419648,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 537322496,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 533127168,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 539419904,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 545711360,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 548857088,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_23"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_23"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_24",
+          "observations": [
+            54,
+            55
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 548859136,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 555150592,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 553053440,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 548858112,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 555150848,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 561442304,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 564588032,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_24"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_24"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_25",
+          "observations": [
+            56,
+            57
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 564590080,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 570881536,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 568784384,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 564589056,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 570881792,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 577173248,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 580318976,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_25"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_25"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_26",
+          "observations": [
+            58,
+            59
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 580321024,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 586612480,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 584515328,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 580320000,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 586612736,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 592904192,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155582464,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0000_decoder_26"
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_26"
+            },
+            {
+              "output": 2,
+              "step": "s0000_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0000_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0000_decoder_27",
+          "observations": [
+            60,
+            61
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 0,
+                "shape": [
+                  151936,
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 1,
+              "step": "s0000_decoder_27"
+            }
+          ],
+          "family": "projection",
+          "id": "s0000_projection",
+          "observations": [
+            62,
+            63
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "output": 0,
+              "step": "s0000_projection",
+              "view": {
+                "offset": 921600,
+                "shape": [
+                  151936
+                ]
+              }
+            },
+            {
+              "input": 1
+            }
+          ],
+          "family": "argmax",
+          "id": "s0000_argmax",
+          "observations": [
+            64,
+            65
+          ]
+        }
+      ]
+    },
+    "sample-0001": {
+      "outputs": [
+        {
+          "output": 1,
+          "step": "s0001_argmax"
+        },
+        {
+          "output": 1,
+          "step": "s0001_projection"
+        }
+      ],
+      "steps": [
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 0,
+                "shape": [
+                  151936,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 1
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155583488,
+                "shape": [
+                  1024
+                ]
+              }
+            }
+          ],
+          "family": "embedding",
+          "id": "s0001_embedding",
+          "observations": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 155585536,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 161876992,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 159779840,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155584512,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 161877248,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 168168704,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 171314432,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 1,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_00",
+          "observations": [
+            6,
+            7
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 171316480,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 177607936,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 175510784,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 171315456,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 177608192,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 183899648,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 187045376,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_00"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_00"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_01",
+          "observations": [
+            8,
+            9
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 187047424,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 193338880,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 191241728,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 187046400,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 193339136,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 199630592,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 202776320,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_01"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_01"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_02",
+          "observations": [
+            10,
+            11
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 202778368,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 209069824,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 206972672,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 202777344,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 209070080,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 215361536,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 218507264,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_02"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_02"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_03",
+          "observations": [
+            12,
+            13
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 218509312,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 224800768,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 222703616,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 218508288,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 224801024,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 231092480,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 234238208,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_03"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_03"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_04",
+          "observations": [
+            14,
+            15
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 234240256,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 240531712,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 238434560,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 234239232,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 240531968,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 246823424,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 249969152,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_04"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_04"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_05",
+          "observations": [
+            16,
+            17
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 249971200,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 256262656,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 254165504,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 249970176,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 256262912,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 262554368,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 265700096,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_05"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_05"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_06",
+          "observations": [
+            18,
+            19
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 265702144,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 271993600,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 269896448,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 265701120,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 271993856,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 278285312,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 281431040,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_06"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_06"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_07",
+          "observations": [
+            20,
+            21
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 281433088,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 287724544,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 285627392,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 281432064,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 287724800,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 294016256,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 297161984,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_07"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_07"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_08",
+          "observations": [
+            22,
+            23
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 297164032,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 303455488,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 301358336,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 297163008,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 303455744,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 309747200,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 312892928,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_08"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_08"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_09",
+          "observations": [
+            24,
+            25
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 312894976,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 319186432,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 317089280,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 312893952,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 319186688,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 325478144,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 328623872,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_09"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_09"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_10",
+          "observations": [
+            26,
+            27
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 328625920,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 334917376,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 332820224,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 328624896,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 334917632,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 341209088,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 344354816,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_10"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_10"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_11",
+          "observations": [
+            28,
+            29
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 344356864,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 350648320,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 348551168,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 344355840,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 350648576,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 356940032,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 360085760,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_11"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_11"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_12",
+          "observations": [
+            30,
+            31
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 360087808,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 366379264,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 364282112,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 360086784,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 366379520,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 372670976,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 375816704,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_12"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_12"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_13",
+          "observations": [
+            32,
+            33
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 375818752,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 382110208,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 380013056,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 375817728,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 382110464,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 388401920,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 391547648,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_13"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_13"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_14",
+          "observations": [
+            34,
+            35
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 391549696,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 397841152,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 395744000,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 391548672,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 397841408,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 404132864,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 407278592,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_14"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_14"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_15",
+          "observations": [
+            36,
+            37
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 407280640,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 413572096,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 411474944,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 407279616,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 413572352,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 419863808,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 423009536,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_15"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_15"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_16",
+          "observations": [
+            38,
+            39
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 423011584,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 429303040,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 427205888,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 423010560,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 429303296,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 435594752,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 438740480,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_16"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_16"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_17",
+          "observations": [
+            40,
+            41
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 438742528,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 445033984,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 442936832,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 438741504,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 445034240,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 451325696,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 454471424,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_17"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_17"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_18",
+          "observations": [
+            42,
+            43
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 454473472,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 460764928,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 458667776,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 454472448,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 460765184,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 467056640,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 470202368,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_18"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_18"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_19",
+          "observations": [
+            44,
+            45
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 470204416,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 476495872,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 474398720,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 470203392,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 476496128,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 482787584,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 485933312,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_19"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_19"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_20",
+          "observations": [
+            46,
+            47
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 485935360,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 492226816,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 490129664,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 485934336,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 492227072,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 498518528,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 501664256,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_20"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_20"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_21",
+          "observations": [
+            48,
+            49
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 501666304,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 507957760,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 505860608,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 501665280,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 507958016,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 514249472,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 517395200,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_21"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_21"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_22",
+          "observations": [
+            50,
+            51
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 517397248,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 523688704,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 521591552,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 517396224,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 523688960,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 529980416,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 533126144,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_22"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_22"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_23",
+          "observations": [
+            52,
+            53
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 533128192,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 539419648,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 537322496,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 533127168,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 539419904,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 545711360,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 548857088,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_23"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_23"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_24",
+          "observations": [
+            54,
+            55
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 548859136,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 555150592,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 553053440,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 548858112,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 555150848,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 561442304,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 564588032,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_24"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_24"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_25",
+          "observations": [
+            56,
+            57
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 564590080,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 570881536,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 568784384,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 564589056,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 570881792,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 577173248,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 580318976,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_25"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_25"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_26",
+          "observations": [
+            58,
+            59
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 580321024,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 586612480,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 584515328,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 580320000,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 586612736,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 592904192,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155582464,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0001_decoder_26"
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_26"
+            },
+            {
+              "output": 2,
+              "step": "s0001_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0001_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0001_decoder_27",
+          "observations": [
+            60,
+            61
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 0,
+                "shape": [
+                  151936,
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 1,
+              "step": "s0001_decoder_27"
+            }
+          ],
+          "family": "projection",
+          "id": "s0001_projection",
+          "observations": [
+            62,
+            63
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "output": 0,
+              "step": "s0001_projection",
+              "view": {
+                "offset": 921600,
+                "shape": [
+                  151936
+                ]
+              }
+            },
+            {
+              "input": 1
+            }
+          ],
+          "family": "argmax",
+          "id": "s0001_argmax",
+          "observations": [
+            64,
+            65
+          ]
+        }
+      ]
+    },
+    "sample-0002": {
+      "outputs": [
+        {
+          "output": 1,
+          "step": "s0002_argmax"
+        },
+        {
+          "output": 1,
+          "step": "s0002_projection"
+        }
+      ],
+      "steps": [
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 0,
+                "shape": [
+                  151936,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 1
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155583488,
+                "shape": [
+                  1024
+                ]
+              }
+            }
+          ],
+          "family": "embedding",
+          "id": "s0002_embedding",
+          "observations": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 155585536,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 161876992,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 159779840,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155584512,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 161877248,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 168168704,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 171314432,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 1,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_00",
+          "observations": [
+            6,
+            7
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 171316480,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 177607936,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 175510784,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 171315456,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 177608192,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 183899648,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 187045376,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_00"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_00"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_01",
+          "observations": [
+            8,
+            9
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 187047424,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 193338880,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 191241728,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 187046400,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 193339136,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 199630592,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 202776320,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_01"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_01"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_02",
+          "observations": [
+            10,
+            11
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 202778368,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 209069824,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 206972672,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 202777344,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 209070080,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 215361536,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 218507264,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_02"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_02"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_03",
+          "observations": [
+            12,
+            13
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 218509312,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 224800768,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 222703616,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 218508288,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 224801024,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 231092480,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 234238208,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_03"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_03"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_04",
+          "observations": [
+            14,
+            15
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 234240256,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 240531712,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 238434560,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 234239232,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 240531968,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 246823424,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 249969152,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_04"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_04"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_05",
+          "observations": [
+            16,
+            17
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 249971200,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 256262656,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 254165504,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 249970176,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 256262912,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 262554368,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 265700096,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_05"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_05"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_06",
+          "observations": [
+            18,
+            19
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 265702144,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 271993600,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 269896448,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 265701120,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 271993856,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 278285312,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 281431040,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_06"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_06"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_07",
+          "observations": [
+            20,
+            21
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 281433088,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 287724544,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 285627392,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 281432064,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 287724800,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 294016256,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 297161984,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_07"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_07"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_08",
+          "observations": [
+            22,
+            23
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 297164032,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 303455488,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 301358336,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 297163008,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 303455744,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 309747200,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 312892928,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_08"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_08"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_09",
+          "observations": [
+            24,
+            25
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 312894976,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 319186432,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 317089280,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 312893952,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 319186688,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 325478144,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 328623872,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_09"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_09"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_10",
+          "observations": [
+            26,
+            27
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 328625920,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 334917376,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 332820224,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 328624896,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 334917632,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 341209088,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 344354816,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_10"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_10"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_11",
+          "observations": [
+            28,
+            29
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 344356864,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 350648320,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 348551168,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 344355840,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 350648576,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 356940032,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 360085760,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_11"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_11"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_12",
+          "observations": [
+            30,
+            31
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 360087808,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 366379264,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 364282112,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 360086784,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 366379520,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 372670976,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 375816704,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_12"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_12"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_13",
+          "observations": [
+            32,
+            33
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 375818752,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 382110208,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 380013056,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 375817728,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 382110464,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 388401920,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 391547648,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_13"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_13"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_14",
+          "observations": [
+            34,
+            35
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 391549696,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 397841152,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 395744000,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 391548672,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 397841408,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 404132864,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 407278592,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_14"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_14"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_15",
+          "observations": [
+            36,
+            37
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 407280640,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 413572096,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 411474944,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 407279616,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 413572352,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 419863808,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 423009536,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_15"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_15"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_16",
+          "observations": [
+            38,
+            39
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 423011584,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 429303040,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 427205888,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 423010560,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 429303296,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 435594752,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 438740480,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_16"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_16"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_17",
+          "observations": [
+            40,
+            41
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 438742528,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 445033984,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 442936832,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 438741504,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 445034240,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 451325696,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 454471424,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_17"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_17"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_18",
+          "observations": [
+            42,
+            43
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 454473472,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 460764928,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 458667776,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 454472448,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 460765184,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 467056640,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 470202368,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_18"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_18"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_19",
+          "observations": [
+            44,
+            45
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 470204416,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 476495872,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 474398720,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 470203392,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 476496128,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 482787584,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 485933312,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_19"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_19"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_20",
+          "observations": [
+            46,
+            47
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 485935360,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 492226816,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 490129664,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 485934336,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 492227072,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 498518528,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 501664256,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_20"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_20"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_21",
+          "observations": [
+            48,
+            49
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 501666304,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 507957760,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 505860608,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 501665280,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 507958016,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 514249472,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 517395200,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_21"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_21"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_22",
+          "observations": [
+            50,
+            51
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 517397248,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 523688704,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 521591552,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 517396224,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 523688960,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 529980416,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 533126144,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_22"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_22"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_23",
+          "observations": [
+            52,
+            53
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 533128192,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 539419648,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 537322496,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 533127168,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 539419904,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 545711360,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 548857088,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_23"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_23"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_24",
+          "observations": [
+            54,
+            55
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 548859136,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 555150592,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 553053440,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 548858112,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 555150848,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 561442304,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 564588032,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_24"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_24"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_25",
+          "observations": [
+            56,
+            57
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 564590080,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 570881536,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 568784384,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 564589056,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 570881792,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 577173248,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 580318976,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_25"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_25"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_26",
+          "observations": [
+            58,
+            59
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 580321024,
+                "shape": [
+                  4096,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 586612480,
+                "shape": [
+                  256
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 584515328,
+                "shape": [
+                  1024,
+                  2048
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 580320000,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 586612736,
+                "shape": [
+                  6144,
+                  1024
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 592904192,
+                "shape": [
+                  1024,
+                  3072
+                ]
+              }
+            },
+            {
+              "input": 0,
+              "view": {
+                "offset": 155582464,
+                "shape": [
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 0,
+              "step": "s0002_decoder_26"
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_26"
+            },
+            {
+              "output": 2,
+              "step": "s0002_embedding"
+            },
+            {
+              "output": 3,
+              "step": "s0002_embedding"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "decoder",
+          "id": "s0002_decoder_27",
+          "observations": [
+            60,
+            61
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0,
+              "view": {
+                "offset": 0,
+                "shape": [
+                  151936,
+                  1024
+                ]
+              }
+            },
+            {
+              "output": 1,
+              "step": "s0002_decoder_27"
+            }
+          ],
+          "family": "projection",
+          "id": "s0002_projection",
+          "observations": [
+            62,
+            63
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "output": 0,
+              "step": "s0002_projection",
+              "view": {
+                "offset": 921600,
+                "shape": [
+                  151936
+                ]
+              }
+            },
+            {
+              "input": 1
+            }
+          ],
+          "family": "argmax",
+          "id": "s0002_argmax",
+          "observations": [
+            64,
+            65
+          ]
+        }
+      ]
+    }
+  },
+  "families": {
+    "argmax": {
+      "cuda": "argmax.cu",
+      "description": "The accepted serial two-stage argmax tree and original prompt/token assembly, independent of upstream numerical correctness. Inputs: input0=contiguous BF16 scores[151936], input1=contiguous int64 prompt[7], on the same CUDA device. The schedule selects logits row 6 without a cast. Returns selected int64 rank-zero tensor and tokens int64[1,8]. Retains all 96 chunks of 1600, 128 strided candidate lanes per chunk, the four-warp then two-stage chunk reduction and the 256-lane/eight-warp final reduction, invalid-index sentinels, and encoded chunk/local indices. Strictly greater finite comparisons preserve encounter/tree order on ties; NaNs win over non-NaNs and smaller encoded indices win among NaNs. The original empty-selection fallback and prompt copy are unchanged. Exact replay is extraction evidence, not proof of numerical equivalence or argmax stability for approximately related score vectors.",
+      "input_kinds": [
+        "tensor",
+        "tensor"
+      ],
+      "kind": "argmax",
+      "output_count": 2
+    },
+    "decoder": {
+      "cuda": "decoder.cu",
+      "description": "One parameterized complete Mirage attention/MLP decoder, preserving the accepted fused next-entry normalization boundary. Inputs input0..input6 are explicit BF16 weight slices: QKV[4096,1024], Q/K norm[256], attention output[1024,2048], post-attention RMSNorm[1024], gate/up[6144,1024], down[1024,3072], next-entry or final RMSNorm[1024]. input7=residual[8,1024], input8=already normalized entry[8,1024], input9=cosine[4096,128], input10=sine[4096,128], all BF16. input11 is the absolute rotary row offset, 0 in the accepted prefill, with 0<=input11<=4088. All tensors are contiguous on one CUDA device. Returns both new residual[8,1024] and normalized[8,1024]; neither may be omitted or substituted by a recorded tensor in reconstruction. The last occurrence supplies final-norm weights instead of next-layer entry-norm weights, without changing its implementation. Includes all eight grouped heads, seven valid tokens and the eighth padded row, Q/K normalization and rotary rounding, causal softmax, attention output, residual/RMSNorm, gate/up layout, rounded SiLU multiplication, down projection, and fused residual/next RMSNorm. The original mma.sync.aligned.m16n8k16.row.col.f32.bf16.bf16.f32 instructions and accumulation order are unchanged; all ordinary numerical work remains serial. No persistent KV/recurrent state exists in this accepted prefill. Only residual and normalized are mutable carried state; immutable rotary tables and original prompt/weights stay live through explicit bindings. Scratch arrays are overwritten before reuse and are not live.",
+      "input_kinds": [
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "int"
+      ],
+      "kind": "numerical",
+      "output_count": 2
+    },
+    "embedding": {
+      "cuda": "embedding.cu",
+      "description": "Seven-token Mirage embedding/positional setup plus entry RMSNorm. Inputs: input0=BF16 embedding weights[151936,1024], input1=int64 prompt[7] with token IDs in [0,151936), input2=BF16 entry norm weights[1024]. All tensors are contiguous on one CUDA device. Returns residual[8,1024], normalized[8,1024], cosine[4096,128], sine[4096,128], all BF16. The padded eighth residual row embeds token zero exactly as accepted. Compute the complete rotary tables for absolute positions 0..4095 with base 1000000, retaining every BF16 rounding and the serial RMSNorm tree. Entry normalization is grouped here because subsequent entry/final norms are already fused into the preceding decoder residual addition. Rotary tables remain immutable explicit inputs at all decoder cuts; weights and the prompt remain immutable original inputs. The full-program integer input2 is ignored by the accepted computation and retained by trace.cu.",
+      "input_kinds": [
+        "tensor",
+        "tensor",
+        "tensor"
+      ],
+      "kind": "numerical",
+      "output_count": 4
+    },
+    "projection": {
+      "cuda": "projection.cu",
+      "description": "Final vocabulary projection and the original hidden-output copy. Inputs: input0=BF16 tied vocabulary weights[151936,1024], input1=BF16 final normalized state[8,1024], contiguous on one CUDA device. Final normalization has already occurred inside the last decoder's fused residual addition; do not normalize again. Returns the complete BF16 logits[8,153600] and hidden[7,1024]. All eight projected rows and padded vocabulary columns are retained; the original zero weight operands for columns >=151936 and exact MMA order are unchanged. Hidden copies the first seven normalized rows using the original serial finish loop. That independent copy is grouped with projection; the instrumented original still executes it in finish and snapshots its source at the projection cut. No argmax or approximate score substitution is performed here. The selected score row is an explicit schedule view.",
+      "input_kinds": [
+        "tensor",
+        "tensor"
+      ],
+      "kind": "numerical",
+      "output_count": 2
+    }
+  },
+  "input_kinds": [
+    "tensor",
+    "tensor",
+    "int"
+  ],
+  "instrumented": "trace.cu",
+  "original_outputs": [
+    0,
+    1
+  ],
+  "schema_version": 1
+}

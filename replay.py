@@ -40,8 +40,8 @@ def write_json(path, value):
 
 def inventory():
     manifest = read_json(ROOT / "manifest.json")
-    actual = {str(p.relative_to(ROOT)) for name in ("proofs", "support", "kernels")
-              for p in (ROOT / name).rglob("*") if p.is_file()}
+    actual = {str(p.relative_to(ROOT)) for name in ("proofs", "support", "kernels", "reference")
+              for p in (ROOT / name).rglob("*") if p.is_file() and "__pycache__" not in p.parts}
     if actual != set(manifest["files"]):
         raise ValueError(f"Artifact inventory mismatch: {sorted(actual ^ set(manifest['files']))}")
     for relative, expected in manifest["files"].items():

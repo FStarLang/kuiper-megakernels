@@ -13,7 +13,7 @@ permission grant from LUCE's authors.
 | LUCE upstream | **`PixelML/luce-megakernel`**, not `Luce-Org/lucebox`; at `bab084443f14e6ab3ba76f8e8e3f721ad2e56144`, the complete tree has no LICENSE, COPYING, or NOTICE file. The included CUDA consists of reduced implementations produced during the case study, not a bundled upstream checkout. No upstream license or separately documented permission grant is asserted |
 | FlashMoE upstream | `osayamenja/FlashMoE`, pinned in `sources.json`; BSD-3-Clause, copyright 2026 Osayamen Jonathan Aimuyo; original notice and conditions retained in `licenses/FlashMoE-BSD-3-Clause.txt` |
 | F*/Pulse support | Source snapshots and changes relative to the pinned compiler package; applicable Apache-2.0 texts retained |
-| Reference semantics | Qwen3 and Qwen3.5 Transformers model implementations, with model identities pinned in `sources.json`; Transformers and PyTorch license texts retained. No model weights, tokenizers, or input tensors are included |
+| Reference semantics | Qwen3 and Qwen3.5 Transformers model implementations, with model identities pinned in `sources.json`; the Mirage Qwen3 sources are included in `reference/mirage/`; Transformers and PyTorch license texts retained. No model weights, tokenizers, or input tensors are included |
 | Proofs and new replay code | Authored during the proof-artifact work. No additional outbound license is assigned by this migration; dependency notices do not automatically license this material |
 
 Existing notices inside source files are preserved. Dependency license texts
@@ -52,8 +52,17 @@ C++ file only adds a Python binding to the existing `kplay_run` function.
 
 The Mirage proofs, kernels and `support/mirage-cleanroom` are output of the
 clean-room RESOLVE proof pipeline, which replaced the earlier Mirage
-artifacts. `kernels/mirage-*.cu` are RESOLVE's reduced Mirage CUDA, and
-`*.extracted.cu` are Kuiper extractions of the verified implementations.
+artifacts. `kernels/mirage-*.cu` are RESOLVE's reduced Mirage CUDA.
+`kernels/mirage-extracted/*/KPlay_Functional.{cu,h}` are unmodified Kuiper
+extractions of the verified implementations; each `binding.cu` is the RESOLVE
+replay binding with its include paths made relative. `kernels/mirage-extracted/include/`
+holds three headers from RESOLVE's Kuiper installation. `proofs/mirage-program/*/plan.json`
+are RESOLVE's recorded host call plans.
+`reference/mirage/` is the PyTorch reference used by RESOLVE: `base.py`,
+`model_abi.py` and `model_config.json` come from the RESOLVE Mirage task, and
+the remaining Python files are unmodified Hugging Face Transformers 4.57.1
+sources (Apache License 2.0; see `licenses/Transformers-Apache-2.0.txt`).
+`mirage_check.py` is new.
 `support/mirage-cleanroom` is Kuiper library source from `nightly-2026-11-18`,
 including open Kuiper PRs #135 and #181 and RESOLVE's numeric additions.
 LUCE's complete optimized program

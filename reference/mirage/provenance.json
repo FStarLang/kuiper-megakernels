@@ -1,0 +1,50 @@
+{
+  "description": "PyTorch reference cited by proofs/mirage-shared/KPlay.SharedSpec.fst as inputs/reference/*. Files are byte-identical to the ones RESOLVE used.",
+  "files": [
+    {
+      "file": "base.py",
+      "sha256": "f80b1933b125751beffad6ed62617dc085e63f66fda772ac3b6494b90179fa5b",
+      "origin": "RESOLVE Mirage task source (original program interface and checkpoint ABI)"
+    },
+    {
+      "file": "model_abi.py",
+      "sha256": "a80e7d15491a2098013048a729d9e665fcec7bcbbfe405c5f1a61eb8e57dc866",
+      "origin": "RESOLVE Mirage task source (original program interface and checkpoint ABI)"
+    },
+    {
+      "file": "model_config.json",
+      "sha256": "660db3b73d788119c04535e48cf9be5f55bc3100841a718637ae695b442f27dd",
+      "origin": "RESOLVE Mirage task source (original program interface and checkpoint ABI)"
+    },
+    {
+      "file": "modeling_qwen3.py",
+      "sha256": "4b95c371fd26d40c69083dab36ac1eafd8cf82b415a0bb827275097c5ad2305b",
+      "origin": "Hugging Face Transformers 4.57.1, transformers/models/qwen3/modeling_qwen3.py (unmodified)"
+    },
+    {
+      "file": "configuration_qwen3.py",
+      "sha256": "27863e9718fdbc899f2d0e567621e4d3d36d8dc500c1d54b49dba4242d08d2bd",
+      "origin": "Hugging Face Transformers 4.57.1, transformers/models/qwen3/configuration_qwen3.py (unmodified)"
+    },
+    {
+      "file": "modeling_rope_utils.py",
+      "sha256": "55cc0c8cb76f592ab178b4662adcbdf4ad5012bb0b4249c0a96603141f18e9ac",
+      "origin": "Hugging Face Transformers 4.57.1, transformers/modeling_rope_utils.py (unmodified)"
+    },
+    {
+      "file": "activations.py",
+      "sha256": "3dd5a81b1e5e0c5371256f00efec19df52255420318737db1e03430a98cf4264",
+      "origin": "Hugging Face Transformers 4.57.1, transformers/activations.py (unmodified)"
+    },
+    {
+      "file": "cache_utils.py",
+      "sha256": "f4e11caf14c75bdefa5e3003b93ef0e8b97fb6103375705ad944b0b344d7da8a",
+      "origin": "Hugging Face Transformers 4.57.1, transformers/cache_utils.py (unmodified)"
+    },
+    {
+      "file": "masking_utils.py",
+      "sha256": "7a963feed8173b8265298dd24350c166222ce6b4719442fce48ab414d0478a6a",
+      "origin": "Hugging Face Transformers 4.57.1, transformers/masking_utils.py (unmodified)"
+    }
+  ]
+}

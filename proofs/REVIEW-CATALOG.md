@@ -9,7 +9,10 @@ implementation cases**, not merely their interfaces.
 
 The Mirage proofs in this repository come from the clean-room RESOLVE proof
 pipeline (see the [README](../README.md#mirage-clean-room-resolve-pipeline-proof)).
-They have no review or tightness cases, so this catalog covers LUCE and FlashMoE only.
+Their one review, [`mirage-program`](mirage-program/KPlay.Review.fsti), is simpler than
+the ones below: both roles take identical inputs and satisfy the identical shared
+`program_postcondition`, so there is no representation difference to assess. Mirage
+has no tightness cases. The detailed assessments below cover LUCE and FlashMoE.
 
 ## How to read the assessments
 

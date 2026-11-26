@@ -37,6 +37,13 @@ class ReplayTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "inventory mismatch"):
                 replay.inventory()
 
+    def test_python_bytecode_cache_is_ignored(self):
+        cache = self.root / "reference/mirage/__pycache__/model_abi.cpython-312.pyc"
+        cache.parent.mkdir(parents=True)
+        cache.write_bytes(b"bytecode")
+        with patch.object(replay, "ROOT", self.root):
+            self.assertEqual(replay.inventory(), self.manifest)
+
     def test_indexed_shared_root_is_accepted(self):
         shared = self.root / "proofs/case/Shared.fst"
         shared.write_text("module Shared\n")

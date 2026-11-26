@@ -21,7 +21,7 @@ The shared-check case IDs are `<project>-shared`.
 
 | Program | Covered workload and observations | Important boundary |
 | --- | --- | --- |
-| Mirage | Qwen3-0.6B; all 28 layers, prompt length 7, one decode step, hidden width 1024, vocabulary 151936. Prompt copied before the generated token; seven final normalized hidden rows; the token is an allowed maximum of a score row approximating the reference logits. | Composition over the generated host wiring of the reduced program; family kernels linked to the reduced CUDA by finite bitwise replay. Not arbitrary prompt/decode lengths. |
+| Mirage | Qwen3-0.6B; all 28 layers, one forward pass over a seven-token prompt plus the greedy next token, hidden width 1024, vocabulary 151936. Prompt copied before the generated token; seven final normalized hidden rows; the token is an allowed maximum of a score row approximating the reference logits. | Composition over the generated host wiring of the reduced program; family kernels linked to the reduced CUDA by finite bitwise replay. Not arbitrary prompt/decode lengths. |
 | LUCE | Qwen3.5-0.8B; all 24 layers: 18 recurrent and six full-attention layers. Prompt lengths 1..520, decode counts 1/5/30/128, and `P+S-1<=2048`. Complete generated-token and pre-final-normalization BF16 hidden histories, recurrent/convolution/KV state, feedback, and caller ownership/lifetimes. | Repaired optimized scalar loads; stable, non-materializing inputs, including ordinary contiguous offset views. FP32 final-normalization observations are distinct from BF16 hidden/history observations. |
 | FlashMoE | Retained router only: `S=256,H=512,E=8,C=32,top_k=1`, finite BF16 tokens bounded by 32 and expert-major weights bounded by 4. Complete demand, packed indices, normalized probabilities, and survival. | No expert MLP or larger-profile claim. The exact original optimized candidate and its original-to-retained binding are unavailable. |
 
@@ -229,13 +229,26 @@ states:
 host call of the reduced program imply `program_postcondition`. Each family's
 Kuiper implementation proves its relation.
 
+`KPlay.Review` (case `mirage-program-review`) checks that both roles, run on
+the same inputs, satisfy this same postcondition. Mirage has no tightness cases.
+
 This guarantee is relational, not an error bound and not equality of base and
-optimized outputs. It has no tightness or review cases.
+optimized outputs. `x %~ r` means the machine value `x` stands for the exact real
+result `r` with rounding abstracted away; it bounds no distance between them.
+
+The specification cites the reference as `inputs/reference/*`; those files are
+shipped byte-identical in [`reference/mirage/`](reference/mirage/). The host
+call plans behind the generated wiring are shipped as
+`proofs/mirage-program/<role>/plan.json`. `mirage_check.py` replays these plans
+on a GPU. It checks each extracted family kernel bitwise against the reduced
+family CUDA, and it checks the composed plan bitwise against the reduced program
+(results in `benchmarks/mirage-plan-replay.json`). Those are finite observations
+that make the trusted links inspectable; they do not replace them.
 
 It is conditional on the trusted assumptions listed prominently in the
 [README](README.md#trusted-assumptions-mirage):
 - the BF16 widening and literal laws added by RESOLVE;
 - the open Kuiper PR #181 `bits_spec` law;
-- the generated host wiring;
+- the generated host wiring (a translation of `plan.json`);
 - the finite bitwise replays that connect extracted kernels, reduced CUDA, and
   the original megakernel.

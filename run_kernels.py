@@ -13,10 +13,10 @@ import time
 from replay import ROOT, inventory, sha256, write_json
 
 
-def compile_kernel(torch, case, work, jobs):
+def compile_kernel(torch, case, work, jobs, source=None, include_paths=(), cuda_flags=()):
     from torch.utils.cpp_extension import load
 
-    source = ROOT / case["kernel"]
+    source = source or ROOT / case["kernel"]
     name = case["id"].replace("-", "_") + "_" + sha256(source)[:12]
     directory = work / name
     directory.mkdir(parents=True, exist_ok=True)
@@ -35,8 +35,8 @@ def compile_kernel(torch, case, work, jobs):
     started = time.monotonic()
     module = load(
         name=name, sources=[str(source), str(path)], build_directory=str(directory),
-        extra_cflags=["-O2"], extra_cuda_cflags=["-O2", "--expt-relaxed-constexpr"],
-        verbose=False,
+        extra_cflags=["-O2"], extra_cuda_cflags=["-O2", "--expt-relaxed-constexpr", *cuda_flags],
+        extra_include_paths=[str(path) for path in include_paths], verbose=False,
     )
     return module, time.monotonic() - started
 

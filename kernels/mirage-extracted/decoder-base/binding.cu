@@ -38,6 +38,6 @@ std::vector<torch::Tensor> kplay_run(torch::Tensor input0, torch::Tensor input1,
 
 #pragma push_macro("KRML_CHECK_SIZE")
 #undef KRML_CHECK_SIZE
-#include "/fastdata/tsorensen/resolve-mirage-proof-20261125/installs/clean/inst/include/krml/krml/internal/target.h"
+#include "krml/internal/target.h"
 #pragma pop_macro("KRML_CHECK_SIZE")
-#include "/fastdata/tsorensen/resolve-mirage-final-20261125/recheck/families/base/decoder/kuiper/generated/KPlay_Functional.cu"
+#include "KPlay_Functional.cu"

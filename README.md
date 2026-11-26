@@ -2,7 +2,7 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 24 family refinements, three shared-specification checks,
-and eight family-tightness proofs**, plus ten checked contract reviews.
+and eight family-tightness proofs**, plus eleven checked contract reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -22,20 +22,63 @@ clean-room RESOLVE proof pipeline
 ([`src/KPlay/proof_pipeline`](https://github.com/msr-central/resolve/tree/main/src/KPlay/proof_pipeline)).
 The agents saw only the reduced CUDA, the PyTorch reference and the Kuiper
 library. They had no access to earlier Mirage proofs, including the former
-Mirage artifacts here. The selected Qwen3-0.6B kernel (seven-token prefill plus one greedy decode
-step) is proved for both roles, and the result then passed RESOLVE's normal
-final check.
+Mirage artifacts here. The selected Qwen3-0.6B kernel is proved for both roles,
+and the result then passed RESOLVE's normal final check. The kernel runs one
+forward pass over a seven-token prompt and appends the greedy (argmax) next
+token; it returns the eight tokens and the seven final hidden rows.
 
 | Case | What F* checks |
 | --- | --- |
 | `mirage-shared` | [`KPlay.SharedSpec`](proofs/mirage-shared/KPlay.SharedSpec.fst): exact real reference math, the role-independent `program_postcondition`, and one quantified relation per role and family |
 | `mirage-{argmax,decoder,embedding,projection}-{base,optimized}` | Each Kuiper/Pulse implementation in `KPlay.Functional` ensures its family relation: for **all** reals that the inputs approximate, the outputs approximate the reference of those reals |
 | `mirage-program-{base,optimized}` | `KPlay.Proof.Program.<Role>.refines`: the family relations at every host call of the reduced program imply `program_postcondition`. That postcondition covers the prompt copied in front of the token, the final hidden rows approximating `final_hidden`, and the token being an allowed maximum of a score row that approximates `next_token_logits` |
+| `mirage-program-review` | [`KPlay.Review`](proofs/mirage-program/KPlay.Review.fsti): the short statement to read. On the same inputs, **both** roles' final state satisfies the same `program_postcondition` |
 
-`kernels/mirage-<family>-<role>.cu` and `kernels/mirage-program-<role>.cu` are
-the reduced family and complete programs. `*.extracted.cu` is the CUDA that
-Kuiper extracted from each verified implementation. RESOLVE replayed it bitwise
-against the reduced family CUDA on recorded inputs.
+**Reading `%~`.** `x %~ r` relates a machine value `x` (BF16/F32) to a real
+number `r` in Kuiper's abstract floating-point model. The specification is
+written over exact real arithmetic, and `%~` says the computed value stands
+for that real result with rounding abstracted away. It is a relation, not a
+numeric error bound: the proofs do not say how far `x` is from `r`.
+
+### Mirage files
+
+| Path | Contents |
+| --- | --- |
+| `reference/mirage/` | The PyTorch reference that `KPlay.SharedSpec` cites as `inputs/reference/*`: `base.py`, the checkpoint ABI `model_abi.py`, `model_config.json`, and the unmodified Transformers 4.57.1 Qwen3 sources it runs. [`provenance.json`](reference/mirage/provenance.json) lists their hashes and origins |
+| `kernels/mirage-program-<role>.cu` | The reduced complete program for each role (the CUDA whose behavior is proved) |
+| `kernels/mirage-<family>-<role>.cu` | The reduced family kernels, one per host call kind |
+| `kernels/mirage-extracted/<family>-<role>/` | The CUDA that Kuiper extracted from each verified implementation (`KPlay_Functional.{cu,h}`) plus a small PyTorch binding (`binding.cu`). `kernels/mirage-extracted/include/` holds the three RESOLVE install headers that differ from or are absent in the Kuiper release |
+| `proofs/mirage-program/<role>/plan.json` | The recorded host call plan of the reduced program: each family call, its arguments (prompt, weight views, earlier outputs) and the program outputs. `KPlay.Proof.Wiring.<Role>` is the translation of this plan, and `accepted_cuda_sha256` binds it to the program CUDA |
+
+### Observing the reduced kernels (GPU)
+
+[`mirage_check.py`](mirage_check.py) makes the bitwise links concrete. For each
+role it runs the complete reduced program and then replays `plan.json` call by
+call. Each family call runs both the reduced family kernel and the
+Kuiper-extracted kernel on the same arguments, and the two must match bitwise.
+Composing the reduced family outputs per the plan must then reproduce the
+complete program's outputs bitwise. It downloads the pinned Kuiper release
+headers, and compiles the extracted code with `--fmad=false` as RESOLVE did
+(the extracted code is the F* model, so the compiler must not contract it).
+
+```bash
+# GPU environment as in "Inspect and run the reduced kernels" below.
+.venv-gpu/bin/python mirage_check.py                # synthetic seeded weights
+# Real Qwen3-0.6B weights plus the Transformers reference:
+.venv-gpu/bin/pip install transformers==4.57.1 safetensors
+CUDA_VISIBLE_DEVICES=0 .venv-gpu/bin/python mirage_check.py \
+    --checkpoint model.safetensors --reference \
+    --prompt 785,3974,13876,38835,34208,916,279   # "The quick brown fox jumps over the"
+```
+
+[`benchmarks/mirage-plan-replay.json`](benchmarks/mirage-plan-replay.json)
+records both runs on an H100. All 31 base and 31 optimized calls matched
+bitwise, and both compositions reproduced their programs. With the real
+checkpoint both roles and the reference chose `" lazy"`. The base hidden rows
+were bitwise equal to the reference's, and the optimized rows differed by at
+most 3.0 (mean 0.13; values up to 60.75). These are observations on one input,
+not proofs.
+
 These cases use profile `mirage-cleanroom`. That profile is pinned to Kuiper
 `nightly-2026-11-18` (F* `049c07a`, Z3 5.3.0) plus the RESOLVE library overlay in
 [`support/mirage-cleanroom/`](support/mirage-cleanroom/). The overlay holds the
@@ -63,7 +106,8 @@ These cases use profile `mirage-cleanroom`. That profile is pinned to Kuiper
 >
 > Outside F*, the guarantee also trusts:
 > - the generated host wiring `KPlay.Proof.Wiring.<Role>`, a mechanical
->   translation of the reduced program's recorded host call plan;
+>   translation of the reduced program's recorded host call plan
+>   (`proofs/mirage-program/<role>/plan.json`);
 > - the finite bitwise replays linking the extracted family kernels to the
 >   reduced CUDA, and the reduced program to the original Mirage megakernel.
 >
@@ -205,7 +249,7 @@ correctness is unconditional; optimized numerical correctness retains its
 family-dependency and numerical-scope premises on the actual returned execution.
 Both enqueue one completion epoch and preserve allocation-failure behavior.
 
-The [review catalog](proofs/REVIEW-CATALOG.md) compares all ten groups,
+The [review catalog](proofs/REVIEW-CATALOG.md) compares the ten LUCE and FlashMoE groups,
 assesses the significance of each contract difference, and distinguishes
 exact functionality, allowed choices, and conditional/relative numerical
 tightness. Each interface includes a more detailed comment at its visible
@@ -265,6 +309,7 @@ python3 -m venv .venv-gpu
 python -m pip install -r requirements-gpu.txt
 python run_kernels.py --project all --device 0 --jobs 2
 python run_kernels.py --project all --kind family --compile-only --jobs 2
+python mirage_check.py   # Mirage plan replay and extracted-kernel links (see above)
 ```
 
 The smoke runner builds **all six complete reduced programs** and checks their
@@ -273,8 +318,8 @@ LUCE's offset-one input repair. It does not demand identical tokens between
 implementations when their specifications permit different choices.
 The 24 family entry points can be compiled independently; execution requires
 their documented caller state, rather than arbitrary zero-filled arguments.
-These are reduced-CUDA checks, **not new extraction of the Pulse witnesses**
-or replays of the original megakernels. No weights or tensors are downloaded.
+Apart from `mirage_check.py`, these are reduced-CUDA checks, **not new extraction
+of the Pulse witnesses** or replays of the original megakernels. No weights or tensors are downloaded.
 
 Full upstream pins, kernel/reference entry paths, model identities, and
 provenance limitations are in `sources.json`. An upstream checkout is a

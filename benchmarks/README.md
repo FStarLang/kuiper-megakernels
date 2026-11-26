@@ -9,6 +9,9 @@ software details are in [environment.json](environment.json).
 > artifacts, which the clean-room pipeline proof has since replaced. They are
 > kept as historical records. Timings for the current Mirage cases are in
 > [mirage-cleanroom-proof-checks.json](mirage-cleanroom-proof-checks.json).
+> The Mirage GPU plan replay (extracted vs. reduced kernels, composed plan vs.
+> program, and the Transformers reference comparison) is in
+> [mirage-plan-replay.json](mirage-plan-replay.json).
 
 ## Measurement method
 

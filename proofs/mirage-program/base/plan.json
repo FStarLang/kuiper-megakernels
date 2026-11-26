@@ -1,0 +1,2926 @@
+{
+  "accepted_cuda_sha256": "04f1dd20558412edaecdb3cd2f11bd94aca17211b3c34ccb4b19743cba702d04",
+  "cases": {
+    "sample-0000": {
+      "outputs": [
+        {
+          "output": 0,
+          "step": "select_next_token"
+        },
+        {
+          "output": 1,
+          "step": "decoder_27"
+        }
+      ],
+      "steps": [
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "input": 1
+            },
+            {
+              "literal": 0
+            },
+            {
+              "literal": 155583488
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "embedding",
+          "id": "embedding_setup",
+          "observations": [
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "embedding_setup"
+            },
+            {
+              "output": 1,
+              "step": "embedding_setup"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 155583488
+            },
+            {
+              "literal": 171314432
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_00",
+          "observations": [
+            5,
+            6
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_00"
+            },
+            {
+              "output": 1,
+              "step": "decoder_00"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 171314432
+            },
+            {
+              "literal": 187045376
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_01",
+          "observations": [
+            7,
+            8
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_01"
+            },
+            {
+              "output": 1,
+              "step": "decoder_01"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 187045376
+            },
+            {
+              "literal": 202776320
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_02",
+          "observations": [
+            9,
+            10
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_02"
+            },
+            {
+              "output": 1,
+              "step": "decoder_02"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 202776320
+            },
+            {
+              "literal": 218507264
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_03",
+          "observations": [
+            11,
+            12
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_03"
+            },
+            {
+              "output": 1,
+              "step": "decoder_03"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 218507264
+            },
+            {
+              "literal": 234238208
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_04",
+          "observations": [
+            13,
+            14
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_04"
+            },
+            {
+              "output": 1,
+              "step": "decoder_04"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 234238208
+            },
+            {
+              "literal": 249969152
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_05",
+          "observations": [
+            15,
+            16
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_05"
+            },
+            {
+              "output": 1,
+              "step": "decoder_05"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 249969152
+            },
+            {
+              "literal": 265700096
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_06",
+          "observations": [
+            17,
+            18
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_06"
+            },
+            {
+              "output": 1,
+              "step": "decoder_06"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 265700096
+            },
+            {
+              "literal": 281431040
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_07",
+          "observations": [
+            19,
+            20
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_07"
+            },
+            {
+              "output": 1,
+              "step": "decoder_07"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 281431040
+            },
+            {
+              "literal": 297161984
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_08",
+          "observations": [
+            21,
+            22
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_08"
+            },
+            {
+              "output": 1,
+              "step": "decoder_08"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 297161984
+            },
+            {
+              "literal": 312892928
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_09",
+          "observations": [
+            23,
+            24
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_09"
+            },
+            {
+              "output": 1,
+              "step": "decoder_09"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 312892928
+            },
+            {
+              "literal": 328623872
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_10",
+          "observations": [
+            25,
+            26
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_10"
+            },
+            {
+              "output": 1,
+              "step": "decoder_10"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 328623872
+            },
+            {
+              "literal": 344354816
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_11",
+          "observations": [
+            27,
+            28
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_11"
+            },
+            {
+              "output": 1,
+              "step": "decoder_11"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 344354816
+            },
+            {
+              "literal": 360085760
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_12",
+          "observations": [
+            29,
+            30
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_12"
+            },
+            {
+              "output": 1,
+              "step": "decoder_12"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 360085760
+            },
+            {
+              "literal": 375816704
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_13",
+          "observations": [
+            31,
+            32
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_13"
+            },
+            {
+              "output": 1,
+              "step": "decoder_13"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 375816704
+            },
+            {
+              "literal": 391547648
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_14",
+          "observations": [
+            33,
+            34
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_14"
+            },
+            {
+              "output": 1,
+              "step": "decoder_14"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 391547648
+            },
+            {
+              "literal": 407278592
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_15",
+          "observations": [
+            35,
+            36
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_15"
+            },
+            {
+              "output": 1,
+              "step": "decoder_15"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 407278592
+            },
+            {
+              "literal": 423009536
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_16",
+          "observations": [
+            37,
+            38
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_16"
+            },
+            {
+              "output": 1,
+              "step": "decoder_16"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 423009536
+            },
+            {
+              "literal": 438740480
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_17",
+          "observations": [
+            39,
+            40
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_17"
+            },
+            {
+              "output": 1,
+              "step": "decoder_17"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 438740480
+            },
+            {
+              "literal": 454471424
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_18",
+          "observations": [
+            41,
+            42
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_18"
+            },
+            {
+              "output": 1,
+              "step": "decoder_18"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 454471424
+            },
+            {
+              "literal": 470202368
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_19",
+          "observations": [
+            43,
+            44
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_19"
+            },
+            {
+              "output": 1,
+              "step": "decoder_19"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 470202368
+            },
+            {
+              "literal": 485933312
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_20",
+          "observations": [
+            45,
+            46
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_20"
+            },
+            {
+              "output": 1,
+              "step": "decoder_20"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 485933312
+            },
+            {
+              "literal": 501664256
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_21",
+          "observations": [
+            47,
+            48
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_21"
+            },
+            {
+              "output": 1,
+              "step": "decoder_21"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 501664256
+            },
+            {
+              "literal": 517395200
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_22",
+          "observations": [
+            49,
+            50
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_22"
+            },
+            {
+              "output": 1,
+              "step": "decoder_22"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 517395200
+            },
+            {
+              "literal": 533126144
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_23",
+          "observations": [
+            51,
+            52
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_23"
+            },
+            {
+              "output": 1,
+              "step": "decoder_23"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 533126144
+            },
+            {
+              "literal": 548857088
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_24",
+          "observations": [
+            53,
+            54
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_24"
+            },
+            {
+              "output": 1,
+              "step": "decoder_24"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 548857088
+            },
+            {
+              "literal": 564588032
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_25",
+          "observations": [
+            55,
+            56
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_25"
+            },
+            {
+              "output": 1,
+              "step": "decoder_25"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 564588032
+            },
+            {
+              "literal": 580318976
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_26",
+          "observations": [
+            57,
+            58
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_26"
+            },
+            {
+              "output": 1,
+              "step": "decoder_26"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 580318976
+            },
+            {
+              "literal": 155582464
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_27",
+          "observations": [
+            59,
+            60
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 1,
+              "step": "decoder_27"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "projection",
+          "id": "final_projection",
+          "observations": [
+            61
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 1
+            },
+            {
+              "output": 0,
+              "step": "final_projection",
+              "view": {
+                "offset": 911616,
+                "shape": [
+                  151936
+                ]
+              }
+            },
+            {
+              "input": 2
+            }
+          ],
+          "family": "argmax",
+          "id": "select_next_token",
+          "observations": [
+            62,
+            63
+          ]
+        }
+      ]
+    },
+    "sample-0001": {
+      "outputs": [
+        {
+          "output": 0,
+          "step": "select_next_token"
+        },
+        {
+          "output": 1,
+          "step": "decoder_27"
+        }
+      ],
+      "steps": [
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "input": 1
+            },
+            {
+              "literal": 0
+            },
+            {
+              "literal": 155583488
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "embedding",
+          "id": "embedding_setup",
+          "observations": [
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "embedding_setup"
+            },
+            {
+              "output": 1,
+              "step": "embedding_setup"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 155583488
+            },
+            {
+              "literal": 171314432
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_00",
+          "observations": [
+            5,
+            6
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_00"
+            },
+            {
+              "output": 1,
+              "step": "decoder_00"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 171314432
+            },
+            {
+              "literal": 187045376
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_01",
+          "observations": [
+            7,
+            8
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_01"
+            },
+            {
+              "output": 1,
+              "step": "decoder_01"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 187045376
+            },
+            {
+              "literal": 202776320
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_02",
+          "observations": [
+            9,
+            10
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_02"
+            },
+            {
+              "output": 1,
+              "step": "decoder_02"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 202776320
+            },
+            {
+              "literal": 218507264
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_03",
+          "observations": [
+            11,
+            12
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_03"
+            },
+            {
+              "output": 1,
+              "step": "decoder_03"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 218507264
+            },
+            {
+              "literal": 234238208
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_04",
+          "observations": [
+            13,
+            14
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_04"
+            },
+            {
+              "output": 1,
+              "step": "decoder_04"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 234238208
+            },
+            {
+              "literal": 249969152
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_05",
+          "observations": [
+            15,
+            16
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_05"
+            },
+            {
+              "output": 1,
+              "step": "decoder_05"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 249969152
+            },
+            {
+              "literal": 265700096
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_06",
+          "observations": [
+            17,
+            18
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_06"
+            },
+            {
+              "output": 1,
+              "step": "decoder_06"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 265700096
+            },
+            {
+              "literal": 281431040
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_07",
+          "observations": [
+            19,
+            20
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_07"
+            },
+            {
+              "output": 1,
+              "step": "decoder_07"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 281431040
+            },
+            {
+              "literal": 297161984
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_08",
+          "observations": [
+            21,
+            22
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_08"
+            },
+            {
+              "output": 1,
+              "step": "decoder_08"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 297161984
+            },
+            {
+              "literal": 312892928
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_09",
+          "observations": [
+            23,
+            24
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_09"
+            },
+            {
+              "output": 1,
+              "step": "decoder_09"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 312892928
+            },
+            {
+              "literal": 328623872
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_10",
+          "observations": [
+            25,
+            26
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_10"
+            },
+            {
+              "output": 1,
+              "step": "decoder_10"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 328623872
+            },
+            {
+              "literal": 344354816
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_11",
+          "observations": [
+            27,
+            28
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_11"
+            },
+            {
+              "output": 1,
+              "step": "decoder_11"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 344354816
+            },
+            {
+              "literal": 360085760
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_12",
+          "observations": [
+            29,
+            30
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_12"
+            },
+            {
+              "output": 1,
+              "step": "decoder_12"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 360085760
+            },
+            {
+              "literal": 375816704
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_13",
+          "observations": [
+            31,
+            32
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_13"
+            },
+            {
+              "output": 1,
+              "step": "decoder_13"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 375816704
+            },
+            {
+              "literal": 391547648
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_14",
+          "observations": [
+            33,
+            34
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_14"
+            },
+            {
+              "output": 1,
+              "step": "decoder_14"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 391547648
+            },
+            {
+              "literal": 407278592
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_15",
+          "observations": [
+            35,
+            36
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_15"
+            },
+            {
+              "output": 1,
+              "step": "decoder_15"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 407278592
+            },
+            {
+              "literal": 423009536
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_16",
+          "observations": [
+            37,
+            38
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_16"
+            },
+            {
+              "output": 1,
+              "step": "decoder_16"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 423009536
+            },
+            {
+              "literal": 438740480
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_17",
+          "observations": [
+            39,
+            40
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_17"
+            },
+            {
+              "output": 1,
+              "step": "decoder_17"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 438740480
+            },
+            {
+              "literal": 454471424
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_18",
+          "observations": [
+            41,
+            42
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_18"
+            },
+            {
+              "output": 1,
+              "step": "decoder_18"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 454471424
+            },
+            {
+              "literal": 470202368
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_19",
+          "observations": [
+            43,
+            44
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_19"
+            },
+            {
+              "output": 1,
+              "step": "decoder_19"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 470202368
+            },
+            {
+              "literal": 485933312
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_20",
+          "observations": [
+            45,
+            46
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_20"
+            },
+            {
+              "output": 1,
+              "step": "decoder_20"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 485933312
+            },
+            {
+              "literal": 501664256
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_21",
+          "observations": [
+            47,
+            48
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_21"
+            },
+            {
+              "output": 1,
+              "step": "decoder_21"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 501664256
+            },
+            {
+              "literal": 517395200
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_22",
+          "observations": [
+            49,
+            50
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_22"
+            },
+            {
+              "output": 1,
+              "step": "decoder_22"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 517395200
+            },
+            {
+              "literal": 533126144
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_23",
+          "observations": [
+            51,
+            52
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_23"
+            },
+            {
+              "output": 1,
+              "step": "decoder_23"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 533126144
+            },
+            {
+              "literal": 548857088
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_24",
+          "observations": [
+            53,
+            54
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_24"
+            },
+            {
+              "output": 1,
+              "step": "decoder_24"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 548857088
+            },
+            {
+              "literal": 564588032
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_25",
+          "observations": [
+            55,
+            56
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_25"
+            },
+            {
+              "output": 1,
+              "step": "decoder_25"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 564588032
+            },
+            {
+              "literal": 580318976
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_26",
+          "observations": [
+            57,
+            58
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_26"
+            },
+            {
+              "output": 1,
+              "step": "decoder_26"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 580318976
+            },
+            {
+              "literal": 155582464
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_27",
+          "observations": [
+            59,
+            60
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 1,
+              "step": "decoder_27"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "projection",
+          "id": "final_projection",
+          "observations": [
+            61
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 1
+            },
+            {
+              "output": 0,
+              "step": "final_projection",
+              "view": {
+                "offset": 911616,
+                "shape": [
+                  151936
+                ]
+              }
+            },
+            {
+              "input": 2
+            }
+          ],
+          "family": "argmax",
+          "id": "select_next_token",
+          "observations": [
+            62,
+            63
+          ]
+        }
+      ]
+    },
+    "sample-0002": {
+      "outputs": [
+        {
+          "output": 0,
+          "step": "select_next_token"
+        },
+        {
+          "output": 1,
+          "step": "decoder_27"
+        }
+      ],
+      "steps": [
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "input": 1
+            },
+            {
+              "literal": 0
+            },
+            {
+              "literal": 155583488
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "embedding",
+          "id": "embedding_setup",
+          "observations": [
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "embedding_setup"
+            },
+            {
+              "output": 1,
+              "step": "embedding_setup"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 155583488
+            },
+            {
+              "literal": 171314432
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_00",
+          "observations": [
+            5,
+            6
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_00"
+            },
+            {
+              "output": 1,
+              "step": "decoder_00"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 171314432
+            },
+            {
+              "literal": 187045376
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_01",
+          "observations": [
+            7,
+            8
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_01"
+            },
+            {
+              "output": 1,
+              "step": "decoder_01"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 187045376
+            },
+            {
+              "literal": 202776320
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_02",
+          "observations": [
+            9,
+            10
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_02"
+            },
+            {
+              "output": 1,
+              "step": "decoder_02"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 202776320
+            },
+            {
+              "literal": 218507264
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_03",
+          "observations": [
+            11,
+            12
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_03"
+            },
+            {
+              "output": 1,
+              "step": "decoder_03"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 218507264
+            },
+            {
+              "literal": 234238208
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_04",
+          "observations": [
+            13,
+            14
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_04"
+            },
+            {
+              "output": 1,
+              "step": "decoder_04"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 234238208
+            },
+            {
+              "literal": 249969152
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_05",
+          "observations": [
+            15,
+            16
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_05"
+            },
+            {
+              "output": 1,
+              "step": "decoder_05"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 249969152
+            },
+            {
+              "literal": 265700096
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_06",
+          "observations": [
+            17,
+            18
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_06"
+            },
+            {
+              "output": 1,
+              "step": "decoder_06"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 265700096
+            },
+            {
+              "literal": 281431040
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_07",
+          "observations": [
+            19,
+            20
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_07"
+            },
+            {
+              "output": 1,
+              "step": "decoder_07"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 281431040
+            },
+            {
+              "literal": 297161984
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_08",
+          "observations": [
+            21,
+            22
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_08"
+            },
+            {
+              "output": 1,
+              "step": "decoder_08"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 297161984
+            },
+            {
+              "literal": 312892928
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_09",
+          "observations": [
+            23,
+            24
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_09"
+            },
+            {
+              "output": 1,
+              "step": "decoder_09"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 312892928
+            },
+            {
+              "literal": 328623872
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_10",
+          "observations": [
+            25,
+            26
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_10"
+            },
+            {
+              "output": 1,
+              "step": "decoder_10"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 328623872
+            },
+            {
+              "literal": 344354816
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_11",
+          "observations": [
+            27,
+            28
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_11"
+            },
+            {
+              "output": 1,
+              "step": "decoder_11"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 344354816
+            },
+            {
+              "literal": 360085760
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_12",
+          "observations": [
+            29,
+            30
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_12"
+            },
+            {
+              "output": 1,
+              "step": "decoder_12"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 360085760
+            },
+            {
+              "literal": 375816704
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_13",
+          "observations": [
+            31,
+            32
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_13"
+            },
+            {
+              "output": 1,
+              "step": "decoder_13"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 375816704
+            },
+            {
+              "literal": 391547648
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_14",
+          "observations": [
+            33,
+            34
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_14"
+            },
+            {
+              "output": 1,
+              "step": "decoder_14"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 391547648
+            },
+            {
+              "literal": 407278592
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_15",
+          "observations": [
+            35,
+            36
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_15"
+            },
+            {
+              "output": 1,
+              "step": "decoder_15"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 407278592
+            },
+            {
+              "literal": 423009536
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_16",
+          "observations": [
+            37,
+            38
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_16"
+            },
+            {
+              "output": 1,
+              "step": "decoder_16"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 423009536
+            },
+            {
+              "literal": 438740480
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_17",
+          "observations": [
+            39,
+            40
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_17"
+            },
+            {
+              "output": 1,
+              "step": "decoder_17"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 438740480
+            },
+            {
+              "literal": 454471424
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_18",
+          "observations": [
+            41,
+            42
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_18"
+            },
+            {
+              "output": 1,
+              "step": "decoder_18"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 454471424
+            },
+            {
+              "literal": 470202368
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_19",
+          "observations": [
+            43,
+            44
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_19"
+            },
+            {
+              "output": 1,
+              "step": "decoder_19"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 470202368
+            },
+            {
+              "literal": 485933312
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_20",
+          "observations": [
+            45,
+            46
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_20"
+            },
+            {
+              "output": 1,
+              "step": "decoder_20"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 485933312
+            },
+            {
+              "literal": 501664256
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_21",
+          "observations": [
+            47,
+            48
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_21"
+            },
+            {
+              "output": 1,
+              "step": "decoder_21"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 501664256
+            },
+            {
+              "literal": 517395200
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_22",
+          "observations": [
+            49,
+            50
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_22"
+            },
+            {
+              "output": 1,
+              "step": "decoder_22"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 517395200
+            },
+            {
+              "literal": 533126144
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_23",
+          "observations": [
+            51,
+            52
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_23"
+            },
+            {
+              "output": 1,
+              "step": "decoder_23"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 533126144
+            },
+            {
+              "literal": 548857088
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_24",
+          "observations": [
+            53,
+            54
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_24"
+            },
+            {
+              "output": 1,
+              "step": "decoder_24"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 548857088
+            },
+            {
+              "literal": 564588032
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_25",
+          "observations": [
+            55,
+            56
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_25"
+            },
+            {
+              "output": 1,
+              "step": "decoder_25"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 564588032
+            },
+            {
+              "literal": 580318976
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_26",
+          "observations": [
+            57,
+            58
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 0,
+              "step": "decoder_26"
+            },
+            {
+              "output": 1,
+              "step": "decoder_26"
+            },
+            {
+              "output": 2,
+              "step": "embedding_setup"
+            },
+            {
+              "literal": 580318976
+            },
+            {
+              "literal": 155582464
+            }
+          ],
+          "family": "decoder",
+          "id": "decoder_27",
+          "observations": [
+            59,
+            60
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 0
+            },
+            {
+              "output": 1,
+              "step": "decoder_27"
+            },
+            {
+              "literal": 0
+            }
+          ],
+          "family": "projection",
+          "id": "final_projection",
+          "observations": [
+            61
+          ]
+        },
+        {
+          "arguments": [
+            {
+              "input": 1
+            },
+            {
+              "output": 0,
+              "step": "final_projection",
+              "view": {
+                "offset": 911616,
+                "shape": [
+                  151936
+                ]
+              }
+            },
+            {
+              "input": 2
+            }
+          ],
+          "family": "argmax",
+          "id": "select_next_token",
+          "observations": [
+            62,
+            63
+          ]
+        }
+      ]
+    }
+  },
+  "families": {
+    "argmax": {
+      "cuda": "argmax.cu",
+      "description": "The accepted serial select_token operation, including its existing prompt copy. Inputs: input0 contiguous CUDA int64 prompt vector; input1 contiguous CUDA BF16 nonempty score vector; input2 int decode_steps=1. Both vectors share the selected device and their lengths fit int32. The schedule supplies the actual final-row logits through a contiguous view, never recorded scores during reconstruction. Returns fresh int64 tokens[1,prompt_length+1] and rank-zero int64 selected index. Copy prompt first, initialize best/index from score 0, then visit columns 1..N-1 in order. Update only for value>best or isnan(value)&&!isnan(best): the first equal maximum wins, signed-zero ties retain the first index, and the first NaN wins over finite values and later NaNs. No running maximum is merged or reordered. This is a separate argmax proof target: exact replay does not establish stability between approximately related upstream scores or cross-implementation numerical/compositional equivalence.",
+      "input_kinds": [
+        "tensor",
+        "tensor",
+        "int"
+      ],
+      "kind": "argmax",
+      "output_count": 2
+    },
+    "decoder": {
+      "cuda": "decoder.cu",
+      "description": "One complete accepted eight-kernel decoder block, reused for all 28 layers: QKV projection, Q/K RMS and RoPE, causal grouped-query attention, output projection, attention residual/post-attention RMS, gate/up projection, SiLU product, down projection, and final residual/following RMS. Inputs: input0 flat CUDA BF16 packed weights; input1 residual[7,1024]; input2 already normalized[7,1024]; input3 rotary[2,7,128]; input4 layer element offset; input5 following RMS weight element offset. All tensors contiguous BF16 on the same selected device; offsets must cover the 15730944-element block and 1024-element norm and fit int32 indexing. Relative layout: input norm 0, post-attention norm 1024, QKV 2048, O 4196352, Q/K norms 6293504/6293632, gate/up 6293760, down 12585216. Returns fresh residual[7,1024] and following normalized[7,1024], both captured after the last fused residual_norm kernel. Implementation-specific cut: the following RMS belongs to the next layer for layers 0-26 and to the final model norm for layer 27 (input5=155582464); it is never recomputed. Four projections use the unchanged single-warp mma.sync.aligned.m16n8k16.row.col.f32.bf16.bf16.f32 loop, including the down projection's two 1536-term FP32 split-K partials. Everything else stays single-threaded, retaining four-partial RMS trees, 16 ordered strided attention-dot partials, BF16 rotary/scaling/mask/softmax roundings, the 8-entry descending softmax trees, 4+3 value-GEMM partials, and all residual/SiLU roundings. Rotary is immutable live-through state bound from embedding; original weights/prompt/decode count remain explicit input bindings. No recurrent, convolution or persistent KV state exists in this accepted seven-token prefill; all other workspaces are dead at the cut.",
+      "input_kinds": [
+        "tensor",
+        "tensor",
+        "tensor",
+        "tensor",
+        "int",
+        "int"
+      ],
+      "kind": "numerical",
+      "output_count": 2
+    },
+    "embedding": {
+      "cuda": "embedding.cu",
+      "description": "Embedding lookup, RoPE table setup, and first input RMS normalization. Inputs: input0 flat CUDA BF16 packed weights; input1 contiguous CUDA int64[7] prompt with IDs in [0,151936); input2 embedding element offset; input3 RMS weight element offset; input4 first absolute sequence position (0 in this accepted prefill). All tensors share the selected device; offsets must cover a [151936,1024] table and 1024 RMS weights and fit the checked int32 address range. Returns fresh BF16 residual[7,1024], normalized[7,1024], rotary[2,7,128] (cos then sin). One serial thread retains powf/cosf/sinf, the four-partial 128-lane descending RMS tree, epsilon 1e-6 and both BF16 normalization roundings. Rotary explicitly carries all seven positions to every decoder; weights and prompt remain immutable original-input bindings. No hidden or persistent state.",
+      "input_kinds": [
+        "tensor",
+        "tensor",
+        "int",
+        "int",
+        "int"
+      ],
+      "kind": "numerical",
+      "output_count": 3
+    },
+    "projection": {
+      "cuda": "projection.cu",
+      "description": "Full tied LM-head projection of all seven positions, without argmax or pruning unused score rows. Inputs: input0 contiguous flat CUDA BF16 packed weights; input1 final normalized BF16[7,1024]; input2 LM-head element offset (0 for the tied embedding). Tensors share the selected device; the offset must cover 151936*1024 elements and fit int32 indexing. Returns fresh BF16 logits[7,151936]. Uses the unchanged single-warp native m16n8k16 BF16-to-FP32 MMA loop in increasing K order, then BF16 storage. The final RMS is already included in the preceding decoder's fused residual_norm, not duplicated here. Final hidden is immutable live-through state referenced directly from that decoder as original output 1.",
+      "input_kinds": [
+        "tensor",
+        "tensor",
+        "int"
+      ],
+      "kind": "numerical",
+      "output_count": 1
+    }
+  },
+  "input_kinds": [
+    "tensor",
+    "tensor",
+    "int"
+  ],
+  "instrumented": "trace.cu",
+  "original_outputs": [
+    0,
+    1
+  ],
+  "schema_version": 1
+}
