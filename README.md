@@ -325,6 +325,17 @@ normal final check (DTester and Kuiper both approved).
 | `luce-program-{base,optimized}` | `KPlay.Proof.Program.<Role>.refines`: the family relations at every host call imply `program_postcondition`. For every step `j < S`, hidden row `j` approximates the reference residual at position `P-1+j` (prompt, then the generated tokens, as input), and token `j` is an allowed maximum of a BF16 or FP32 score row approximating the reference logits there. Model constants (eps, DeltaNet query scale, RoPE frequencies) may be their exact reals or the f32 / `exp2`-`log2` forms the kernels compute |
 | `luce-program-review` | [`KPlay.Review`](proofs/luce-program/KPlay.Review.fsti): on the same inputs, **both** roles' outputs satisfy the same `program_postcondition` |
 
+**Typed specification (`luce-spec`).** [`proofs/luce-spec/KPlay.Spec.fst`](proofs/luce-spec/KPlay.Spec.fst)
+restates the guarantee over named dimensions and weight/input/output records, with one real
+equation per reference operation (citing `reference/luce/`) and
+`postcondition input output = structural /\ numerical /\ selection`. It does not mention flat
+offsets. [`KPlay.Spec.Bridge`](proofs/luce-spec/KPlay.Spec.Bridge.fst) gives the layout-only views
+`inputs_of`/`outputs_of`. It proves `program_postcondition_iff`: for 752393024 packed weights and
+1024 hidden values per generated token, `program_postcondition` holds exactly when the typed
+`postcondition` holds. [`KPlay.Spec.Review`](proofs/luce-spec/KPlay.Spec.Review.fsti) concludes
+the typed `postcondition` for both roles. Check with
+`python3 replay.py verify --case luce-spec --jobs 8`. This case re-verifies the program proofs.
+
 RESOLVE's testing found base and optimized outputs **not bitwise equal** on
 any sample, so the roles agree only through this common specification. They
 may choose different tokens where scores are close. `%~` is read as for Mirage.

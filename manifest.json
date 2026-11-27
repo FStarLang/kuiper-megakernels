@@ -870,6 +870,43 @@
         "proofs/luce-program/optimized/KPlay.Proof.OptState.fst",
         "proofs/luce-program/optimized/KPlay.Proof.OptWin.fst"
       ]
+    },
+    {
+      "directory": "proofs/luce-spec",
+      "id": "luce-spec",
+      "implementation_cases": [
+        "luce-program-base",
+        "luce-program-optimized"
+      ],
+      "kind": "review",
+      "profile": "luce-cleanroom",
+      "project": "luce",
+      "roots": [
+        "proofs/luce-spec/KPlay.Spec.fst",
+        "proofs/luce-spec/KPlay.Spec.Bridge.fst",
+        "proofs/luce-spec/KPlay.Spec.Review.fsti",
+        "proofs/luce-spec/KPlay.Spec.Review.fst",
+        "proofs/luce-program/KPlay.Review.fsti",
+        "proofs/luce-program/KPlay.Review.fst",
+        "proofs/luce-program/base/KPlay.Proof.Program.Base.fsti",
+        "proofs/luce-program/base/KPlay.Proof.Program.Base.fst",
+        "proofs/luce-program/base/KPlay.Proof.Wiring.Base.fst",
+        "proofs/luce-program/base/KPlay.Proof.BaseAccess.fst",
+        "proofs/luce-program/base/KPlay.Proof.BaseChain.fst",
+        "proofs/luce-program/base/KPlay.Proof.BaseCongr.fst",
+        "proofs/luce-program/base/KPlay.Proof.BaseKV.fst",
+        "proofs/luce-program/base/KPlay.Proof.BaseRef.fst",
+        "proofs/luce-program/base/KPlay.Proof.BaseShape.fst",
+        "proofs/luce-program/base/KPlay.Proof.BaseView.fst",
+        "proofs/luce-shared/KPlay.SharedSpec.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Program.Optimized.fsti",
+        "proofs/luce-program/optimized/KPlay.Proof.Program.Optimized.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.Wiring.Optimized.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.OptApprox.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.OptChain.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.OptState.fst",
+        "proofs/luce-program/optimized/KPlay.Proof.OptWin.fst"
+      ]
     }
   ],
   "files": {
@@ -1093,6 +1130,10 @@
     "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fst": "1649c78b6296ee4de256e858a6e163dee0be894fdeeb29f3ab2c233089f63560",
     "proofs/luce-recurrent_decoder/optimized/KPlay.Functional.fsti": "37d07702640975b007167354f1f9c33b2bc0a12ee95708845b285d31c0f86b92",
     "proofs/luce-shared/KPlay.SharedSpec.fst": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+    "proofs/luce-spec/KPlay.Spec.Bridge.fst": "883cb613869f70dd6213a52c2efa79daa869d5e2d13726ac2bfe082cf3174623",
+    "proofs/luce-spec/KPlay.Spec.Review.fst": "229458f54c0ce07eafa665b01855778cecc04684d405d0d7c3493a39b35eaeee",
+    "proofs/luce-spec/KPlay.Spec.Review.fsti": "427a85f0d65efe534f5d2db45c9d7f928e84c18c3a51972cc1d8e5974afce90d",
+    "proofs/luce-spec/KPlay.Spec.fst": "a9cbca01b46babc874c542af3d6df037e090b18c515970fc51910654ab542531",
     "proofs/luce-token_history_update/base/KPlay.Functional.fst": "02d2d63f880f827adf2fbed73b3b9bfd62e0298aa6518bd122419711aec9800d",
     "proofs/luce-token_history_update/base/KPlay.Functional.fsti": "ddef389ceaa2e83e60f39de54838784d59157f6cbc8774a4af8399d999126a8c",
     "proofs/mirage-argmax/base/KPlay.Functional.fst": "f74b58c6b0bcd820978072bc393710c1b43d8d9e1055aaa26dd2a90acc6c64ee",
