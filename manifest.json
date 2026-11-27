@@ -907,6 +907,21 @@
         "proofs/luce-program/optimized/KPlay.Proof.OptState.fst",
         "proofs/luce-program/optimized/KPlay.Proof.OptWin.fst"
       ]
+    },
+    {
+      "directory": "proofs/mirage-tightness",
+      "id": "mirage-tightness",
+      "kind": "tightness",
+      "profile": "mirage-cleanroom",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-spec/KPlay.Spec.fst",
+        "proofs/tightness/KPlay.Tightness.Answer.fst",
+        "proofs/mirage-tightness/KPlay.Tightness.Mirage.Question.fst",
+        "proofs/mirage-tightness/KPlay.Tightness.Mirage.Statement.fst",
+        "proofs/mirage-tightness/KPlay.Tightness.Mirage.Proof.fst",
+        "proofs/mirage-tightness/KPlay.Tightness.Mirage.fst"
+      ]
     }
   ],
   "files": {
@@ -1168,6 +1183,11 @@
     "proofs/mirage-spec/KPlay.Spec.Review.fst": "7f9dc4705b44f558dfed5cc987ce5150654bfae8f7fc11a501d86d01a0b483a8",
     "proofs/mirage-spec/KPlay.Spec.Review.fsti": "a4c3857845a4bce382dfbddfbe29c93e552ea29f1e975a799d5b936c9a2ec157",
     "proofs/mirage-spec/KPlay.Spec.fst": "87d964ba13e21c4a1174b673ea042f123d9d8e0b0e9e5c764c05079c2dda5de2",
+    "proofs/mirage-tightness/KPlay.Tightness.Mirage.Proof.fst": "ddd63af6d12c88d0f8b44f86e6c9a5284804beecb4201763a8744df260382e9c",
+    "proofs/mirage-tightness/KPlay.Tightness.Mirage.Question.fst": "23be624ba8423ce08ed5258fed46f5ac25d58fa9a8a2895188b5f91dbf6d185f",
+    "proofs/mirage-tightness/KPlay.Tightness.Mirage.Statement.fst": "0a3f34bc6cdeb25fbe50bf405808ed9723fceeb548e04937720bdf602de220c0",
+    "proofs/mirage-tightness/KPlay.Tightness.Mirage.fst": "8de1dca4ef1d0c1b892ad06b2d2a74f20e8963dfc81289830993230c4945948c",
+    "proofs/tightness/KPlay.Tightness.Answer.fst": "b731bfe6ec156c8dde756c5aed6c73386ef8a7e3c39f7fe8ec61abf6c7080543",
     "reference/flashmoe/E8_mega_kernel_h100/__init__.py": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",
     "reference/flashmoe/E8_mega_kernel_h100/cases/__init__.py": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",
     "reference/flashmoe/E8_mega_kernel_h100/cases/flashmoe/__init__.py": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",

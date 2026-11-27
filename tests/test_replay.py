@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 import replay
+import tightness
 
 
 class ReplayTests(unittest.TestCase):
@@ -30,6 +31,25 @@ class ReplayTests(unittest.TestCase):
         with patch.object(replay, "ROOT", self.root):
             with self.assertRaisesRegex(ValueError, "changed artifact"):
                 replay.inventory()
+
+    def test_hand_edited_tightness_theorem_is_rejected(self):
+        d = self.root / "proofs/demo-tightness"
+        d.mkdir(parents=True)
+        (d / "KPlay.Tightness.Demo.Question.fst").write_text("module KPlay.Tightness.Demo.Question\n")
+        with patch.object(tightness, "ROOT", self.root):
+            files = tightness.generated("demo")
+            for path, text in files.items():
+                path.write_text(text)
+            next(iter(files)).write_text("module KPlay.Tightness.Demo.Statement\nlet tight : prop = True\n")
+            roots = [str(p.relative_to(self.root)) for p in [d / "KPlay.Tightness.Demo.Question.fst", *files]]
+            for r in roots:
+                self.manifest["files"][r] = replay.sha256(self.root / r)
+            self.manifest["cases"].append({"id": "demo-tightness", "kind": "tightness", "profile": "profile",
+                                           "project": "demo", "directory": "proofs/demo-tightness", "roots": roots})
+            replay.write_json(self.root / "manifest.json", self.manifest)
+            with patch.object(replay, "ROOT", self.root):
+                with self.assertRaisesRegex(ValueError, "not as generated"):
+                    replay.inventory()
 
     def test_unindexed_dependency_is_rejected(self):
         (self.source.parent / "Unindexed.fst").write_text("module Unindexed\n")
