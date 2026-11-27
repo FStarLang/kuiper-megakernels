@@ -1113,27 +1113,14 @@ let nm_of (tn:T.numerics) : GTot SS.numerics = {
 
 let literal_eq (i:nat) : Lemma (SS.base_freq_literal i == T.inv_freq_f32_literal i) = ()
 
-let freq_exact_at (s:S.seq real) (i:T.index T.rotary_pairs)
-  : Lemma (requires s == SS.inv_freq_exact) (ensures SS.at s i == T.inv_freq_exact i) = ()
-
 let freq_f32_at (s:S.seq real) (i:T.index T.rotary_pairs)
   : Lemma (requires s == SS.inv_freq_f32) (ensures SS.at s i == T.inv_freq_f32 i) = literal_eq i
-
-let freq_exp2_at (s:S.seq real) (i:T.index T.rotary_pairs)
-  : Lemma (requires s == SS.inv_freq_exp2) (ensures SS.at s i == T.inv_freq_exp2 i) = ()
 
 let tn_of_ok (nm:SS.numerics)
   : Lemma (requires SS.numerics_ok nm) (ensures T.numerics_ok (tn_of nm) /\ nm_ok (tn_of nm) nm)
   = let s = nm.SS.inv_freq in
-    introduce forall (i:T.index T.rotary_pairs).
-      (s == SS.inv_freq_exact ==> SS.at s i == T.inv_freq_exact i) /\
-      (s == SS.inv_freq_f32 ==> SS.at s i == T.inv_freq_f32 i) /\
-      (s == SS.inv_freq_exp2 ==> SS.at s i == T.inv_freq_exp2 i)
-    with begin
-      FStar.Classical.move_requires (freq_exact_at s) i;
-      FStar.Classical.move_requires (freq_f32_at s) i;
-      FStar.Classical.move_requires (freq_exp2_at s) i
-    end
+    introduce forall (i:T.index T.rotary_pairs). SS.at s i == T.inv_freq_f32 i
+    with freq_f32_at s i
 
 let seq_of_freq (f:T.vector real T.rotary_pairs) (g:T.vector real T.rotary_pairs) (s:S.seq real)
   : Lemma (requires S.length s == 32 /\ (forall (i:T.index T.rotary_pairs). f i == g i) /\
@@ -1144,19 +1131,9 @@ let seq_of_freq (f:T.vector real T.rotary_pairs) (g:T.vector real T.rotary_pairs
 let nm_of_ok (tn:T.numerics)
   : Lemma (requires T.numerics_ok tn) (ensures SS.numerics_ok (nm_of tn) /\ nm_ok tn (nm_of tn))
   = let f = tn.T.inv_freq in
-    introduce (forall (i:T.index T.rotary_pairs). f i == T.inv_freq_exact i) ==>
-              S.init_ghost 32 f == SS.inv_freq_exact
-    with seq_of_freq f T.inv_freq_exact SS.inv_freq_exact;
-    introduce (forall (i:T.index T.rotary_pairs). f i == T.inv_freq_f32 i) ==>
-              S.init_ghost 32 f == SS.inv_freq_f32
-    with begin
-      introduce forall (i:T.index T.rotary_pairs). S.index SS.inv_freq_f32 i == T.inv_freq_f32 i
-      with literal_eq i;
-      seq_of_freq f T.inv_freq_f32 SS.inv_freq_f32
-    end;
-    introduce (forall (i:T.index T.rotary_pairs). f i == T.inv_freq_exp2 i) ==>
-              S.init_ghost 32 f == SS.inv_freq_exp2
-    with seq_of_freq f T.inv_freq_exp2 SS.inv_freq_exp2
+    introduce forall (i:T.index T.rotary_pairs). S.index SS.inv_freq_f32 i == T.inv_freq_f32 i
+    with literal_eq i;
+    seq_of_freq f T.inv_freq_f32 SS.inv_freq_f32
 
 (** lengths of the flat reference values *)
 

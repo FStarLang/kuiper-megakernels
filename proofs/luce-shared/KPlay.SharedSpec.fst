@@ -20,7 +20,6 @@ module Exp = FStar.Math.Exp
 module Sqrt = FStar.Math.Sqrt
 module Trig = Kuiper.Real.Trigonometry
 module Lit = Kuiper.Float32.Literals
-module RO = Kuiper.Float.Realops
 
 (*** Model dimensions and packed weight layout *)
 
@@ -91,13 +90,11 @@ noeq type numerics = {
   inv_freq : S.seq real;      (* 32 RoPE inverse frequencies, theta = 1e7, rotary dim 64 *)
 }
 
-let eps_exact : real = 0.000001R
+(* The constants are the float32 values PyTorch computes in the reference
+   (modeling_qwen3_5.py:217, float32): the f32 roundings of 1e-6, 1/sqrt(128)
+   and 1 / 1e7^(2i/64). *)
 let eps_f32 : real = Lit.value "0.0000009999999974752427078783512115478515625"
-let qscale_exact : real = Sqrt.rsqrt 128.0R
 let qscale_f32 : real = Lit.value "0.088388346135616302490234375"
-
-let inv_freq_exact : S.seq real =
-  S.init 32 (fun (i:nat{i < 32}) -> (FStar.Math.Pow.pow 10000000.0R (0.0R -. (of_int (2 * i) /. 64.0R)) <: real))
 
 let base_freq_literal (i:nat) : string =
   match i with
@@ -135,25 +132,17 @@ let base_freq_literal (i:nat) : string =
   | 31 -> "0.00000016548170833630138076841831207275390625"
   | _ -> "0.0"
 
-(* f32-rounded inverse frequencies (the base kernel's constants) *)
+(* PyTorch's float32 inverse frequencies, the same values in both roles *)
 let inv_freq_f32 : S.seq real =
   S.init 32 (fun (i:nat{i < 32}) -> Lit.value (base_freq_literal i))
 
-(* 1 / 2^((2i/64) * log2(1e7)) (the optimized kernel's exp2/log2 form) *)
-let inv_freq_exp2 : S.seq real =
-  S.init 32 (fun (i:nat{i < 32}) ->
-    1.0R /. RO.r_exp2 ((of_int (2 * i) /. 64.0R) *. RO.r_log2 10000000.0R))
+(* The single admitted choice of model constants: PyTorch's float32 values. *)
+let model_numerics : numerics = { eps = eps_f32; dn_qscale = qscale_f32; inv_freq = inv_freq_f32 }
 
-(* Admissible spellings of the model constants: the exact real value or its
-   f32 rounding; for RoPE also the exp2/log2 form (equal to the exact power in
-   real arithmetic, but not linked to Pow.pow by the library). *)
-let numerics_ok (nm:numerics) : prop =
-  (nm.eps == eps_exact \/ nm.eps == eps_f32) /\
-  (nm.dn_qscale == qscale_exact \/ nm.dn_qscale == qscale_f32) /\
-  (nm.inv_freq == inv_freq_exact \/ nm.inv_freq == inv_freq_f32 \/ nm.inv_freq == inv_freq_exp2)
+let numerics_ok (nm:numerics) : prop = nm == model_numerics
 
-let base_numerics : numerics = { eps = eps_f32; dn_qscale = qscale_f32; inv_freq = inv_freq_f32 }
-let opt_numerics : numerics = { eps = eps_f32; dn_qscale = qscale_f32; inv_freq = inv_freq_exp2 }
+let base_numerics : numerics = model_numerics
+let opt_numerics : numerics = model_numerics
 
 let rope_cos (nm:numerics) (t:int) : S.seq real =
   S.init 32 (fun (i:nat{i < 32}) -> Trig.cos (of_int t *. at nm.inv_freq i))

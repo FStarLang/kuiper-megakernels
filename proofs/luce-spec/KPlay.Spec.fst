@@ -21,9 +21,9 @@ module KPlay.Spec
 
    The math is over ideal reals. Floating results are related to it only by
    the abstract approximation %~ (Kuiper.Approximates); the specification
-   gives no error bound. A few model constants may be spelled either exactly
-   or as their f32 rounding (numerics_ok), because the kernels use the
-   rounded constants. *)
+   gives no error bound. The model constants are pinned (numerics_ok) to the
+   float32 values PyTorch computes in the reference: the f32 roundings of
+   1e-6, 1/sqrt(128) and the RoPE inverse frequencies (M:217, float32). *)
 
 open FStar.Real
 open Kuiper
@@ -34,10 +34,8 @@ module F32 = Kuiper.Float32
 module F = Kuiper.Floating
 module Exp = FStar.Math.Exp
 module Sqrt = FStar.Math.Sqrt
-module Pow = FStar.Math.Pow
 module Trig = Kuiper.Real.Trigonometry
 module Lit = Kuiper.Float32.Literals
-module RO = Kuiper.Float.Realops
 
 #set-options "--z3rlimit 20"
 
@@ -116,7 +114,7 @@ noeq type model_weights (a:Type0) = {
   full_layers   : index full_layer_count -> GTot (decoder_layer self_attn_params a);
 }
 
-(* Admissible spellings of the model constants, see numerics_ok. *)
+(* Model constants, pinned by numerics_ok. *)
 noeq type numerics = {
   rms_norm_eps       : real;                    (* 1e-6, also the l2norm epsilon *)
   linear_query_scale : real;                    (* 1 / sqrt(128), M:412 *)
@@ -444,15 +442,11 @@ let logits (nm:numerics) (w:model_weights real) (h:vector real hidden_size) : GT
 
 (** Model constants *)
 
-let eps_exact : real = 0.000001R
+(* f32 roundings of 1e-6 and 1 / sqrt(128), as PyTorch uses them *)
 let eps_f32 : real = Lit.value "0.0000009999999974752427078783512115478515625"
-let query_scale_exact : real = Sqrt.rsqrt 128.0R
 let query_scale_f32 : real = Lit.value "0.088388346135616302490234375"
 
-(* 1 / theta^(2i / 64), theta = 1e7 *)
-let inv_freq_exact : vector real rotary_pairs =
-  fun i -> Pow.pow 10000000.0R (0.0R -. (of_int (2 * i) /. 64.0R))
-
+(* PyTorch's float32 inv_freq = 1 / theta^(2i / 64), theta = 1e7 (M:217) *)
 let inv_freq_f32_literal (i:nat) : string =
   match i with
   | 0 -> "1.0"
@@ -489,20 +483,12 @@ let inv_freq_f32_literal (i:nat) : string =
   | 31 -> "0.00000016548170833630138076841831207275390625"
   | _ -> "0.0"
 
-(* f32 roundings of inv_freq_exact (the base kernel's constants) *)
 let inv_freq_f32 : vector real rotary_pairs = fun i -> Lit.value (inv_freq_f32_literal i)
 
-(* 1 / 2^((2i/64) log2 1e7) (the optimized kernel's exp2/log2 form); equal
-   to inv_freq_exact over the reals, but not linked to Pow.pow by the library *)
-let inv_freq_exp2 : vector real rotary_pairs =
-  fun i -> 1.0R /. RO.r_exp2 ((of_int (2 * i) /. 64.0R) *. RO.r_log2 10000000.0R)
-
 let numerics_ok (nm:numerics) : prop =
-  (nm.rms_norm_eps == eps_exact \/ nm.rms_norm_eps == eps_f32) /\
-  (nm.linear_query_scale == query_scale_exact \/ nm.linear_query_scale == query_scale_f32) /\
-  ((forall (i:index rotary_pairs). nm.inv_freq i == inv_freq_exact i) \/
-   (forall (i:index rotary_pairs). nm.inv_freq i == inv_freq_f32 i) \/
-   (forall (i:index rotary_pairs). nm.inv_freq i == inv_freq_exp2 i))
+  nm.rms_norm_eps == eps_f32 /\
+  nm.linear_query_scale == query_scale_f32 /\
+  (forall (i:index rotary_pairs). nm.inv_freq i == inv_freq_f32 i)
 
 (*** S3. Liftings of %~ to the model types *)
 
