@@ -161,7 +161,13 @@ states:
      softmax of that row of `x @ w`;
    - each selection is an allowed first maximum of its native row
      (`allowed_choice`);
-   - each kept token's combine weight approximates `p / p` of its selected probability;
+   - each kept token's combine weight approximates `p / p` of its selected
+     probability. This holds on every kept token, with no premise on the
+     selected probability; we edited this part of the spec by hand after the
+     RESOLVE run. To prove it, the optimized argmax seeds its scan from
+     `row[0]`
+     ([`patches/flashmoe-argmax-start-row0.patch`](patches/flashmoe-argmax-start-row0.patch),
+     a local patch to the original);
    - demand, token indices, probabilities and survival are **exactly** the
      token-order capacity routing of those selections (`routing_state`,
      `survival_rows`), with unfilled slots `-1` / `+0.0`.

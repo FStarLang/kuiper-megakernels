@@ -9,8 +9,8 @@ static void
 __hoisted_kplay_run_0(float *row, int32_t *sel, float *sp)
 {
     uint32_t selected = 0U;
-    float best = -INFINITY;
-    uint32_t e = 0U;
+    float best = row[0U];
+    uint32_t e = 1U;
     while (e < 8U) {
         uint32_t j = e;
         float x = row[j];

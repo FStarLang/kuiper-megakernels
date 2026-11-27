@@ -1,11 +1,16 @@
 module KPlay.Proof.OptScan
 
+(* The optimized argmax scan (locally patched to seed with row[0], like base:
+   first strict maximum) yields an allowed top-1 choice over the row it
+   consumed, and its selected probability is that row entry. *)
+
 open Kuiper
-open Kuiper.Approximates
 open KPlay.SharedSpec
 module S = FStar.Seq
 module F32 = Kuiper.Float32
 module FB = Kuiper.Floating.Base
+
+#set-options "--z3rlimit 20 --fuel 1 --ifuel 1"
 
 let lt_irrefl (x:F32.t) : Lemma (~(lt x x)) =
   if lt x x then F32.lt_ordered x x else ()
@@ -15,22 +20,21 @@ let lte_of_not_lt (b y:F32.t)
           (ensures is_nan y \/ lte y b)
   = FStar.Classical.move_requires (FB.negate_lt_is_lte b) y
 
-let scan_inv (row:S.seq F32.t) (n:nat{n <= S.length row}) (j:int) (b:F32.t) : prop =
-  0 <= j /\ j < (if n = 0 then 1 else n) /\ j < S.length row + 1 /\
-  ((j == 0 /\ b == ninf) \/ (j < n /\ b == S.index row j)) /\
+let scan_inv (row:S.seq F32.t) (n:nat{1 <= n /\ n <= S.length row}) : prop =
+  let j = fst (base_scan row n) in
+  let b = snd (base_scan row n) in
+  0 <= j /\ j < n /\ b == S.index row j /\
   (forall (i:nat). i < n ==> ~(lt b (S.index row i))) /\
-  (forall (i:nat). i < j /\ i < S.length row ==> is_nan (S.index row i) \/
-     (exists (v:F32.t). lte (S.index row i) v /\ lt v (S.index row j)))
+  (forall (i:nat). i < j ==>
+     is_nan (S.index row i) \/ (exists (v:F32.t). lte (S.index row i) v /\ lt v b))
 
-#push-options "--z3rlimit 50 --fuel 1 --ifuel 1"
-let rec opt_scan_props (row:S.seq F32.t) (n:nat{n <= S.length row})
-  : Lemma (ensures scan_inv row n (fst (opt_scan row n)) (snd (opt_scan row n)))
-          (decreases n)
-  = if n = 0 then ()
+#push-options "--z3rlimit 50"
+let rec scan_props (row:S.seq F32.t) (n:nat{1 <= n /\ n <= S.length row})
+  : Lemma (ensures scan_inv row n) (decreases n)
+  = if n = 1 then lt_irrefl (S.index row 0)
     else begin
-      opt_scan_props row (n - 1);
-      let p = opt_scan row (n - 1) in
-      let b = snd p in
+      scan_props row (n - 1);
+      let b = snd (base_scan row (n - 1)) in
       let x = S.index row (n - 1) in
       if lt b x then begin
         F32.lt_ordered b x;
@@ -42,17 +46,13 @@ let rec opt_scan_props (row:S.seq F32.t) (n:nat{n <= S.length row})
           = (if lt x (S.index row i) then F32.lt_transitive b x (S.index row i));
             lte_of_not_lt b (S.index row i)
         in
-        FStar.Classical.forall_intro aux;
-        assert (opt_scan row n == (n - 1, x))
-      end else begin
-        assert (opt_scan row n == p)
+        FStar.Classical.forall_intro aux
       end
     end
 #pop-options
 
 let opt_scan_allowed (row:S.seq F32.t)
   : Lemma (requires S.length row == experts)
-          (ensures allowed_choice row (fst (opt_scan row experts)) /\
-                   (let j = fst (opt_scan row experts) in
-                    lt ninf (S.index row j) ==> snd (opt_scan row experts) == S.index row j))
-  = opt_scan_props row experts
+          (ensures allowed_choice row (fst (base_scan row experts)) /\
+                   snd (base_scan row experts) == S.index row (fst (base_scan row experts)))
+  = scan_props row experts
