@@ -41,6 +41,19 @@ written over exact real arithmetic, and `%~` says the computed value stands
 for that real result with rounding abstracted away. It is a relation, not a
 numeric error bound: the proofs do not say how far `x` is from `r`.
 
+**Typed specification.** [`proofs/mirage-spec`](proofs/mirage-spec) restates
+the guarantee for reading. [`KPlay.Spec`](proofs/mirage-spec/KPlay.Spec.fst)
+models the reference over named dimensions, typed vectors and matrices, and
+records for weights, inputs and outputs. It has one real-valued equation per
+reference operation, each citing its source line, and a typed `postcondition`
+that is structural, numerical and selection. `KPlay.Spec.Bridge` proves that
+`program_postcondition` is equivalent to that `postcondition` on the
+program's buffer lengths, read through layout-only views
+(`program_postcondition_iff`). [`KPlay.Spec.Review`](proofs/mirage-spec/KPlay.Spec.Review.fsti)
+then states that both roles meet the typed `postcondition`. Check it with
+`python3 replay.py verify --case mirage-spec --work <work> --jobs 8`; this also
+re-checks the program proofs.
+
 ### Mirage files
 
 | Path | Contents |

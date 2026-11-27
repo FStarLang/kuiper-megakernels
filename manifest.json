@@ -229,6 +229,33 @@
       ]
     },
     {
+      "directory": "proofs/mirage-spec",
+      "id": "mirage-spec",
+      "implementation_cases": [
+        "mirage-program-base",
+        "mirage-program-optimized"
+      ],
+      "kind": "review",
+      "profile": "mirage-cleanroom",
+      "project": "mirage",
+      "roots": [
+        "proofs/mirage-program/KPlay.Review.fsti",
+        "proofs/mirage-program/KPlay.Review.fst",
+        "proofs/mirage-program/base/KPlay.Proof.Program.Base.fsti",
+        "proofs/mirage-program/base/KPlay.Proof.Program.Base.fst",
+        "proofs/mirage-program/base/KPlay.Proof.Wiring.Base.fst",
+        "proofs/mirage-shared/KPlay.SharedSpec.fst",
+        "proofs/mirage-program/optimized/KPlay.Proof.Program.Optimized.fsti",
+        "proofs/mirage-program/optimized/KPlay.Proof.Program.Optimized.fst",
+        "proofs/mirage-program/optimized/KPlay.Proof.Wiring.Optimized.fst",
+        "proofs/mirage-program/optimized/KPlay.Proof.SeqApprox.fst",
+        "proofs/mirage-spec/KPlay.Spec.fst",
+        "proofs/mirage-spec/KPlay.Spec.Bridge.fst",
+        "proofs/mirage-spec/KPlay.Spec.Review.fsti",
+        "proofs/mirage-spec/KPlay.Spec.Review.fst"
+      ]
+    },
+    {
       "directory": "proofs/flashmoe-shared",
       "id": "flashmoe-shared",
       "kind": "shared",
@@ -1063,6 +1090,10 @@
     "proofs/mirage-projection/optimized/KPlay.Functional.fst": "7ca2041da0795576ab1527cb7ff72aa328939680b1b9ed3a9e0420414c9eeb6a",
     "proofs/mirage-projection/optimized/KPlay.Functional.fsti": "73db0b3323762b71d134d887ff01ae3d3e17e2bf17148a96682576e157c532f1",
     "proofs/mirage-shared/KPlay.SharedSpec.fst": "a0316c766a4ca23d53f701eb287080f0704a17bb6ce6466e58679df72e5ada45",
+    "proofs/mirage-spec/KPlay.Spec.Bridge.fst": "ce599a43521f27b7b67f021bcafc554c6b094017de2213ead17d1890e11f32e4",
+    "proofs/mirage-spec/KPlay.Spec.Review.fst": "7f9dc4705b44f558dfed5cc987ce5150654bfae8f7fc11a501d86d01a0b483a8",
+    "proofs/mirage-spec/KPlay.Spec.Review.fsti": "a4c3857845a4bce382dfbddfbe29c93e552ea29f1e975a799d5b936c9a2ec157",
+    "proofs/mirage-spec/KPlay.Spec.fst": "87d964ba13e21c4a1174b673ea042f123d9d8e0b0e9e5c764c05079c2dda5de2",
     "reference/flashmoe/E8_mega_kernel_h100/__init__.py": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",
     "reference/flashmoe/E8_mega_kernel_h100/cases/__init__.py": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",
     "reference/flashmoe/E8_mega_kernel_h100/cases/flashmoe/__init__.py": "348e555443b5d175d06f819219de27a743d5706829845e8057ade2c9a77faa56",
