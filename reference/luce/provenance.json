@@ -1,0 +1,43 @@
+{
+  "description": "Reference cited by proofs/luce-shared/KPlay.SharedSpec.fst as inputs/reference/*. Files are byte-identical to the ones RESOLVE used (proof/inputs/reference and proof/reference-authority).",
+  "files": [
+    {
+      "file": "base.py",
+      "sha256": "8cc844eed4fe2a3efcdd2bb149e16485093cac6167f01cbae82f1db00636c334",
+      "origin": "Excerpt of the RESOLVE E13 LUCE task's base role: base.py (complete), and the construct_reference_model/decode_reference and validate_inputs declarations it imports; not a runnable module"
+    },
+    {
+      "file": "modeling_qwen3_5.py",
+      "sha256": "ee3c4647ab6ec1a3da00947cd3fe3ad7c527be064606debc94ea50836095df0b",
+      "origin": "Verbatim excerpt of Hugging Face transformers v5.3.0 src/transformers/models/qwen3_5/modeling_qwen3_5.py (Apache-2.0); not runnable"
+    },
+    {
+      "file": "configuration_qwen3_5.py",
+      "sha256": "c3d3951ee4d0d80f18934d8f8709838f93c83ecf794ac24f96d1c1f3c69badcb",
+      "origin": "Verbatim excerpt of Hugging Face transformers v5.3.0 configuration_qwen3_5.py (Qwen3_5TextConfig; Apache-2.0)"
+    },
+    {
+      "file": "model_config.json.txt",
+      "sha256": "3f26247f2eeb59763eab5c0af3b64aa2ec0d64eef63b49160f4239a494486b85",
+      "origin": "Qwen/Qwen3.5-0.8B config.json at the pinned model revision"
+    },
+    {
+      "file": "weight_layout.json",
+      "sha256": "f22255415c1365f8a3c72067ff52bdc5c0292aaf9d6e95c87fb63e7bdf7f86fe",
+      "origin": "Packed-weight layout (offsets/shapes of the 320 text parameters)"
+    },
+    {
+      "file": "LAYOUT.md",
+      "sha256": "ed951d2b17c6943379638db7891379aade8c213c56baa7432ef53d9b0f0548b0",
+      "origin": "Plain-language program contract and packed-weight layout"
+    },
+    {
+      "file": "input-domain.txt",
+      "sha256": "781527df635998b24a4806ac1a961833effc36166d7cf939f466578b076df0ab",
+      "origin": "Plain-language profile, input domain and validation of the LUCE run"
+    }
+  ],
+  "base": "pinned Hugging Face transformers 5.3.0 Qwen3.5 implementation (eager attention, torch recurrent gated delta rule), Qwen/Qwen3.5-0.8B revision 2fc06364715b967f1860aea9cf38778875588b17",
+  "optimized": "Luce-Org/lucebox @ 0f212acacb284cf77f29f4fb4f706b1f4fdc3f88, optimizations/megakernel",
+  "profile": "all 24 layers; prompt lengths 1..8; decode steps {1,5}; cache extent P+S-1 <= 12"
+}

@@ -1,0 +1,822 @@
+{
+  "command": "CUDA_VISIBLE_DEVICES=<gpu> python luce_check.py --weights <packed Qwen3.5-0.8B BF16 weights> --jobs 8",
+  "plan_replay": {
+    "base_vs_optimized": {
+      "sample-0000": {
+        "hidden_bitwise_equal": false,
+        "hidden_max_abs_difference": 0.03125,
+        "hidden_max_abs_value": 4.71875,
+        "tokens_equal": true
+      },
+      "sample-0001": {
+        "hidden_bitwise_equal": false,
+        "hidden_max_abs_difference": 0.0625,
+        "hidden_max_abs_value": 6.15625,
+        "tokens_equal": true
+      },
+      "sample-0002": {
+        "hidden_bitwise_equal": false,
+        "hidden_max_abs_difference": 0.0625,
+        "hidden_max_abs_value": 5.71875,
+        "tokens_equal": true
+      },
+      "sample-0003": {
+        "hidden_bitwise_equal": false,
+        "hidden_max_abs_difference": 0.03125,
+        "hidden_max_abs_value": 4.28125,
+        "tokens_equal": true
+      }
+    },
+    "completed_utc": "2026-11-27T09:57:59.005221+00:00",
+    "gpu": "NVIDIA H100 PCIe",
+    "roles": {
+      "base": [
+        {
+          "all_extracted_bitwise_equal": true,
+          "calls": 207,
+          "composed_equals_program": true,
+          "decode_steps": 5,
+          "extracted_family_cuda_ms_total": 12888.697294976562,
+          "families": {
+            "argmax": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "embedding_rope": {
+              "calls": 7,
+              "extracted_bitwise_equal": 7
+            },
+            "final_norm_projection": {
+              "calls": 7,
+              "extracted_bitwise_equal": 7
+            },
+            "full_attention_decoder": {
+              "calls": 42,
+              "extracted_bitwise_equal": 42
+            },
+            "initialize": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "recurrent_decoder": {
+              "calls": 126,
+              "extracted_bitwise_equal": 126
+            },
+            "token_history_update": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            }
+          },
+          "program_cuda_ms": 32722.5,
+          "prompt_length": 3,
+          "reduced_family_cuda_ms_total": 30136.590699668974,
+          "sample": "sample-0000",
+          "tokens": [
+            363,
+            198,
+            262,
+            460,
+            16562
+          ]
+        },
+        {
+          "all_extracted_bitwise_equal": true,
+          "calls": 51,
+          "composed_equals_program": true,
+          "decode_steps": 1,
+          "extracted_family_cuda_ms_total": 1846.8463248722255,
+          "families": {
+            "argmax": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "embedding_rope": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "final_norm_projection": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "full_attention_decoder": {
+              "calls": 6,
+              "extracted_bitwise_equal": 6
+            },
+            "initialize": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "recurrent_decoder": {
+              "calls": 18,
+              "extracted_bitwise_equal": 18
+            },
+            "token_history_update": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            }
+          },
+          "program_cuda_ms": 7099.65673828125,
+          "prompt_length": 1,
+          "reduced_family_cuda_ms_total": 4312.464226529002,
+          "sample": "sample-0001",
+          "tokens": [
+            198
+          ]
+        },
+        {
+          "all_extracted_bitwise_equal": true,
+          "calls": 337,
+          "composed_equals_program": true,
+          "decode_steps": 5,
+          "extracted_family_cuda_ms_total": 22112.867342997342,
+          "families": {
+            "argmax": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "embedding_rope": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "final_norm_projection": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "full_attention_decoder": {
+              "calls": 72,
+              "extracted_bitwise_equal": 72
+            },
+            "initialize": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "recurrent_decoder": {
+              "calls": 216,
+              "extracted_bitwise_equal": 216
+            },
+            "token_history_update": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            }
+          },
+          "program_cuda_ms": 53650.828125,
+          "prompt_length": 8,
+          "reduced_family_cuda_ms_total": 51560.19990783185,
+          "sample": "sample-0002",
+          "tokens": [
+            1639,
+            1639,
+            1639,
+            1639,
+            1639
+          ]
+        },
+        {
+          "all_extracted_bitwise_equal": true,
+          "calls": 77,
+          "composed_equals_program": true,
+          "decode_steps": 1,
+          "extracted_family_cuda_ms_total": 3764.671060808003,
+          "families": {
+            "argmax": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "embedding_rope": {
+              "calls": 2,
+              "extracted_bitwise_equal": 2
+            },
+            "final_norm_projection": {
+              "calls": 2,
+              "extracted_bitwise_equal": 2
+            },
+            "full_attention_decoder": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "initialize": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "recurrent_decoder": {
+              "calls": 36,
+              "extracted_bitwise_equal": 36
+            },
+            "token_history_update": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            }
+          },
+          "program_cuda_ms": 11331.400390625,
+          "prompt_length": 2,
+          "reduced_family_cuda_ms_total": 8614.47036089003,
+          "sample": "sample-0003",
+          "tokens": [
+            96690
+          ]
+        }
+      ],
+      "optimized": [
+        {
+          "all_extracted_bitwise_equal": true,
+          "calls": 191,
+          "composed_equals_program": true,
+          "decode_steps": 5,
+          "extracted_family_cuda_ms_total": 86752.58535970002,
+          "families": {
+            "argmax": {
+              "calls": 5,
+              "extracted_bitwise_equal": 5
+            },
+            "attention_decoder": {
+              "calls": 42,
+              "extracted_bitwise_equal": 42
+            },
+            "embedding": {
+              "calls": 7,
+              "extracted_bitwise_equal": 7
+            },
+            "final_projection": {
+              "calls": 5,
+              "extracted_bitwise_equal": 5
+            },
+            "inactive_decode": {
+              "calls": 5,
+              "extracted_bitwise_equal": 5
+            },
+            "initialize": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "recurrent_decoder": {
+              "calls": 126,
+              "extracted_bitwise_equal": 126
+            }
+          },
+          "program_cuda_ms": 54514.83203125,
+          "prompt_length": 3,
+          "reduced_family_cuda_ms_total": 105894.49162136018,
+          "sample": "sample-0000",
+          "tokens": [
+            363,
+            198,
+            262,
+            460,
+            16562
+          ]
+        },
+        {
+          "all_extracted_bitwise_equal": true,
+          "calls": 39,
+          "composed_equals_program": true,
+          "decode_steps": 1,
+          "extracted_family_cuda_ms_total": 13198.055192381144,
+          "families": {
+            "argmax": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "attention_decoder": {
+              "calls": 6,
+              "extracted_bitwise_equal": 6
+            },
+            "embedding": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "final_projection": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "inactive_decode": {
+              "calls": 11,
+              "extracted_bitwise_equal": 11
+            },
+            "initialize": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "recurrent_decoder": {
+              "calls": 18,
+              "extracted_bitwise_equal": 18
+            }
+          },
+          "program_cuda_ms": 16095.67578125,
+          "prompt_length": 1,
+          "reduced_family_cuda_ms_total": 23430.923597931862,
+          "sample": "sample-0001",
+          "tokens": [
+            198
+          ]
+        },
+        {
+          "all_extracted_bitwise_equal": true,
+          "calls": 311,
+          "composed_equals_program": true,
+          "decode_steps": 5,
+          "extracted_family_cuda_ms_total": 139450.62382365763,
+          "families": {
+            "argmax": {
+              "calls": 5,
+              "extracted_bitwise_equal": 5
+            },
+            "attention_decoder": {
+              "calls": 72,
+              "extracted_bitwise_equal": 72
+            },
+            "embedding": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "final_projection": {
+              "calls": 5,
+              "extracted_bitwise_equal": 5
+            },
+            "initialize": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "recurrent_decoder": {
+              "calls": 216,
+              "extracted_bitwise_equal": 216
+            }
+          },
+          "program_cuda_ms": 78332.546875,
+          "prompt_length": 8,
+          "reduced_family_cuda_ms_total": 163060.3411913216,
+          "sample": "sample-0002",
+          "tokens": [
+            1639,
+            1639,
+            1639,
+            1639,
+            1639
+          ]
+        },
+        {
+          "all_extracted_bitwise_equal": true,
+          "calls": 63,
+          "composed_equals_program": true,
+          "decode_steps": 1,
+          "extracted_family_cuda_ms_total": 23688.13306438923,
+          "families": {
+            "argmax": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "attention_decoder": {
+              "calls": 12,
+              "extracted_bitwise_equal": 12
+            },
+            "embedding": {
+              "calls": 2,
+              "extracted_bitwise_equal": 2
+            },
+            "final_projection": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "inactive_decode": {
+              "calls": 10,
+              "extracted_bitwise_equal": 10
+            },
+            "initialize": {
+              "calls": 1,
+              "extracted_bitwise_equal": 1
+            },
+            "recurrent_decoder": {
+              "calls": 36,
+              "extracted_bitwise_equal": 36
+            }
+          },
+          "program_cuda_ms": 20773.58203125,
+          "prompt_length": 2,
+          "reduced_family_cuda_ms_total": 34870.60825686157,
+          "sample": "sample-0003",
+          "tokens": [
+            96690
+          ]
+        }
+      ]
+    },
+    "scope": "finite observations on the chosen inputs; not proofs",
+    "started_utc": "2026-11-27T09:19:49.730924+00:00",
+    "status": "passed",
+    "torch_version": "2.14.0+cu130",
+    "weights": {
+      "kind": "packed",
+      "sha256": "76f4e1f2301f86e294ac88012209e29107e51b29578d9014482e3767e6c4ac9d"
+    }
+  },
+  "synthetic": {
+    "command": "CUDA_VISIBLE_DEVICES=<gpu> python luce_check.py --jobs 16",
+    "plan_replay": {
+      "base_vs_optimized": {
+        "sample-0000": {
+          "hidden_bitwise_equal": false,
+          "hidden_max_abs_difference": 8.625,
+          "hidden_max_abs_value": 5.40625,
+          "tokens_equal": false
+        },
+        "sample-0001": {
+          "hidden_bitwise_equal": false,
+          "hidden_max_abs_difference": 0.1796875,
+          "hidden_max_abs_value": 5.875,
+          "tokens_equal": true
+        },
+        "sample-0002": {
+          "hidden_bitwise_equal": false,
+          "hidden_max_abs_difference": 0.28515625,
+          "hidden_max_abs_value": 5.5625,
+          "tokens_equal": true
+        },
+        "sample-0003": {
+          "hidden_bitwise_equal": false,
+          "hidden_max_abs_difference": 0.234375,
+          "hidden_max_abs_value": 5.1875,
+          "tokens_equal": true
+        }
+      },
+      "completed_utc": "2026-11-27T10:31:33.600836+00:00",
+      "gpu": "NVIDIA H100 PCIe",
+      "roles": {
+        "base": [
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 207,
+            "composed_equals_program": true,
+            "decode_steps": 5,
+            "extracted_family_cuda_ms_total": 14225.027901005,
+            "families": {
+              "argmax": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "embedding_rope": {
+                "calls": 7,
+                "extracted_bitwise_equal": 7
+              },
+              "final_norm_projection": {
+                "calls": 7,
+                "extracted_bitwise_equal": 7
+              },
+              "full_attention_decoder": {
+                "calls": 42,
+                "extracted_bitwise_equal": 42
+              },
+              "initialize": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "recurrent_decoder": {
+                "calls": 126,
+                "extracted_bitwise_equal": 126
+              },
+              "token_history_update": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              }
+            },
+            "program_cuda_ms": 32767.845703125,
+            "prompt_length": 3,
+            "reduced_family_cuda_ms_total": 30272.971989372745,
+            "sample": "sample-0000",
+            "tokens": [
+              175633,
+              59710,
+              44920,
+              205137,
+              6835
+            ]
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 51,
+            "composed_equals_program": true,
+            "decode_steps": 1,
+            "extracted_family_cuda_ms_total": 1989.6409753859043,
+            "families": {
+              "argmax": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "embedding_rope": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "final_norm_projection": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "full_attention_decoder": {
+                "calls": 6,
+                "extracted_bitwise_equal": 6
+              },
+              "initialize": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "recurrent_decoder": {
+                "calls": 18,
+                "extracted_bitwise_equal": 18
+              },
+              "token_history_update": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              }
+            },
+            "program_cuda_ms": 7128.09423828125,
+            "prompt_length": 1,
+            "reduced_family_cuda_ms_total": 4339.479854114354,
+            "sample": "sample-0001",
+            "tokens": [
+              242414
+            ]
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 337,
+            "composed_equals_program": true,
+            "decode_steps": 5,
+            "extracted_family_cuda_ms_total": 25106.360074613243,
+            "families": {
+              "argmax": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "embedding_rope": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "final_norm_projection": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "full_attention_decoder": {
+                "calls": 72,
+                "extracted_bitwise_equal": 72
+              },
+              "initialize": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "recurrent_decoder": {
+                "calls": 216,
+                "extracted_bitwise_equal": 216
+              },
+              "token_history_update": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              }
+            },
+            "program_cuda_ms": 53895.75,
+            "prompt_length": 8,
+            "reduced_family_cuda_ms_total": 51788.61000601947,
+            "sample": "sample-0002",
+            "tokens": [
+              71934,
+              121130,
+              54970,
+              42843,
+              204131
+            ]
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 77,
+            "composed_equals_program": true,
+            "decode_steps": 1,
+            "extracted_family_cuda_ms_total": 5642.781126830727,
+            "families": {
+              "argmax": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "embedding_rope": {
+                "calls": 2,
+                "extracted_bitwise_equal": 2
+              },
+              "final_norm_projection": {
+                "calls": 2,
+                "extracted_bitwise_equal": 2
+              },
+              "full_attention_decoder": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "initialize": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "recurrent_decoder": {
+                "calls": 36,
+                "extracted_bitwise_equal": 36
+              },
+              "token_history_update": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              }
+            },
+            "program_cuda_ms": 11389.705078125,
+            "prompt_length": 2,
+            "reduced_family_cuda_ms_total": 8664.174271116033,
+            "sample": "sample-0003",
+            "tokens": [
+              149955
+            ]
+          }
+        ],
+        "optimized": [
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 191,
+            "composed_equals_program": true,
+            "decode_steps": 5,
+            "extracted_family_cuda_ms_total": 87113.3268994987,
+            "families": {
+              "argmax": {
+                "calls": 5,
+                "extracted_bitwise_equal": 5
+              },
+              "attention_decoder": {
+                "calls": 42,
+                "extracted_bitwise_equal": 42
+              },
+              "embedding": {
+                "calls": 7,
+                "extracted_bitwise_equal": 7
+              },
+              "final_projection": {
+                "calls": 5,
+                "extracted_bitwise_equal": 5
+              },
+              "inactive_decode": {
+                "calls": 5,
+                "extracted_bitwise_equal": 5
+              },
+              "initialize": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "recurrent_decoder": {
+                "calls": 126,
+                "extracted_bitwise_equal": 126
+              }
+            },
+            "program_cuda_ms": 54598.73046875,
+            "prompt_length": 3,
+            "reduced_family_cuda_ms_total": 106087.22920112312,
+            "sample": "sample-0000",
+            "tokens": [
+              148878,
+              34929,
+              147937,
+              186976,
+              66458
+            ]
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 39,
+            "composed_equals_program": true,
+            "decode_steps": 1,
+            "extracted_family_cuda_ms_total": 13213.030626498163,
+            "families": {
+              "argmax": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "attention_decoder": {
+                "calls": 6,
+                "extracted_bitwise_equal": 6
+              },
+              "embedding": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "final_projection": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "inactive_decode": {
+                "calls": 11,
+                "extracted_bitwise_equal": 11
+              },
+              "initialize": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "recurrent_decoder": {
+                "calls": 18,
+                "extracted_bitwise_equal": 18
+              }
+            },
+            "program_cuda_ms": 16126.9619140625,
+            "prompt_length": 1,
+            "reduced_family_cuda_ms_total": 23458.526225805283,
+            "sample": "sample-0001",
+            "tokens": [
+              242414
+            ]
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 311,
+            "composed_equals_program": true,
+            "decode_steps": 5,
+            "extracted_family_cuda_ms_total": 142775.78411202878,
+            "families": {
+              "argmax": {
+                "calls": 5,
+                "extracted_bitwise_equal": 5
+              },
+              "attention_decoder": {
+                "calls": 72,
+                "extracted_bitwise_equal": 72
+              },
+              "embedding": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "final_projection": {
+                "calls": 5,
+                "extracted_bitwise_equal": 5
+              },
+              "initialize": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "recurrent_decoder": {
+                "calls": 216,
+                "extracted_bitwise_equal": 216
+              }
+            },
+            "program_cuda_ms": 78490.015625,
+            "prompt_length": 8,
+            "reduced_family_cuda_ms_total": 164016.23846140504,
+            "sample": "sample-0002",
+            "tokens": [
+              71934,
+              121130,
+              54970,
+              42843,
+              204131
+            ]
+          },
+          {
+            "all_extracted_bitwise_equal": true,
+            "calls": 63,
+            "composed_equals_program": true,
+            "decode_steps": 1,
+            "extracted_family_cuda_ms_total": 23784.644408278167,
+            "families": {
+              "argmax": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "attention_decoder": {
+                "calls": 12,
+                "extracted_bitwise_equal": 12
+              },
+              "embedding": {
+                "calls": 2,
+                "extracted_bitwise_equal": 2
+              },
+              "final_projection": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "inactive_decode": {
+                "calls": 10,
+                "extracted_bitwise_equal": 10
+              },
+              "initialize": {
+                "calls": 1,
+                "extracted_bitwise_equal": 1
+              },
+              "recurrent_decoder": {
+                "calls": 36,
+                "extracted_bitwise_equal": 36
+              }
+            },
+            "program_cuda_ms": 20847.59375,
+            "prompt_length": 2,
+            "reduced_family_cuda_ms_total": 34874.97977069765,
+            "sample": "sample-0003",
+            "tokens": [
+              149955
+            ]
+          }
+        ]
+      },
+      "scope": "finite observations on the chosen inputs; not proofs",
+      "started_utc": "2026-11-27T09:59:40.332480+00:00",
+      "status": "passed",
+      "torch_version": "2.14.0+cu130",
+      "weights": {
+        "kind": "synthetic",
+        "seed": 0
+      }
+    }
+  }
+}

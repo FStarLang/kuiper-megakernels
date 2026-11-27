@@ -1,8 +1,8 @@
 # Kuiper megakernel proof artifacts
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
-program refinements, 26 family refinements, three shared-specification checks,
-and five family-tightness proofs**, plus eight checked contract reviews.
+program refinements, 30 family refinements and three shared-specification
+checks**, plus three checked base/optimized program reviews.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -13,9 +13,8 @@ The support-library and CUDA payloads and historical timing records are
 unchanged. Proofs are now grouped by kernel with one shared specification,
 as described below. See [NOTICE.md](NOTICE.md) for attribution and licensing
 boundaries.
-On this branch the Mirage and FlashMoE artifacts are replaced by proofs from
-the clean-room RESOLVE proof pipeline (sections below); LUCE keeps its
-migrated artifacts.
+On this branch the Mirage, FlashMoE and LUCE artifacts are all replaced by
+proofs from the clean-room RESOLVE proof pipeline (sections below).
 
 ## Mirage: clean-room RESOLVE pipeline proof
 
@@ -259,6 +258,150 @@ capacity of 32. Per-seed expert demand (survivors) was:
 The generator is `make_inputs` of the reference shim. RESOLVE's DTester input
 categories V0-V7 are not published. These are finite observations, not proofs.
 
+## LUCE: clean-room RESOLVE pipeline proof
+
+The LUCE artifacts are likewise replaced by a proof from the clean-room
+RESOLVE proof pipeline. Its agents saw only the reduced CUDA, the PyTorch
+reference and the Kuiper library, not the former LUCE proofs. The subject is
+greedy BF16 decode of Qwen3.5-0.8B: each call takes the packed BF16 weights
+`[752393024]`, prompt tokens `[P]` and a decode-step count `S`, starts from zero
+state, and returns `S` generated tokens (I64) and the `S` pre-final-norm hidden
+rows `[S,1024]` (BF16). Both roles are proved, and the result passed RESOLVE's
+normal final check (DTester and Kuiper both approved).
+
+> [!IMPORTANT]
+> ### What the originals are
+>
+> - **Optimized:** the official
+>   [Luce-Org/lucebox](https://github.com/Luce-Org/lucebox) megakernel at
+>   `0f212acacb284cf77f29f4fb4f706b1f4fdc3f88`, `optimizations/megakernel`
+>   (BF16 Qwen3.5-0.8B decode megakernel; includes the merged #761, #804 and
+>   #1026), decode path only.
+> - **Base:** the pinned Hugging Face Transformers **5.3.0** Qwen3.5 reference
+>   (`Qwen/Qwen3.5-0.8B` revision `2fc0636`, BF16, eager attention).
+> - **Hardware:** H100, `sm_90`.
+> - **Profile:** all 24 layers (18 Gated DeltaNet + 6 gated full attention),
+>   prompt lengths 1..8, decode steps {1, 5}; cache extent `P+S-1 <= 12`
+>   positions. The relations hold **vacuously** for integer arguments outside
+>   this domain (for example a cache extent above 12).
+>
+> See `sources.json` and [`reference/luce/`](reference/luce/).
+
+| Role | Families (host calls for `P=3, S=5`) |
+| --- | --- |
+| base | `initialize` (1); per position `embedding_rope` (7), 18 `recurrent_decoder` (126) and 6 `full_attention_decoder` (42); per generated position `final_norm_projection` (7); `argmax` and `token_history_update` (12 each, including padding to 12 positions) |
+| optimized | `initialize` (1); per position `embedding` (7), 18 `recurrent_decoder` (126) and 6 `attention_decoder` (42); per decode step `final_projection` and `argmax` (5 each); `inactive_decode` for the padding positions (5) |
+
+| Case | What F* checks |
+| --- | --- |
+| `luce-shared` | [`KPlay.SharedSpec`](proofs/luce-shared/KPlay.SharedSpec.fst): exact real reference math (embedding, `(1 + w)` RMSNorm, Gated DeltaNet with threshold-20 softplus, gated attention with partial RoPE, SwiGLU MLP, final norm and tied LM head from zero state), the role-independent `program_postcondition`, and one relation per role and family |
+| `luce-<family>-{base,optimized}` (14 cases) | Each Kuiper/Pulse implementation in `KPlay.Functional` ensures its family relation, for **all** reals that the inputs approximate |
+| `luce-program-{base,optimized}` | `KPlay.Proof.Program.<Role>.refines`: the family relations at every host call imply `program_postcondition`. For every step `j < S`, hidden row `j` approximates the reference residual at position `P-1+j` (prompt, then the generated tokens, as input), and token `j` is an allowed maximum of a BF16 or FP32 score row approximating the reference logits there. Model constants (eps, DeltaNet query scale, RoPE frequencies) may be their exact reals or the f32 / `exp2`-`log2` forms the kernels compute |
+| `luce-program-review` | [`KPlay.Review`](proofs/luce-program/KPlay.Review.fsti): on the same inputs, **both** roles' outputs satisfy the same `program_postcondition` |
+
+RESOLVE's testing found base and optimized outputs **not bitwise equal** on
+any sample, so the roles agree only through this common specification. They
+may choose different tokens where scores are close. `%~` is read as for Mirage.
+
+**FMA contraction.** The reduced optimized attention decoder computes the
+first RoPE half as `sub32(mul32(x0, cos), mul32(x1, sin))` with PTX
+`mul.ftz`/`sub.ftz` (no `.rn`). Under nvcc's default `--fmad=true`, in which
+RESOLVE recorded the reduced kernels, ptxas contracts this into
+`fma(x0, cos, -(x1*sin))`. The optimized `attention_decoder` implementation
+models the contraction **explicitly** (`F32.fma_rn_ftz u0 c (neg (mul_rn_ftz u1 s))`).
+Like every Kuiper implementation here it is compiled with `--fmad=false`
+(`validation.json`; the family's `M.json` numeric model says the same), so the
+extracted code is never contracted, and it matched the recorded traces bitwise.
+
+These cases use profile `luce-cleanroom` =
+`support/mirage-cleanroom` + `support/flashmoe-cleanroom` +
+[`support/luce-cleanroom/`](support/luce-cleanroom/) (`Luce.Softplus`,
+`Luce.Softplus.Fast`), pinned to the same Kuiper `nightly-2026-11-18` release.
+Together they are exactly the 70 `src/lib` modules of RESOLVE's LUCE
+installation that differ from the stock package (`archive_sha256` matches the pin).
+
+> [!WARNING]
+> ### Trusted assumptions (LUCE)
+>
+> All proofs are F*. RESOLVE's `proof/program/result.json` lists 54
+> `trusted_assumptions`; [CLAIMS.md](CLAIMS.md#luce-clean-room-pipeline-proof)
+> reproduces them all verbatim. In summary:
+>
+> - **`Luce.Softplus.softplus20_approx`** (new, **TRUSTED, unproved**): the
+>   base threshold-20 softplus `a > 20 ? a : log1pf(expf(a))` approximates
+>   `Luce.Softplus.model` (= `KPlay.SharedSpec.softplus`).
+> - **`Luce.Softplus.Fast.softplus20`** (new, **TRUSTED, unproved**): the same
+>   for the optimized `ex2`/`lg2` softplus composite.
+> - The two BF16→F32 widening laws (`Kuiper.Float.Casts.Raw`
+>   `bf16_to_f32_kind`, `bf16_to_f32_lte`), the Kuiper `r_*` ideal laws of the
+>   floating operations (`Kuiper.Float.Realops`, `Kuiper.Float32.FastMath`),
+>   and the `Kuiper.Float32.ConstantFold` exact-literal certificates (e.g.
+>   `1e-6f`, `1/1024`), as listed under [Mirage](#trusted-assumptions-mirage).
+> - Kuiper's models of FP32/BF16 operations, casts, GPU intrinsics
+>   (`rsqrt`/`rcp`/`exp2` approximations, `__expf`, `cosf`/`sinf`), comparisons,
+>   the BF16 tensor-core MMA (`emma_approx_lemma`), launches, `memcpy`, arrays,
+>   the 32-bit `size_t` extraction assumption, and F*/Pulse/KaRaMeL extraction to CUDA.
+> - The fixed RESOLVE host wrappers (`wrapper.json`): contiguity and shape
+>   checks, typed allocation, argument passing and CUDA completion.
+> - `%~` is qualitative; there is no error bound. Stability of the greedy token
+>   against rounding is not proved.
+>
+> Outside F*, the guarantee also trusts:
+> - the generated host wiring `KPlay.Proof.Wiring.<Role>`, a mechanical
+>   translation of `proofs/luce-program/<role>/plan.json`;
+> - the finite bitwise links from the extracted family kernels to the reduced
+>   CUDA, and from the reduced programs to the original sources
+>   (`universal_original_source_equivalence: false`).
+
+**Testing versus proof.** RESOLVE tested **4 input samples** (categories V0,
+V1, V7, V8; `(P,S)` = (3,5), (1,1), (8,5), (2,1)) with the actual checkpoint
+in BF16. The base was repeatable (5 runs, one distinct result per sample).
+DTester ran each sample 8 times: 4 baseline runs plus 2 runs under each of two
+perturbations (unstructured scoped delays on global and on shared memory, 5000
+cycles, p=0.8, no prepass). All runs were **comparable (8/8 per sample)**, with
+no mismatches, crashes or infrastructure errors. The final RESOLVE check
+approved the candidate (`dtester_approved = 1`, `kuiper_approved = 1`).
+Testing covers only these inputs and schedules. The proof covers **every**
+input in the stated domain for the reduced programs, under the trusted
+assumptions above.
+
+### LUCE files
+
+| Path | Contents |
+| --- | --- |
+| `reference/luce/` | The reference that `KPlay.SharedSpec` cites as `inputs/reference/*`, byte-identical: verbatim Transformers v5.3.0 excerpts `modeling_qwen3_5.py` and `configuration_qwen3_5.py`, the task's `base.py` (an excerpt; not runnable), `LAYOUT.md`, `weight_layout.json`, `model_config.json.txt` and `input-domain.txt`. [`provenance.json`](reference/luce/provenance.json) lists their hashes and origins |
+| `kernels/luce-program-<role>.cu` | The reduced complete program for each role |
+| `kernels/luce-<family>-<role>.cu` | The reduced family kernels of that role |
+| `kernels/luce-extracted/<family>-<role>/` | Kuiper's extraction of each verified implementation (`KPlay_Functional.{cu,h}`) plus a PyTorch binding (`binding.cu`); `include/` holds the same four RESOLVE install headers as FlashMoE's |
+| `proofs/luce-program/<role>/plan.json` | The recorded host call plan (4 samples) behind `KPlay.Proof.Wiring.<Role>`; `accepted_cuda_sha256` binds it to the program CUDA |
+| `support/luce-cleanroom/` | `Luce.Softplus.fst` and `Luce.Softplus.Fast.fst` |
+
+### Observing the LUCE kernels (GPU)
+
+[`luce_check.py`](luce_check.py) replays each role's plan for each of the four
+recorded samples (with RESOLVE's testing prompts), running the reduced and the
+extracted family kernel on the same arguments and requiring bitwise equality,
+and then requires that the composition reproduce the complete program bitwise.
+It builds the reduced kernels with nvcc's default flags and the extracted ones
+with `--fmad=false`. It finally records how far base and optimized agree.
+
+```bash
+.venv-gpu/bin/python luce_check.py                                  # synthetic seeded weights
+.venv-gpu/bin/python luce_check.py --weights model.safetensors      # real Qwen3.5-0.8B weights
+```
+
+With the actual Qwen3.5-0.8B checkpoint packed as BF16 on an H100
+([`benchmarks/luce-plan-replay.json`](benchmarks/luce-plan-replay.json)), all
+**1,276** family calls (base 672, optimized 604, across the four samples)
+matched bitwise between the extracted and reduced kernels, and both roles'
+compositions reproduced their complete programs bitwise on every sample. Base
+and optimized generated the **same tokens** on all four samples, but their
+hidden rows were not bitwise equal (max absolute difference 0.03125--0.0625 at
+values up to 6.2). With the default synthetic weights (seed 0, recorded in
+the same file) every bitwise check also passed; there the roles chose
+different tokens on sample-0000 from the first step, as near-tied random
+scores allow. These are finite observations, not proofs.
+
 ## Quick start (CPU only)
 
 Use **Linux x86_64 and Python 3.12+**; Ubuntu 24.04 is the tested environment.
@@ -275,10 +418,10 @@ sudo apt-get install -y git python3 make ca-certificates libgmp10 libzstd1 libst
 git clone https://github.com/FStarLang/kuiper-megakernels.git
 cd kuiper-megakernels
 make -j2 integrity test
-python3 replay.py verify --case luce-argmax-tightness --jobs 2
+python3 replay.py verify --case luce-shared --jobs 2
 ```
 
-The last command checks a small supplied proof. Its first run also prepares
+The last command checks a small supplied proof (the LUCE shared specification). Its first run also prepares
 and checks the support libraries, which can take several minutes.
 All commands below are run from the repository root.
 
@@ -287,13 +430,13 @@ All commands below are run from the repository root.
 The full suite includes a successful check exceeding **20 GiB peak child
 memory** and takes hours, not seconds. Allow for multiple concurrent compiler
 processes when choosing `--jobs`; peak child memory is not total memory.
-Use a suitably large host, or select `tightness`/`shared`.
+Use a suitably large host, or select `shared`.
 
 ```sh
 python3 replay.py list
-python3 replay.py verify --kind tightness --jobs 2
 python3 replay.py verify --kind shared --jobs 2
 python3 replay.py verify --case 'flashmoe-*' --jobs 8
+python3 replay.py verify --case 'luce-*' --jobs 16
 python3 replay.py verify --kind family --jobs 4
 python3 replay.py verify --kind program --jobs 4
 python3 replay.py verify --jobs 4
@@ -305,11 +448,11 @@ interfaces and implementation bodies. Dependency checking is timed separately;
 download and extraction are not included. Subsequent invocations reuse that
 preparation, **not example proof results**. Every requested `.fst` and `.fsti`
 is checked afresh with
-`--force --cache_off --admit_smt_queries false`. LUCE uses F* commit
-`da21c3925bf09a0a1d9e7558170be82da5edb37c` and Z3 4.13.3. Mirage and FlashMoE use the
+`--force --cache_off --admit_smt_queries false`. All current cases use the
 `kuiper-nightly-2026-11-18` pin (F* `049c07a0d9902cd39bf45a47a736be891297b79f`,
-Z3 5.3.0). The manifest's `toolchains` map assigns profiles to pins, and every
-other profile uses `default`.
+Z3 5.3.0). The manifest's `toolchains` map assigns profiles to pins; any other
+profile would use `default` (F* `da21c39`, Z3 4.13.3), which the former LUCE
+artifacts used and no current case does.
 
 Results and per-module logs go to `.work/proofs/runs/<run>/`. JSON records wall
 time, child CPU time, peak child RSS, source hashes, tool versions, and worker
@@ -317,43 +460,26 @@ count. This measures **checking the supplied proof**, not finding it. Existing
 native/numerical axioms are still trusted; disabling SMT admission does not
 turn those axioms into hardware proofs. See [CLAIMS.md](CLAIMS.md).
 
-The reviewed kernels' entry modules additionally have distinct
-module names so the checked review can import both at once; only their filenames,
-module declarations, and qualified tactic self-references changed, except for
-explicit proof steps added to two recurrent-decoder lemmas and a full-attention
-cache-loop exit after renaming exposed solver sensitivity. Contracts and executable operations are unchanged. Historical hashes are retained
-in `manifest.json` under `historical_entry_modules`. Other retained proof sources
-preserve their historical bytes.
-
-Each kernel has one directory containing its shared specification, its
-family-tightness proof where present, and separate implementations. For example:
+Each project uses one specification for all its cases,
+`proofs/<project>-shared/KPlay.SharedSpec.fst`, and one directory per family
+and role, `proofs/<project>-<family>/<role>/`. Family directories exist only
+for the roles that have that family. The complete programs and the review are
+under `proofs/<project>-program/`:
 
 ```text
-proofs/luce-argmax/
-  KPlay.SharedSpec.fst
-  KPlay.Proof.Tightness.fst
-  KPlay.Review.{fst,fsti}
-  base/KPlay.Base.Functional.{fst,fsti}
-  optimized/KPlay.Optimized.Functional.{fst,fsti}
+proofs/luce-shared/KPlay.SharedSpec.fst
+proofs/luce-argmax/{base,optimized}/KPlay.Functional.{fst,fsti}
+proofs/luce-embedding_rope/base/KPlay.Functional.{fst,fsti}
+proofs/luce-program/KPlay.Review.{fst,fsti}
+proofs/luce-program/<role>/KPlay.Proof.{Program,Wiring}.<Role>.*, plan.json
 ```
 
-The LUCE program uses the same layout under `proofs/luce-program/`, without a
-whole-program tightness proof. Its common `KPlay.Proof.Shared.*` helper modules
-also live at the group root. Mirage and FlashMoE instead use one specification
-for all their cases, `proofs/<project>-shared/KPlay.SharedSpec.fst`, and
-`proofs/<project>-<family>/<role>/`; FlashMoE family directories exist only
-for the roles that have that family.
-Every role imports the group's single `KPlay.SharedSpec` module. The manifest
+Every role imports the project's single `KPlay.SharedSpec` module. The manifest
 lists the common sources as roots of each case, and the runner includes their
 directory and checks them afresh with each selected case.
 
-The LUCE family and program specifications were
-already byte-identical across roles. Only paths and duplicate files changed;
-theorem statements, numerical assumptions, and implementation bodies are unchanged.
-Existing case IDs and replay commands are unchanged.
-
 `--case` accepts a quoted pattern and is repeatable. `--kind` selects `family`,
-`program`, `shared`, `tightness`, or `review`; the default is `all`. A changed support
+`program`, `shared`, or `review` (`tightness` is accepted but no current case has that kind); the default is `all`. A changed support
 profile requires a new `--work` directory. The old compiler's packaged checked
 caches produced verification failures during preparation, so replay deliberately
 retains the historical cache-free checking policy.
@@ -363,40 +489,15 @@ and the adjacent module logs. Interrupted runs are not reported as successful.
 To start over after an interrupted toolchain preparation, use a fresh directory:
 
 ```sh
-python3 replay.py verify --case luce-argmax-tightness --jobs 2 --work .work/retry
+python3 replay.py verify --case luce-shared --jobs 2 --work .work/retry
 ```
 
 ## Review the base/optimized correspondence
 
-The Mirage and FlashMoE reviews (`mirage-program-review`,
-`flashmoe-program-review`) are described in their sections above: both roles
-satisfy the identical `program_postcondition` on the same inputs. The LUCE
-reviews below are migrated artifacts with role-indexed dispatchers.
-
-Start with the [LUCE program review](proofs/luce-program/KPlay.Review.fsti).
-It exposes the common caller precondition, the complete postcondition, and the
-`base`, `optimized` and implementation-indexed, dispatch-only `switcher`
-definitions; the `.fst` keeps the adaptation proofs. It proves equality of the packed input views and exposes the
-same complete safety/history postcondition for both implementations. Base numerical
-correctness is unconditional; optimized numerical correctness retains its
-family-dependency and numerical-scope premises on the actual returned execution.
-Both enqueue one completion epoch and preserve allocation-failure behavior.
-
-The [review catalog](proofs/REVIEW-CATALOG.md) compares the six LUCE groups,
-assesses the significance of each contract difference, and distinguishes
-exact functionality, allowed choices, and conditional/relative numerical
-tightness. Each interface includes a more detailed comment at its visible
-`switcher` implementation.
-
-All five LUCE family reviews use the same interface-and-dispatcher style:
-
-| Review interface | Explicit representation difference | Common guarantee |
-| --- | --- | --- |
-| [LUCE argmax](proofs/luce-argmax/KPlay.Review.fsti) | BF16 versus FP32 scores; first versus any maximum | Explicit proof that the base postcondition implies the optimized postcondition on the same represented logical scores and output; exact history update |
-| [LUCE final norm/projection](proofs/luce-final_norm_projection/KPlay.Review.fsti) | BF16 versus FP32 returned logits | Identical shared mathematical logit targets, exact hidden-history append, and preserved input ownership |
-| [LUCE embedding](proofs/luce-embedding/KPlay.Review.fsti) | Base additionally returns rotary data and initial recurrent/convolution state | Identical exact BF16 embedding-row postcondition; auxiliary outputs and initial-token alias ownership are explicit |
-| [LUCE recurrent decoder](proofs/luce-recurrent_decoder/KPlay.Review.fsti) | BF16 versus FP32 convolution state, transposed recurrent axes, and optimized allocation-free initial state | Same complete shared decoder/cache transition under explicit input/output representations |
-| [LUCE full-attention decoder](proofs/luce-full_attention_decoder/KPlay.Review.fsti) | Compact time-major versus full head-major caches; external versus internal rotary computation | Complete shared decoder/cache transition; optimized numerical guarantee requires finite actual live scores, while physical cache retention is unconditional |
+The three reviews (`mirage-program-review`, `flashmoe-program-review`,
+`luce-program-review`) are described in their sections above: in each, both
+roles satisfy the identical `program_postcondition` on the same inputs. The
+[review catalog](proofs/REVIEW-CATALOG.md) summarizes what each one states.
 
 Each `*-review` case checks the review **and all roots of both implementation cases**,
 including their bodies, not just their interfaces. The manifest validator rejects
@@ -409,11 +510,10 @@ unchanged.
 The [workflow](.github/workflows/megakernel-artifacts.yml) checks frozen source
 hashes and runner unit tests on pushes to `main` and on pull requests.
 Proof checks are opt-in: maintainers can open **Actions**, select
-**Megakernel artifacts**, choose **Run workflow**, and select `tightness` or
-`shared`, or use:
+**Megakernel artifacts**, choose **Run workflow**, and select `shared`, or use:
 
 ```sh
-gh workflow run megakernel-artifacts.yml --repo FStarLang/kuiper-megakernels -f suite=tightness
+gh workflow run megakernel-artifacts.yml --repo FStarLang/kuiper-megakernels -f suite=shared
 ```
 
 The manual proof job uses two workers and uploads timing records and diagnostic
@@ -441,15 +541,16 @@ python run_kernels.py --project all --device 0 --jobs 2
 python run_kernels.py --project all --kind family --compile-only --jobs 2
 python mirage_check.py   # Mirage plan replay and extracted-kernel links (see above)
 python flashmoe_check.py # FlashMoE plan replay, extracted-kernel links, reference
+python luce_check.py     # LUCE plan replay and extracted-kernel links (see above)
 ```
 
 The smoke runner builds **all six complete reduced programs** and checks their
 complete outputs on synthetic fixtures, including FlashMoE ties/capacity and
-LUCE's offset-one input repair. It does not demand identical tokens between
+LUCE's offset-one weight view. It does not demand identical tokens between
 implementations when their specifications permit different choices.
-The 26 family entry points can be compiled independently; execution requires
+The 30 family entry points can be compiled independently; execution requires
 their documented caller state, rather than arbitrary zero-filled arguments.
-Apart from `mirage_check.py` and `flashmoe_check.py`, these are reduced-CUDA checks, **not new extraction
+Apart from `mirage_check.py`, `flashmoe_check.py` and `luce_check.py`, these are reduced-CUDA checks, **not new extraction
 of the Pulse witnesses** or replays of the original megakernels. No weights or tensors are downloaded.
 
 Full upstream pins, kernel/reference entry paths, model identities, and
@@ -470,13 +571,11 @@ Native extension builds may be reused on subsequent invocations; select a new
 | Original workload and task | Pinned upstream references and explicit mathematical specifications | Reference/task interpretation was reviewed, not proved by checking a Git hash |
 | Reduction and decomposition | Exact complete and family CUDA sources | Original/reduced correspondence is historical finite/reviewed evidence, not a universal equivalence theorem |
 | Specification and implementation | Shared contracts, interfaces, complete Pulse implementations and helper proofs | F* checks refinement under the stated numerical and native contracts |
-| Tightness | Five constructive LUCE family-level proofs; Mirage and FlashMoE have none | Existence and full-observation determination, or the stated choice/approximation policy; not IEEE uniqueness |
+| Tightness | None in this release (the former LUCE family-tightness proofs were removed with the migrated LUCE artifacts) | Reference fidelity of the relations is a reviewed obligation |
 | Replay | Small standalone proof and CUDA runners | No discovery, agent orchestration, fuzzing pipeline, or DTester implementation |
 
 This repository is independent of Kuiper's source tree: most cases reuse module
-names and must have isolated include paths. Reviewed kernels' entry
-modules are named `KPlay.Base.Functional` and `KPlay.Optimized.Functional` to
-allow their joint review. The replay runner provides the required
+names and must have isolated include paths. The replay runner provides the required
 isolation and obtains its compiler from the pinned public release. No Kuiper
 checkout or submodule is required. Frozen payloads preserve their original
 whitespace and are excluded from formatting/whitespace cleanup.

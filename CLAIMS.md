@@ -10,20 +10,20 @@ replay script is not a verified CUDA parser, compiler, or reduction algorithm.
 
 Complete proof sources: Mirage [base](proofs/mirage-program/base/) /
 [optimized](proofs/mirage-program/optimized/) and FlashMoE
-[base](proofs/flashmoe-program/base/) / [optimized](proofs/flashmoe-program/optimized/)
-(clean-room pipeline; see [Mirage](#mirage-clean-room-pipeline-proof) and
-[FlashMoE](#flashmoe-clean-room-pipeline-proof) below), and LUCE
-[base](proofs/luce-program/base/) / [optimized](proofs/luce-program/optimized/).
+[base](proofs/flashmoe-program/base/) / [optimized](proofs/flashmoe-program/optimized/),
+and LUCE [base](proofs/luce-program/base/) / [optimized](proofs/luce-program/optimized/),
+all from the clean-room pipeline (see [Mirage](#mirage-clean-room-pipeline-proof),
+[FlashMoE](#flashmoe-clean-room-pipeline-proof) and
+[LUCE](#luce-clean-room-pipeline-proof) below).
 Each implementation directory includes its contract and complete implementation;
-helper modules are checked too. The LUCE program's shared specification
-and common `KPlay.Proof.Shared.*` helpers live once at `proofs/luce-program/`;
-Mirage and FlashMoE each have one `proofs/<project>-shared/KPlay.SharedSpec.fst`.
+helper modules are checked too. Each project has one
+`proofs/<project>-shared/KPlay.SharedSpec.fst`.
 The shared-check case IDs are `<project>-shared`.
 
 | Program | Covered workload and observations | Important boundary |
 | --- | --- | --- |
 | Mirage | Qwen3-0.6B; all 28 layers, one forward pass over a seven-token prompt plus the greedy next token, hidden width 1024, vocabulary 151936. Prompt copied before the generated token; seven final normalized hidden rows; the token is an allowed maximum of a score row approximating the reference logits. | Composition over the generated host wiring of the reduced program; family kernels linked to the reduced CUDA by finite bitwise replay. Not arbitrary prompt/decode lengths. |
-| LUCE | Qwen3.5-0.8B; all 24 layers: 18 recurrent and six full-attention layers. Prompt lengths 1..520, decode counts 1/5/30/128, and `P+S-1<=2048`. Complete generated-token and pre-final-normalization BF16 hidden histories, recurrent/convolution/KV state, feedback, and caller ownership/lifetimes. | Repaired optimized scalar loads; stable, non-materializing inputs, including ordinary contiguous offset views. FP32 final-normalization observations are distinct from BF16 hidden/history observations. |
+| LUCE | Qwen3.5-0.8B greedy BF16 decode; all 24 layers: 18 Gated DeltaNet and six gated full-attention layers. Prompt lengths 1..8, decode steps 1..5 (tested: 1 and 5), cache extent `P+S-1 <= 12`. Returned tokens `[S]` and pre-final-norm BF16 hidden rows `[S,1024]`: each hidden row approximates the reference residual at position `P-1+j`, and each token is an allowed maximum of a BF16 or FP32 score row approximating the reference logits there. | Optimized original is the official **Luce-Org/lucebox** megakernel (`0f212ac`); base is the pinned Transformers 5.3.0 reference. Trusts two softplus laws (`Luce.Softplus*`) and the listed Kuiper laws. Composition over generated host wiring; links to reduced/original CUDA are finite bitwise checks. Relations are vacuous outside the profile's integer domain. |
 | FlashMoE | Capacity-pruned top-1 router only, smoke profile `S=256,H=512,E=8,C=32,top_k=1`; finite BF16 tokens bounded by 32 and `[H,E]` weights bounded by 4. Complete demand, kept token indices, combine probabilities and survival: exact token-order capacity routing of first-maximum selections over softmax rows that approximate the real softmax of `x @ w`. | Optimized original is FlashMoE **with PR #32** (deterministic router); gate weights `[E,H]`. Trusts `cpu_exp_f32_approx`; top-1 stability against rounding not proved. Composition over generated host wiring; links to reduced/original CUDA are finite bitwise checks. No expert MLP or larger profile. |
 
 The base and optimized roles refine a common **relative algebraic task**.
@@ -32,92 +32,20 @@ stability, or a guarantee of equal selected tokens/experts. Each execution
 follows its own permitted numerical observations and selection history.
 Satisfaction of the numerical premises is not newly established by replay.
 
-The Mirage and FlashMoE `KPlay.Review` modules state that both roles satisfy
-the identical role-independent `program_postcondition` on the same inputs.
+Each project's `KPlay.Review` module (`<project>-program-review`) states
+that both roles satisfy the identical role-independent `program_postcondition`
+on the same inputs.
 
-The [LUCE program review](proofs/luce-program/KPlay.Review.fsti) proves that both
-packing maps describe the same 752393024 BF16 weights, parameter addresses and
-prompt cells. Both wrappers retain allocation failure, owning returned tensors,
-and the complete queued safety/history postcondition at the next epoch.
-Their actual execution witnesses remain distinct: base convolution/normalization
-observations are BF16, optimized observations FP32. Base numerical correctness
-is unconditional; the optimized numerical prefix is conditional on its
-`family_dependencies` and `numerical_scope` for that returned execution.
-The dispatcher does not claim unconditional numerical equivalence or equal
-generated tokens.
+## Family contracts
 
-LUCE's shared model separates normalization and hidden
-types. These representation changes do not identify unequal native types or
-change the real-valued equations.
-
-## Family contracts and their tightness proofs
-
-Each LUCE `proofs/luce-<family>/` directory contains the single shared source
-used by its `base/` and `optimized/` implementations and a
-`KPlay.Proof.Tightness.fst` module. The shared source retains the exact bytes
-bound by both family acceptances.
-`witness` constructs a permitted result. The subsequent lemmas establish the
-appropriate uniqueness or complete allowed-result characterization.
-
-| Project | Family | Determined observations or retained freedom |
-| --- | --- | --- |
-| LUCE | [embedding](proofs/luce-embedding/) | Complete embedding vector |
-| LUCE | [recurrent_decoder](proofs/luce-recurrent_decoder/) | Hidden values and complete convolution/recurrent state |
-| LUCE | [full_attention_decoder](proofs/luce-full_attention_decoder/) | Hidden values and complete specified KV state |
-| LUCE | [final_norm_projection](proofs/luce-final_norm_projection/) | Mathematical normalization/projection targets and preserved state; native values remain subject to the declared relation |
-| LUCE | [argmax](proofs/luce-argmax/) | Complete output/history relation; NaN priority, infinities, and authorized any-maximum ties remain. Fixing choices determines the state history |
-
-Inspect `unique`, `full_contract`, `no_extra_results`, `fixed_choice_unique`,
-`fixed_choices_unique`, and `all_targets_unique` where present. Not every
-family has the same theorem shape. In particular, float-to-real approximation
-does **not** make two allowed floating-point bit patterns identical.
-
-The [LUCE argmax review](proofs/luce-argmax/KPlay.Review.fsti) preserves the
-stronger first-maximum base guarantee and proves it implies the optimized
-any-maximum guarantee for the same logical scores and output. The dispatcher
-establishes both its role's guarantee and the common any-maximum guarantee.
-Score representation preserves categories (including NaNs and infinities),
-signed-zero keys, ordering, and ties across the BF16/FP32 physical interfaces.
-Both contracts retain exact history updates and inactive empty histories.
-
-The [LUCE final norm/projection review](proofs/luce-final_norm_projection/KPlay.Review.fsti)
-uses identical input ownership and mathematical targets for both implementations,
-while exposing the BF16/FP32 score representation difference. Both append the
-exact unnormalized input hidden row on emitting calls, preserve prior history,
-and preserve input permissions. The common approximation target does not
-establish comparison preservation or bitwise equality between their scores.
-
-The [LUCE embedding review](proofs/luce-embedding/KPlay.Review.fsti) states the
-same exact BF16 embedding-row postcondition for both implementations. It also
-exposes the base-only rotary and initial-state outputs without implying that
-the optimized embedding call produces them. Half-permission input ownership
-supports the initial previous-token/prompt alias. The common domain requires
-valid prompt tokens and an explicitly identified selected token.
-
-The [LUCE recurrent-decoder review](proofs/luce-recurrent_decoder/KPlay.Review.fsti)
-exposes the BF16/FP32 convolution-state difference, transposed recurrent
-key/value axes, and optimized allocation-free initial state. Both return
-represented layer values satisfying the same complete shared decoder/cache
-postcondition, including installation of the layer state and cache framing.
-The base requires materialized buffers representing zero state on first use.
-This is common-task refinement, not equality of separate numerical executions.
-
-The [LUCE full-attention review](proofs/luce-full_attention_decoder/KPlay.Review.fsti)
-exposes compact time-major base caches versus full head-major optimized caches,
-null initial source buffers, and the base-only rotary input. Both return
-represented layer values satisfying the complete shared decoder/cache transition,
-but the optimized numerical guarantee requires finiteness of the actual returned
-live-score observation. This premise is visible in `numerical_premise`, not
-assumed or discharged by the dispatcher. Physical cache retention and ownership
-are unconditional. The review does not claim unconditional equivalence of the
-native numerical contracts or equality of independent executions.
-
-These are **family-level** tightness proofs. They are not additional
-whole-program tightness certificates, task-correctness proofs, hardware
-models, or native termination proofs. A determinate but wrong task could still
-be tight; reference fidelity and the approved observation/freedom policies
-remain separate obligations. An inconsistent trusted theory would also defeat
-the intended interpretation.
+Every family case proves that its Kuiper/Pulse implementation ensures its
+family relation in the project's `KPlay.SharedSpec`, for **all** reals that the
+inputs approximate. No case in this release has a tightness proof: the five
+LUCE family-tightness proofs and five family reviews belonged to the former
+migrated LUCE artifacts, which the clean-room LUCE proof replaces. A
+determinate but wrong task could still be tight, and a loose relation could
+still be correct; reference fidelity remains a separate, reviewed obligation.
+An inconsistent trusted theory would also defeat the intended interpretation.
 
 ## Trusted boundary
 
@@ -136,25 +64,25 @@ the intended interpretation.
   proof checking establishes the supplied source theorems; hashes establish
   identity, not semantic correspondence.
 
-`support/luce` contains only changed/new source dependencies relative to the
-default pinned public Kuiper package. `support/mirage-cleanroom` contains the
+`support/mirage-cleanroom` contains the
 66 `src/lib` modules that differ from or are absent in Kuiper
 `nightly-2026-11-18`; it is the library of the RESOLVE installation that
 checked the Mirage proofs. `support/flashmoe-cleanroom` adds the two
 `Kuiper.KPlay.CpuExp` modules; with `support/mirage-cleanroom` it is exactly the
-library of the RESOLVE installation that checked the FlashMoE proofs. `support/foundation` contains the five changed
-F*/Pulse source files; it applies only to the default toolchain. Unrelated sparse/GEMM patches were excluded using the
-actual dependency closures. The historical compiler and the public replay
-compiler have the same F* commit but were built with OCaml 5.4.0 and 5.3.0,
-respectively; no historical binary-installation fingerprint is claimed.
+library of the RESOLVE installation that checked the FlashMoE proofs.
+`support/luce-cleanroom` adds `Luce.Softplus` and `Luce.Softplus.Fast`; the
+three overlays together are exactly the 70 differing `src/lib` modules of the
+RESOLVE installation that checked the LUCE proofs. `support/foundation`
+contains the five changed F*/Pulse source files; it applies only to the
+`default` toolchain, which no current case uses.
 
 ## Native checks in this release
 
 The complete-program smoke tests use synthetic, non-secret inputs. FlashMoE
 checks all four outputs for both a tie/overflow case and a balanced-routing
 case (weights in the `[512,8]` layout). Mirage and LUCE check complete token/hidden output shapes, token range,
-zero-weight hidden results, and input preservation; LUCE also uses offset-one
-BF16 weights. These are finite diagnostics, not the universal theorem.
+zero-weight hidden results, and input preservation; LUCE uses an offset-one
+(contiguous) BF16 weight view. These are finite diagnostics, not the universal theorem.
 Compilation of a family entry point is not execution or numerical validation.
 
 Proof receipts from the original work are represented by their hashes, not
@@ -270,3 +198,157 @@ is **not** proved; it is recorded as a separate obligation. RESOLVE's testing
 (8 samples, DTester 8/8 comparable runs per sample under unstructured
 global/shared delays) is finite evidence about the original and reduced
 programs; the proof is about the reduced programs on every input in the domain.
+
+## LUCE clean-room pipeline proof
+
+The LUCE cases also come from the clean-room RESOLVE proof pipeline; its
+agents had no access to the former LUCE proofs. **The optimized original is
+the official [Luce-Org/lucebox](https://github.com/Luce-Org/lucebox) megakernel**
+at `0f212acacb284cf77f29f4fb4f706b1f4fdc3f88`, `optimizations/megakernel`
+(BF16 Qwen3.5-0.8B decode megakernel; includes the merged #761, #804 and
+#1026). **The base** is the pinned Hugging Face Transformers 5.3.0 Qwen3.5
+reference (`Qwen/Qwen3.5-0.8B` revision `2fc0636`). Hardware: H100, `sm_90`.
+One specification,
+[`proofs/luce-shared/KPlay.SharedSpec.fst`](proofs/luce-shared/KPlay.SharedSpec.fst),
+states:
+
+1. **Reference math over reals** (`reference/luce/`): embedding, Qwen3.5
+   `(1 + w)` RMSNorm, Gated DeltaNet layers (causal depthwise convolution,
+   l2-normalized scaled queries/keys, threshold-20 softplus decay, delta-rule
+   state update, gated RMSNorm), gated full-attention layers (per-head norms,
+   partial RoPE, grouped-query causal softmax), the SwiGLU MLP, the final norm
+   and the tied LM head, all from fresh zero state (`ref_hidden`, `ref_logits`).
+2. **`program_postcondition`.** Role independent. Under `program_premise`
+   (752393024 weights, `1 <= P <= 8`, `1 <= S <= 5`, valid prompt tokens):
+   there are `S` valid tokens and `S` hidden rows, and there exist admissible
+   model constants (`numerics_ok`: eps, DeltaNet query scale and RoPE inverse
+   frequencies as their exact reals or the f32 / `exp2`-`log2` forms the kernels
+   compute) such that for every real weight vector the BF16 weights
+   approximate and every step `j < S`:
+   - hidden row `j` approximates `ref_hidden` at position `P-1+j`, with the
+     prompt followed by the previously generated tokens as input;
+   - token `j` is an allowed maximum (`allowed_choice`: NaN first, otherwise
+     no strictly greater element) of some BF16 or FP32 score row that
+     approximates `ref_logits` of that hidden state.
+3. **One relation per role and family.** Base `initialize`, `embedding_rope`,
+   `recurrent_decoder`, `full_attention_decoder`, `final_norm_projection`,
+   `argmax`, `token_history_update`; optimized `initialize`, `embedding`,
+   `recurrent_decoder`, `attention_decoder`, `final_projection`, `argmax`,
+   `inactive_decode`.
+
+`KPlay.Proof.Program.<Role>.refines` proves that the family relations at every
+host call imply `program_postcondition`; each family's Kuiper implementation
+proves its relation. `KPlay.Review` (case `luce-program-review`) checks that
+both roles, on the same inputs, satisfy this same postcondition. There are no
+tightness cases.
+
+**Profile.** All 24 layers (18 Gated DeltaNet + 6 gated full attention),
+prompt lengths 1..8, decode steps {1, 5} (the premise admits 1..5), cache
+extent `P+S-1 <= 12` positions. Both reduced programs pad the run to the
+12-position extent: after the last computed position, `13-P-S` iterations run
+`argmax` and `token_history_update` (base) or `inactive_decode` (optimized). Family relations hold
+vacuously for integer arguments outside this domain (for example a cache
+extent above 12).
+
+**FMA contraction.** Every Kuiper implementation is compiled with
+`--fmad=false` (`validation.json`: `cuda_flags ["--fmad=false"]`,
+`preserve_float_rounding`), so the compiler never contracts the extracted
+code. The reduced optimized attention decoder's RoPE line
+`sub32(mul32(x0, cos), mul32(x1, sin))` uses PTX `mul.ftz`/`sub.ftz` without
+`.rn`; under nvcc's default `--fmad=true`, the build in which RESOLVE recorded
+the reduced kernels, ptxas contracts it into `fma(x0, cos, -(x1*sin))`. The
+optimized `attention_decoder` implementation models this contraction
+explicitly as `F32.fma_rn_ftz u0 c (neg (mul_rn_ftz u1 s))` and matched the
+recorded traces bitwise. The family's `M.json` states this numeric model
+("nvcc --fmad=false, so no compiler contraction ... the RoPE rotation is
+written explicitly ... as fma.rn.ftz(x0, c, -(x1*s))"); its `--fmad=false`
+refers to the Kuiper build. `luce_check.py` likewise builds the reduced
+kernels with default flags and the extracted kernels with `--fmad=false`.
+
+The guarantee is relational (`%~`), not an error bound. RESOLVE's testing
+found base and optimized outputs **not** bitwise equal on any of its 4
+samples (unlike FlashMoE), so the two roles agree only through this common
+specification; they may choose different tokens where scores are close.
+
+**Trusted assumptions.** All proofs are F*. In addition to F*, Pulse and Z3,
+the guarantee trusts every item of `proof/program/result.json`
+`trusted_assumptions`: the accepted specification's `M.json` trust list
+(items 1-4) followed by the families' `M.json` trust items, verbatim:
+
+1. Luce.Softplus.softplus20_approx: LUCE-local numerical assumption that the base threshold-20 softplus (a > 20 ? a : log1pf(expf(a))) approximates Luce.Softplus.model (= KPlay.SharedSpec.softplus).
+2. Luce.Softplus.Fast.softplus20: LUCE-local assumption for the optimized ex2/lg2 softplus composite against the same model.
+3. Kuiper.Float.Casts.Raw: the two trusted BF16/F32 widening laws (via bf16_to_f32_kind, bf16_to_f32_lte).
+4. Kuiper library r_* ideal laws of the floating operations (Kuiper.Float.Realops, Kuiper.Float32.FastMath) and the exact-literal certificates of Kuiper.Float32.ConstantFold.
+5. CUDA completion and typed tensor allocation/access by the fixed RESOLVE wrapper (synchronous-stable-buffers-v1)
+6. Kuiper/Pulse extraction to CUDA and the Kuiper assumption that size_t values fit in 32 bits
+7. Kuiper library laws: exactness and order preservation of the BF16->FP32 widening (bf16_to_f32_kind, bf16_to_f32_lte), FP32 lt ordering/transitivity, and the IEEE eq/bits class laws
+8. The wrapper checks contiguity and the logits shape [248320]
+9. Kuiper library approximation laws for of_int, FP32 mul, cosf/sinf and FP32->BF16 conversion
+10. The wrapper passes numel(input0..2) as the buffer lengths and checks contiguity and the table shape [248320,1024]
+11. Kuiper.Float32 add/mul/rsqrt real-approximation contracts and their extraction to __fadd_rn/__fmul_rn/rsqrtf (compiled with --fmad=false)
+12. Kuiper.Float32.ConstantFold literal certificates for the f32 literals 1e-6f and 1/1024
+13. Kuiper.Float.Casts bf16 <-> f32 conversion contracts (fcast_approx)
+14. Kuiper.TensorCore.MMA m16n8k16 model (emma, emma_approx_lemma) (fill, mma_sync from global-memory tiles, store) and its extraction to PTX mma.sync
+15. Kuiper launch_kernel_1, launch_sync (kernel_desc_1_n), gpu_array_alloc/free and the global-array send-across instance (on/on_pure_elim)
+16. Kuiper.SizeT assumption that size_t values fit in 32 bits (size_t extracted as uint32_t)
+17. Host wrapper glue: contiguous typed storage, shape checks, fresh output allocation, CUDA completion
+18. F*/Pulse/Karamel toolchain
+19. Kuiper tensor-core MMA model (Kuiper.TensorCore.MMA mma_sync / emma and emma_approx_lemma)
+20. Kuiper float32/bfloat16 operation models and their approximation laws (add, mul, div, neg, sub, fma_rn, conversions)
+21. Kuiper.Float32 rsqrt and exp approximation laws (rsqrtf, expf)
+22. Kuiper/Pulse GPU launch, memcpy and memory model; F* and Pulse extraction to CUDA
+23. CUDA kernel launch and completion (launch_kernel_1, single thread)
+24. typed PyTorch tensor allocation and data_ptr access in the wrapper
+25. Kuiper extraction of FStar.SizeT to 32-bit size and BF16/FP32 zero constants
+26. CUDA completion and typed tensor allocation/access by the fixed RESOLVE wrapper (synchronous-stable-buffers-v1) and the wrapper.json argument/output binding
+27. Kuiper floating-point approximation laws for native F32/BF16 operations (Kuiper.Float.Realops, Kuiper.Float32.FastMath.fma_rn) and the two trusted cast laws in Kuiper.Float.Casts.Raw
+28. Kuiper.TensorCore.MMA emma_approx_lemma (tensor-core m16n8k16 BF16 MMA approximates the real dot product)
+29. Kuiper.Float32.ConstantFold literal_approx / Kuiper.Float32.Literals exact-normal literal values
+30. Luce.Softplus softplus20_approx (thresholded softplus approximates the real softplus)
+31. The wrapper passes numel(input0) as S and checks input shapes [S], [S,1024], [1024], [] and contiguity
+32. Kuiper/Pulse verified extraction to CUDA and the KaRaMeL toolchain
+33. Kuiper native binary32 comparison axioms (Kuiper.Float32 / Kuiper.Floating laws)
+34. Fixed host wrapper glue generated from wrapper.json (allocation, shape checks, argument passing)
+35. Callers supply 0 <= decision < S; out-of-range decisions are outside the relation premise
+36. Kuiper/Pulse toolchain, extraction to CUDA, and the Kuiper float operation contracts (ftz ops, approx rsqrt/rcp, __expf, bf16 casts)
+37. The generated host wrapper (wrapper.json): pointer binding, contiguity/shape checks and passing numel(weights) as uint32 length
+38. The frozen KPlay.SharedSpec relation as the statement of correctness
+39. One assert_norm certificate establishing the decimal literal of eps (1e-6 as float32) as an exact float
+40. Kuiper.Float32 GPU intrinsic contracts (mul_rn_ftz, rcp_approx_ftz, exp2_approx_ftz) and FastMath cos/sin, flog, div, of_int real-approximation contracts and their extraction to PTX/CUDA
+41. Kuiper.Float.Casts bf16->f32 widening contract (fcast_approx)
+42. Kuiper launch_kernel_1 and global-array send-across instance (Kuiper.Array.Core.is_send_pts_to)
+43. Host wrapper glue: contiguous typed storage, table shape check, fresh output allocation, CUDA completion
+44. Kuiper/Pulse array model, launch_kernel_1 / memcpy_device_to_device semantics and Karamel extraction to CUDA
+45. Kuiper float32/bfloat16 primitive models (fma/add/mul ftz, FastMath divide as __fdividef, rsqrt approximation, casts) and their approximation lemmas
+46. CUDA completion and typed tensor allocation/access in the fixed host wrapper
+47. Float32 literal parsing of the epsilon constant via FB.of_literal
+48. Kuiper.Array.Core.memcpy_device_to_device specification and its extraction to cudaMemcpy(cudaMemcpyDeviceToDevice)
+49. Local sized instance for FStar.Int64.t (8 bytes, matches sizeof(int64_t))
+50. Kuiper/Pulse array model, launch_kernel_1 semantics and Karamel extraction to CUDA
+51. Kuiper zero constants for float32 and bfloat16 extract to positive-zero literals
+52. Luce.Softplus.Fast.softplus20: LUCE-local assumed approximation law of the thresholded fast softplus composite (Luce.Softplus.model).
+53. Kuiper float32 primitive contracts (add/mul/fma round-to-nearest flush-to-zero, approximate exp2/rcp/rsqrt, fast-math exp/log) and literal interpretation (Kuiper.Float32.ConstantFold.literal_approx).
+54. Kuiper bfloat16/float32 cast approximation laws (Kuiper.Float.Casts).
+
+The two `Luce.Softplus*` laws are new, interface-only `assume`s in
+[`support/luce-cleanroom/`](support/luce-cleanroom/); the cast, literal and
+bit laws are those of `support/mirage-cleanroom` (see the
+[README](README.md#trusted-assumptions-mirage)). Outside F* the guarantee also
+trusts the generated host wiring `KPlay.Proof.Wiring.<Role>` (a translation of
+`proofs/luce-program/<role>/plan.json`), and the finite bitwise links from the
+extracted family kernels to the reduced CUDA and from the reduced programs to
+the original sources (RESOLVE's same-role bitwise translation check,
+`universal_original_source_equivalence: false`).
+
+**Testing versus proof.** RESOLVE tested 4 input samples (categories V0, V1,
+V7, V8; `(P,S)` = (3,5), (1,1), (8,5), (2,1)) with the actual checkpoint
+converted to BF16. The base was stable (5 runs, one distinct result per
+sample). DTester ran each sample 8 times: 4 baseline runs plus 2 runs under
+each of two perturbations (unstructured scoped delays on global and on shared
+memory, 5000 cycles, p=0.8, no prepass). All runs were **comparable (8/8 per
+sample)** with no mismatches, crashes or infrastructure errors ("no result
+nondeterminism detected"). The final RESOLVE check approved the candidate
+(`dtester_approved = 1`, `kuiper_approved = 1`; "DTester and Kuiper approved
+the candidate"). Testing covers only these inputs and schedules; the proof
+covers every input in the stated domain for the reduced programs, under the
+trusted assumptions above.

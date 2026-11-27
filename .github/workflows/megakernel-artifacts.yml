@@ -11,9 +11,8 @@ on:
         description: Hosted-runner-sized, fresh cache-free proof suite
         type: choice
         options:
-          - tightness
           - shared
-        default: tightness
+        default: shared
 
 permissions:
   contents: read

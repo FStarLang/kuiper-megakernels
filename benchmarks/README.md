@@ -22,6 +22,15 @@ software details are in [environment.json](environment.json).
 > after a 117 s support check of the 68-module `flashmoe-cleanroom` profile.
 > The FlashMoE GPU plan replay is in
 > [flashmoe-plan-replay.json](flashmoe-plan-replay.json).
+>
+> The `luce-*` rows below likewise measure the **former** LUCE artifacts,
+> including their removed tightness cases; the `LUCE` support row is the
+> former `luce` profile. Timings for the current LUCE cases are in
+> [luce-cleanroom-proof-checks.json](luce-cleanroom-proof-checks.json):
+> all 18 cases passed in 1905 s elapsed with `--jobs 16` (largest case
+> `luce-full_attention_decoder-base`, 539 s; peak child RSS under 3 GiB),
+> after a 119 s support check of the 70-module `luce-cleanroom` profile.
+> The LUCE GPU plan replay is in [luce-plan-replay.json](luce-plan-replay.json).
 
 ## Measurement method
 
@@ -176,6 +185,9 @@ These two files predate the current Mirage and FlashMoE proofs; their FlashMoE
 entries describe the former artifacts. The current FlashMoE programs passed the
 `run_kernels.py --project flashmoe` smoke test again, and their per-call replay
 is in [flashmoe-plan-replay.json](flashmoe-plan-replay.json).
+Their LUCE entries likewise describe the former artifacts. The current LUCE
+programs passed `run_kernels.py --project luce` again, and their per-call
+replay is in [luce-plan-replay.json](luce-plan-replay.json).
 
 The complete-program builds took 41.7--93.7 s each. Recorded CUDA-event and host
 wall times are single synthetic smoke observations, **not performance
@@ -190,7 +202,7 @@ program smoke tests; these files retain the first, fresh-build measurements.
 The standalone repository keeps full historical proof checking out of the
 required PR checks. The included workflow runs source-integrity checks and
 runner unit tests on pushes to `main` and on PRs.
-Fresh `tightness` and `shared` proof suites are available through
+A fresh `shared` proof suite is available through
 manual dispatch, with two workers and retained diagnostic/timing artifacts.
 Run `program`, `family`, or `all` locally/on an appropriately provisioned larger
 runner using `replay.py`; they are deliberately not offered on the standard

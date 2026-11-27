@@ -13,20 +13,20 @@
     "license": "Apache-2.0"
   },
   "luce": {
-    "repository": "https://github.com/PixelML/luce-megakernel",
-    "commit": "bab084443f14e6ab3ba76f8e8e3f721ad2e56144",
+    "repository": "https://github.com/Luce-Org/lucebox",
+    "commit": "0f212acacb284cf77f29f4fb4f706b1f4fdc3f88",
     "model": "Qwen/Qwen3.5-0.8B",
     "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
     "upstream_paths": {
-      "decode": "kernel.cu",
-      "prefill": "prefill.cu",
-      "python_caller": "model.py",
-      "hugging_face_comparison": "final_bench.py"
+      "decode_megakernel": "optimizations/megakernel/kernel.cu",
+      "python_caller": "optimizations/megakernel/model.py",
+      "bindings": "optimizations/megakernel/torch_bindings.cpp"
     },
-    "reference_code_note": "The external Transformers implementation is not pinned by the model revision. These paths identify upstream inspection entrypoints, not a reconstruction of the historical reference environment.",
-    "scope": "Upstream source reference; accepted reduced optimized code additionally repairs unaligned vector loads.",
-    "license": null,
-    "redistribution_note": "No LICENSE, COPYING, or NOTICE file was found in the complete pinned tree. Included CUDA consists of reduced implementations produced during the case study; the upstream checkout is not bundled. This metadata asserts neither an upstream license nor a separately documented permission grant."
+    "optimized_note": "The optimized original is the official BF16 Qwen3.5-0.8B decode megakernel (H100 sm_90) of optimizations/megakernel at this commit, which includes the merged #761, #804 and #1026; decode path only.",
+    "base_reference": "Pinned Hugging Face transformers 5.3.0 Qwen3.5 implementation (excerpts in reference/luce/), Qwen/Qwen3.5-0.8B at model_revision, BF16.",
+    "profile": "all 24 layers (18 Gated DeltaNet + 6 gated full attention); prompt lengths 1..8; decode steps {1,5}; cache extent P+S-1 <= 12",
+    "scope": "Source of the original optimized program. The proved subjects are the reduced programs in kernels/luce-program-*.cu; their link to this source is RESOLVE's finite same-role bitwise translation check on 4 samples, not a universal equivalence theorem.",
+    "license": "Apache-2.0"
   },
   "flashmoe": {
     "repository": "https://github.com/tyler-utah/FlashMoE",

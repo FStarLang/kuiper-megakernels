@@ -1,0 +1,969 @@
+{
+  "cache_policy": "force/cache_off for every module; setup support checks recorded separately",
+  "cases": [
+    {
+      "id": "luce-shared",
+      "jobs": 16,
+      "kind": "shared",
+      "modules": [
+        {
+          "max_rss_kib": 770756,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.965092,
+          "user_seconds": 17.606474,
+          "wall_seconds": 18.55188881792128
+        }
+      ],
+      "requested_modules": 1,
+      "status": "passed",
+      "wall_seconds": 18.612320402171463
+    },
+    {
+      "id": "luce-argmax-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 807612,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "31cb846f6c101768d2d3df8b5a6a5074aeec906bb3790adc972ca4d1f2849e5b",
+          "system_seconds": 0.48559399999999997,
+          "user_seconds": 20.167054,
+          "wall_seconds": 20.652638620929793
+        },
+        {
+          "max_rss_kib": 895684,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "0612aa1890b17f581e98fc870107efa1c64db2fc9fa0a6b3fc16eba5531b7b3b",
+          "system_seconds": 1.108236,
+          "user_seconds": 26.502577,
+          "wall_seconds": 27.55986428214237
+        },
+        {
+          "max_rss_kib": 770752,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.950689,
+          "user_seconds": 17.456272,
+          "wall_seconds": 18.388425178127363
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 27.621005632914603
+    },
+    {
+      "id": "luce-embedding_rope-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 735936,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "0701bd93ea5af1389e0c12710ab8965e9663a4251ab9c3af8684daabe1964980",
+          "system_seconds": 0.40596699999999997,
+          "user_seconds": 16.535691,
+          "wall_seconds": 16.943710271036252
+        },
+        {
+          "max_rss_kib": 842896,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "1f7d79b15a16b454a00e4dcae3af1d9570fd3e9842d7e65e3846995cebe3d4fd",
+          "system_seconds": 0.754061,
+          "user_seconds": 29.349435,
+          "wall_seconds": 30.06256444985047
+        },
+        {
+          "max_rss_kib": 772804,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.980829,
+          "user_seconds": 17.590281,
+          "wall_seconds": 18.552160847000778
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 30.124149076873437
+    },
+    {
+      "id": "luce-final_norm_projection-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 735940,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "961a6f924ab124e5e90a284916d7237c456c11b58fa243510286ce4da322603d",
+          "system_seconds": 0.43100299999999997,
+          "user_seconds": 16.272114,
+          "wall_seconds": 16.704111522994936
+        },
+        {
+          "max_rss_kib": 1162948,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "9ffbb875f87743ac74a2d9f28a4fc7c8c4fe18a895bf650a48c8ef6fe0b28ce3",
+          "system_seconds": 2.584309,
+          "user_seconds": 122.882081,
+          "wall_seconds": 125.2604629911948
+        },
+        {
+          "max_rss_kib": 767680,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.9774759999999999,
+          "user_seconds": 17.676719,
+          "wall_seconds": 18.63361399807036
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 125.32227426907048
+    },
+    {
+      "id": "luce-full_attention_decoder-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 735940,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "a4380196a0541e702e623b405aa2de2d682bdc714259cebcaf803994dd95c752",
+          "system_seconds": 0.414008,
+          "user_seconds": 16.412343,
+          "wall_seconds": 16.827598355012015
+        },
+        {
+          "max_rss_kib": 2802372,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "cf50e5faafd0e16244699393804678e381ad7705e19b86119d2e616a2fb59b57",
+          "system_seconds": 11.136762,
+          "user_seconds": 528.648723,
+          "wall_seconds": 538.7926630319562
+        },
+        {
+          "max_rss_kib": 770756,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.917813,
+          "user_seconds": 17.464566,
+          "wall_seconds": 18.36349617689848
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 538.8537616878748
+    },
+    {
+      "id": "luce-initialize-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 736960,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "43a69426a851784a3413c2579ce9f9278ba54adfce2049175b919aa30df00fd3",
+          "system_seconds": 0.434762,
+          "user_seconds": 16.445539,
+          "wall_seconds": 16.880708852084354
+        },
+        {
+          "max_rss_kib": 848580,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "df369e2690f79012ff35958eeb0bc30a958d3603718ae7cbf97a0c2ac6f0d33b",
+          "system_seconds": 1.027978,
+          "user_seconds": 72.910771,
+          "wall_seconds": 73.86591378017329
+        },
+        {
+          "max_rss_kib": 771772,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 1.002647,
+          "user_seconds": 17.554012,
+          "wall_seconds": 18.536616019904613
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 73.92672938201576
+    },
+    {
+      "id": "luce-recurrent_decoder-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 870084,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "698c2a32ff04064a7e140b986c815d741816cca03f0474dee4b5abeb96c463d0",
+          "system_seconds": 0.490998,
+          "user_seconds": 24.64292,
+          "wall_seconds": 25.13512539002113
+        },
+        {
+          "max_rss_kib": 1573596,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "04245a4083328bc0cfd5f8b0995212f55183647bd1ca67e1bdd6ab4f8c50b84e",
+          "system_seconds": 7.085474,
+          "user_seconds": 260.336457,
+          "wall_seconds": 266.7286544169765
+        },
+        {
+          "max_rss_kib": 771784,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.9143709999999999,
+          "user_seconds": 17.769597,
+          "wall_seconds": 18.662555559072644
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 266.79045342700556
+    },
+    {
+      "id": "luce-token_history_update-base",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 737988,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "ddef389ceaa2e83e60f39de54838784d59157f6cbc8774a4af8399d999126a8c",
+          "system_seconds": 0.449592,
+          "user_seconds": 16.496174,
+          "wall_seconds": 16.9459624029696
+        },
+        {
+          "max_rss_kib": 806588,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "02d2d63f880f827adf2fbed73b3b9bfd62e0298aa6518bd122419711aec9800d",
+          "system_seconds": 0.648239,
+          "user_seconds": 21.894,
+          "wall_seconds": 22.52718596998602
+        },
+        {
+          "max_rss_kib": 773828,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.9500379999999999,
+          "user_seconds": 17.497604,
+          "wall_seconds": 18.428366360953078
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 22.58869936107658
+    },
+    {
+      "id": "luce-argmax-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 807624,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "2066a2f194eac522c52fe634cd7a8352f0fd4cb81ad9bcc4b4fbf22c6d2ce797",
+          "system_seconds": 0.476989,
+          "user_seconds": 20.404535,
+          "wall_seconds": 20.88315733592026
+        },
+        {
+          "max_rss_kib": 1037000,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "e9239b9cf90d93c065004d3fd858ec77db7d43f87621b47407d45dbc3c623ce9",
+          "system_seconds": 1.436108,
+          "user_seconds": 38.891898,
+          "wall_seconds": 40.23510210891254
+        },
+        {
+          "max_rss_kib": 771780,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.917346,
+          "user_seconds": 17.545617,
+          "wall_seconds": 18.44499398395419
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 40.29672327102162
+    },
+    {
+      "id": "luce-attention_decoder-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 736968,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "69c4322c275c3233854c4389ec85c543246daddbe73f47738a00a0a614cf1995",
+          "system_seconds": 0.41099199999999997,
+          "user_seconds": 16.563703,
+          "wall_seconds": 16.975694993976504
+        },
+        {
+          "max_rss_kib": 2200464,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "c86d36441bc62767ac2edbca244266fc87d27f8958433689f20ef5a537def640",
+          "system_seconds": 4.8618179999999995,
+          "user_seconds": 258.403394,
+          "wall_seconds": 262.7158199928235
+        },
+        {
+          "max_rss_kib": 770756,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.9152129999999999,
+          "user_seconds": 17.570056,
+          "wall_seconds": 18.466896265977994
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 262.7941452320665
+    },
+    {
+      "id": "luce-embedding-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 733884,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "fda1697687058957c8b01c6353b2b8aa5488a7ccef06a5e228031ad68e933de7",
+          "system_seconds": 0.461022,
+          "user_seconds": 16.38681,
+          "wall_seconds": 16.848987373057753
+        },
+        {
+          "max_rss_kib": 839364,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "b1cb5aa3d72cc0c1fa769e9289063355f489bbf1bc79d48860f513b2fb414e96",
+          "system_seconds": 0.832348,
+          "user_seconds": 26.170029,
+          "wall_seconds": 26.964396737050265
+        },
+        {
+          "max_rss_kib": 770756,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.997274,
+          "user_seconds": 17.423442,
+          "wall_seconds": 18.40068926103413
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 27.02592969709076
+    },
+    {
+      "id": "luce-final_projection-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 735940,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "bbc45cf5aaca5a716d2febafd7e059a147f41819ec64d9ba4579ee1ecf101a84",
+          "system_seconds": 0.443995,
+          "user_seconds": 16.501844,
+          "wall_seconds": 16.94696918898262
+        },
+        {
+          "max_rss_kib": 1015492,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "a7bb89e8c3da826a9ad3bbf6c5c434c91dd18899eb0cb5194965eba7b60f6eab",
+          "system_seconds": 1.928553,
+          "user_seconds": 45.935056,
+          "wall_seconds": 47.74248935515061
+        },
+        {
+          "max_rss_kib": 769732,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 1.004505,
+          "user_seconds": 17.470554,
+          "wall_seconds": 18.456667782040313
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 47.80403420119546
+    },
+    {
+      "id": "luce-inactive_decode-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 740032,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "f0a6e0a412b78d6501a9179c8cf9b3d486448598645496ed6bcd4a3819bc6ec9",
+          "system_seconds": 0.481985,
+          "user_seconds": 16.509518,
+          "wall_seconds": 16.992623139871284
+        },
+        {
+          "max_rss_kib": 775880,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "db4e135d644a73791fb4755f2b3bc94acb89f1f6a46474f03eb5da40667f8344",
+          "system_seconds": 0.48571,
+          "user_seconds": 17.723804,
+          "wall_seconds": 18.208043687976897
+        },
+        {
+          "max_rss_kib": 769732,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.983389,
+          "user_seconds": 17.606087,
+          "wall_seconds": 18.56999503215775
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 18.631816704990342
+    },
+    {
+      "id": "luce-initialize-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 735940,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "0001c21386ba0d76719255ffa953322e4bf42bed6d3d2f7c935a5ff6730dc0a1",
+          "system_seconds": 0.45499,
+          "user_seconds": 16.386643,
+          "wall_seconds": 16.843003269052133
+        },
+        {
+          "max_rss_kib": 793276,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "96961197be92a541999e2fcc7991b1478d025527d0f28edb65ff3d9bd232683d",
+          "system_seconds": 0.62029,
+          "user_seconds": 19.717172,
+          "wall_seconds": 20.317600960144773
+        },
+        {
+          "max_rss_kib": 769736,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.986617,
+          "user_seconds": 17.525386,
+          "wall_seconds": 18.49333131010644
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 20.380183215951547
+    },
+    {
+      "id": "luce-recurrent_decoder-optimized",
+      "jobs": 16,
+      "kind": "family",
+      "modules": [
+        {
+          "max_rss_kib": 735940,
+          "module": "KPlay.Functional.fsti",
+          "returncode": 0,
+          "source_sha256": "37d07702640975b007167354f1f9c33b2bc0a12ee95708845b285d31c0f86b92",
+          "system_seconds": 0.47696299999999997,
+          "user_seconds": 16.442732,
+          "wall_seconds": 16.92106492188759
+        },
+        {
+          "max_rss_kib": 1305784,
+          "module": "KPlay.Functional.fst",
+          "returncode": 0,
+          "source_sha256": "1649c78b6296ee4de256e858a6e163dee0be894fdeeb29f3ab2c233089f63560",
+          "system_seconds": 4.772405,
+          "user_seconds": 104.498262,
+          "wall_seconds": 108.85649103811011
+        },
+        {
+          "max_rss_kib": 768708,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.9861369999999999,
+          "user_seconds": 17.4319,
+          "wall_seconds": 18.399666844168678
+        }
+      ],
+      "requested_modules": 3,
+      "status": "passed",
+      "wall_seconds": 108.91808734182268
+    },
+    {
+      "id": "luce-program-base",
+      "jobs": 16,
+      "kind": "program",
+      "modules": [
+        {
+          "max_rss_kib": 765640,
+          "module": "KPlay.Proof.Program.Base.fsti",
+          "returncode": 0,
+          "source_sha256": "283f511c42d80fe88fa898b925d51059052b0cf726d8dd14cba6b34fd1b8c9dd",
+          "system_seconds": 0.39496899999999996,
+          "user_seconds": 17.145657,
+          "wall_seconds": 17.54223164706491
+        },
+        {
+          "max_rss_kib": 835268,
+          "module": "KPlay.Proof.Program.Base.fst",
+          "returncode": 0,
+          "source_sha256": "3e3012668800b5f36613781486906a4790810cf41f8435fd8edd5c71dcd27125",
+          "system_seconds": 0.7115389999999999,
+          "user_seconds": 22.364494,
+          "wall_seconds": 23.045077624963596
+        },
+        {
+          "max_rss_kib": 769732,
+          "module": "KPlay.Proof.Wiring.Base.fst",
+          "returncode": 0,
+          "source_sha256": "4d9df2bd798d98c33e1ad47de07ae5908931f3ddac4bf51491814da965e783f0",
+          "system_seconds": 0.487114,
+          "user_seconds": 17.546362,
+          "wall_seconds": 18.03371084202081
+        },
+        {
+          "max_rss_kib": 1060548,
+          "module": "KPlay.Proof.BaseAccess.fst",
+          "returncode": 0,
+          "source_sha256": "ec38a0b0504e0ce5f5e63b8437b523cc447a4e7f5ad5ed53cb4ceadc1e84630d",
+          "system_seconds": 2.016761,
+          "user_seconds": 78.140828,
+          "wall_seconds": 79.92701377090998
+        },
+        {
+          "max_rss_kib": 918480,
+          "module": "KPlay.Proof.BaseChain.fst",
+          "returncode": 0,
+          "source_sha256": "34dd2e21fe0d748f07409fddb4e80128104f2e4924a0f5fe3e1a5f92d1ed0d74",
+          "system_seconds": 1.2692109999999999,
+          "user_seconds": 31.766033,
+          "wall_seconds": 32.943109932821244
+        },
+        {
+          "max_rss_kib": 756424,
+          "module": "KPlay.Proof.BaseCongr.fst",
+          "returncode": 0,
+          "source_sha256": "b86635d6ee2af4bd6a1d103c7a56c9fad3732f14c65f7cca8597acfa5fa46cf5",
+          "system_seconds": 0.773911,
+          "user_seconds": 18.962978,
+          "wall_seconds": 19.72012570500374
+        },
+        {
+          "max_rss_kib": 741060,
+          "module": "KPlay.Proof.BaseKV.fst",
+          "returncode": 0,
+          "source_sha256": "afe069eb32c9f5ffa6cb0a4fd42b008e46773613cbff59c7c7c82102df51385e",
+          "system_seconds": 0.574264,
+          "user_seconds": 19.252971,
+          "wall_seconds": 19.820092762820423
+        },
+        {
+          "max_rss_kib": 741060,
+          "module": "KPlay.Proof.BaseRef.fst",
+          "returncode": 0,
+          "source_sha256": "c28ff3bd224a5d4e79b418caa92cbc040d095c62d80a25102ced450e97a159f4",
+          "system_seconds": 0.644933,
+          "user_seconds": 17.750833,
+          "wall_seconds": 18.38361296406947
+        },
+        {
+          "max_rss_kib": 897732,
+          "module": "KPlay.Proof.BaseShape.fst",
+          "returncode": 0,
+          "source_sha256": "79683361c76eb32f4977608e2cddabb03e91077e1078b98a9f82339de9b9f19f",
+          "system_seconds": 1.076265,
+          "user_seconds": 22.601013000000002,
+          "wall_seconds": 23.610044276807457
+        },
+        {
+          "max_rss_kib": 782020,
+          "module": "KPlay.Proof.BaseView.fst",
+          "returncode": 0,
+          "source_sha256": "521ba739d938a6de6f71a0fde77179acdf72674929ea378d0f7448642b0e7d71",
+          "system_seconds": 0.555585,
+          "user_seconds": 18.127673,
+          "wall_seconds": 18.676636372925714
+        },
+        {
+          "max_rss_kib": 773824,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.9409259999999999,
+          "user_seconds": 18.107299,
+          "wall_seconds": 19.029386525973678
+        }
+      ],
+      "requested_modules": 11,
+      "status": "passed",
+      "wall_seconds": 80.01554959686473
+    },
+    {
+      "id": "luce-program-optimized",
+      "jobs": 16,
+      "kind": "program",
+      "modules": [
+        {
+          "max_rss_kib": 806596,
+          "module": "KPlay.Proof.Program.Optimized.fsti",
+          "returncode": 0,
+          "source_sha256": "d2abf1d2160e303a252b6b498ed409bcb2ffc33ddd4e84a14c40a62cb8321a17",
+          "system_seconds": 0.43500099999999997,
+          "user_seconds": 16.853053,
+          "wall_seconds": 17.289429684868082
+        },
+        {
+          "max_rss_kib": 1153152,
+          "module": "KPlay.Proof.Program.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "b6d15aaf774747d0bb85703196e8e10ae21870b146e252ad15f9ecea34e969cc",
+          "system_seconds": 2.239929,
+          "user_seconds": 91.171103,
+          "wall_seconds": 93.00311710499227
+        },
+        {
+          "max_rss_kib": 811716,
+          "module": "KPlay.Proof.Wiring.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "375a9b16973e7ab9a97d1c86bc02db31a6fd55b73b89db6ea85cee4eb5c09a09",
+          "system_seconds": 0.48788299999999996,
+          "user_seconds": 17.043088,
+          "wall_seconds": 17.53076018486172
+        },
+        {
+          "max_rss_kib": 812736,
+          "module": "KPlay.Proof.OptApprox.fst",
+          "returncode": 0,
+          "source_sha256": "62f47d178ed7bab171057e1ed28d96a6d3cda384425aeace6641e5769e6ebfb0",
+          "system_seconds": 0.5366949999999999,
+          "user_seconds": 17.343458,
+          "wall_seconds": 17.87773783202283
+        },
+        {
+          "max_rss_kib": 833220,
+          "module": "KPlay.Proof.OptChain.fst",
+          "returncode": 0,
+          "source_sha256": "6c86f1acf1a9d2aa45f4b2912263c90369e0509bb94cfeddc27090dafb4b1ced",
+          "system_seconds": 0.815066,
+          "user_seconds": 27.932092,
+          "wall_seconds": 28.716839194996282
+        },
+        {
+          "max_rss_kib": 736956,
+          "module": "KPlay.Proof.OptState.fst",
+          "returncode": 0,
+          "source_sha256": "55f64f6960d3ae86ac96ba3852f993e3fb1a1d094abc9533cd0091928b159adc",
+          "system_seconds": 0.688257,
+          "user_seconds": 17.280106,
+          "wall_seconds": 17.955596740124747
+        },
+        {
+          "max_rss_kib": 758468,
+          "module": "KPlay.Proof.OptWin.fst",
+          "returncode": 0,
+          "source_sha256": "33c5850f4ae2b17701ff07f024c6e7f655c3b10526a93140a0055f9a09d11909",
+          "system_seconds": 0.880134,
+          "user_seconds": 18.304681,
+          "wall_seconds": 19.161234444007277
+        },
+        {
+          "max_rss_kib": 774852,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.8743869999999999,
+          "user_seconds": 17.451505,
+          "wall_seconds": 18.30926161701791
+        }
+      ],
+      "requested_modules": 8,
+      "status": "passed",
+      "wall_seconds": 93.06429839506745
+    },
+    {
+      "id": "luce-program-review",
+      "jobs": 16,
+      "kind": "review",
+      "modules": [
+        {
+          "max_rss_kib": 816836,
+          "module": "KPlay.Review.fsti",
+          "returncode": 0,
+          "source_sha256": "772e399eb4e2e879dfc75566d2983027c4f6f676d1f2390ecd261a8ca3dcca2c",
+          "system_seconds": 0.42599299999999996,
+          "user_seconds": 19.733702,
+          "wall_seconds": 20.16107396618463
+        },
+        {
+          "max_rss_kib": 863940,
+          "module": "KPlay.Review.fst",
+          "returncode": 0,
+          "source_sha256": "7812d88e138907caf4fecddce227d6706542fece190dc759e6e6db262b28c542",
+          "system_seconds": 0.637852,
+          "user_seconds": 21.328131,
+          "wall_seconds": 21.968564405106008
+        },
+        {
+          "max_rss_kib": 765640,
+          "module": "KPlay.Proof.Program.Base.fsti",
+          "returncode": 0,
+          "source_sha256": "283f511c42d80fe88fa898b925d51059052b0cf726d8dd14cba6b34fd1b8c9dd",
+          "system_seconds": 0.47004799999999997,
+          "user_seconds": 19.104975,
+          "wall_seconds": 19.576408175053075
+        },
+        {
+          "max_rss_kib": 833220,
+          "module": "KPlay.Proof.Program.Base.fst",
+          "returncode": 0,
+          "source_sha256": "3e3012668800b5f36613781486906a4790810cf41f8435fd8edd5c71dcd27125",
+          "system_seconds": 0.822638,
+          "user_seconds": 24.879076,
+          "wall_seconds": 25.675381191074848
+        },
+        {
+          "max_rss_kib": 769724,
+          "module": "KPlay.Proof.Wiring.Base.fst",
+          "returncode": 0,
+          "source_sha256": "4d9df2bd798d98c33e1ad47de07ae5908931f3ddac4bf51491814da965e783f0",
+          "system_seconds": 0.43860499999999997,
+          "user_seconds": 19.233466,
+          "wall_seconds": 19.67790637514554
+        },
+        {
+          "max_rss_kib": 1060548,
+          "module": "KPlay.Proof.BaseAccess.fst",
+          "returncode": 0,
+          "source_sha256": "ec38a0b0504e0ce5f5e63b8437b523cc447a4e7f5ad5ed53cb4ceadc1e84630d",
+          "system_seconds": 2.061136,
+          "user_seconds": 84.001538,
+          "wall_seconds": 85.8360666600056
+        },
+        {
+          "max_rss_kib": 915140,
+          "module": "KPlay.Proof.BaseChain.fst",
+          "returncode": 0,
+          "source_sha256": "34dd2e21fe0d748f07409fddb4e80128104f2e4924a0f5fe3e1a5f92d1ed0d74",
+          "system_seconds": 1.314289,
+          "user_seconds": 35.493466,
+          "wall_seconds": 36.72961035906337
+        },
+        {
+          "max_rss_kib": 758468,
+          "module": "KPlay.Proof.BaseCongr.fst",
+          "returncode": 0,
+          "source_sha256": "b86635d6ee2af4bd6a1d103c7a56c9fad3732f14c65f7cca8597acfa5fa46cf5",
+          "system_seconds": 0.837279,
+          "user_seconds": 22.200352,
+          "wall_seconds": 23.035168190021068
+        },
+        {
+          "max_rss_kib": 735940,
+          "module": "KPlay.Proof.BaseKV.fst",
+          "returncode": 0,
+          "source_sha256": "afe069eb32c9f5ffa6cb0a4fd42b008e46773613cbff59c7c7c82102df51385e",
+          "system_seconds": 0.6573359999999999,
+          "user_seconds": 21.337655,
+          "wall_seconds": 22.016282990109175
+        },
+        {
+          "max_rss_kib": 747208,
+          "module": "KPlay.Proof.BaseRef.fst",
+          "returncode": 0,
+          "source_sha256": "c28ff3bd224a5d4e79b418caa92cbc040d095c62d80a25102ced450e97a159f4",
+          "system_seconds": 0.7137249999999999,
+          "user_seconds": 20.466199,
+          "wall_seconds": 21.167701511876658
+        },
+        {
+          "max_rss_kib": 902852,
+          "module": "KPlay.Proof.BaseShape.fst",
+          "returncode": 0,
+          "source_sha256": "79683361c76eb32f4977608e2cddabb03e91077e1078b98a9f82339de9b9f19f",
+          "system_seconds": 1.2077499999999999,
+          "user_seconds": 25.645166,
+          "wall_seconds": 26.811245888937265
+        },
+        {
+          "max_rss_kib": 779972,
+          "module": "KPlay.Proof.BaseView.fst",
+          "returncode": 0,
+          "source_sha256": "521ba739d938a6de6f71a0fde77179acdf72674929ea378d0f7448642b0e7d71",
+          "system_seconds": 0.616806,
+          "user_seconds": 19.973274,
+          "wall_seconds": 20.582762458827347
+        },
+        {
+          "max_rss_kib": 775876,
+          "module": "KPlay.SharedSpec.fst",
+          "returncode": 0,
+          "source_sha256": "0a7d940fe7e39d3f886670fa84b60295062f5850ab15ad6c541a5510c11475ae",
+          "system_seconds": 0.9528479999999999,
+          "user_seconds": 20.214663,
+          "wall_seconds": 21.1521336811129
+        },
+        {
+          "max_rss_kib": 806596,
+          "module": "KPlay.Proof.Program.Optimized.fsti",
+          "returncode": 0,
+          "source_sha256": "d2abf1d2160e303a252b6b498ed409bcb2ffc33ddd4e84a14c40a62cb8321a17",
+          "system_seconds": 0.462976,
+          "user_seconds": 19.009055,
+          "wall_seconds": 19.475409555947408
+        },
+        {
+          "max_rss_kib": 1149228,
+          "module": "KPlay.Proof.Program.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "b6d15aaf774747d0bb85703196e8e10ae21870b146e252ad15f9ecea34e969cc",
+          "system_seconds": 2.396485,
+          "user_seconds": 99.893769,
+          "wall_seconds": 101.9319134298712
+        },
+        {
+          "max_rss_kib": 808648,
+          "module": "KPlay.Proof.Wiring.Optimized.fst",
+          "returncode": 0,
+          "source_sha256": "375a9b16973e7ab9a97d1c86bc02db31a6fd55b73b89db6ea85cee4eb5c09a09",
+          "system_seconds": 0.51996,
+          "user_seconds": 19.783547,
+          "wall_seconds": 20.303980776807293
+        },
+        {
+          "max_rss_kib": 809672,
+          "module": "KPlay.Proof.OptApprox.fst",
+          "returncode": 0,
+          "source_sha256": "62f47d178ed7bab171057e1ed28d96a6d3cda384425aeace6641e5769e6ebfb0",
+          "system_seconds": 0.54792,
+          "user_seconds": 18.687481,
+          "wall_seconds": 19.232995536876842
+        },
+        {
+          "max_rss_kib": 833220,
+          "module": "KPlay.Proof.OptChain.fst",
+          "returncode": 0,
+          "source_sha256": "6c86f1acf1a9d2aa45f4b2912263c90369e0509bb94cfeddc27090dafb4b1ced",
+          "system_seconds": 0.8956109999999999,
+          "user_seconds": 29.85442,
+          "wall_seconds": 30.71831494010985
+        },
+        {
+          "max_rss_kib": 735940,
+          "module": "KPlay.Proof.OptState.fst",
+          "returncode": 0,
+          "source_sha256": "55f64f6960d3ae86ac96ba3852f993e3fb1a1d094abc9533cd0091928b159adc",
+          "system_seconds": 0.7428929999999999,
+          "user_seconds": 18.973333,
+          "wall_seconds": 19.701988752931356
+        },
+        {
+          "max_rss_kib": 754372,
+          "module": "KPlay.Proof.OptWin.fst",
+          "returncode": 0,
+          "source_sha256": "33c5850f4ae2b17701ff07f024c6e7f655c3b10526a93140a0055f9a09d11909",
+          "system_seconds": 0.952992,
+          "user_seconds": 19.720624,
+          "wall_seconds": 20.64480238012038
+        }
+      ],
+      "requested_modules": 20,
+      "status": "passed",
+      "wall_seconds": 101.99837465700693
+    }
+  ],
+  "completed_utc": "2026-11-27T09:53:42.709783+00:00",
+  "input_sha256": "fe5b67da8a0860d4e1bbf51c859db4431277b97414d3c4fbc56fb6ef6cfed6bf",
+  "jobs": 16,
+  "logical_cpus": 128,
+  "machine": "x86_64",
+  "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+  "requested_cases": [
+    "luce-shared",
+    "luce-argmax-base",
+    "luce-embedding_rope-base",
+    "luce-final_norm_projection-base",
+    "luce-full_attention_decoder-base",
+    "luce-initialize-base",
+    "luce-recurrent_decoder-base",
+    "luce-token_history_update-base",
+    "luce-argmax-optimized",
+    "luce-attention_decoder-optimized",
+    "luce-embedding-optimized",
+    "luce-final_projection-optimized",
+    "luce-inactive_decode-optimized",
+    "luce-initialize-optimized",
+    "luce-recurrent_decoder-optimized",
+    "luce-program-base",
+    "luce-program-optimized",
+    "luce-program-review"
+  ],
+  "started_utc": "2026-11-27T09:21:57.899230+00:00",
+  "status": "passed",
+  "toolchain": {
+    "fstar_version": {
+      "kuiper-nightly-2026-11-18": "F* 2026.11.15~dev\nplatform=Linux_x86_64\nsystem=Unix\ncompiler=OCaml 5.3.0\ndate=2026-11-17 01:03:23 +0000\ncommit=049c07a0d9902cd39bf45a47a736be891297b79f\n"
+    },
+    "support_sha256": "2de3ef605e3d4b38e7937f86e9777b1d3fdab989b53adf950f1b89e2a408ce79",
+    "toolchain": {
+      "kuiper-nightly-2026-11-18": {
+        "foundation": false,
+        "fstar_commit": "049c07a0d9902cd39bf45a47a736be891297b79f",
+        "kuiper_commit": "1623fb4ef144e530eaf0fb9f1c3f750d5249080b",
+        "platform": "Linux-x86_64",
+        "sha256": "37ab664feaa4d051ed2030ae9ca31857aec98dacbff3f970df4f7d55ac0da1f1",
+        "url": "https://github.com/FStarLang/kuiper/releases/download/nightly-2026-11-18/kuiper-Linux-x86_64.tar.gz",
+        "z3_version": "5.3.0"
+      }
+    }
+  },
+  "wall_seconds": 1904.8059294088744
+}
