@@ -474,6 +474,35 @@
       ]
     },
     {
+      "directory": "proofs/flashmoe-spec",
+      "id": "flashmoe-spec",
+      "implementation_cases": [
+        "flashmoe-program-base",
+        "flashmoe-program-optimized"
+      ],
+      "kind": "review",
+      "profile": "flashmoe-cleanroom",
+      "project": "flashmoe",
+      "roots": [
+        "proofs/flashmoe-spec/KPlay.Spec.fst",
+        "proofs/flashmoe-spec/KPlay.Spec.Bridge.fst",
+        "proofs/flashmoe-spec/KPlay.Spec.Review.fsti",
+        "proofs/flashmoe-spec/KPlay.Spec.Review.fst",
+        "proofs/flashmoe-program/KPlay.Review.fsti",
+        "proofs/flashmoe-program/KPlay.Review.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Program.Base.fsti",
+        "proofs/flashmoe-program/base/KPlay.Proof.Program.Base.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Wiring.Base.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Base.Chain.fst",
+        "proofs/flashmoe-program/base/KPlay.Proof.Base.Select.fst",
+        "proofs/flashmoe-shared/KPlay.SharedSpec.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Program.Optimized.fsti",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Program.Optimized.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.Wiring.Optimized.fst",
+        "proofs/flashmoe-program/optimized/KPlay.Proof.OptScan.fst"
+      ]
+    },
+    {
       "directory": "proofs/luce-shared",
       "id": "luce-shared",
       "kind": "shared",
@@ -1012,6 +1041,10 @@
     "proofs/flashmoe-shared/KPlay.SharedSpec.fst": "84df5d02067612e220ec1276aa7d1e40d3d26f48deed27bdaa6f4092e6c75c97",
     "proofs/flashmoe-softmax/optimized/KPlay.Functional.fst": "db2ab0488dada5202a66f3b47bb7d5ff53094d16fe6fd21c686e47e10f55dccf",
     "proofs/flashmoe-softmax/optimized/KPlay.Functional.fsti": "4b3f73f19cf68bac1d23ffb8d875cebe7d09fdd6be20c0d046f3fd8cfd18b98e",
+    "proofs/flashmoe-spec/KPlay.Spec.Bridge.fst": "04fec82f8a66b08bd55b70355c16b17fcebb8e28d20b7a9bbdf79414df9e1782",
+    "proofs/flashmoe-spec/KPlay.Spec.Review.fst": "b952a0f6dfb62872aa4b54707fb2e15bd26622b272fa5b6c0e68a920cbf7ca6f",
+    "proofs/flashmoe-spec/KPlay.Spec.Review.fsti": "25d268d6e5a8304bbb50b294a8d189147f7ba08e265a10662dfdf6409b16eed3",
+    "proofs/flashmoe-spec/KPlay.Spec.fst": "b9a814b456f6cd5f40bed2ccadacfe8ad16be04393a95593a260a46c71974e7f",
     "proofs/luce-argmax/base/KPlay.Functional.fst": "0612aa1890b17f581e98fc870107efa1c64db2fc9fa0a6b3fc16eba5531b7b3b",
     "proofs/luce-argmax/base/KPlay.Functional.fsti": "31cb846f6c101768d2d3df8b5a6a5074aeec906bb3790adc972ca4d1f2849e5b",
     "proofs/luce-argmax/optimized/KPlay.Functional.fst": "e9239b9cf90d93c065004d3fd858ec77db7d43f87621b47407d45dbc3c623ce9",

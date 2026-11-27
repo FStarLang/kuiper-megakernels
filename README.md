@@ -175,6 +175,19 @@ Selection is over the native rows actually computed. The two roles may
 therefore pick different experts where real-valued scores are close, and their
 outputs need not be equal. `%~` is read as for Mirage above.
 
+Review case `flashmoe-spec` ([`proofs/flashmoe-spec/`](proofs/flashmoe-spec/))
+restates the same guarantee as a typed spec that people can read.
+[`KPlay.Spec`](proofs/flashmoe-spec/KPlay.Spec.fst) has named dimensions,
+records for `inputs`/`outputs`, one real equation per reference operation, and
+`postcondition input output` = structural ∧ numerical ∧ selection over a
+routing run. It never mentions flat buffers or `KPlay.SharedSpec`.
+`KPlay.Spec.Bridge` gives the row-major views `inputs_of`/`outputs_of` and
+proves `program_postcondition_iff`: for inputs of the right length, the flat
+`program_postcondition` holds iff the output lengths and the typed
+`postcondition` both hold. `KPlay.Spec.Review` concludes the typed
+`postcondition` for both roles. To check:
+`python3 replay.py verify --case flashmoe-spec --work <work> --jobs 8`.
+
 These cases use profile `flashmoe-cleanroom`, pinned to the same Kuiper
 `nightly-2026-11-18` release as Mirage. RESOLVE's FlashMoE installation was
 built from that release (`archive_sha256` matches the pin); its library
