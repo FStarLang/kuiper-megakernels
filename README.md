@@ -2,7 +2,8 @@
 
 Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 30 family refinements and three shared-specification
-checks**, plus three checked base/optimized program reviews.
+checks**, plus three checked base/optimized program reviews and three typed
+specifications (`proofs/<project>-spec`) proved equivalent to the flat ones.
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 

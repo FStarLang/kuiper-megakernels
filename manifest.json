@@ -1047,7 +1047,7 @@
     "kernels/mirage-program-optimized.cu": "534f3a8c665e7707c030e0b690b4ed66c5337eb3edad821fda162a92f17557a8",
     "kernels/mirage-projection-base.cu": "7455a3e886fe7e165f51bcfe97cd054a26bc330d89604c39ed7ba634e092511a",
     "kernels/mirage-projection-optimized.cu": "e0bc74e947cda504076ecea02093f2cb56121e753236dfc4597ec5d691fcb2e7",
-    "proofs/REVIEW-CATALOG.md": "b0566e93c8fc1494ae7a95f26e176e0792533058f5cbfc7fe482ea1a3acf196a",
+    "proofs/REVIEW-CATALOG.md": "4b75af7851731a1aa3a78d3cac4964a8ee246059b1d0d992ca738deb9e135d28",
     "proofs/flashmoe-argmax/base/KPlay.Functional.fst": "a87b8443911cbc8ec127b2a0d80fe56aa437a2a554871329567b31adf71426ca",
     "proofs/flashmoe-argmax/base/KPlay.Functional.fsti": "220e338ba187d23ce8c154d1d1296178475f7c605b5a9b7dfb55e0b144b3fab9",
     "proofs/flashmoe-argmax/optimized/KPlay.Functional.fst": "664f572e0804f8ad754177cc342b1ebd2d4c90321257459a82c174ee5c92604b",

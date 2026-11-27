@@ -1,5 +1,13 @@
 # Base/optimized review catalog
 
+**Start here:** `proofs/<project>-spec/KPlay.Spec.Review.fsti` states, for both
+roles, the guarantee over the typed specification `KPlay.Spec` (records,
+named reference equations, typed `postcondition`, in the form of
+`review/checked-kernel-specs`). `KPlay.Spec.Bridge.program_postcondition_iff`
+proves that typed postcondition equivalent to the flat `program_postcondition`
+used below, given buffer lengths. The flat reviews below are what the typed ones
+are built from.
+
 All proofs in this repository come from the clean-room RESOLVE proof pipeline
 (see the README sections on
 [Mirage](../README.md#mirage-clean-room-resolve-pipeline-proof),
