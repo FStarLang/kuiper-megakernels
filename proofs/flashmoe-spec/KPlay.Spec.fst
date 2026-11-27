@@ -208,11 +208,11 @@ let top1_relation (row:vector F32.t expert_count) (j:index expert_count) : prop 
   (forall (i:index expert_count). i < j ==>
      is_nan (row i) \/ (exists (v:F32.t). lte (row i) v /\ lt v (row j)))
 
-(* base.py:20-21: for a selected probability above -inf, the combine
-   weight approximates p / p for every nonzero real p it approximates. *)
+(* base.py:20-21: the combine weight approximates p / p for every nonzero
+   real p the selected probability approximates. *)
 let combine_relation (selected_probability combine:F32.t) : prop =
   forall (p:real).
-    lt neg_infinity selected_probability /\ selected_probability %~ p /\ p =!= 0.0R ==>
+    selected_probability %~ p /\ p =!= 0.0R ==>
     combine %~ combine_weight p
 
 (* base.py:23-33: the four outputs are exactly the token-order capacity

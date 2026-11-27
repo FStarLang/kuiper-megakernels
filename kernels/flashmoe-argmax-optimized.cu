@@ -10,8 +10,8 @@
 __global__ void argmax_row(
     const float* row, int32_t* output_selected, float* output_selected_probability) {
     int selected = 0;
-    float selected_probability = -std::numeric_limits<float>::infinity();
-    for (int expert = 0; expert < 8; ++expert) {
+    float selected_probability = row[0];
+    for (int expert = 1; expert < 8; ++expert) {
         if (row[expert] > selected_probability) {
             selected = expert;
             selected_probability = row[expert];

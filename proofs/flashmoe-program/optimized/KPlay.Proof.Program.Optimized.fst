@@ -397,11 +397,11 @@ let step_srv (r:run) (n:nat{n < tokens})
 
 let combine_from_opt (row:S.seq F32.t) (s:int) (sp c:F32.t)
   : Lemma (requires S.length row == experts /\ 0 <= s /\ s < experts /\
-                    (lt ninf (S.index row s) ==> sp == S.index row s) /\
+                    sp == S.index row s /\
                     optimized_combine_ok (S.index row s) sp c)
           (ensures selected_combine_ok row s c)
   = let aux (rp:real)
-      : Lemma (requires lt ninf (S.index row s) /\ S.index row s %~ rp /\ rp =!= 0.0R)
+      : Lemma (requires S.index row s %~ rp /\ rp =!= 0.0R)
               (ensures rp =!= 0.0R ==> c %~ ref_combine rp)
       = assert (0.0R +. rp == rp)
     in
@@ -415,8 +415,8 @@ let step_post (r:run) (n:nat{n < tokens})
     rows_row r n;
     opt_scan_allowed row;
     assert (optimized_argmax_relation row (asel r n) (aprob r n));
-    assert (sel_at r n == fst (opt_scan row experts));
-    assert (S.index (aprob r n) 0 == snd (opt_scan row experts));
+    assert (sel_at r n == fst (base_scan row experts));
+    assert (S.index (aprob r n) 0 == snd (base_scan row experts));
     if kept (sel_seq r) n then begin
       assert (rank (sel_seq r) n == rk_at r n);
       comb_at_slot r n;

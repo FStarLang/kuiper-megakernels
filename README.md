@@ -176,6 +176,14 @@ Selection is over the native rows actually computed. The two roles may
 therefore pick different experts where real-valued scores are close, and their
 outputs need not be equal. `%~` is read as for Mirage above.
 
+The combine weight is constrained on every kept token, with no premise on the
+selected probability. We edited this part of the spec by hand after the
+RESOLVE run, which had required the selected probability to be above −infinity.
+To prove it, the optimized argmax now seeds its scan from `row[0]` instead of
+−infinity, as base does. This is a local patch to the original,
+[`patches/flashmoe-argmax-start-row0.patch`](patches/flashmoe-argmax-start-row0.patch),
+and it is also applied to the reduced kernels.
+
 Review case `flashmoe-spec` ([`proofs/flashmoe-spec/`](proofs/flashmoe-spec/))
 restates the same guarantee as a typed spec that people can read.
 [`KPlay.Spec`](proofs/flashmoe-spec/KPlay.Spec.fst) has named dimensions,

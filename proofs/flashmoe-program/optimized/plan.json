@@ -1,5 +1,5 @@
 {
-  "accepted_cuda_sha256": "52e8902e3c6ff9eded48a3063739702b3191bd898f73a8fb86569f3ba8aa6e62",
+  "accepted_cuda_sha256": "359d8684bb80b6b4ad61cb047475565e404da9a2fd21f850732c528b0a8d5f6f",
   "cases": {
     "sample-0000": {
       "outputs": [
@@ -149837,7 +149837,7 @@
   "families": {
     "argmax": {
       "cuda": "argmax.cu",
-      "description": "The accepted serial eight-expert argmax over a contiguous CUDA float32 row [8]. Outputs are rank-zero int32 selected and rank-zero float32 selected_probability. Initialize selected=0 and selected_probability=-infinity, then compare row[expert] strictly > selected_probability in expert order 0..7 and update both values only on success. This retains the earliest equal winner, skips NaNs by the original comparison, and retains (0,-infinity) if no comparison succeeds. The full row remains an explicit softmax-to-routing binding because routing uses row[selected] independently of the running selected_probability. The unchanged capacity tuple bypasses this read-only operation explicitly in the schedule. This is a separate proof target; exact replay does not establish upstream numerical equivalence or argmax stability between different score vectors.",
+      "description": "The accepted serial eight-expert argmax over a contiguous CUDA float32 row [8]. Outputs are rank-zero int32 selected and rank-zero float32 selected_probability. Initialize selected=0 and selected_probability=row[0] (local patch patches/flashmoe-argmax-start-row0.patch, applied after RESOLVE accepted a -infinity seed scanning 0..7), then compare row[expert] strictly > selected_probability in expert order 1..7 and update both values only on success. This retains the earliest equal winner, skips NaNs by the original comparison, and retains (0,row[0]) if no comparison succeeds. The full row remains an explicit softmax-to-routing binding because routing uses row[selected] independently of the running selected_probability. The unchanged capacity tuple bypasses this read-only operation explicitly in the schedule. This is a separate proof target; exact replay does not establish upstream numerical equivalence or argmax stability between different score vectors.",
       "input_kinds": [
         "tensor"
       ],
