@@ -11,7 +11,7 @@ module BF = Kuiper.BFloat16
 
 #set-options "--z3rlimit 50"
 
-let cell (i:nat{i < Q.count})
+let cell (i:nat{i < Q.cells})
   : Lemma (i / K.hidden_size < K.prompt_length /\
            (i / K.hidden_size) * K.hidden_size + i % K.hidden_size == i)
   = FStar.Math.Lemmas.euclidean_division_definition i K.hidden_size
@@ -29,7 +29,7 @@ let one (x:Q.input{Q.domain x}) (y:T.answer)
       let c : Q.choice x = t in
       assert (Q.allowed x c);
       S.lemma_eq_intro y.A.exact (Q.exact_target x c);
-      let num (m:Q.model) (i:nat{i < Q.count})
+      let num (m:Q.model) (i:nat{i < Q.cells})
         : Lemma (Q.models x m ==> S.index y.A.numbers i %~ S.index (Q.number_target x m c) i)
         = cell i;
           assert (K.numerical_postcondition x o)

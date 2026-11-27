@@ -33,7 +33,8 @@ let example : input = {
    final hidden values, row by row. *)
 let exact = s:S.seq int{S.length s == K.sequence_length}
 let number = BF.t
-let count : nat = K.prompt_length * K.hidden_size
+let cells : nat = K.prompt_length * K.hidden_size
+let count (_:exact) : nat = cells
 let view (y:A.answer exact number count) : GTot K.outputs = {
   K.tokens = (fun t -> S.index y.A.exact t);
   K.hidden_states = (fun r c -> S.index y.A.numbers (r * K.hidden_size + c)) }
@@ -56,5 +57,5 @@ let allowed (x:input{domain x}) (c:choice x) : prop =
    hidden state hidden_states[-1]. *)
 let exact_target (x:input{domain x}) (c:choice x) : GTot exact =
   S.append (S.init_ghost K.prompt_length (fun t -> x.K.prompt_tokens t)) (S.create 1 c)
-let number_target (x:input{domain x}) (m:model) (c:choice x) : GTot (s:S.seq real{S.length s == count}) =
-  S.init_ghost count (fun i -> K.last_hidden_state m (K.prompt_ids x) (i / K.hidden_size) (i % K.hidden_size))
+let number_target (x:input{domain x}) (m:model) (c:choice x) : GTot (s:S.seq real{S.length s == count (exact_target x c)}) =
+  S.init_ghost cells (fun i -> K.last_hidden_state m (K.prompt_ids x) (i / K.hidden_size) (i % K.hidden_size))

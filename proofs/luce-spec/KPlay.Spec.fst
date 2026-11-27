@@ -21,7 +21,7 @@ module KPlay.Spec
 
    The math is over ideal reals. Floating results are related to it only by
    the abstract approximation %~ (Kuiper.Approximates); the specification
-   gives no error bound. The model constants are pinned (numerics_ok) to the
+   gives no error bound. The model constants are fixed (model_numerics) to the
    float32 values PyTorch computes in the reference: the f32 roundings of
    1e-6, 1/sqrt(128) and the RoPE inverse frequencies (M:217, float32). *)
 
@@ -114,7 +114,7 @@ noeq type model_weights (a:Type0) = {
   full_layers   : index full_layer_count -> GTot (decoder_layer self_attn_params a);
 }
 
-(* Model constants, pinned by numerics_ok. *)
+(* Model constants; the spec uses exactly model_numerics. *)
 noeq type numerics = {
   rms_norm_eps       : real;                    (* 1e-6, also the l2norm epsilon *)
   linear_query_scale : real;                    (* 1 / sqrt(128), M:412 *)
@@ -485,10 +485,10 @@ let inv_freq_f32_literal (i:nat) : string =
 
 let inv_freq_f32 : vector real rotary_pairs = fun i -> Lit.value (inv_freq_f32_literal i)
 
-let numerics_ok (nm:numerics) : prop =
-  nm.rms_norm_eps == eps_f32 /\
-  nm.linear_query_scale == query_scale_f32 /\
-  (forall (i:index rotary_pairs). nm.inv_freq i == inv_freq_f32 i)
+let model_numerics : numerics = {
+  rms_norm_eps = eps_f32;
+  linear_query_scale = query_scale_f32;
+  inv_freq = inv_freq_f32 }
 
 (*** S3. Liftings of %~ to the model types *)
 
@@ -603,6 +603,5 @@ let selection (nm:numerics) (x:inputs) (y:outputs) (w:model_weights real) : prop
 let postcondition (input:inputs) (output:outputs) : prop =
   input_domain input ==>
   (structural input output /\
-   (exists (nm:numerics). numerics_ok nm /\
-     (forall (w:model_weights real). weights_approximates input.weights w ==>
-        numerical nm input output w /\ selection nm input output w)))
+   (forall (w:model_weights real). weights_approximates input.weights w ==>
+      numerical model_numerics input output w /\ selection model_numerics input output w))

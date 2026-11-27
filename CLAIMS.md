@@ -40,12 +40,37 @@ on the same inputs.
 
 Every family case proves that its Kuiper/Pulse implementation ensures its
 family relation in the project's `KPlay.SharedSpec`, for **all** reals that the
-inputs approximate. No case in this release has a tightness proof: the five
-LUCE family-tightness proofs and five family reviews belonged to the former
-migrated LUCE artifacts, which the clean-room LUCE proof replaces. A
-determinate but wrong task could still be tight, and a loose relation could
-still be correct; reference fidelity remains a separate, reviewed obligation.
-An inconsistent trusted theory would also defeat the intended interpretation.
+inputs approximate. Family relations have no separate tightness proofs;
+tightness is checked once per project, on the typed program spec (below).
+Reference fidelity remains a separate, reviewed obligation. An inconsistent
+trusted theory would also defeat the intended interpretation.
+
+## Tightness: each spec defines a function
+
+Each project's typed spec (`proofs/<p>-spec/KPlay.Spec.fst`) is checked to
+define a function: for each allowed input it accepts exactly one answer,
+except for the declared freedoms. "At least one" is the program proof (the
+kernel's own output is accepted). "At most one" is case `<p>-tightness`:
+
+- `proofs/<p>-tightness/KPlay.Tightness.<P>.Question.fst` (reviewed) lists
+  the inputs, every output (written out flat; `view` maps it back to the
+  spec's output record), the reference value of each output, and the only
+  freedom (`allowed`);
+- [`tightness.py`](tightness.py) writes the theorem
+  (`KPlay.Tightness.<P>.Statement.fst`, the same text for every project): every
+  answer the spec accepts equals the reference values, up to one allowed
+  choice; floating values match by `%~` for every real model of the inputs;
+- F* checks the proof (`KPlay.Tightness.<P>.Proof.fst`). `replay.py` rejects a
+  generated file that differs from `tightness.py`'s output.
+
+Declared freedoms: Mirage and LUCE, which token is chosen among argmax ties
+of a rounded score row; FlashMoE, which expert is chosen among first-maximum
+ties of a rounded probability row. Nothing else is free: model constants are
+fixed to PyTorch's float32 values (LUCE), and the FlashMoE combine weight is
+constrained on every row. What remains reviewed is the question file itself:
+that it lists every output, that its reference values are the reference
+math, and that `allowed` is no wider than the reference's real freedom.
+Tightness says nothing about whether the reference math is the right task.
 
 ## Trusted boundary
 
@@ -115,7 +140,8 @@ host call of the reduced program imply `program_postcondition`. Each family's
 Kuiper implementation proves its relation.
 
 `KPlay.Review` (case `mirage-program-review`) checks that both roles, run on
-the same inputs, satisfy this same postcondition. Mirage has no tightness cases.
+the same inputs, satisfy this same postcondition. Case `mirage-tightness` checks
+that the typed spec defines a function (see Tightness).
 
 This guarantee is relational, not an error bound and not equality of base and
 optimized outputs. `x %~ r` means the machine value `x` stands for the exact real
@@ -179,8 +205,8 @@ states:
 `KPlay.Proof.Program.<Role>.refines` proves that the family relations at every
 host call imply `program_postcondition`; each family's Kuiper implementation
 proves its relation. `KPlay.Review` (case `flashmoe-program-review`) checks
-that both roles, on the same inputs, satisfy this same postcondition. There
-are no tightness cases.
+that both roles, on the same inputs, satisfy this same postcondition. Case
+`flashmoe-tightness` checks that the typed spec defines a function.
 
 The guarantee is relational. Selections are over the native rows each role
 computes, so base and optimized may select different experts where scores are
@@ -221,8 +247,8 @@ the RoPE frequency is `float(position) * ROPE_INV_FREQ[i]` with PyTorch's
 float32 `inv_freq` table instead of `float(position) / powf(1e7, 2i/64)`. The
 reduced optimized kernels (`embedding`, program) and the optimized `embedding`
 proof compute the same product. The model constants in `KPlay.SharedSpec` and
-`KPlay.Spec` are pinned to PyTorch's float32 values (`numerics_ok nm` is
-`nm == model_numerics`). These specs, that proof and the reduced kernels were
+`KPlay.Spec` are fixed to PyTorch's float32 values (`nm == model_numerics`
+in `KPlay.SharedSpec`; `KPlay.Spec` uses `model_numerics` directly). These specs, that proof and the reduced kernels were
 edited by hand after the RESOLVE run, and the base `full_attention_decoder`
 proof gained one helper lemma (`cp_probs_at`) to re-check under the new spec. On the four RESOLVE samples the patched
 original and the reduced patched program agree bitwise (tokens and hidden
@@ -241,7 +267,7 @@ states:
 2. **`program_postcondition`.** Role independent. Under `program_premise`
    (752393024 weights, `1 <= P <= 8`, `1 <= S <= 5`, valid prompt tokens):
    there are `S` valid tokens and `S` hidden rows, and, with the model
-   constants pinned to PyTorch's float32 values (`numerics_ok`: eps `1e-6f`,
+   constants fixed to PyTorch's float32 values (`model_numerics`: eps `1e-6f`,
    DeltaNet query scale `1/sqrt(128)` rounded to f32, and the 32 float32 RoPE
    `inv_freq` values of the reference), for every real weight vector the BF16
    weights approximate and every step `j < S`:
@@ -259,8 +285,8 @@ states:
 `KPlay.Proof.Program.<Role>.refines` proves that the family relations at every
 host call imply `program_postcondition`; each family's Kuiper implementation
 proves its relation. `KPlay.Review` (case `luce-program-review`) checks that
-both roles, on the same inputs, satisfy this same postcondition. There are no
-tightness cases.
+both roles, on the same inputs, satisfy this same postcondition. Case
+`luce-tightness` checks that the typed spec defines a function.
 
 **Profile.** All 24 layers (18 Gated DeltaNet + 6 gated full attention),
 prompt lengths 1..8, decode steps {1, 5} (the premise admits 1..5), cache

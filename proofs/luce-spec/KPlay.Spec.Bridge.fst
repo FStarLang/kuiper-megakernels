@@ -1117,7 +1117,7 @@ let freq_f32_at (s:S.seq real) (i:T.index T.rotary_pairs)
   : Lemma (requires s == SS.inv_freq_f32) (ensures SS.at s i == T.inv_freq_f32 i) = literal_eq i
 
 let tn_of_ok (nm:SS.numerics)
-  : Lemma (requires SS.numerics_ok nm) (ensures T.numerics_ok (tn_of nm) /\ nm_ok (tn_of nm) nm)
+  : Lemma (requires SS.numerics_ok nm) (ensures nm_ok T.model_numerics nm)
   = let s = nm.SS.inv_freq in
     introduce forall (i:T.index T.rotary_pairs). SS.at s i == T.inv_freq_f32 i
     with freq_f32_at s i
@@ -1128,9 +1128,9 @@ let seq_of_freq (f:T.vector real T.rotary_pairs) (g:T.vector real T.rotary_pairs
           (ensures S.init_ghost 32 f == s)
   = S.lemma_eq_intro (S.init_ghost 32 f) s
 
-let nm_of_ok (tn:T.numerics)
-  : Lemma (requires T.numerics_ok tn) (ensures SS.numerics_ok (nm_of tn) /\ nm_ok tn (nm_of tn))
-  = let f = tn.T.inv_freq in
+let nm_of_ok (_:unit)
+  : Lemma (ensures SS.numerics_ok (nm_of T.model_numerics) /\ nm_ok T.model_numerics (nm_of T.model_numerics))
+  = let f = T.model_numerics.T.inv_freq in
     introduce forall (i:T.index T.rotary_pairs). S.index SS.inv_freq_f32 i == T.inv_freq_f32 i
     with literal_eq i;
     seq_of_freq f T.inv_freq_f32 SS.inv_freq_f32
@@ -1322,12 +1322,11 @@ let fwd_with (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t
                                      (SS.tok_at tokens j))))
           (ensures (let x = inputs_of w prompt steps in
                     let y = outputs_of tokens hidden in
-                    exists (tn:T.numerics). T.numerics_ok tn /\
-                      (forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
-                         T.numerical tn x y tw /\ T.selection tn x y tw)))
+                    forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
+                      T.numerical T.model_numerics x y tw /\ T.selection T.model_numerics x y tw))
   = let x = inputs_of w prompt steps in
     let y = outputs_of tokens hidden in
-    let tn = tn_of nm in
+    let tn = T.model_numerics in
     tn_of_ok nm;
     introduce forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
                 T.numerical tn x y tw /\ T.selection tn x y tw
@@ -1343,11 +1342,10 @@ let fwd_with (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t
     end
 
 let bwd_with (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t) (hidden:S.seq BF.t)
-             (tn:T.numerics)
   : Lemma (requires 1 <= S.length prompt /\ SS.valid_tokens prompt /\
                     S.length tokens == steps /\ S.length hidden == steps * 1024 /\ SS.valid_tokens tokens /\
-                    T.numerics_ok tn /\
-                    (let x = inputs_of w prompt steps in
+                    (let tn = T.model_numerics in
+                     let x = inputs_of w prompt steps in
                      let y = outputs_of tokens hidden in
                      forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
                        T.numerical tn x y tw /\ T.selection tn x y tw))
@@ -1357,8 +1355,9 @@ let bwd_with (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t
                           SS.bf_row hidden j %~ SS.ref_hidden nm rw (SS.prog_tok prompt tokens) (S.length prompt - 1 + j) /\
                           SS.selected_ok nm rw (SS.ref_hidden nm rw (SS.prog_tok prompt tokens) (S.length prompt - 1 + j))
                                       (SS.tok_at tokens j))))
-  = let nm = nm_of tn in
-    nm_of_ok tn;
+  = let tn = T.model_numerics in
+    let nm = nm_of tn in
+    nm_of_ok ();
     introduce forall (rw:S.seq real). w %~ rw ==>
       (forall (j:nat). j < steps ==>
          SS.bf_row hidden j %~ SS.ref_hidden nm rw (SS.prog_tok prompt tokens) (S.length prompt - 1 + j) /\
@@ -1385,9 +1384,8 @@ let program_to_typed (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.s
     let y = outputs_of tokens hidden in
     introduce T.input_domain x ==>
       (T.structural x y /\
-       (exists (tn:T.numerics). T.numerics_ok tn /\
-         (forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
-            T.numerical tn x y tw /\ T.selection tn x y tw)))
+       (forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
+          T.numerical T.model_numerics x y tw /\ T.selection T.model_numerics x y tw))
     with begin
       assert (forall (i:nat). i < S.length prompt ==> T.valid_token (x.T.prompt i));
       assert (SS.program_premise w prompt steps);
@@ -1413,7 +1411,7 @@ let typed_to_program (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.s
       assert (T.structural x y);
       introduce forall (i:nat). i < S.length tokens ==> SS.valid_token (I64.v (S.index tokens i))
       with introduce _ ==> _ with assert (T.valid_token (y.T.tokens i));
-      FStar.Classical.forall_intro (FStar.Classical.move_requires (bwd_with w prompt steps tokens hidden))
+      bwd_with w prompt steps tokens hidden
     end
 
 let program_postcondition_iff (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int)

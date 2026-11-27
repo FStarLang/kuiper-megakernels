@@ -4,6 +4,9 @@ Standalone artifacts from the RESOLVE megakernel case studies: **six complete
 program refinements, 30 family refinements and three shared-specification
 checks**, plus three checked base/optimized program reviews and three typed
 specifications (`proofs/<project>-spec`) proved equivalent to the flat ones.
+Each typed specification is also checked to **define a function**: one answer
+per input, up to argmax ties (cases `<project>-tightness`; see
+[CLAIMS.md](CLAIMS.md#tightness-each-spec-defines-a-function)).
 No RESOLVE installation, agent, DTester,
 model weights, private checkout, or historical checked cache is required.
 
@@ -350,7 +353,7 @@ the typed `postcondition` for both roles. Check with
 
 **Constants and hand edits.** The model constants (eps, DeltaNet query scale,
 RoPE inverse frequencies) are PyTorch's float32 values in both
-`KPlay.SharedSpec` and `KPlay.Spec` (`numerics_ok` admits only them). The
+`KPlay.SharedSpec` and `KPlay.Spec` (`model_numerics`, the only constants). The
 specs, the optimized `embedding` proof and the reduced optimized kernels were
 edited by hand after the RESOLVE run to match the patched original; the base
 `full_attention_decoder` proof gained one helper lemma to re-check.
@@ -498,6 +501,8 @@ python3 replay.py list
 python3 replay.py verify --kind shared --jobs 2
 python3 replay.py verify --case 'flashmoe-*' --jobs 8
 python3 replay.py verify --case 'luce-*' --jobs 16
+python3 replay.py verify --kind tightness --jobs 3   # about 30 s each
+python3 tightness.py --check mirage flashmoe luce  # generated theorems unchanged
 python3 replay.py verify --kind family --jobs 4
 python3 replay.py verify --kind program --jobs 4
 python3 replay.py verify --jobs 4
@@ -540,7 +545,7 @@ lists the common sources as roots of each case, and the runner includes their
 directory and checks them afresh with each selected case.
 
 `--case` accepts a quoted pattern and is repeatable. `--kind` selects `family`,
-`program`, `shared`, or `review` (`tightness` is accepted but no current case has that kind); the default is `all`. A changed support
+`program`, `shared`, `review`, or `tightness`; the default is `all`. A changed support
 profile requires a new `--work` directory. The old compiler's packaged checked
 caches produced verification failures during preparation, so replay deliberately
 retains the historical cache-free checking policy.
@@ -632,7 +637,7 @@ Native extension builds may be reused on subsequent invocations; select a new
 | Original workload and task | Pinned upstream references and explicit mathematical specifications | Reference/task interpretation was reviewed, not proved by checking a Git hash |
 | Reduction and decomposition | Exact complete and family CUDA sources | Original/reduced correspondence is historical finite/reviewed evidence, not a universal equivalence theorem |
 | Specification and implementation | Shared contracts, interfaces, complete Pulse implementations and helper proofs | F* checks refinement under the stated numerical and native contracts |
-| Tightness | None in this release (the former LUCE family-tightness proofs were removed with the migrated LUCE artifacts) | Reference fidelity of the relations is a reviewed obligation |
+| Tightness | `<p>-tightness`: each typed spec defines a function (one answer per input, up to argmax ties); theorem written by `tightness.py`, proof checked by F* | The question file (outputs listed, reference values, allowed ties) is reviewed |
 | Replay | Small standalone proof and CUDA runners | No discovery, agent orchestration, fuzzing pipeline, or DTester implementation |
 
 This repository is independent of Kuiper's source tree: most cases reuse module

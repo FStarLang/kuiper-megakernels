@@ -1,3 +1,0 @@
-luce-rope-pytorch-table.patch: replaces Lucebox's runtime powf RoPE frequencies with PyTorch's float32 inv_freq table, so the optimized program computes position * inv_freq[i] as the reference does.
-Local patch against optimizations/megakernel/kernel.cu at Lucebox commit 0f212acacb284cf77f29f4fb4f706b1f4fdc3f88; apply with `patch -p1` from the Lucebox root.
-It is not upstream; the LUCE specs and the reduced optimized kernels assume it.

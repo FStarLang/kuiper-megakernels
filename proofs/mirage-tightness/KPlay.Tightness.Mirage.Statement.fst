@@ -13,7 +13,8 @@ type answer = A.answer Q.exact Q.number Q.count
 let pinned (x:Q.input{Q.domain x}) (c:Q.choice x) (y:answer) : prop =
   y.A.exact == Q.exact_target x c /\
   (forall (m:Q.model). Q.models x m ==>
-     (forall (i:nat{i < Q.count}). S.index y.A.numbers i %~ S.index (Q.number_target x m c) i))
+     (forall (i:nat{i < Q.count (Q.exact_target x c)}). i < S.length y.A.numbers ==>
+        S.index y.A.numbers i %~ S.index (Q.number_target x m c) i))
 
 (* The spec is tight: its domain is not empty, and every answer it accepts is
    the pinned answer for some allowed choice. *)

@@ -22,7 +22,8 @@ roots of both implementation cases**, not merely their interfaces.
 
 The roles may use different family decompositions; this is visible only in
 their wiring (`KPlay.Proof.Wiring.<Role>`), not in the reviewed postcondition.
-No project has tightness cases.
+Each project has one tightness case, `<p>-tightness`, on its typed spec;
+review its `KPlay.Tightness.<P>.Question.fst` (CLAIMS.md, Tightness).
 
 | Review | Common inputs | Common guarantee (`program_postcondition`) | What it does not establish |
 | --- | --- | --- | --- |
