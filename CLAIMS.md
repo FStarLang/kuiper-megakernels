@@ -24,7 +24,7 @@ The shared-check case IDs are `<project>-shared`.
 | --- | --- | --- |
 | Mirage | Qwen3-0.6B; all 28 layers, one forward pass over a seven-token prompt plus the greedy next token, hidden width 1024, vocabulary 151936. Prompt copied before the generated token; seven final normalized hidden rows; the token is an allowed maximum of a score row approximating the reference logits. | Composition over the generated host wiring of the reduced program; family kernels linked to the reduced CUDA by finite bitwise replay. Not arbitrary prompt/decode lengths. |
 | LUCE | Qwen3.5-0.8B greedy BF16 decode; all 24 layers: 18 Gated DeltaNet and six gated full-attention layers. Prompt lengths 1..8, decode steps 1..5 (tested: 1 and 5), cache extent `P+S-1 <= 12`. Returned tokens `[S]` and pre-final-norm BF16 hidden rows `[S,1024]`: each hidden row approximates the reference residual at position `P-1+j`, and each token is an allowed maximum of a BF16 or FP32 score row approximating the reference logits there. | Optimized original is the official **Luce-Org/lucebox** megakernel (`0f212ac`); base is the pinned Transformers 5.3.0 reference. Trusts two softplus laws (`Luce.Softplus*`) and the listed Kuiper laws. Composition over generated host wiring; links to reduced/original CUDA are finite bitwise checks. Relations are vacuous outside the profile's integer domain. |
-| FlashMoE | Capacity-pruned top-1 router only, smoke profile `S=256,H=512,E=8,C=32,top_k=1`; finite BF16 tokens bounded by 32 and `[H,E]` weights bounded by 4. Complete demand, kept token indices, combine probabilities and survival: exact token-order capacity routing of first-maximum selections over softmax rows that approximate the real softmax of `x @ w`. | Optimized original is FlashMoE **with PR #32** (deterministic router); gate weights `[E,H]`. Trusts `cpu_exp_f32_approx`; top-1 stability against rounding not proved. Composition over generated host wiring; links to reduced/original CUDA are finite bitwise checks. No expert MLP or larger profile. |
+| FlashMoE | Capacity-pruned top-1 router only, smoke profile `S=256,H=512,E=8,C=32,top_k=1`; any BF16 tokens and `[H,E]` weights of that shape (no premise on their values; the reference's own input check in `reference/flashmoe/input-domain.txt` is stricter). Complete demand, kept token indices, combine probabilities and survival: exact token-order capacity routing of first-maximum selections over softmax rows that approximate the real softmax of `x @ w`. | Optimized original is FlashMoE **with PR #32** (deterministic router); gate weights `[E,H]`. Trusts `cpu_exp_f32_approx`; top-1 stability against rounding not proved. Composition over generated host wiring; links to reduced/original CUDA are finite bitwise checks. No expert MLP or larger profile. |
 
 The base and optimized roles refine a common **relative algebraic task**.
 This is not bitwise equivalence, an IEEE error bound, proof of numerical
@@ -229,7 +229,7 @@ Stability of the top-1 choice against rounding (native argmax = real argmax)
 is **not** proved; it is recorded as a separate obligation. RESOLVE's testing
 (8 samples, DTester 8/8 comparable runs per sample under unstructured
 global/shared delays) is finite evidence about the original and reduced
-programs; the proof is about the reduced programs on every input in the domain.
+programs; the proof is about the reduced programs on every input of the profile's shape.
 
 ## LUCE clean-room pipeline proof
 

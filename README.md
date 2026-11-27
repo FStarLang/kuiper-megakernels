@@ -246,8 +246,10 @@ were **comparable (8/8 per sample)**, with no result mismatches, races or crashe
 DTester reported 0 scope-instrumented sites, and there was no count/policy
 prepass and no structured scope, so this is weak evidence about schedules.
 Testing covers only these inputs and schedules. The proof covers **every**
-input in the stated domain (finite BF16, |tokens| ≤ 32, |weights| ≤ 4) for
-the reduced programs, under the trusted assumptions above. Neither covers the
+input of the smoke profile's shape for the reduced programs, with no premise
+on the values, under the trusted assumptions above. (The reference itself
+rejects inputs outside `reference/flashmoe/input-domain.txt`: finite BF16,
+|tokens| ≤ 32, |weights| ≤ 4.) Neither covers the
 full-size FlashMoE profile or the expert computation.
 
 ### FlashMoE files
