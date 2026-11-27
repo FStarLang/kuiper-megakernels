@@ -1,0 +1,42 @@
+--- a/optimizations/megakernel/kernel.cu
++++ b/optimizations/megakernel/kernel.cu
+@@ -89,6 +89,19 @@
+     0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1
+ };
+ 
++// RoPE inverse frequencies 1 / FA_ROPE_THETA^(2i / FA_ROTARY_DIM), as the float32
++// table PyTorch computes (transformers Qwen3.5 rotary embedding).
++__device__ __constant__ float ROPE_INV_FREQ[FA_ROTARY_DIM / 2] = {
++    0x1.000000p+0f, 0x1.356656p-1f, 0x1.75f036p-2f, 0x1.c3f06ap-3f,
++    0x1.111aeep-3f, 0x1.4a12acp-4f, 0x1.8eec7ep-5f, 0x1.e222eep-6f,
++    0x1.235a72p-6f, 0x1.6020a4p-7f, 0x1.a9942ap-8f, 0x1.012cfap-8f,
++    0x1.36d21ap-9f, 0x1.77a7dap-10f, 0x1.c603c4p-11f, 0x1.125c04p-11f,
++    0x1.4b96c0p-12f, 0x1.90c182p-13f, 0x1.e459c4p-14f, 0x1.24b0fcp-14f,
++    0x1.61bea4p-15f, 0x1.ab8882p-16f, 0x1.025b56p-16f, 0x1.383f88p-17f,
++    0x1.796182p-18f, 0x1.c8198cp-19f, 0x1.139e94p-19f, 0x1.4d1c98p-20f,
++    0x1.9298aep-21f, 0x1.e6933ap-22f, 0x1.26091cp-22f, 0x1.635e88p-23f
++};
++
+ // =============================================================================
+ // Weight structs — ALL BF16
+ // =============================================================================
+@@ -492,8 +505,7 @@
+             sc = SHFL_SYNC(0xffffffff, sc, 0);
+             for (int i = lane_id; i < FA_ROTARY_DIM/2; i += WARP_SIZE) {
+                 int p = i + FA_ROTARY_DIM/2;
+-                float fe = float(2*i) / float(FA_ROTARY_DIM);
+-                float freq = float(position) / powf(FA_ROPE_THETA, fe);
++                float freq = float(position) * ROPE_INV_FREQ[i];
+                 float cv = cosf(freq), sv = sinf(freq);
+                 apply_rope_pair(kh, kc, w.k_norm_weight, i, p, sc, cv, sv);
+                 vc[i] = F2H(vh[i]); vc[p] = F2H(vh[p]);
+@@ -516,8 +528,7 @@
+                 sc = SHFL_SYNC(0xffffffff, sc, 0);
+                 for (int i = lane_id; i < FA_ROTARY_DIM/2; i += WARP_SIZE) {
+                     int p = i + FA_ROTARY_DIM/2;
+-                    float fe = float(2*i) / float(FA_ROTARY_DIM);
+-                    float freq = float(position) / powf(FA_ROPE_THETA, fe);
++                    float freq = float(position) * ROPE_INV_FREQ[i];
+                     float cv = cosf(freq), sv = sinf(freq);
+                     apply_rope_pair(qh_ptr, qh_ptr, w.q_norm_weight, i, p, sc, cv, sv);
+                 }

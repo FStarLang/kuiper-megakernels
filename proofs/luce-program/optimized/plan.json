@@ -1,5 +1,5 @@
 {
-  "accepted_cuda_sha256": "e93c3fe71b2e088b81c5733bc4838564f64e78378c4e62923ef3a52dc10cee22",
+  "accepted_cuda_sha256": "5fe26628e73985cb4b686cce54ad497b08150c987866b3a4f5b2312a541feee5",
   "cases": {
     "sample-0000": {
       "outputs": [
@@ -24243,7 +24243,7 @@
     },
     "embedding": {
       "cuda": "embedding.cu",
-      "description": "Accepted active-position token selection, embedding load, and rotary setup. Inputs: bfloat16 embedding table [248320,1024], int64 prompt [L], int64 generated-token state [S], integer position p with 0<=p<min(12,L+S-1); selected token IDs must be in [0,248320). Position zero reads tokens[0], later prompt positions read prompt[p], and generated positions read tokens[p-L]. Outputs: float32 hidden [1024], cosine [32], sine [32]. Preserve runtime div/lg2/ex2/cos/sin approximate FTZ instructions and unroll-1 rotary loop; do not constant-fold the powers. One physical thread. All persistent state, tokens/history, immutable weights/prompt, and position remain explicit graph bindings; values not modified by a family remain bound to their preceding producer.",
+      "description": "Accepted active-position token selection, embedding load, and rotary setup. Inputs: bfloat16 embedding table [248320,1024], int64 prompt [L], int64 generated-token state [S], integer position p with 0<=p<min(12,L+S-1); selected token IDs must be in [0,248320). Position zero reads tokens[0], later prompt positions read prompt[p], and generated positions read tokens[p-L]. Outputs: float32 hidden [1024], cosine [32], sine [32]. Rotary frequency is position * PyTorch's float32 inv_freq[i] (mul.ftz), then approximate FTZ cos/sin, in an unroll-1 loop. One physical thread. All persistent state, tokens/history, immutable weights/prompt, and position remain explicit graph bindings; values not modified by a family remain bound to their preceding producer.",
       "input_kinds": [
         "tensor",
         "tensor",

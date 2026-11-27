@@ -13,54 +13,230 @@ module BF = Kuiper.BFloat16
 module Fast = Kuiper.Float32.FastMath
 module Cast = FStar.Int.Cast
 module RO = Kuiper.Float.Realops
-module Pow = FStar.Math.Pow
-module Exp = FStar.Math.Exp
 module Trig = Kuiper.Real.Trigonometry
 module Casts = Kuiper.Float.Casts
 module R = FStar.Real
+module Lit = Kuiper.Float32.Literals
+module CF = Kuiper.Float32.ConstantFold
+module Cert = Kuiper.Float32.ConstantFold.Certificates
 
-(*** Real-level facts *)
+(*** RoPE inverse frequencies *)
 
-let log2_e7 : real = RO.r_log2 10000000.0R
+#push-options "--z3rlimit 20 --fuel 1 --ifuel 1"
 
-let freq_r (p:int) (i:nat) : real =
-  R.of_int p *. (1.0R /. Pow.exp2 ((R.of_int (2 * i) *. (1.0R /. 64.0R)) *. log2_e7))
+(* PyTorch's 32 float32 RoPE inverse frequencies (exact binary32 values of the
+   CUDA table, spelled as their exact decimal expansions). *)
+inline_for_extraction noextract
+let freq (i:sz) : f32 =
+  if i = 0sz then of_literal #f32 "1.0"
+  else if i = 1sz then of_literal #f32 "0.604296386241912841796875"
+  else if i = 2sz then of_literal #f32 "0.3651741445064544677734375"
+  else if i = 3sz then of_literal #f32 "0.22067339718341827392578125"
+  else if i = 4sz then of_literal #f32 "0.13335214555263519287109375"
+  else if i = 5sz then of_literal #f32 "0.08058421313762664794921875"
+  else if i = 6sz then of_literal #f32 "0.0486967526376247406005859375"
+  else if i = 7sz then of_literal #f32 "0.02942727319896221160888671875"
+  else if i = 8sz then of_literal #f32 "0.01778279431164264678955078125"
+  else if i = 9sz then of_literal #f32 "0.01074607856571674346923828125"
+  else if i = 10sz then of_literal #f32 "0.0064938166178762912750244140625"
+  else if i = 11sz then of_literal #f32 "0.0039241896010935306549072265625"
+  else if i = 12sz then of_literal #f32 "0.00237137381918728351593017578125"
+  else if i = 13sz then of_literal #f32 "0.001433012657798826694488525390625"
+  else if i = 14sz then of_literal #f32 "0.000865964335389435291290283203125"
+  else if i = 15sz then of_literal #f32 "0.000523299095220863819122314453125"
+  else if i = 16sz then of_literal #f32 "0.000316227786242961883544921875"
+  else if i = 17sz then of_literal #f32 "0.000191095299669541418552398681640625"
+  else if i = 18sz then of_literal #f32 "0.000115478193038143217563629150390625"
+  else if i = 19sz then of_literal #f32 "0.000069783054641447961330413818359375"
+  else if i = 20sz then of_literal #f32 "0.0000421696531702764332294464111328125"
+  else if i = 21sz then of_literal #f32 "0.000025482966520939953625202178955078125"
+  else if i = 22sz then of_literal #f32 "0.000015399264157167635858058929443359375"
+  else if i = 23sz then of_literal #f32 "0.00000930572059587575495243072509765625"
+  else if i = 24sz then of_literal #f32 "0.00000562341347176698036491870880126953125"
+  else if i = 25sz then of_literal #f32 "0.00000339820826411596499383449554443359375"
+  else if i = 26sz then of_literal #f32 "0.00000205352489501819945871829986572265625"
+  else if i = 27sz then of_literal #f32 "0.00000124093776321387849748134613037109375"
+  else if i = 28sz then of_literal #f32 "0.00000074989424092564149759709835052490234375"
+  else if i = 29sz then of_literal #f32 "0.000000453158378377338522113859653472900390625"
+  else if i = 30sz then of_literal #f32 "0.00000027384197665014653466641902923583984375"
+  else of_literal #f32 "0.00000016548170833630138076841831207275390625"
+
+let lit_0 () : Lemma (of_literal #f32 "1.0" %~ Lit.value "1.0") =
+  assert_norm (Cert.exact_normal "1.0" 8388608 (-23));
+  CF.literal_approx "1.0" 8388608 (-23)
+
+let lit_1 () : Lemma (of_literal #f32 "0.604296386241912841796875" %~ Lit.value "0.604296386241912841796875") =
+  assert_norm (Cert.exact_normal "0.604296386241912841796875" 10138411 (-24));
+  CF.literal_approx "0.604296386241912841796875" 10138411 (-24)
+
+let lit_2 () : Lemma (of_literal #f32 "0.3651741445064544677734375" %~ Lit.value "0.3651741445064544677734375") =
+  assert_norm (Cert.exact_normal "0.3651741445064544677734375" 12253211 (-25));
+  CF.literal_approx "0.3651741445064544677734375" 12253211 (-25)
+
+let lit_3 () : Lemma (of_literal #f32 "0.22067339718341827392578125" %~ Lit.value "0.22067339718341827392578125") =
+  assert_norm (Cert.exact_normal "0.22067339718341827392578125" 14809141 (-26));
+  CF.literal_approx "0.22067339718341827392578125" 14809141 (-26)
+
+let lit_4 () : Lemma (of_literal #f32 "0.13335214555263519287109375" %~ Lit.value "0.13335214555263519287109375") =
+  assert_norm (Cert.exact_normal "0.13335214555263519287109375" 8949111 (-26));
+  CF.literal_approx "0.13335214555263519287109375" 8949111 (-26)
+
+let lit_5 () : Lemma (of_literal #f32 "0.08058421313762664794921875" %~ Lit.value "0.08058421313762664794921875") =
+  assert_norm (Cert.exact_normal "0.08058421313762664794921875" 10815830 (-27));
+  CF.literal_approx "0.08058421313762664794921875" 10815830 (-27)
+
+let lit_6 () : Lemma (of_literal #f32 "0.0486967526376247406005859375" %~ Lit.value "0.0486967526376247406005859375") =
+  assert_norm (Cert.exact_normal "0.0486967526376247406005859375" 13071935 (-28));
+  CF.literal_approx "0.0486967526376247406005859375" 13071935 (-28)
+
+let lit_7 () : Lemma (of_literal #f32 "0.02942727319896221160888671875" %~ Lit.value "0.02942727319896221160888671875") =
+  assert_norm (Cert.exact_normal "0.02942727319896221160888671875" 15798647 (-29));
+  CF.literal_approx "0.02942727319896221160888671875" 15798647 (-29)
+
+let lit_8 () : Lemma (of_literal #f32 "0.01778279431164264678955078125" %~ Lit.value "0.01778279431164264678955078125") =
+  assert_norm (Cert.exact_normal "0.01778279431164264678955078125" 9547065 (-29));
+  CF.literal_approx "0.01778279431164264678955078125" 9547065 (-29)
+
+let lit_9 () : Lemma (of_literal #f32 "0.01074607856571674346923828125" %~ Lit.value "0.01074607856571674346923828125") =
+  assert_norm (Cert.exact_normal "0.01074607856571674346923828125" 11538514 (-30));
+  CF.literal_approx "0.01074607856571674346923828125" 11538514 (-30)
+
+let lit_10 () : Lemma (of_literal #f32 "0.0064938166178762912750244140625" %~ Lit.value "0.0064938166178762912750244140625") =
+  assert_norm (Cert.exact_normal "0.0064938166178762912750244140625" 13945365 (-31));
+  CF.literal_approx "0.0064938166178762912750244140625" 13945365 (-31)
+
+let lit_11 () : Lemma (of_literal #f32 "0.0039241896010935306549072265625" %~ Lit.value "0.0039241896010935306549072265625") =
+  assert_norm (Cert.exact_normal "0.0039241896010935306549072265625" 8427133 (-31));
+  CF.literal_approx "0.0039241896010935306549072265625" 8427133 (-31)
+
+let lit_12 () : Lemma (of_literal #f32 "0.00237137381918728351593017578125" %~ Lit.value "0.00237137381918728351593017578125") =
+  assert_norm (Cert.exact_normal "0.00237137381918728351593017578125" 10184973 (-32));
+  CF.literal_approx "0.00237137381918728351593017578125" 10184973 (-32)
+
+let lit_13 () : Lemma (of_literal #f32 "0.001433012657798826694488525390625" %~ Lit.value "0.001433012657798826694488525390625") =
+  assert_norm (Cert.exact_normal "0.001433012657798826694488525390625" 12309485 (-33));
+  CF.literal_approx "0.001433012657798826694488525390625" 12309485 (-33)
+
+let lit_14 () : Lemma (of_literal #f32 "0.000865964335389435291290283203125" %~ Lit.value "0.000865964335389435291290283203125") =
+  assert_norm (Cert.exact_normal "0.000865964335389435291290283203125" 14877154 (-34));
+  CF.literal_approx "0.000865964335389435291290283203125" 14877154 (-34)
+
+let lit_15 () : Lemma (of_literal #f32 "0.000523299095220863819122314453125" %~ Lit.value "0.000523299095220863819122314453125") =
+  assert_norm (Cert.exact_normal "0.000523299095220863819122314453125" 8990210 (-34));
+  CF.literal_approx "0.000523299095220863819122314453125" 8990210 (-34)
+
+let lit_16 () : Lemma (of_literal #f32 "0.000316227786242961883544921875" %~ Lit.value "0.000316227786242961883544921875") =
+  assert_norm (Cert.exact_normal "0.000316227786242961883544921875" 10865504 (-35));
+  CF.literal_approx "0.000316227786242961883544921875" 10865504 (-35)
+
+let lit_17 () : Lemma (of_literal #f32 "0.000191095299669541418552398681640625" %~ Lit.value "0.000191095299669541418552398681640625") =
+  assert_norm (Cert.exact_normal "0.000191095299669541418552398681640625" 13131969 (-36));
+  CF.literal_approx "0.000191095299669541418552398681640625" 13131969 (-36)
+
+let lit_18 () : Lemma (of_literal #f32 "0.000115478193038143217563629150390625" %~ Lit.value "0.000115478193038143217563629150390625") =
+  assert_norm (Cert.exact_normal "0.000115478193038143217563629150390625" 15871202 (-37));
+  CF.literal_approx "0.000115478193038143217563629150390625" 15871202 (-37)
+
+let lit_19 () : Lemma (of_literal #f32 "0.000069783054641447961330413818359375" %~ Lit.value "0.000069783054641447961330413818359375") =
+  assert_norm (Cert.exact_normal "0.000069783054641447961330413818359375" 9590910 (-37));
+  CF.literal_approx "0.000069783054641447961330413818359375" 9590910 (-37)
+
+let lit_20 () : Lemma (of_literal #f32 "0.0000421696531702764332294464111328125" %~ Lit.value "0.0000421696531702764332294464111328125") =
+  assert_norm (Cert.exact_normal "0.0000421696531702764332294464111328125" 11591506 (-38));
+  CF.literal_approx "0.0000421696531702764332294464111328125" 11591506 (-38)
+
+let lit_21 () : Lemma (of_literal #f32 "0.000025482966520939953625202178955078125" %~ Lit.value "0.000025482966520939953625202178955078125") =
+  assert_norm (Cert.exact_normal "0.000025482966520939953625202178955078125" 14009409 (-39));
+  CF.literal_approx "0.000025482966520939953625202178955078125" 14009409 (-39)
+
+let lit_22 () : Lemma (of_literal #f32 "0.000015399264157167635858058929443359375" %~ Lit.value "0.000015399264157167635858058929443359375") =
+  assert_norm (Cert.exact_normal "0.000015399264157167635858058929443359375" 8465835 (-39));
+  CF.literal_approx "0.000015399264157167635858058929443359375" 8465835 (-39)
+
+let lit_23 () : Lemma (of_literal #f32 "0.00000930572059587575495243072509765625" %~ Lit.value "0.00000930572059587575495243072509765625") =
+  assert_norm (Cert.exact_normal "0.00000930572059587575495243072509765625" 10231748 (-40));
+  CF.literal_approx "0.00000930572059587575495243072509765625" 10231748 (-40)
+
+let lit_24 () : Lemma (of_literal #f32 "0.00000562341347176698036491870880126953125" %~ Lit.value "0.00000562341347176698036491870880126953125") =
+  assert_norm (Cert.exact_normal "0.00000562341347176698036491870880126953125" 12366017 (-41));
+  CF.literal_approx "0.00000562341347176698036491870880126953125" 12366017 (-41)
+
+let lit_25 () : Lemma (of_literal #f32 "0.00000339820826411596499383449554443359375" %~ Lit.value "0.00000339820826411596499383449554443359375") =
+  assert_norm (Cert.exact_normal "0.00000339820826411596499383449554443359375" 14945478 (-42));
+  CF.literal_approx "0.00000339820826411596499383449554443359375" 14945478 (-42)
+
+let lit_26 () : Lemma (of_literal #f32 "0.00000205352489501819945871829986572265625" %~ Lit.value "0.00000205352489501819945871829986572265625") =
+  assert_norm (Cert.exact_normal "0.00000205352489501819945871829986572265625" 9031498 (-42));
+  CF.literal_approx "0.00000205352489501819945871829986572265625" 9031498 (-42)
+
+let lit_27 () : Lemma (of_literal #f32 "0.00000124093776321387849748134613037109375" %~ Lit.value "0.00000124093776321387849748134613037109375") =
+  assert_norm (Cert.exact_normal "0.00000124093776321387849748134613037109375" 10915404 (-43));
+  CF.literal_approx "0.00000124093776321387849748134613037109375" 10915404 (-43)
+
+let lit_28 () : Lemma (of_literal #f32 "0.00000074989424092564149759709835052490234375" %~ Lit.value "0.00000074989424092564149759709835052490234375") =
+  assert_norm (Cert.exact_normal "0.00000074989424092564149759709835052490234375" 13192279 (-44));
+  CF.literal_approx "0.00000074989424092564149759709835052490234375" 13192279 (-44)
+
+let lit_29 () : Lemma (of_literal #f32 "0.000000453158378377338522113859653472900390625" %~ Lit.value "0.000000453158378377338522113859653472900390625") =
+  assert_norm (Cert.exact_normal "0.000000453158378377338522113859653472900390625" 15944093 (-45));
+  CF.literal_approx "0.000000453158378377338522113859653472900390625" 15944093 (-45)
+
+let lit_30 () : Lemma (of_literal #f32 "0.00000027384197665014653466641902923583984375" %~ Lit.value "0.00000027384197665014653466641902923583984375") =
+  assert_norm (Cert.exact_normal "0.00000027384197665014653466641902923583984375" 9634958 (-45));
+  CF.literal_approx "0.00000027384197665014653466641902923583984375" 9634958 (-45)
+
+let lit_31 () : Lemma (of_literal #f32 "0.00000016548170833630138076841831207275390625" %~ Lit.value "0.00000016548170833630138076841831207275390625") =
+  assert_norm (Cert.exact_normal "0.00000016548170833630138076841831207275390625" 11644740 (-46));
+  CF.literal_approx "0.00000016548170833630138076841831207275390625" 11644740 (-46)
+
+let freq_approx (i:szlt 32)
+  : Lemma (freq i %~ Lit.value (base_freq_literal (SZ.v i))) =
+  if i = 0sz then lit_0 ()
+  else if i = 1sz then lit_1 ()
+  else if i = 2sz then lit_2 ()
+  else if i = 3sz then lit_3 ()
+  else if i = 4sz then lit_4 ()
+  else if i = 5sz then lit_5 ()
+  else if i = 6sz then lit_6 ()
+  else if i = 7sz then lit_7 ()
+  else if i = 8sz then lit_8 ()
+  else if i = 9sz then lit_9 ()
+  else if i = 10sz then lit_10 ()
+  else if i = 11sz then lit_11 ()
+  else if i = 12sz then lit_12 ()
+  else if i = 13sz then lit_13 ()
+  else if i = 14sz then lit_14 ()
+  else if i = 15sz then lit_15 ()
+  else if i = 16sz then lit_16 ()
+  else if i = 17sz then lit_17 ()
+  else if i = 18sz then lit_18 ()
+  else if i = 19sz then lit_19 ()
+  else if i = 20sz then lit_20 ()
+  else if i = 21sz then lit_21 ()
+  else if i = 22sz then lit_22 ()
+  else if i = 23sz then lit_23 ()
+  else if i = 24sz then lit_24 ()
+  else if i = 25sz then lit_25 ()
+  else if i = 26sz then lit_26 ()
+  else if i = 27sz then lit_27 ()
+  else if i = 28sz then lit_28 ()
+  else if i = 29sz then lit_29 ()
+  else if i = 30sz then lit_30 ()
+  else lit_31 ()
+
+#pop-options
+
+let freq_r (p:int) (i:nat) : real = R.of_int p *. at inv_freq_f32 i
 
 let freq_ok (p:int) (i:nat{i < 32})
   : Lemma (S.index (rope_cos opt_numerics p) i == Trig.cos (freq_r p i) /\
            S.index (rope_sin opt_numerics p) i == Trig.sin (freq_r p i))
-  = RO.log_base_nonzero 2.0R;
-    assert (at inv_freq_exp2 i ==
-            1.0R /. Pow.exp2 ((R.of_int (2 * i) /. 64.0R) *. log2_e7));
-    assert (R.of_int (2 * i) /. 64.0R == R.of_int (2 * i) *. (1.0R /. 64.0R))
-
-(* log2(1e7) computed as logf(1e7) / logf(2) *)
-inline_for_extraction noextract
-let log2_e7_f32 () : f32 = div (flog (of_int #f32 10000000L)) (flog (of_int #f32 2L))
-
-let log2_e7_f32_ok ()
-  : Lemma (log2_e7_f32 () %~ log2_e7)
-  = approx_of_int #f32;
-    approx_apply (of_int #f32) RO.r_of_int 10000000L 10000000L;
-    approx_apply (of_int #f32) RO.r_of_int 2L 2L;
-    approx_flog #f32;
-    assert (flog (of_int #f32 10000000L) %~ Exp.log 10000000.0R);
-    assert (flog (of_int #f32 2L) %~ Exp.log 2.0R);
-    RO.log_base_nonzero 2.0R;
-    approx_div #f32;
-    assert (div (flog (of_int #f32 10000000L)) (flog (of_int #f32 2L)) %~
-            (Exp.log 10000000.0R /. Exp.log 2.0R))
+  = ()
 
 let of_int_ok (x:I64.t)
   : Lemma (of_int #f32 x %~ R.of_int (I64.v x))
   = approx_of_int #f32;
     approx_apply (of_int #f32) RO.r_of_int x x
-
-let neg_ok (x:f32) (r:real)
-  : Lemma (requires x %~ r)
-          (ensures neg x %~ (0.0R -. r) /\ Pow.exp2 (0.0R -. r) == 1.0R /. Pow.exp2 r)
-  = approx_neg #f32;
-    Pow.pow_neg 2.0R r
 
 (*** Embedding row *)
 
@@ -169,25 +345,14 @@ fn embed_hidden
 }
 
 inline_for_extraction noextract
-fn rope_freq (pf : f32) (pr : erased int) (i : SZ.t { SZ.v i < 32 }) (l : f32)
+fn rope_freq (pf : f32) (pr : erased int) (i : SZ.t { SZ.v i < 32 })
   preserves gpu
-  requires pure (pf %~ R.of_int pr /\ l %~ log2_e7)
+  requires pure (pf %~ R.of_int pr)
   returns r : f32
   ensures pure (r %~ freq_r pr (SZ.v i))
 {
-  let ii = Cast.uint32_to_int64 (SZ.sizet_to_u32 (2sz *^ i));
-  let fi = of_int #f32 ii;
-  of_int_ok ii;
-  let c64 = of_int #f32 64L;
-  of_int_ok 64L;
-  let r64 = F32.rcp_approx_ftz c64;
-  let a = F32.mul_rn_ftz fi r64;
-  let b = F32.mul_rn_ftz a l;
-  (* ptxas compiles the source's div.approx(p, ex2(m)) as p * ex2(-m). *)
-  let nb = neg b;
-  neg_ok b ((R.of_int (2 * SZ.v i) *. (1.0R /. 64.0R)) *. log2_e7);
-  let e = F32.exp2_approx_ftz nb;
-  F32.mul_rn_ftz pf e
+  freq_approx i;
+  F32.mul_rn_ftz pf (freq i)
 }
 
 inline_for_extraction noextract
@@ -208,10 +373,8 @@ fn rope
   pts_to_len sine;
   let pf = of_int #f32 position;
   of_int_ok position;
-  let l = log2_e7_f32 ();
-  log2_e7_f32_ok ();
   (* Runtime start index (0 whenever the relation's premise holds): keeps the
-     rotary loop from being unrolled into compile-time-folded approximations. *)
+     rotary loop from being unrolled and constant-folded. *)
   let start = (if (plen = 0sz) then 1sz else 0sz);
   let mut i = start;
   while (!i <^ 32sz)
@@ -224,7 +387,7 @@ fn rope
     decreases (32 - SZ.v !i)
   {
     let vi = !i;
-    let fr = rope_freq pf (I64.v position) vi l;
+    let fr = rope_freq pf (I64.v position) vi;
     freq_ok (I64.v position) (SZ.v vi);
     let cv = Fast.cos fr;
     let sv = Fast.sin fr;

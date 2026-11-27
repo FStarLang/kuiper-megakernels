@@ -303,7 +303,10 @@ normal final check (DTester and Kuiper both approved).
 >   [Luce-Org/lucebox](https://github.com/Luce-Org/lucebox) megakernel at
 >   `0f212acacb284cf77f29f4fb4f706b1f4fdc3f88`, `optimizations/megakernel`
 >   (BF16 Qwen3.5-0.8B decode megakernel; includes the merged #761, #804 and
->   #1026), decode path only.
+>   #1026), decode path only, with one local (not upstream) patch,
+>   [`patches/luce-rope-pytorch-table.patch`](patches/luce-rope-pytorch-table.patch):
+>   RoPE frequencies are `position * inv_freq[i]` with PyTorch's float32
+>   `inv_freq` table instead of `position / powf(1e7, 2i/64)`.
 > - **Base:** the pinned Hugging Face Transformers **5.3.0** Qwen3.5 reference
 >   (`Qwen/Qwen3.5-0.8B` revision `2fc0636`, BF16, eager attention).
 > - **Hardware:** H100, `sm_90`.
@@ -323,7 +326,7 @@ normal final check (DTester and Kuiper both approved).
 | --- | --- |
 | `luce-shared` | [`KPlay.SharedSpec`](proofs/luce-shared/KPlay.SharedSpec.fst): exact real reference math (embedding, `(1 + w)` RMSNorm, Gated DeltaNet with threshold-20 softplus, gated attention with partial RoPE, SwiGLU MLP, final norm and tied LM head from zero state), the role-independent `program_postcondition`, and one relation per role and family |
 | `luce-<family>-{base,optimized}` (14 cases) | Each Kuiper/Pulse implementation in `KPlay.Functional` ensures its family relation, for **all** reals that the inputs approximate |
-| `luce-program-{base,optimized}` | `KPlay.Proof.Program.<Role>.refines`: the family relations at every host call imply `program_postcondition`. For every step `j < S`, hidden row `j` approximates the reference residual at position `P-1+j` (prompt, then the generated tokens, as input), and token `j` is an allowed maximum of a BF16 or FP32 score row approximating the reference logits there. Model constants (eps, DeltaNet query scale, RoPE frequencies) may be their exact reals or the f32 / `exp2`-`log2` forms the kernels compute |
+| `luce-program-{base,optimized}` | `KPlay.Proof.Program.<Role>.refines`: the family relations at every host call imply `program_postcondition`. For every step `j < S`, hidden row `j` approximates the reference residual at position `P-1+j` (prompt, then the generated tokens, as input), and token `j` is an allowed maximum of a BF16 or FP32 score row approximating the reference logits there. Model constants (eps, DeltaNet query scale, RoPE inverse frequencies) are pinned to PyTorch's float32 values |
 | `luce-program-review` | [`KPlay.Review`](proofs/luce-program/KPlay.Review.fsti): on the same inputs, **both** roles' outputs satisfy the same `program_postcondition` |
 
 **Typed specification (`luce-spec`).** [`proofs/luce-spec/KPlay.Spec.fst`](proofs/luce-spec/KPlay.Spec.fst)
@@ -336,6 +339,17 @@ offsets. [`KPlay.Spec.Bridge`](proofs/luce-spec/KPlay.Spec.Bridge.fst) gives the
 `postcondition` holds. [`KPlay.Spec.Review`](proofs/luce-spec/KPlay.Spec.Review.fsti) concludes
 the typed `postcondition` for both roles. Check with
 `python3 replay.py verify --case luce-spec --jobs 8`. This case re-verifies the program proofs.
+
+**Constants and hand edits.** The model constants (eps, DeltaNet query scale,
+RoPE inverse frequencies) are PyTorch's float32 values in both
+`KPlay.SharedSpec` and `KPlay.Spec` (`numerics_ok` admits only them). The
+specs, the optimized `embedding` proof and the reduced optimized kernels were
+edited by hand after the RESOLVE run to match the patched original; the base
+`full_attention_decoder` proof gained one helper lemma to re-check.
+On the four RESOLVE samples the patched original and the reduced patched
+program produce bitwise-identical tokens and hidden states. The patch changes
+the hidden states on the two multi-token samples (tokens unchanged), and
+the outputs remain not bitwise equal to PyTorch.
 
 RESOLVE's testing found base and optimized outputs **not bitwise equal** on
 any sample, so the roles agree only through this common specification. They
@@ -413,6 +427,7 @@ assumptions above.
 | `kernels/luce-extracted/<family>-<role>/` | Kuiper's extraction of each verified implementation (`KPlay_Functional.{cu,h}`) plus a PyTorch binding (`binding.cu`); `include/` holds the same four RESOLVE install headers as FlashMoE's |
 | `proofs/luce-program/<role>/plan.json` | The recorded host call plan (4 samples) behind `KPlay.Proof.Wiring.<Role>`; `accepted_cuda_sha256` binds it to the program CUDA |
 | `support/luce-cleanroom/` | `Luce.Softplus.fst` and `Luce.Softplus.Fast.fst` |
+| `patches/` | The local RoPE patch to the Lucebox original (`luce-rope-pytorch-table.patch`) and a `README` |
 
 ### Observing the LUCE kernels (GPU)
 

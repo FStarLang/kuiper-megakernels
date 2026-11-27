@@ -206,8 +206,22 @@ agents had no access to the former LUCE proofs. **The optimized original is
 the official [Luce-Org/lucebox](https://github.com/Luce-Org/lucebox) megakernel**
 at `0f212acacb284cf77f29f4fb4f706b1f4fdc3f88`, `optimizations/megakernel`
 (BF16 Qwen3.5-0.8B decode megakernel; includes the merged #761, #804 and
-#1026). **The base** is the pinned Hugging Face Transformers 5.3.0 Qwen3.5
+#1026), with the local RoPE patch below. **The base** is the pinned Hugging Face Transformers 5.3.0 Qwen3.5
 reference (`Qwen/Qwen3.5-0.8B` revision `2fc0636`). Hardware: H100, `sm_90`.
+
+**Local patch and hand edits.** The optimized original carries one local,
+non-upstream patch, [`patches/luce-rope-pytorch-table.patch`](patches/luce-rope-pytorch-table.patch):
+the RoPE frequency is `float(position) * ROPE_INV_FREQ[i]` with PyTorch's
+float32 `inv_freq` table instead of `float(position) / powf(1e7, 2i/64)`. The
+reduced optimized kernels (`embedding`, program) and the optimized `embedding`
+proof compute the same product. The model constants in `KPlay.SharedSpec` and
+`KPlay.Spec` are pinned to PyTorch's float32 values (`numerics_ok nm` is
+`nm == model_numerics`). These specs, that proof and the reduced kernels were
+edited by hand after the RESOLVE run, and the base `full_attention_decoder`
+proof gained one helper lemma (`cp_probs_at`) to re-check under the new spec. On the four RESOLVE samples the patched
+original and the reduced patched program agree bitwise (tokens and hidden
+states); this is a test, not part of the proof.
+
 One specification,
 [`proofs/luce-shared/KPlay.SharedSpec.fst`](proofs/luce-shared/KPlay.SharedSpec.fst),
 states:
@@ -220,11 +234,11 @@ states:
    and the tied LM head, all from fresh zero state (`ref_hidden`, `ref_logits`).
 2. **`program_postcondition`.** Role independent. Under `program_premise`
    (752393024 weights, `1 <= P <= 8`, `1 <= S <= 5`, valid prompt tokens):
-   there are `S` valid tokens and `S` hidden rows, and there exist admissible
-   model constants (`numerics_ok`: eps, DeltaNet query scale and RoPE inverse
-   frequencies as their exact reals or the f32 / `exp2`-`log2` forms the kernels
-   compute) such that for every real weight vector the BF16 weights
-   approximate and every step `j < S`:
+   there are `S` valid tokens and `S` hidden rows, and, with the model
+   constants pinned to PyTorch's float32 values (`numerics_ok`: eps `1e-6f`,
+   DeltaNet query scale `1/sqrt(128)` rounded to f32, and the 32 float32 RoPE
+   `inv_freq` values of the reference), for every real weight vector the BF16
+   weights approximate and every step `j < S`:
    - hidden row `j` approximates `ref_hidden` at position `P-1+j`, with the
      prompt followed by the previously generated tokens as input;
    - token `j` is an allowed maximum (`allowed_choice`: NaN first, otherwise
