@@ -117,6 +117,13 @@ let rec base_scan (row:S.seq F32.t) (n:nat{1 <= n /\ n <= S.length row})
     else let p = base_scan row (n - 1) in
          if lt (snd p) (S.index row (n - 1)) then (n - 1, S.index row (n - 1)) else p
 
+(* Optimized argmax: start from (0, -inf); scan 0..n-1 with strict row[e] > best. *)
+let rec opt_scan (row:S.seq F32.t) (n:nat{n <= S.length row})
+  : Tot (int & F32.t) (decreases n)
+  = if n = 0 then (0, ninf)
+    else let p = opt_scan row (n - 1) in
+         if lt (snd p) (S.index row (n - 1)) then (n - 1, S.index row (n - 1)) else p
+
 (* Allowed top-1 choice over the native row actually consumed: no entry is
    strictly greater (or, for the all-NaN/-inf row, expert 0 with nothing above
    -inf), and every earlier non-NaN entry is strictly below it (stated through
@@ -148,7 +155,7 @@ let softmax_rows_ok (x w:S.seq BF.t) (rows:S.seq F32.t) : prop =
 let selected_combine_ok (row:S.seq F32.t) (j:int) (c:F32.t) : prop =
   S.length row == experts /\ 0 <= j /\ j < experts /\
   (forall (rp:real).
-     S.index row j %~ rp /\ rp =!= 0.0R ==>
+     lt ninf (S.index row j) /\ S.index row j %~ rp /\ rp =!= 0.0R ==>
      c %~ (ref_combine rp))
 
 (* Capacity state after the first n tokens of sel, with kept combine weights
@@ -270,14 +277,11 @@ let optimized_softmax_relation (scores:S.seq F32.t) (t:int) (row:S.seq F32.t) : 
   (S.length row == experts /\
    (forall (rs:S.seq real). scores %~ rs ==> row %~ (ref_softmax (row_of rs t))))
 
-(* The optimized argmax is locally patched to seed its scan with (0, row[0])
-   like base (patches/flashmoe-argmax-start-row0.patch), so it is the same
-   scan as base. *)
 let optimized_argmax_relation (row:S.seq F32.t) (sel:S.seq I32.t) (sp:S.seq F32.t) : prop =
   S.length row == experts ==>
   (S.length sel == 1 /\ S.length sp == 1 /\
-   I32.v (S.index sel 0) == fst (base_scan row experts) /\
-   S.index sp 0 == snd (base_scan row experts))
+   I32.v (S.index sel 0) == fst (opt_scan row experts) /\
+   S.index sp 0 == snd (opt_scan row experts))
 
 (* fdividef(row[selected], __fadd_rn(0.0f, selected_probability)). *)
 let optimized_combine_ok (q p c:F32.t) : prop =

@@ -82,7 +82,7 @@ let sel_ok (r:run) (rw:S.seq real) (j:nat)
     tok_out r j;
     let lg = ulog r t in
     assert (lg %~ ref_logits base_numerics rw (ref_hidden base_numerics rw (toks r) t) /\
-            allowed_choice lg (tok_at (output0 r) j))
+            first_allowed_choice lg (tok_at (output0 r) j))
 
 let row_ok (r:run) (rw:S.seq real) (j:nat)
   : Lemma (requires ctx r rw /\ j < r.input2)

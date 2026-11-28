@@ -20,10 +20,25 @@ module KPlay.Spec
    from all-zero states.
 
    The math is over ideal reals. Floating results are related to it only by
-   the abstract approximation %~ (Kuiper.Approximates); the specification
-   gives no error bound. The model constants are fixed (model_numerics) to the
-   float32 values PyTorch computes in the reference: the f32 roundings of
-   1e-6, 1/sqrt(128) and the RoPE inverse frequencies (M:217, float32). *)
+   the number type's approximation (%~ at BF16 and F32); the specification
+   gives no error bound.
+
+   The spec is written once, over number types (KPlay.Numbers): `spec nb ns`
+   takes one for the weights and hidden states and one for F32 score rows.
+   The kernels are proved against `postcondition = spec N.bf16 N.f32`;
+   tightness.py checks that `spec N.exact N.exact` (exact reals) defines a
+   function.
+
+   LIBRARY RULES (KPlay.Numbers), the only freedoms at float types:
+   - constants (N.constant): a float kernel may use each model constant's
+     exact value or its float32 value (eps 1e-6, the DeltaNet query scale
+     1/sqrt(128), the RoPE frequencies; the float32 values are listed
+     below, as PyTorch computes them);
+   - argmax (N.bf16_argmax, N.f32_argmax): over BF16 scores the first NaN,
+     otherwise a highest score; over F32 scores, if every score is finite a
+     highest one, otherwise any pick.
+   Exact reals use the exact constants and the first maximum, so the rules
+   leave nothing open there. *)
 
 open FStar.Real
 open Kuiper
@@ -34,8 +49,11 @@ module F32 = Kuiper.Float32
 module F = Kuiper.Floating
 module Exp = FStar.Math.Exp
 module Sqrt = FStar.Math.Sqrt
+module Pow = FStar.Math.Pow
 module Trig = Kuiper.Real.Trigonometry
 module Lit = Kuiper.Float32.Literals
+module RO = Kuiper.Float.Realops
+module N = KPlay.Numbers
 
 #set-options "--z3rlimit 20"
 
@@ -64,8 +82,8 @@ let max_prompt_length : nat = 8
 let max_decode_steps : nat = 5
 
 type index (n:nat) = i:nat{i < n}
-type vector (a:Type0) (n:nat) = index n -> GTot a
-type matrix (a:Type0) (rows cols:nat) = index rows -> GTot (vector a cols)
+type vector (a:Type0) (n:nat) = N.row a n
+type matrix (a:Type0) (rows cols:nat) = N.row (vector a cols) rows
 type tensor3 (a:Type0) (d0 d1 d2:nat) = index d0 -> GTot (matrix a d1 d2)
 
 (* Parameters of one layer, named as model.layers.i.* in the checkpoint
@@ -114,7 +132,7 @@ noeq type model_weights (a:Type0) = {
   full_layers   : index full_layer_count -> GTot (decoder_layer self_attn_params a);
 }
 
-(* Model constants; the spec uses exactly model_numerics. *)
+(* The model constants a run uses, see numerics_ok. *)
 noeq type numerics = {
   rms_norm_eps       : real;                    (* 1e-6, also the l2norm epsilon *)
   linear_query_scale : real;                    (* 1 / sqrt(128), M:412 *)
@@ -139,18 +157,21 @@ noeq type layer_state = {
 }
 
 (* Program inputs and outputs (LAYOUT.md "Contract"). *)
-noeq type inputs = {
-  weights       : model_weights BF.t;             (* packed_weights *)
+noeq type inputs_t (a:Type0) = {
+  weights       : model_weights a;                (* packed_weights *)
   prompt_length : nat;
   prompt        : vector int prompt_length;       (* prompt_tokens *)
   decode_steps  : int;
 }
 
-noeq type outputs = {
+noeq type outputs_t (a:Type0) = {
   generated_count : nat;
   tokens          : vector int generated_count;
-  hidden_states   : vector (vector BF.t hidden_size) generated_count;
+  hidden_states   : matrix a generated_count hidden_size;
 }
+
+type inputs = inputs_t BF.t
+type outputs = outputs_t BF.t
 
 (*** S2. Reference equations (real-valued) *)
 
@@ -238,12 +259,12 @@ let linear_attn_conv_out (p:linear_attn_params real) (xn:vector real hidden_size
 let linear_attn_query (nm:numerics) (p:linear_attn_params real) (xn:vector real hidden_size)
                       (conv:conv_state) : GTot (matrix real linear_num_heads linear_head_dim) =
   let co = linear_attn_conv_out p xn conv in
-  fun h d -> l2norm nm.rms_norm_eps (fun e -> co (h * 128 + e)) d *. nm.linear_query_scale
+  fun h d -> l2norm #linear_head_dim nm.rms_norm_eps (fun e -> co (h * 128 + e)) d *. nm.linear_query_scale
 
 let linear_attn_key (nm:numerics) (p:linear_attn_params real) (xn:vector real hidden_size)
                     (conv:conv_state) : GTot (matrix real linear_num_heads linear_head_dim) =
   let co = linear_attn_conv_out p xn conv in
-  fun h d -> l2norm nm.rms_norm_eps (fun e -> co (2048 + h * 128 + e)) d
+  fun h d -> l2norm #linear_head_dim nm.rms_norm_eps (fun e -> co (2048 + h * 128 + e)) d
 
 let linear_attn_value (p:linear_attn_params real) (xn:vector real hidden_size)
                       (conv:conv_state) : GTot (matrix real linear_num_heads linear_head_dim) =
@@ -442,11 +463,17 @@ let logits (nm:numerics) (w:model_weights real) (h:vector real hidden_size) : GT
 
 (** Model constants *)
 
-(* f32 roundings of 1e-6 and 1 / sqrt(128), as PyTorch uses them *)
+let eps_exact : real = 0.000001R
 let eps_f32 : real = Lit.value "0.0000009999999974752427078783512115478515625"
+let query_scale_exact : real = Sqrt.rsqrt 128.0R
 let query_scale_f32 : real = Lit.value "0.088388346135616302490234375"
 
-(* PyTorch's float32 inv_freq = 1 / theta^(2i / 64), theta = 1e7 (M:217) *)
+(* 1 / theta^(2i / 64), theta = 1e7, written as 1 / 2^((2i/64) log2 theta)
+   (the same real number; the library has no law linking Pow.pow to exp/log,
+   and this is the form the optimized kernel uses) *)
+let inv_freq_exact : vector real rotary_pairs =
+  fun i -> 1.0R /. RO.r_exp2 ((of_int (2 * i) /. 64.0R) *. RO.r_log2 10000000.0R)
+
 let inv_freq_f32_literal (i:nat) : string =
   match i with
   | 0 -> "1.0"
@@ -483,125 +510,125 @@ let inv_freq_f32_literal (i:nat) : string =
   | 31 -> "0.00000016548170833630138076841831207275390625"
   | _ -> "0.0"
 
+(* f32 roundings of inv_freq_exact (the base kernel's constants) *)
 let inv_freq_f32 : vector real rotary_pairs = fun i -> Lit.value (inv_freq_f32_literal i)
 
-let model_numerics : numerics = {
-  rms_norm_eps = eps_f32;
-  linear_query_scale = query_scale_f32;
-  inv_freq = inv_freq_f32 }
+(* The constants a run may use, under the number type's constant rule. *)
+let numerics_ok (#a:Type0) (num:N.number a) (nm:numerics) : prop =
+  num.N.constant eps_exact eps_f32 nm.rms_norm_eps /\
+  num.N.constant query_scale_exact query_scale_f32 nm.linear_query_scale /\
+  (forall (i:index rotary_pairs). num.N.constant (inv_freq_exact i) (inv_freq_f32 i) (nm.inv_freq i))
 
-(*** S3. Liftings of %~ to the model types *)
+(*** S3. Liftings of the number type's approximation to the model types *)
 
-let vector_approximates (#a:Type0) {| Kuiper.Scalars.scalar a, real_like a |} (#n:nat)
-    (x:vector a n) (r:vector real n) : prop =
-  forall (i:index n). x i %~ r i
+let vector_approx (#a:Type0) (num:N.number a) (#n:nat) (x:vector a n) (r:vector real n) : prop =
+  forall (i:index n). num.N.approx (x i) (r i)
 
-let matrix_approximates (#a:Type0) {| Kuiper.Scalars.scalar a, real_like a |} (#rows #cols:nat)
+let matrix_approx (#a:Type0) (num:N.number a) (#rows #cols:nat)
     (x:matrix a rows cols) (r:matrix real rows cols) : prop =
-  forall (i:index rows) (j:index cols). x i j %~ r i j
+  forall (i:index rows) (j:index cols). num.N.approx (x i j) (r i j)
 
-let mlp_approximates (x:mlp_params BF.t) (r:mlp_params real) : prop =
-  matrix_approximates x.gate_proj r.gate_proj /\
-  matrix_approximates x.up_proj r.up_proj /\
-  matrix_approximates x.down_proj r.down_proj
+let mlp_approx (#a:Type0) (num:N.number a) (x:mlp_params a) (r:mlp_params real) : prop =
+  matrix_approx num x.gate_proj r.gate_proj /\
+  matrix_approx num x.up_proj r.up_proj /\
+  matrix_approx num x.down_proj r.down_proj
 
-let linear_attn_approximates (x:linear_attn_params BF.t) (r:linear_attn_params real) : prop =
-  matrix_approximates x.in_proj_qkv r.in_proj_qkv /\
-  matrix_approximates x.in_proj_z r.in_proj_z /\
-  matrix_approximates x.in_proj_b r.in_proj_b /\
-  matrix_approximates x.in_proj_a r.in_proj_a /\
-  matrix_approximates x.conv1d r.conv1d /\
-  vector_approximates x.a_log r.a_log /\
-  vector_approximates x.dt_bias r.dt_bias /\
-  vector_approximates x.norm r.norm /\
-  matrix_approximates x.out_proj r.out_proj
+let linear_attn_approx (#a:Type0) (num:N.number a) (x:linear_attn_params a) (r:linear_attn_params real) : prop =
+  matrix_approx num x.in_proj_qkv r.in_proj_qkv /\
+  matrix_approx num x.in_proj_z r.in_proj_z /\
+  matrix_approx num x.in_proj_b r.in_proj_b /\
+  matrix_approx num x.in_proj_a r.in_proj_a /\
+  matrix_approx num x.conv1d r.conv1d /\
+  vector_approx num x.a_log r.a_log /\
+  vector_approx num x.dt_bias r.dt_bias /\
+  vector_approx num x.norm r.norm /\
+  matrix_approx num x.out_proj r.out_proj
 
-let self_attn_approximates (x:self_attn_params BF.t) (r:self_attn_params real) : prop =
-  matrix_approximates x.q_proj r.q_proj /\
-  matrix_approximates x.k_proj r.k_proj /\
-  matrix_approximates x.v_proj r.v_proj /\
-  vector_approximates x.q_norm r.q_norm /\
-  vector_approximates x.k_norm r.k_norm /\
-  matrix_approximates x.o_proj r.o_proj
+let self_attn_approx (#a:Type0) (num:N.number a) (x:self_attn_params a) (r:self_attn_params real) : prop =
+  matrix_approx num x.q_proj r.q_proj /\
+  matrix_approx num x.k_proj r.k_proj /\
+  matrix_approx num x.v_proj r.v_proj /\
+  vector_approx num x.q_norm r.q_norm /\
+  vector_approx num x.k_norm r.k_norm /\
+  matrix_approx num x.o_proj r.o_proj
 
-let layer_approximates (#m:Type0 -> Type0) (mixer_approximates:m BF.t -> m real -> prop)
-    (x:decoder_layer m BF.t) (r:decoder_layer m real) : prop =
-  vector_approximates x.input_layernorm r.input_layernorm /\
-  vector_approximates x.post_attention_layernorm r.post_attention_layernorm /\
-  mlp_approximates x.mlp r.mlp /\
-  mixer_approximates x.token_mixer r.token_mixer
+let layer_approx (#m:Type0 -> Type0) (#a:Type0) (num:N.number a) (mixer_approx:m a -> m real -> prop)
+    (x:decoder_layer m a) (r:decoder_layer m real) : prop =
+  vector_approx num x.input_layernorm r.input_layernorm /\
+  vector_approx num x.post_attention_layernorm r.post_attention_layernorm /\
+  mlp_approx num x.mlp r.mlp /\
+  mixer_approx x.token_mixer r.token_mixer
 
-let weights_approximates (x:model_weights BF.t) (r:model_weights real) : prop =
-  matrix_approximates x.embed_tokens r.embed_tokens /\
-  vector_approximates x.final_norm r.final_norm /\
+let weights_approx (#a:Type0) (num:N.number a) (x:model_weights a) (r:model_weights real) : prop =
+  matrix_approx num x.embed_tokens r.embed_tokens /\
+  vector_approx num x.final_norm r.final_norm /\
   (forall (d:index linear_layer_count).
-     layer_approximates linear_attn_approximates (x.linear_layers d) (r.linear_layers d)) /\
+     layer_approx num (linear_attn_approx num) (x.linear_layers d) (r.linear_layers d)) /\
   (forall (g:index full_layer_count).
-     layer_approximates self_attn_approximates (x.full_layers g) (r.full_layers g))
+     layer_approx num (self_attn_approx num) (x.full_layers g) (r.full_layers g))
 
 (*** S4. Operation relations (role-independent) *)
 
 let valid_token (x:int) : bool = 0 <= x && x < 248320
 
-let is_nan (#t:Type) {| F.floating t |} (x:t) : prop = NaN? (F.kind x)
-
-(* Greedy selection (torch.argmax, B:147) over the score row actually
-   consumed: if the row has a NaN the chosen element is NaN, otherwise no
-   element is strictly greater. Ties may be broken either way. *)
-let allowed_choice (#t:Type) {| F.floating t |} (#n:nat) (row:vector t n) (sel:int) : prop =
-  0 <= sel /\ sel < n /\
-  ((exists (k:index n). is_nan (row k)) ==> is_nan (row sel)) /\
-  ((forall (k:index n). ~(is_nan (row k))) ==> (forall (k:index n). ~(lt (row sel) (row k))))
-
 (* The decode operation: an output hidden row approximates the reference
    residual stream at position p (consumed tokens toks). *)
-let hidden_state_relation (nm:numerics) (w:model_weights real) (toks:nat -> GTot int) (p:nat)
-                          (h:vector BF.t hidden_size) : prop =
-  vector_approximates h (hidden_at nm w toks p)
+let hidden_state_relation (#a:Type0) (num:N.number a) (nm:numerics) (w:model_weights real)
+                          (toks:nat -> GTot int) (p:nat) (h:vector a hidden_size) : prop =
+  vector_approx num h (hidden_at nm w toks p)
 
-(* The logits/argmax operation: sel is an allowed choice over a BF16 or F32
-   score row that approximates the reference logits of hidden state h. *)
-let greedy_choice_relation (nm:numerics) (w:model_weights real) (h:vector real hidden_size) (sel:int)
-  : prop =
-  (exists (row:vector BF.t vocab_size). vector_approximates row (logits nm w h) /\ allowed_choice row sel) \/
-  (exists (row:vector F32.t vocab_size). vector_approximates row (logits nm w h) /\ allowed_choice row sel)
+(* The logits/argmax operation (torch.argmax, B:147): sel is an argmax,
+   under the number type's rule, of a score row actually consumed that
+   approximates the reference logits of hidden state h. The row is of the
+   program's number type (nb) or of the F32 score type (ns). *)
+let greedy_choice_relation (#a #b:Type0) (nb:N.number a) (ns:N.number b) (nm:numerics)
+                           (w:model_weights real) (h:vector real hidden_size) (sel:int) : prop =
+  (exists (row:vector a vocab_size). vector_approx nb row (logits nm w h) /\ nb.N.argmax vocab_size row sel) \/
+  (exists (row:vector b vocab_size). vector_approx ns row (logits nm w h) /\ ns.N.argmax vocab_size row sel)
 
 (*** S5. Typed program postcondition *)
 
 (* input-domain.txt; decode_steps in {1, 5} is relaxed to 1..5 *)
-let input_domain (x:inputs) : prop =
+let input_domain (#a:Type0) (x:inputs_t a) : prop =
   1 <= x.prompt_length /\ x.prompt_length <= max_prompt_length /\
   1 <= x.decode_steps /\ x.decode_steps <= max_decode_steps /\
   (forall (i:index x.prompt_length). valid_token (x.prompt i))
 
 (* Token consumed at decode position p: the prompt, then the generated tokens
    (B:151-157). *)
-let consumed (x:inputs) (y:outputs) (p:nat) : GTot int =
+let consumed (#a #b:Type0) (x:inputs_t a) (y:outputs_t b) (p:nat) : GTot int =
   if p < x.prompt_length then x.prompt p
   else if p - x.prompt_length < y.generated_count then y.tokens (p - x.prompt_length)
   else 0
 
 (* Position of the last prompt token (= prompt_length - 1 on the domain). *)
-let last_prompt_position (x:inputs) : nat = if x.prompt_length >= 1 then x.prompt_length - 1 else 0
+let last_prompt_position (#a:Type0) (x:inputs_t a) : nat =
+  if x.prompt_length >= 1 then x.prompt_length - 1 else 0
 
 (* Structural: shape and token validity. *)
-let structural (x:inputs) (y:outputs) : prop =
+let structural (#a #b:Type0) (x:inputs_t a) (y:outputs_t b) : prop =
   y.generated_count == x.decode_steps /\
   (forall (j:index y.generated_count). valid_token (y.tokens j))
 
 (* Numerical: hidden state j approximates the reference residual stream at
    position P - 1 + j. *)
-let numerical (nm:numerics) (x:inputs) (y:outputs) (w:model_weights real) : prop =
+let numerical (#a:Type0) (nb:N.number a) (nm:numerics) (x:inputs_t a) (y:outputs_t a)
+              (w:model_weights real) : prop =
   forall (j:index y.generated_count).
-    hidden_state_relation nm w (consumed x y) (last_prompt_position x + j) (y.hidden_states j)
+    hidden_state_relation nb nm w (consumed x y) (last_prompt_position x + j) (y.hidden_states j)
 
 (* Selection: token j is a greedy choice over logits at that position. *)
-let selection (nm:numerics) (x:inputs) (y:outputs) (w:model_weights real) : prop =
+let selection (#a #b:Type0) (nb:N.number a) (ns:N.number b) (nm:numerics) (x:inputs_t a)
+              (y:outputs_t a) (w:model_weights real) : prop =
   forall (j:index y.generated_count).
-    greedy_choice_relation nm w (hidden_at nm w (consumed x y) (last_prompt_position x + j)) (y.tokens j)
+    greedy_choice_relation nb ns nm w (hidden_at nm w (consumed x y) (last_prompt_position x + j)) (y.tokens j)
 
-let postcondition (input:inputs) (output:outputs) : prop =
+let spec (#a #b:Type0) (nb:N.number a) (ns:N.number b) (input:inputs_t a) (output:outputs_t a)
+  : prop =
   input_domain input ==>
   (structural input output /\
-   (forall (w:model_weights real). weights_approximates input.weights w ==>
-      numerical model_numerics input output w /\ selection model_numerics input output w))
+   (exists (nm:numerics). numerics_ok nb nm /\
+     (forall (w:model_weights real). weights_approx nb input.weights w ==>
+        numerical nb nm input output w /\ selection nb ns nm input output w)))
+
+let postcondition (input:inputs) (output:outputs) : prop = spec N.bf16 N.f32 input output

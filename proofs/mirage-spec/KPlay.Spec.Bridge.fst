@@ -12,6 +12,7 @@ module Exp = FStar.Math.Exp
 module Sqrt = FStar.Math.Sqrt
 module Pow = FStar.Math.Pow
 module Trig = Kuiper.Real.Trigonometry
+module N = KPlay.Numbers
 
 (* Index arithmetic *)
 
@@ -767,8 +768,8 @@ let typed_of_flat (input0:S.seq BF.t) (input1:S.seq I64.t) (input2:int)
     domain_iff input0 input1 input2;
     introduce input_domain input ==>
               (structural_postcondition input output /\
-               numerical_postcondition input output /\
-               selection_postcondition input output)
+               numerical_postcondition N.bf16 input output /\
+               selection_postcondition N.bf16 input output)
     with begin
       let prompt = prompt_ids input in
       numerical_forward input0 input1 output1 prompt;

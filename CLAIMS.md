@@ -47,30 +47,26 @@ trusted theory would also defeat the intended interpretation.
 
 ## Tightness: each spec defines a function
 
-Each project's typed spec (`proofs/<p>-spec/KPlay.Spec.fst`) is checked to
-define a function: for each allowed input it accepts exactly one answer,
-except for the declared freedoms. "At least one" is the program proof (the
-kernel's own output is accepted). "At most one" is case `<p>-tightness`:
+Each project's typed spec (`proofs/<p>-spec/KPlay.Spec.fst`) is written once,
+generically over a number type (`KPlay.Numbers.number`: approximation, argmax
+rule, constant rule). The program's guarantee is the spec at the float number
+types (`postcondition = spec N.bf16 ...` or `spec N.f32 ...`). Case
+`<p>-tightness` checks the same spec at exact reals (`N.exact`: approximation
+is equality, argmax is the first maximum, a constant is its exact value), with
+no human input:
 
-- `proofs/<p>-tightness/KPlay.Tightness.<P>.Question.fst` (reviewed) lists
-  the inputs, every output (written out flat; `view` maps it back to the
-  spec's output record), the reference value of each output, and the only
-  freedom (`allowed`);
-- [`tightness.py`](tightness.py) writes the theorem
-  (`KPlay.Tightness.<P>.Statement.fst`, the same text for every project): every
-  answer the spec accepts equals the reference values, up to one allowed
-  choice; floating values match by `%~` for every real model of the inputs;
+- [`tightness.py`](tightness.py) reads the spec's `postcondition` line and
+  its `outputs_t` record, and writes the theorem
+  (`KPlay.Tightness.<P>.Statement.fst`): the input domain is nonempty, every
+  input in it has an answer, and any two answers are equal field by field;
 - F* checks the proof (`KPlay.Tightness.<P>.Proof.fst`). `replay.py` rejects a
   generated file that differs from `tightness.py`'s output.
 
-Declared freedoms: Mirage and LUCE, which token is chosen among argmax ties
-of a rounded score row; FlashMoE, which expert is chosen among first-maximum
-ties of a rounded probability row. Nothing else is free: model constants are
-fixed to PyTorch's float32 values (LUCE), and the FlashMoE combine weight is
-constrained on every row. What remains reviewed is the question file itself:
-that it lists every output, that its reference values are the reference
-math, and that `allowed` is no wider than the reference's real freedom.
-Tightness says nothing about whether the reference math is the right task.
+So at exact reals each spec defines a function. The float freedoms (argmax
+ties of a rounded row, LUCE constants: the exact value or its float32 value)
+come from the number type's rules, which are fixed in `KPlay.Numbers` and
+the same for every spec. No kernel was changed for these checks. Tightness
+says nothing about whether the reference math is the right task.
 
 ## Trusted boundary
 
@@ -188,12 +184,7 @@ states:
    - each selection is an allowed first maximum of its native row
      (`allowed_choice`);
    - each kept token's combine weight approximates `p / p` of its selected
-     probability. This holds on every kept token, with no premise on the
-     selected probability; we edited this part of the spec by hand after the
-     RESOLVE run. To prove it, the optimized argmax seeds its scan from
-     `row[0]`
-     ([`patches/flashmoe-argmax-start-row0.patch`](patches/flashmoe-argmax-start-row0.patch),
-     a local patch to the original);
+     probability, when that probability is above −infinity;
    - demand, token indices, probabilities and survival are **exactly** the
      token-order capacity routing of those selections (`routing_state`,
      `survival_rows`), with unfilled slots `-1` / `+0.0`.
@@ -238,21 +229,17 @@ agents had no access to the former LUCE proofs. **The optimized original is
 the official [Luce-Org/lucebox](https://github.com/Luce-Org/lucebox) megakernel**
 at `0f212acacb284cf77f29f4fb4f706b1f4fdc3f88`, `optimizations/megakernel`
 (BF16 Qwen3.5-0.8B decode megakernel; includes the merged #761, #804 and
-#1026), with the local RoPE patch below. **The base** is the pinned Hugging Face Transformers 5.3.0 Qwen3.5
+#1026), unmodified. **The base** is the pinned Hugging Face Transformers 5.3.0 Qwen3.5
 reference (`Qwen/Qwen3.5-0.8B` revision `2fc0636`). Hardware: H100, `sm_90`.
 
-**Local patch and hand edits.** The optimized original carries one local,
-non-upstream patch, [`patches/luce-rope-pytorch-table.patch`](patches/luce-rope-pytorch-table.patch):
-the RoPE frequency is `float(position) * ROPE_INV_FREQ[i]` with PyTorch's
-float32 `inv_freq` table instead of `float(position) / powf(1e7, 2i/64)`. The
-reduced optimized kernels (`embedding`, program) and the optimized `embedding`
-proof compute the same product. The model constants in `KPlay.SharedSpec` and
-`KPlay.Spec` are fixed to PyTorch's float32 values (`nm == model_numerics`
-in `KPlay.SharedSpec`; `KPlay.Spec` uses `model_numerics` directly). These specs, that proof and the reduced kernels were
-edited by hand after the RESOLVE run, and the base `full_attention_decoder`
-proof gained one helper lemma (`cp_probs_at`) to re-check under the new spec. On the four RESOLVE samples the patched
-original and the reduced patched program agree bitwise (tokens and hidden
-states); this is a test, not part of the proof.
+**Model constants.** The base kernel uses PyTorch's float32 constants (eps,
+DeltaNet query scale 1/sqrt(128), the RoPE inverse frequencies); the
+optimized kernel computes the RoPE frequencies in float32 at run time
+(`1 / exp2((2i/64) * log2(1e7))`). The spec allows each constant to be its exact value
+or its float32 value (`numerics_ok`, the number type's constant rule). The
+exact RoPE frequency is written in the same form, `1 / 2^((2i/64) log2 1e7)`
+(that is, `1e7^(-2i/64)`); the toolchain has no law linking its `pow` to
+`exp`/`log`, so a `pow` form is not used.
 
 One specification,
 [`proofs/luce-shared/KPlay.SharedSpec.fst`](proofs/luce-shared/KPlay.SharedSpec.fst),

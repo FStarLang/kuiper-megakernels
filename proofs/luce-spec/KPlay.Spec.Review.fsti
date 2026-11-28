@@ -8,9 +8,7 @@ module KPlay.Spec.Review
    kernel families satisfy their relations produces outputs that satisfy
    KPlay.Spec.postcondition, read through the layout-only views of
    KPlay.Spec.Bridge. Proved from KPlay.Review (which concludes the flat
-   KPlay.SharedSpec.program_postcondition) and Bridge.program_to_typed. The
-   converse, Bridge.typed_to_program, shows the typed statement is not weaker
-   than the flat one. *)
+   KPlay.SharedSpec.program_postcondition) and Bridge.program_to_typed. *)
 
 module B = KPlay.Proof.Wiring.Base
 module O = KPlay.Proof.Wiring.Optimized

@@ -30,6 +30,7 @@ module Exp = FStar.Math.Exp
 module Sqrt = FStar.Math.Sqrt
 module Pow = FStar.Math.Pow
 module Trig = Kuiper.Real.Trigonometry
+module N = KPlay.Numbers
 
 (* ------------------------------------------------------------------ *)
 (* S1. Model                                                           *)
@@ -46,8 +47,8 @@ unfold let prompt_length : pos = 7
 unfold let sequence_length : pos = 8   (* prompt + decode_steps = 1 generated token *)
 
 type index (n:nat) = i:nat{i < n}
-type vector (a:Type0) (n:nat) = index n -> GTot a
-type matrix (a:Type0) (rows cols:nat) = index rows -> GTot (vector a cols)
+type vector (a:Type0) (n:nat) = N.row a n
+type matrix (a:Type0) (rows cols:nat) = N.row (vector a cols) rows
 
 (* [prompt_length, hidden_size]: residual / hidden stream of the prompt. *)
 type hidden (a:Type0) = matrix a prompt_length hidden_size
@@ -94,17 +95,21 @@ noeq type rotary_tables (a:Type0) = {
 (* base.py:27 forward(packed_weights, prompt_tokens, decode_steps); `weights`
    is packed_weights unpacked (base.py:28). Token ids are the given int64
    values; their range is a domain premise (S5). *)
-noeq type inputs = {
-  weights : model_weights BF.t;
+noeq type inputs_t (a:Type0) = {
+  weights : model_weights a;
   prompt_tokens : vector int prompt_length;
   decode_steps : int;
 }
 
 (* base.py:44-47: the returned token sequence [8] and hidden_states[-1]. *)
-noeq type outputs = {
+noeq type outputs_t (a:Type0) = {
   tokens : vector int sequence_length;
-  hidden_states : hidden BF.t;
+  hidden_states : matrix a prompt_length hidden_size;
 }
+
+(* The program's number type: BF16 (packed_weights and hidden_states). *)
+type inputs = inputs_t BF.t
+type outputs = outputs_t BF.t
 
 (* ------------------------------------------------------------------ *)
 (* S2. Reference equations over reals                                  *)
@@ -294,44 +299,43 @@ let next_token_logits (w:model_weights real) (prompt:vector token_id prompt_leng
   : GTot (vector real vocab_size) =
   linear w.embed_tokens (last_hidden_state w prompt (prompt_length - 1))
 
-(* argmax(dim=-1) (base.py:43) over a native BF16 score row, up to tie
-   order: if the row has a NaN, the first NaN; otherwise any index whose
-   score is >= every score (native order; +0 and -0 tie). *)
-let is_nan (x:BF.t) : prop = F.NaN? (F.kind x)
-
-let has_nan (#n:nat) (scores:vector BF.t n) : prop = exists (i:index n). is_nan (scores i)
-
-let argmax_choice (#n:nat) (scores:vector BF.t n) (j:int) : prop =
-  0 <= j /\ j < n /\
-  (has_nan scores ==> is_nan (scores j) /\ (forall (i:index n). i < j ==> ~(is_nan (scores i)))) /\
-  (~(has_nan scores) ==> (forall (i:index n). F.lte (scores i) (scores j)))
+(* argmax(dim=-1) (base.py:43) over a native BF16 score row: N.bf16_argmax
+   (the first NaN if any, otherwise any maximum). *)
+let argmax_choice (#n:nat) (scores:vector BF.t n) (j:int) : prop = N.bf16_argmax n scores j
 
 (* ------------------------------------------------------------------ *)
 (* S3. Liftings of %~ to the model types                               *)
 
-let vector_approximates (#n:nat) (x:vector BF.t n) (r:vector real n) : prop =
-  forall (i:index n). x i %~ r i
+let vector_approx (#a:Type0) (num:N.number a) (#n:nat) (x:vector a n) (r:vector real n) : prop =
+  forall (i:index n). num.N.approx (x i) (r i)
 
+let matrix_approx (#a:Type0) (num:N.number a) (#rows #cols:nat) (x:matrix a rows cols) (r:matrix real rows cols) : prop =
+  forall (i:index rows). vector_approx num (x i) (r i)
+
+let parameters_approx (#a:Type0) (num:N.number a) (p:parameters a) (r:parameters real) : prop =
+  vector_approx num p.input_layernorm r.input_layernorm /\
+  vector_approx num p.post_attention_layernorm r.post_attention_layernorm /\
+  matrix_approx num p.q_proj r.q_proj /\
+  matrix_approx num p.k_proj r.k_proj /\
+  matrix_approx num p.v_proj r.v_proj /\
+  matrix_approx num p.o_proj r.o_proj /\
+  vector_approx num p.q_norm r.q_norm /\
+  vector_approx num p.k_norm r.k_norm /\
+  matrix_approx num p.gate_proj r.gate_proj /\
+  matrix_approx num p.up_proj r.up_proj /\
+  matrix_approx num p.down_proj r.down_proj
+
+let weights_approx (#a:Type0) (num:N.number a) (w:model_weights a) (r:model_weights real) : prop =
+  matrix_approx num w.embed_tokens r.embed_tokens /\
+  vector_approx num w.norm r.norm /\
+  (forall (l:index num_hidden_layers). parameters_approx num (w.layers l) (r.layers l))
+
+(* The BF16 instances, used by the relations below and the proofs. *)
+let vector_approximates (#n:nat) (x:vector BF.t n) (r:vector real n) : prop = vector_approx N.bf16 x r
 let matrix_approximates (#rows #cols:nat) (x:matrix BF.t rows cols) (r:matrix real rows cols) : prop =
-  forall (i:index rows). vector_approximates (x i) (r i)
-
-let parameters_approximates (p:parameters BF.t) (r:parameters real) : prop =
-  vector_approximates p.input_layernorm r.input_layernorm /\
-  vector_approximates p.post_attention_layernorm r.post_attention_layernorm /\
-  matrix_approximates p.q_proj r.q_proj /\
-  matrix_approximates p.k_proj r.k_proj /\
-  matrix_approximates p.v_proj r.v_proj /\
-  matrix_approximates p.o_proj r.o_proj /\
-  vector_approximates p.q_norm r.q_norm /\
-  vector_approximates p.k_norm r.k_norm /\
-  matrix_approximates p.gate_proj r.gate_proj /\
-  matrix_approximates p.up_proj r.up_proj /\
-  matrix_approximates p.down_proj r.down_proj
-
-let weights_approximates (w:model_weights BF.t) (r:model_weights real) : prop =
-  matrix_approximates w.embed_tokens r.embed_tokens /\
-  vector_approximates w.norm r.norm /\
-  (forall (l:index num_hidden_layers). parameters_approximates (w.layers l) (r.layers l))
+  matrix_approx N.bf16 x r
+let parameters_approximates (p:parameters BF.t) (r:parameters real) : prop = parameters_approx N.bf16 p r
+let weights_approximates (w:model_weights BF.t) (r:model_weights real) : prop = weights_approx N.bf16 w r
 
 (* ------------------------------------------------------------------ *)
 (* S4. Operation relations (role independent)                          *)
@@ -381,38 +385,40 @@ let numerical_execution (w:model_weights BF.t) (prompt:vector token_id prompt_le
 (* S5. Program postcondition                                           *)
 
 (* Domain premises checked by validate_inputs (model_abi.py:84-92). *)
-let input_domain (input:inputs) : prop =
+let input_domain (#a:Type0) (input:inputs_t a) : prop =
   (forall (t:index prompt_length). 0 <= input.prompt_tokens t /\ input.prompt_tokens t < vocab_size) /\
   input.decode_steps == 1
 
-let prompt_ids (input:inputs{input_domain input}) : vector token_id prompt_length =
+let prompt_ids (#a:Type0) (input:inputs_t a{input_domain input}) : vector token_id prompt_length =
   fun (t:index prompt_length) -> input.prompt_tokens t
 
 (* torch.cat((prompt_tokens, generated)) (base.py:45): the prompt in front. *)
-let structural_postcondition (input:inputs) (output:outputs) : prop =
+let structural_postcondition (#a:Type0) (input:inputs_t a) (output:outputs_t a) : prop =
   forall (t:index prompt_length). output.tokens t == input.prompt_tokens t
 
 (* hidden_states[-1] approximates the reference for every real model that
    the weights approximate. *)
-let numerical_postcondition (input:inputs{input_domain input}) (output:outputs) : prop =
+let numerical_postcondition (#a:Type0) (num:N.number a) (input:inputs_t a{input_domain input}) (output:outputs_t a) : prop =
   forall (rw:model_weights real).
-    weights_approximates input.weights rw ==>
-    matrix_approximates output.hidden_states (last_hidden_state rw (prompt_ids input))
+    weights_approx num input.weights rw ==>
+    matrix_approx num output.hidden_states (last_hidden_state rw (prompt_ids input))
 
-(* The generated token is an allowed argmax of the BF16 score row actually
+(* The generated token is an allowed argmax of the score row actually
    consumed, and that row approximates the reference next-token logits. *)
-let selection_postcondition (input:inputs{input_domain input}) (output:outputs) : prop =
-  exists (scores:vector BF.t vocab_size).
+let selection_postcondition (#a:Type0) (num:N.number a) (input:inputs_t a{input_domain input}) (output:outputs_t a) : prop =
+  exists (scores:vector a vocab_size).
     (forall (rw:model_weights real).
-       weights_approximates input.weights rw ==>
-       vector_approximates scores (next_token_logits rw (prompt_ids input))) /\
-    argmax_choice scores (output.tokens prompt_length)
+       weights_approx num input.weights rw ==>
+       vector_approx num scores (next_token_logits rw (prompt_ids input))) /\
+    num.N.argmax vocab_size scores (output.tokens prompt_length)
 
-let postcondition (input:inputs) (output:outputs) : prop =
+let spec (#a:Type0) (num:N.number a) (input:inputs_t a) (output:outputs_t a) : prop =
   input_domain input ==>
   (structural_postcondition input output /\
-   numerical_postcondition input output /\
-   selection_postcondition input output)
+   numerical_postcondition num input output /\
+   selection_postcondition num input output)
+
+let postcondition (input:inputs) (output:outputs) : prop = spec N.bf16 input output
 
 (* ------------------------------------------------------------------ *)
 (* Composition (G4): the S4 relations along one run imply S5.          *)

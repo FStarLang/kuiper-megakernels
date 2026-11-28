@@ -6,18 +6,27 @@ module KPlay.Spec.Bridge
    Views (layout only): `weights_view`, `inputs_of`, `outputs_of` read the
    flat program buffers as typed records.
 
-   Main result (`program_postcondition_iff`): for packed weights of the
-   expected length and hidden output of one row per token,
-     KPlay.SharedSpec.program_postcondition w prompt steps tokens hidden
-       <==> KPlay.Spec.postcondition (inputs_of w prompt steps) (outputs_of tokens hidden).
+   Native statement (`native_postcondition`): the typed statement with the
+   kernels' own rules spelled out over Kuiper floats (`%~`, the kernels'
+   constant forms, BF16 first-NaN/first-maximum and F32 NaN-aware argmax).
+
+   Results:
+   - `program_postcondition_iff`: for packed weights of the expected length
+     and hidden output of one row per token,
+       KPlay.SharedSpec.program_postcondition w prompt steps tokens hidden
+         <==> native_postcondition (inputs_of w prompt steps) (outputs_of tokens hidden).
+   - `native_implies`: native_postcondition implies KPlay.Spec.postcondition
+     (the generic spec at N.bf16 N.f32); each kernel rule is an instance of
+     the library rule.
+   - `program_to_typed`: the two combined.
 
    Proof outline: `weights_ok tw w` says the typed real weights tw agree with
    the flat real weights w at the packed offsets. Under it, each flat
    reference operation equals its typed equation pointwise, and by induction
    over layers and positions `T.hidden_at` equals `SS.ref_hidden` and
-   `T.logits` equals `SS.ref_logits`. For ==> (`program_to_typed`) a typed
+   `T.logits` equals `SS.ref_logits`. For ==> (`program_to_native`) a typed
    real weight record tw is packed into a flat sequence (`flat_of`, built
-   from the layout reader `flat_read`); for <== (`typed_to_program`) a flat
+   from the layout reader `flat_read`); for <== (`native_to_program`) a flat
    real sequence rw is read through `weights_view`. The premises
    `S.length w == SS.weights_len` (used by ==>) and
    `S.length hidden == S.length tokens * 1024` (used by <==) fix the buffer
@@ -35,8 +44,111 @@ module Exp = FStar.Math.Exp
 module ML = FStar.Math.Lemmas
 module SS = KPlay.SharedSpec
 module T = KPlay.Spec
+module N = KPlay.Numbers
 
-#set-options "--z3rlimit 20 --fuel 1 --ifuel 1"
+#set-options "--z3rlimit 60 --fuel 1 --ifuel 1"
+
+(*** Native rules
+
+   The kernels' native guarantee, as KPlay.SharedSpec states it: %~ at BF16
+   and F32, the constants exact or as the kernels spell them (f32 literals,
+   or the exp2/log2 form of the RoPE frequencies), and argmax as the first
+   allowed choice over BF16 scores, an allowed choice over F32 scores.
+   `program_postcondition_iff` shows the flat postcondition is exactly
+   `native_postcondition`; `native_implies` shows it implies T.postcondition
+   (the spec at N.bf16 N.f32). *)
+
+let numerics_ok (nm:T.numerics) : prop =
+  (nm.T.rms_norm_eps == T.eps_exact \/ nm.T.rms_norm_eps == T.eps_f32) /\
+  (nm.T.linear_query_scale == T.query_scale_exact \/ nm.T.linear_query_scale == T.query_scale_f32) /\
+  ((forall (i:T.index T.rotary_pairs). nm.T.inv_freq i == T.inv_freq_exact i) \/
+   (forall (i:T.index T.rotary_pairs). nm.T.inv_freq i == T.inv_freq_f32 i))
+
+let vector_approximates (#a:Type0) {| Kuiper.Scalars.scalar a, real_like a |} (#n:nat)
+    (x:T.vector a n) (r:T.vector real n) : prop =
+  forall (i:T.index n). x i %~ r i
+
+let matrix_approximates (#a:Type0) {| Kuiper.Scalars.scalar a, real_like a |} (#rows #cols:nat)
+    (x:T.matrix a rows cols) (r:T.matrix real rows cols) : prop =
+  forall (i:T.index rows) (j:T.index cols). x i j %~ r i j
+
+let mlp_approximates (x:T.mlp_params BF.t) (r:T.mlp_params real) : prop =
+  matrix_approximates x.T.gate_proj r.T.gate_proj /\
+  matrix_approximates x.T.up_proj r.T.up_proj /\
+  matrix_approximates x.T.down_proj r.T.down_proj
+
+let linear_attn_approximates (x:T.linear_attn_params BF.t) (r:T.linear_attn_params real) : prop =
+  matrix_approximates x.T.in_proj_qkv r.T.in_proj_qkv /\
+  matrix_approximates x.T.in_proj_z r.T.in_proj_z /\
+  matrix_approximates x.T.in_proj_b r.T.in_proj_b /\
+  matrix_approximates x.T.in_proj_a r.T.in_proj_a /\
+  matrix_approximates x.T.conv1d r.T.conv1d /\
+  vector_approximates x.T.a_log r.T.a_log /\
+  vector_approximates x.T.dt_bias r.T.dt_bias /\
+  vector_approximates x.T.norm r.T.norm /\
+  matrix_approximates x.T.out_proj r.T.out_proj
+
+let self_attn_approximates (x:T.self_attn_params BF.t) (r:T.self_attn_params real) : prop =
+  matrix_approximates x.T.q_proj r.T.q_proj /\
+  matrix_approximates x.T.k_proj r.T.k_proj /\
+  matrix_approximates x.T.v_proj r.T.v_proj /\
+  vector_approximates x.T.q_norm r.T.q_norm /\
+  vector_approximates x.T.k_norm r.T.k_norm /\
+  matrix_approximates x.T.o_proj r.T.o_proj
+
+let layer_approximates (#m:Type0 -> Type0) (mixer_approximates:m BF.t -> m real -> prop)
+    (x:T.decoder_layer m BF.t) (r:T.decoder_layer m real) : prop =
+  vector_approximates x.T.input_layernorm r.T.input_layernorm /\
+  vector_approximates x.T.post_attention_layernorm r.T.post_attention_layernorm /\
+  mlp_approximates x.T.mlp r.T.mlp /\
+  mixer_approximates x.T.token_mixer r.T.token_mixer
+
+let weights_approximates (x:T.model_weights BF.t) (r:T.model_weights real) : prop =
+  matrix_approximates x.T.embed_tokens r.T.embed_tokens /\
+  vector_approximates x.T.final_norm r.T.final_norm /\
+  (forall (d:T.index T.linear_layer_count).
+     layer_approximates linear_attn_approximates (x.T.linear_layers d) (r.T.linear_layers d)) /\
+  (forall (g:T.index T.full_layer_count).
+     layer_approximates self_attn_approximates (x.T.full_layers g) (r.T.full_layers g))
+
+let is_nan (#t:Type) {| F.floating t |} (x:t) : prop = NaN? (F.kind x)
+
+(* if the row has a NaN the chosen element is NaN, otherwise no element is
+   strictly greater *)
+let allowed_choice (#t:Type) {| F.floating t |} (#n:nat) (row:T.vector t n) (sel:int) : prop =
+  0 <= sel /\ sel < n /\
+  ((exists (k:T.index n). is_nan (row k)) ==> is_nan (row sel)) /\
+  ((forall (k:T.index n). ~(is_nan (row k))) ==> (forall (k:T.index n). ~(lt (row sel) (row k))))
+
+let first_allowed_choice (#t:Type) {| F.floating t |} (#n:nat) (row:T.vector t n) (sel:int) : prop =
+  allowed_choice row sel /\ (forall (k:nat). k < sel ==> ~(allowed_choice row k))
+
+let hidden_state_relation (nm:T.numerics) (w:T.model_weights real) (toks:nat -> GTot int) (p:nat)
+                          (h:T.vector BF.t T.hidden_size) : prop =
+  vector_approximates h (T.hidden_at nm w toks p)
+
+let greedy_choice_relation (nm:T.numerics) (w:T.model_weights real) (h:T.vector real T.hidden_size)
+                           (sel:int) : prop =
+  (exists (row:T.vector BF.t T.vocab_size).
+     vector_approximates row (T.logits nm w h) /\ first_allowed_choice row sel) \/
+  (exists (row:T.vector F32.t T.vocab_size).
+     vector_approximates row (T.logits nm w h) /\ allowed_choice row sel)
+
+let numerical (nm:T.numerics) (x:T.inputs) (y:T.outputs) (w:T.model_weights real) : prop =
+  forall (j:T.index y.T.generated_count).
+    hidden_state_relation nm w (T.consumed x y) (T.last_prompt_position x + j) (y.T.hidden_states j)
+
+let selection (nm:T.numerics) (x:T.inputs) (y:T.outputs) (w:T.model_weights real) : prop =
+  forall (j:T.index y.T.generated_count).
+    greedy_choice_relation nm w (T.hidden_at nm w (T.consumed x y) (T.last_prompt_position x + j)) (y.T.tokens j)
+
+let native_postcondition (input:T.inputs) (output:T.outputs) : prop =
+  T.input_domain input ==>
+  (T.structural input output /\
+   (exists (nm:T.numerics). numerics_ok nm /\
+     (forall (w:T.model_weights real). weights_approximates input.T.weights w ==>
+        numerical nm input output w /\ selection nm input output w)))
+
 
 (*** Index arithmetic *)
 
@@ -167,6 +279,7 @@ let conv_out_eq (window:T.conv_state) (weight:T.matrix real T.conv_dim T.conv_ke
     with sum_vsum T.conv_kernel_size (fun k -> window c k *. weight c k)
            (fun k -> SS.at (SS.dn_conv nm w wo x cv) (c * 4 + k) *. SS.at w (SS.dn_mix wo + 8421376 + c * 4 + k))
 
+#push-options "--z3rlimit 100"
 let dn_qkv_eq (tn:T.numerics) (nm:SS.numerics) (p:T.linear_attn_params real) (xn:T.vector real T.hidden_size)
               (conv:T.conv_state) (w:S.seq real) (wo:int) (x cv:S.seq real)
   : Lemma (requires nm_ok tn nm /\ vec_ok (T.linear_attn_conv_out p xn conv) (SS.dn_conv_out nm w wo x cv) 0)
@@ -183,6 +296,7 @@ let dn_qkv_eq (tn:T.numerics) (nm:SS.numerics) (p:T.linear_attn_params real) (xn
       sq_sum_eq #T.linear_head_dim (fun e -> T.linear_attn_conv_out p xn conv (2048 + h * 128 + e)) co (2048 + h * 128);
       divmod h d 128
     end
+#pop-options
 
 let delta_eq (state:T.recurrent_state) (k v:T.matrix real T.linear_num_heads T.linear_head_dim)
              (decay beta:T.vector real T.linear_num_heads)
@@ -267,7 +381,7 @@ let dn_mixer_eq (tn:T.numerics) (nm:SS.numerics) (p:T.linear_attn_params real) (
     introduce forall (c:T.index T.linear_key_dim).
       flat_gated c == SS.at (SS.dn_gated nm w wo x cv rs) (0 + c)
     with gated_eq tn.T.rms_norm_eps p.T.norm core z nm w wo x cv rs (c / 128) (c % 128) c;
-    linear_eq p.T.out_proj (fun (c:T.index T.linear_key_dim) ->
+    linear_eq p.T.out_proj (fun (c:nat{c < T.linear_key_dim}) ->
         T.gated_head_norm tn.T.rms_norm_eps p.T.norm (T.linear_attn_core tn p xn conv state)
           (T.linear p.T.in_proj_z xn) (c / 128) (c % 128))
       w (SS.dn_mix wo + 8446112) (SS.dn_gated nm w wo x cv rs)
@@ -296,7 +410,7 @@ let attn_qkv_eq (tn:T.numerics) (nm:SS.numerics) (p:T.self_attn_params real) (xn
     introduce forall (h:T.index T.num_attention_heads) (i:T.index T.head_dim).
       T.attn_query tn p xn cos sin h i == SS.at (SS.at_q nm w wo x cs sn) (0 + h * 256 + i)
     with begin
-      let u = (fun (e:T.index T.head_dim) -> T.linear p.T.q_proj xn (h * 512 + e)) in
+      let u = (fun (e:nat{e < T.head_dim}) -> T.linear p.T.q_proj xn (h * 512 + e)) in
       head_norm_eq tn.T.rms_norm_eps u p.T.q_norm raw w (h * 512) (SS.at_mix wo + 5242880);
       rope_eq (T.rms_norm tn.T.rms_norm_eps u p.T.q_norm) cos sin
         (SS.head_norm nm.SS.eps raw (h * 512) w (SS.at_mix wo + 5242880)) cs sn;
@@ -305,7 +419,7 @@ let attn_qkv_eq (tn:T.numerics) (nm:SS.numerics) (p:T.self_attn_params real) (xn
     introduce forall (h:T.index T.num_key_value_heads) (i:T.index T.head_dim).
       T.attn_key tn p xn cos sin h i == SS.at (SS.at_k nm w wo x cs sn) (0 + h * 256 + i)
     with begin
-      let u = (fun (e:T.index T.head_dim) -> T.linear p.T.k_proj xn (h * 256 + e)) in
+      let u = (fun (e:nat{e < T.head_dim}) -> T.linear p.T.k_proj xn (h * 256 + e)) in
       head_norm_eq tn.T.rms_norm_eps u p.T.k_norm kraw w (h * 256) (SS.at_mix wo + 5243136);
       rope_eq (T.rms_norm tn.T.rms_norm_eps u p.T.k_norm) cos sin
         (SS.head_norm nm.SS.eps kraw (h * 256) w (SS.at_mix wo + 5243136)) cs sn;
@@ -395,7 +509,7 @@ let self_attention_eq (tn:T.numerics) (nm:SS.numerics) (p:T.self_attn_params rea
         heads (c / 256) (c % 256) *. T.sigmoid (T.attn_gate p xn (c / 256) (c % 256)) ==
         SS.at (SS.at_gated nm w wo x cs sn t hk hv) (0 + c)
     with heads_eq t q keys values nm w wo x cs sn hk hv (c / 256) (c % 256) c;
-    linear_eq p.T.o_proj (fun (c:T.index T.attn_out_dim) ->
+    linear_eq p.T.o_proj (fun (c:nat{c < T.attn_out_dim}) ->
         T.attention_heads t (T.attn_query tn p xn cos sin) keys values (c / 256) (c % 256) *.
         T.sigmoid (T.attn_gate p xn (c / 256) (c % 256)))
       w (SS.at_mix wo + 5243392) (SS.at_gated nm w wo x cs sn t hk hv)
@@ -887,17 +1001,17 @@ let flat_read_view (#a:Type0) (z:a) (e:int -> GTot a) (o:int)
 let zero_bf () : Lemma ((zero #BF.t) %~ 0.0R) = a0 #BF.t
 
 let vec_rd_approx (#n:nat) (x:T.vector BF.t n) (r:T.vector real n) (k:int)
-  : Lemma (requires T.vector_approximates x r) (ensures vec_rd zero x k %~ vec_rd 0.0R r k)
+  : Lemma (requires vector_approximates x r) (ensures vec_rd zero x k %~ vec_rd 0.0R r k)
   = zero_bf ()
 
 let mat_rd_approx (#rows #cols:nat) (x:T.matrix BF.t rows cols) (r:T.matrix real rows cols) (k:int)
-  : Lemma (requires T.matrix_approximates x r) (ensures mat_rd zero x k %~ mat_rd 0.0R r k)
+  : Lemma (requires matrix_approximates x r) (ensures mat_rd zero x k %~ mat_rd 0.0R r k)
   = zero_bf ()
 
 let common_rd_approx (#m:Type0 -> Type0) (x:T.decoder_layer m BF.t) (r:T.decoder_layer m real) (k:int)
-  : Lemma (requires T.vector_approximates x.T.input_layernorm r.T.input_layernorm /\
-                    T.vector_approximates x.T.post_attention_layernorm r.T.post_attention_layernorm /\
-                    T.mlp_approximates x.T.mlp r.T.mlp)
+  : Lemma (requires vector_approximates x.T.input_layernorm r.T.input_layernorm /\
+                    vector_approximates x.T.post_attention_layernorm r.T.post_attention_layernorm /\
+                    mlp_approximates x.T.mlp r.T.mlp)
           (ensures common_rd zero x k %~ common_rd 0.0R r k)
   = vec_rd_approx x.T.input_layernorm r.T.input_layernorm k;
     vec_rd_approx x.T.post_attention_layernorm r.T.post_attention_layernorm (k - 1024);
@@ -906,7 +1020,7 @@ let common_rd_approx (#m:Type0 -> Type0) (x:T.decoder_layer m BF.t) (r:T.decoder
     mat_rd_approx x.T.mlp.T.down_proj r.T.mlp.T.down_proj (k - 7342080)
 
 let linear_attn_rd_approx (x:T.linear_attn_params BF.t) (r:T.linear_attn_params real) (k:int)
-  : Lemma (requires T.linear_attn_approximates x r)
+  : Lemma (requires linear_attn_approximates x r)
           (ensures linear_attn_rd zero x k %~ linear_attn_rd 0.0R r k)
   = mat_rd_approx x.T.in_proj_qkv r.T.in_proj_qkv k;
     mat_rd_approx x.T.in_proj_z r.T.in_proj_z (k - 6291456);
@@ -919,7 +1033,7 @@ let linear_attn_rd_approx (x:T.linear_attn_params BF.t) (r:T.linear_attn_params 
     mat_rd_approx x.T.out_proj r.T.out_proj (k - 8446112)
 
 let self_attn_rd_approx (x:T.self_attn_params BF.t) (r:T.self_attn_params real) (k:int)
-  : Lemma (requires T.self_attn_approximates x r)
+  : Lemma (requires self_attn_approximates x r)
           (ensures self_attn_rd zero x k %~ self_attn_rd 0.0R r k)
   = mat_rd_approx x.T.q_proj r.T.q_proj k;
     mat_rd_approx x.T.k_proj r.T.k_proj (k - 4194304);
@@ -929,7 +1043,7 @@ let self_attn_rd_approx (x:T.self_attn_params BF.t) (r:T.self_attn_params real) 
     mat_rd_approx x.T.o_proj r.T.o_proj (k - 5243392)
 
 let flat_read_approx (x:T.model_weights BF.t) (r:T.model_weights real) (o:int)
-  : Lemma (requires T.weights_approximates x r) (ensures flat_read zero x o %~ flat_read 0.0R r o)
+  : Lemma (requires weights_approximates x r) (ensures flat_read zero x o %~ flat_read 0.0R r o)
   = zero_bf ();
     mat_rd_approx x.T.embed_tokens r.T.embed_tokens o;
     vec_rd_approx x.T.final_norm r.T.final_norm (o - SS.final_norm_off);
@@ -1113,14 +1227,22 @@ let nm_of (tn:T.numerics) : GTot SS.numerics = {
 
 let literal_eq (i:nat) : Lemma (SS.base_freq_literal i == T.inv_freq_f32_literal i) = ()
 
+let freq_exact_at (s:S.seq real) (i:T.index T.rotary_pairs)
+  : Lemma (requires s == SS.inv_freq_exp2) (ensures SS.at s i == T.inv_freq_exact i) = ()
+
 let freq_f32_at (s:S.seq real) (i:T.index T.rotary_pairs)
   : Lemma (requires s == SS.inv_freq_f32) (ensures SS.at s i == T.inv_freq_f32 i) = literal_eq i
 
 let tn_of_ok (nm:SS.numerics)
-  : Lemma (requires SS.numerics_ok nm) (ensures nm_ok T.model_numerics nm)
+  : Lemma (requires SS.numerics_ok nm) (ensures numerics_ok (tn_of nm) /\ nm_ok (tn_of nm) nm)
   = let s = nm.SS.inv_freq in
-    introduce forall (i:T.index T.rotary_pairs). SS.at s i == T.inv_freq_f32 i
-    with freq_f32_at s i
+    introduce forall (i:T.index T.rotary_pairs).
+      (s == SS.inv_freq_exp2 ==> SS.at s i == T.inv_freq_exact i) /\
+      (s == SS.inv_freq_f32 ==> SS.at s i == T.inv_freq_f32 i)
+    with begin
+      FStar.Classical.move_requires (freq_exact_at s) i;
+      FStar.Classical.move_requires (freq_f32_at s) i
+    end
 
 let seq_of_freq (f:T.vector real T.rotary_pairs) (g:T.vector real T.rotary_pairs) (s:S.seq real)
   : Lemma (requires S.length s == 32 /\ (forall (i:T.index T.rotary_pairs). f i == g i) /\
@@ -1128,12 +1250,19 @@ let seq_of_freq (f:T.vector real T.rotary_pairs) (g:T.vector real T.rotary_pairs
           (ensures S.init_ghost 32 f == s)
   = S.lemma_eq_intro (S.init_ghost 32 f) s
 
-let nm_of_ok (_:unit)
-  : Lemma (ensures SS.numerics_ok (nm_of T.model_numerics) /\ nm_ok T.model_numerics (nm_of T.model_numerics))
-  = let f = T.model_numerics.T.inv_freq in
-    introduce forall (i:T.index T.rotary_pairs). S.index SS.inv_freq_f32 i == T.inv_freq_f32 i
-    with literal_eq i;
-    seq_of_freq f T.inv_freq_f32 SS.inv_freq_f32
+let nm_of_ok (tn:T.numerics)
+  : Lemma (requires numerics_ok tn) (ensures SS.numerics_ok (nm_of tn) /\ nm_ok tn (nm_of tn))
+  = let f = tn.T.inv_freq in
+    introduce (forall (i:T.index T.rotary_pairs). f i == T.inv_freq_exact i) ==>
+              S.init_ghost 32 f == SS.inv_freq_exp2
+    with seq_of_freq f T.inv_freq_exact SS.inv_freq_exp2;
+    introduce (forall (i:T.index T.rotary_pairs). f i == T.inv_freq_f32 i) ==>
+              S.init_ghost 32 f == SS.inv_freq_f32
+    with begin
+      introduce forall (i:T.index T.rotary_pairs). S.index SS.inv_freq_f32 i == T.inv_freq_f32 i
+      with literal_eq i;
+      seq_of_freq f T.inv_freq_f32 SS.inv_freq_f32
+    end
 
 (** lengths of the flat reference values *)
 
@@ -1159,7 +1288,7 @@ let seq_vec (#t:Type0) (n:nat) (row:S.seq t{S.length row == n}) : T.vector t n =
   fun k -> S.index row k
 
 let allowed_init_iff (#t:Type0) {| F.floating t |} (n:nat) (v:T.vector t n) (sel:int)
-  : Lemma (SS.allowed_choice (S.init_ghost n v) sel <==> T.allowed_choice v sel)
+  : Lemma (SS.allowed_choice (S.init_ghost n v) sel <==> allowed_choice v sel)
   = ()
 
 let seq_vec_init (#t:Type0) (n:nat) (row:S.seq t{S.length row == n})
@@ -1167,32 +1296,52 @@ let seq_vec_init (#t:Type0) (n:nat) (row:S.seq t{S.length row == n})
   = S.lemma_eq_intro (S.init_ghost n (seq_vec n row)) row
 
 let allowed_iff (#t:Type0) {| F.floating t |} (n:nat) (row:S.seq t{S.length row == n}) (sel:int)
-  : Lemma (SS.allowed_choice row sel <==> T.allowed_choice (seq_vec n row) sel)
+  : Lemma (SS.allowed_choice row sel <==> allowed_choice (seq_vec n row) sel)
   = seq_vec_init n row; allowed_init_iff n (seq_vec n row) sel
+
+let first_init_iff (#t:Type0) {| F.floating t |} (n:nat) (v:T.vector t n) (sel:int)
+  : Lemma (SS.first_allowed_choice (S.init_ghost n v) sel <==> first_allowed_choice v sel)
+  = FStar.Classical.forall_intro (allowed_init_iff n v)
+
+let first_iff (#t:Type0) {| F.floating t |} (n:nat) (row:S.seq t{S.length row == n}) (sel:int)
+  : Lemma (SS.first_allowed_choice row sel <==> first_allowed_choice (seq_vec n row) sel)
+  = seq_vec_init n row; first_init_iff n (seq_vec n row) sel
 
 let choice_fwd (#t:Type0) {| Kuiper.Scalars.scalar t, real_like t, F.floating t |}
     (lr:T.vector real T.vocab_size) (ls:S.seq real) (sel:int) (row:S.seq t)
   : Lemma (requires S.length ls == 248320 /\ vec_ok lr ls 0 /\ row %~ ls /\ SS.allowed_choice row sel)
-          (ensures exists (v:T.vector t T.vocab_size). T.vector_approximates v lr /\ T.allowed_choice v sel)
+          (ensures exists (v:T.vector t T.vocab_size). vector_approximates v lr /\ allowed_choice v sel)
   = allowed_iff 248320 row sel;
-    assert (T.vector_approximates (seq_vec 248320 row) lr)
+    assert (vector_approximates (seq_vec 248320 row) lr)
 
 let choice_bwd (#t:Type0) {| Kuiper.Scalars.scalar t, real_like t, F.floating t |}
     (lr:T.vector real T.vocab_size) (ls:S.seq real) (sel:int) (v:T.vector t T.vocab_size)
-  : Lemma (requires S.length ls == 248320 /\ vec_ok lr ls 0 /\ T.vector_approximates v lr /\ T.allowed_choice v sel)
+  : Lemma (requires S.length ls == 248320 /\ vec_ok lr ls 0 /\ vector_approximates v lr /\ allowed_choice v sel)
           (ensures exists (row:S.seq t). row %~ ls /\ SS.allowed_choice row sel)
   = allowed_init_iff 248320 v sel;
+    assert (S.init_ghost 248320 v %~ ls)
+
+let first_fwd (lr:T.vector real T.vocab_size) (ls:S.seq real) (sel:int) (row:S.seq BF.t)
+  : Lemma (requires S.length ls == 248320 /\ vec_ok lr ls 0 /\ row %~ ls /\ SS.first_allowed_choice row sel)
+          (ensures exists (v:T.vector BF.t T.vocab_size). vector_approximates v lr /\ first_allowed_choice v sel)
+  = first_iff 248320 row sel;
+    assert (vector_approximates (seq_vec 248320 row) lr)
+
+let first_bwd (lr:T.vector real T.vocab_size) (ls:S.seq real) (sel:int) (v:T.vector BF.t T.vocab_size)
+  : Lemma (requires S.length ls == 248320 /\ vec_ok lr ls 0 /\ vector_approximates v lr /\ first_allowed_choice v sel)
+          (ensures exists (row:S.seq BF.t). row %~ ls /\ SS.first_allowed_choice row sel)
+  = first_init_iff 248320 v sel;
     assert (S.init_ghost 248320 v %~ ls)
 
 let selection_iff (tn:T.numerics) (nm:SS.numerics) (tw:T.model_weights real) (rw:S.seq real)
                   (h:T.vector real T.hidden_size) (hs:S.seq real) (sel:int)
   : Lemma (requires vec_ok (T.logits tn tw h) (SS.ref_logits nm rw hs) 0)
-          (ensures SS.selected_ok nm rw hs sel <==> T.greedy_choice_relation tn tw h sel)
+          (ensures SS.selected_ok nm rw hs sel <==> greedy_choice_relation tn tw h sel)
   = let lr = T.logits tn tw h in
     let ls = SS.ref_logits nm rw hs in
-    FStar.Classical.forall_intro (FStar.Classical.move_requires (choice_fwd #BF.t lr ls sel));
+    FStar.Classical.forall_intro (FStar.Classical.move_requires (first_fwd lr ls sel));
     FStar.Classical.forall_intro (FStar.Classical.move_requires (choice_fwd #F32.t lr ls sel));
-    FStar.Classical.forall_intro (FStar.Classical.move_requires (choice_bwd #BF.t lr ls sel));
+    FStar.Classical.forall_intro (FStar.Classical.move_requires (first_bwd lr ls sel));
     FStar.Classical.forall_intro (FStar.Classical.move_requires (choice_bwd #F32.t lr ls sel))
 
 let hidden_row_iff (tokens:S.seq I64.t) (hidden:S.seq BF.t) (j:nat) (hr:T.vector real T.hidden_size)
@@ -1200,24 +1349,24 @@ let hidden_row_iff (tokens:S.seq I64.t) (hidden:S.seq BF.t) (j:nat) (hr:T.vector
   : Lemma (requires j < S.length tokens /\ S.length hidden == S.length tokens * 1024 /\
                     S.length hs == 1024 /\ vec_ok hr hs 0)
           (ensures SS.bf_row hidden j %~ hs <==>
-                   T.vector_approximates ((outputs_of tokens hidden).T.hidden_states j) hr)
+                   vector_approximates ((outputs_of tokens hidden).T.hidden_states j) hr)
   = let row = SS.bf_row hidden j in
     let v = (outputs_of tokens hidden).T.hidden_states j in
     assert (row == S.slice hidden (j * 1024) (j * 1024 + 1024));
     assert (S.length row == 1024);
     let at (i:T.index T.hidden_size) : Lemma (S.index row i == v i /\ S.index hs i == hr i) = () in
     FStar.Classical.forall_intro at;
-    introduce row %~ hs ==> T.vector_approximates v hr
+    introduce row %~ hs ==> vector_approximates v hr
     with introduce forall (i:T.index T.hidden_size). v i %~ hr i
          with assert ((row @! i) %~ (hs @! i));
-    introduce T.vector_approximates v hr ==> row %~ hs
+    introduce vector_approximates v hr ==> row %~ hs
     with introduce forall (i:nat). i < len row ==> (row @! i) %~ (hs @! i)
          with introduce _ ==> _ with assert (v i %~ hr i)
 
 (** weights in both directions *)
 
 let weights_fwd (w:S.seq BF.t) (tw:T.model_weights real)
-  : Lemma (requires S.length w == SS.weights_len /\ T.weights_approximates (weights_view (elem zero w)) tw)
+  : Lemma (requires S.length w == SS.weights_len /\ weights_approximates (weights_view (elem zero w)) tw)
           (ensures w %~ flat_of tw /\ weights_ok tw (flat_of tw))
   = flat_of_ok tw;
     let fw = flat_of tw in
@@ -1230,23 +1379,23 @@ let weights_fwd (w:S.seq BF.t) (tw:T.model_weights real)
 
 let linear_view_approx (e1:int -> GTot BF.t) (e2:int -> GTot real) (wo:int)
   : Lemma (requires forall (o:int). e1 o %~ e2 o)
-          (ensures T.layer_approximates T.linear_attn_approximates (linear_layer_view e1 wo) (linear_layer_view e2 wo))
+          (ensures layer_approximates linear_attn_approximates (linear_layer_view e1 wo) (linear_layer_view e2 wo))
   = ()
 
 let full_view_approx (e1:int -> GTot BF.t) (e2:int -> GTot real) (wo:int)
   : Lemma (requires forall (o:int). e1 o %~ e2 o)
-          (ensures T.layer_approximates T.self_attn_approximates (full_layer_view e1 wo) (full_layer_view e2 wo))
+          (ensures layer_approximates self_attn_approximates (full_layer_view e1 wo) (full_layer_view e2 wo))
   = ()
 
 let view_approx (e1:int -> GTot BF.t) (e2:int -> GTot real)
   : Lemma (requires forall (o:int). e1 o %~ e2 o)
-          (ensures T.weights_approximates (weights_view e1) (weights_view e2))
+          (ensures weights_approximates (weights_view e1) (weights_view e2))
   = introduce forall (d:T.index T.linear_layer_count).
-      T.layer_approximates T.linear_attn_approximates ((weights_view e1).T.linear_layers d)
+      layer_approximates linear_attn_approximates ((weights_view e1).T.linear_layers d)
         ((weights_view e2).T.linear_layers d)
     with linear_view_approx e1 e2 (SS.layer_off (4 * (d / 3) + d % 3));
     introduce forall (g:T.index T.full_layer_count).
-      T.layer_approximates T.self_attn_approximates ((weights_view e1).T.full_layers g)
+      layer_approximates self_attn_approximates ((weights_view e1).T.full_layers g)
         ((weights_view e2).T.full_layers g)
     with full_view_approx e1 e2 (SS.layer_off (4 * g + 3))
 
@@ -1266,7 +1415,7 @@ let view_ok (rw:S.seq real) : Lemma (weights_ok (weights_view (SS.at rw)) rw)
 
 let weights_bwd (w:S.seq BF.t) (rw:S.seq real)
   : Lemma (requires w %~ rw)
-          (ensures T.weights_approximates (weights_view (elem zero w)) (weights_view (SS.at rw)) /\
+          (ensures weights_approximates (weights_view (elem zero w)) (weights_view (SS.at rw)) /\
                    weights_ok (weights_view (SS.at rw)) rw)
   = zero_bf ();
     introduce forall (o:int). elem zero w o %~ SS.at rw o
@@ -1291,10 +1440,10 @@ let position_iff (tn:T.numerics) (nm:SS.numerics) (tw:T.model_weights real) (rw:
                     let hs = SS.ref_hidden nm rw (SS.prog_tok prompt tokens) p in
                     let h = T.hidden_at tn tw (T.consumed x y) (T.last_prompt_position x + j) in
                     (SS.bf_row hidden j %~ hs <==>
-                       T.hidden_state_relation tn tw (T.consumed x y) (T.last_prompt_position x + j)
+                       hidden_state_relation tn tw (T.consumed x y) (T.last_prompt_position x + j)
                          (y.T.hidden_states j)) /\
                     (SS.selected_ok nm rw hs (SS.tok_at tokens j) <==>
-                       T.greedy_choice_relation tn tw h (y.T.tokens j))))
+                       greedy_choice_relation tn tw h (y.T.tokens j))))
   = let x = inputs_of w prompt steps in
     let y = outputs_of tokens hidden in
     let p = S.length prompt - 1 + j in
@@ -1322,42 +1471,43 @@ let fwd_with (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t
                                      (SS.tok_at tokens j))))
           (ensures (let x = inputs_of w prompt steps in
                     let y = outputs_of tokens hidden in
-                    forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
-                      T.numerical T.model_numerics x y tw /\ T.selection T.model_numerics x y tw))
+                    exists (tn:T.numerics). numerics_ok tn /\
+                      (forall (tw:T.model_weights real). weights_approximates x.T.weights tw ==>
+                         numerical tn x y tw /\ selection tn x y tw)))
   = let x = inputs_of w prompt steps in
     let y = outputs_of tokens hidden in
-    let tn = T.model_numerics in
+    let tn = tn_of nm in
     tn_of_ok nm;
-    introduce forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
-                T.numerical tn x y tw /\ T.selection tn x y tw
+    introduce forall (tw:T.model_weights real). weights_approximates x.T.weights tw ==>
+                numerical tn x y tw /\ selection tn x y tw
     with introduce _ ==> _
     with begin
       weights_fwd w tw;
       let rw = flat_of tw in
       introduce forall (j:T.index y.T.generated_count).
-        T.hidden_state_relation tn tw (T.consumed x y) (T.last_prompt_position x + j) (y.T.hidden_states j) /\
-        T.greedy_choice_relation tn tw (T.hidden_at tn tw (T.consumed x y) (T.last_prompt_position x + j))
+        hidden_state_relation tn tw (T.consumed x y) (T.last_prompt_position x + j) (y.T.hidden_states j) /\
+        greedy_choice_relation tn tw (T.hidden_at tn tw (T.consumed x y) (T.last_prompt_position x + j))
           (y.T.tokens j)
       with position_iff tn nm tw rw w prompt steps tokens hidden j
     end
 
 let bwd_with (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t) (hidden:S.seq BF.t)
+             (tn:T.numerics)
   : Lemma (requires 1 <= S.length prompt /\ SS.valid_tokens prompt /\
                     S.length tokens == steps /\ S.length hidden == steps * 1024 /\ SS.valid_tokens tokens /\
-                    (let tn = T.model_numerics in
-                     let x = inputs_of w prompt steps in
+                    numerics_ok tn /\
+                    (let x = inputs_of w prompt steps in
                      let y = outputs_of tokens hidden in
-                     forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
-                       T.numerical tn x y tw /\ T.selection tn x y tw))
+                     forall (tw:T.model_weights real). weights_approximates x.T.weights tw ==>
+                       numerical tn x y tw /\ selection tn x y tw))
           (ensures exists (nm:SS.numerics). SS.numerics_ok nm /\
                      (forall (rw:S.seq real). w %~ rw ==>
                        (forall (j:nat). j < steps ==>
                           SS.bf_row hidden j %~ SS.ref_hidden nm rw (SS.prog_tok prompt tokens) (S.length prompt - 1 + j) /\
                           SS.selected_ok nm rw (SS.ref_hidden nm rw (SS.prog_tok prompt tokens) (S.length prompt - 1 + j))
                                       (SS.tok_at tokens j))))
-  = let tn = T.model_numerics in
-    let nm = nm_of tn in
-    nm_of_ok ();
+  = let nm = nm_of tn in
+    nm_of_ok tn;
     introduce forall (rw:S.seq real). w %~ rw ==>
       (forall (j:nat). j < steps ==>
          SS.bf_row hidden j %~ SS.ref_hidden nm rw (SS.prog_tok prompt tokens) (S.length prompt - 1 + j) /\
@@ -1377,24 +1527,25 @@ let bwd_with (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t
 
 (*** Main theorems *)
 
-let program_to_typed (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t) (hidden:S.seq BF.t)
+let program_to_native (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t) (hidden:S.seq BF.t)
   : Lemma (requires S.length w == SS.weights_len /\ SS.program_postcondition w prompt steps tokens hidden)
-          (ensures T.postcondition (inputs_of w prompt steps) (outputs_of tokens hidden))
+          (ensures native_postcondition (inputs_of w prompt steps) (outputs_of tokens hidden))
   = let x = inputs_of w prompt steps in
     let y = outputs_of tokens hidden in
     introduce T.input_domain x ==>
       (T.structural x y /\
-       (forall (tw:T.model_weights real). T.weights_approximates x.T.weights tw ==>
-          T.numerical T.model_numerics x y tw /\ T.selection T.model_numerics x y tw))
+       (exists (tn:T.numerics). numerics_ok tn /\
+         (forall (tw:T.model_weights real). weights_approximates x.T.weights tw ==>
+            numerical tn x y tw /\ selection tn x y tw)))
     with begin
       assert (forall (i:nat). i < S.length prompt ==> T.valid_token (x.T.prompt i));
       assert (SS.program_premise w prompt steps);
       FStar.Classical.forall_intro (FStar.Classical.move_requires (fwd_with w prompt steps tokens hidden))
     end
 
-let typed_to_program (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t) (hidden:S.seq BF.t)
+let native_to_program (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t) (hidden:S.seq BF.t)
   : Lemma (requires S.length hidden == S.length tokens * 1024 /\
-                    T.postcondition (inputs_of w prompt steps) (outputs_of tokens hidden))
+                    native_postcondition (inputs_of w prompt steps) (outputs_of tokens hidden))
           (ensures SS.program_postcondition w prompt steps tokens hidden)
   = let x = inputs_of w prompt steps in
     let y = outputs_of tokens hidden in
@@ -1411,13 +1562,105 @@ let typed_to_program (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.s
       assert (T.structural x y);
       introduce forall (i:nat). i < S.length tokens ==> SS.valid_token (I64.v (S.index tokens i))
       with introduce _ ==> _ with assert (T.valid_token (y.T.tokens i));
-      bwd_with w prompt steps tokens hidden
+      FStar.Classical.forall_intro (FStar.Classical.move_requires (bwd_with w prompt steps tokens hidden))
     end
 
 let program_postcondition_iff (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int)
                               (tokens:S.seq I64.t) (hidden:S.seq BF.t)
   : Lemma (requires S.length w == SS.weights_len /\ S.length hidden == S.length tokens * 1024)
           (ensures SS.program_postcondition w prompt steps tokens hidden <==>
-                   T.postcondition (inputs_of w prompt steps) (outputs_of tokens hidden))
-  = FStar.Classical.move_requires (program_to_typed w prompt steps tokens) hidden;
-    FStar.Classical.move_requires (typed_to_program w prompt steps tokens) hidden
+                   native_postcondition (inputs_of w prompt steps) (outputs_of tokens hidden))
+  = FStar.Classical.move_requires (program_to_native w prompt steps tokens) hidden;
+    FStar.Classical.move_requires (native_to_program w prompt steps tokens) hidden
+
+(*** Native implies the spec at N.bf16 N.f32 *)
+
+(* The exp2/log2 form of the RoPE frequencies is the exact form. *)
+let numerics_implies (nm:T.numerics)
+  : Lemma (requires numerics_ok nm) (ensures T.numerics_ok N.bf16 nm)
+  = ()
+
+let first_bf16 (#n:nat) (row:T.vector BF.t n) (sel:int)
+  : Lemma (requires first_allowed_choice row sel) (ensures N.bf16_argmax n row sel)
+  = let before (i:T.index n) : Lemma (requires i < sel) (ensures ~(N.is_nan (row i)))
+      = if N.is_nan (row i) then assert (allowed_choice row i)
+    in
+    FStar.Classical.forall_intro (FStar.Classical.move_requires before)
+
+let allowed_f32 (#n:nat) (row:T.vector F32.t n) (sel:int)
+  : Lemma (requires allowed_choice row sel) (ensures N.f32_argmax n row sel)
+  = introduce (forall (i:T.index n). N.float_finite (row i)) ==>
+              (forall (i:T.index n). F.lte (row i) (row sel))
+    with begin
+      F32.lt_ordered (F.neg F.infinity) (row sel);
+      let at (i:T.index n) : Lemma (F.lte (row i) (row sel)) =
+        F32.lt_ordered (F.neg F.infinity) (row i)
+      in
+      FStar.Classical.forall_intro at
+    end
+
+let greedy_implies (nm:T.numerics) (w:T.model_weights real) (h:T.vector real T.hidden_size) (sel:int)
+  : Lemma (requires greedy_choice_relation nm w h sel)
+          (ensures T.greedy_choice_relation N.bf16 N.f32 nm w h sel)
+  = let bf (row:T.vector BF.t T.vocab_size)
+      : Lemma (first_allowed_choice row sel ==> N.bf16_argmax T.vocab_size row sel)
+      = FStar.Classical.move_requires (first_bf16 row) sel in
+    let fl (row:T.vector F32.t T.vocab_size)
+      : Lemma (allowed_choice row sel ==> N.f32_argmax T.vocab_size row sel)
+      = FStar.Classical.move_requires (allowed_f32 row) sel in
+    FStar.Classical.forall_intro bf;
+    FStar.Classical.forall_intro fl
+
+let layer_implies (#m:Type0 -> Type0) (ma:m BF.t -> m real -> prop) (mb:m BF.t -> m real -> prop)
+    (x:T.decoder_layer m BF.t) (r:T.decoder_layer m real)
+  : Lemma (requires T.layer_approx N.bf16 mb x r /\ (mb x.T.token_mixer r.T.token_mixer ==> ma x.T.token_mixer r.T.token_mixer))
+          (ensures layer_approximates ma x r)
+  = ()
+
+let weights_implies (x:T.model_weights BF.t) (r:T.model_weights real)
+  : Lemma (requires T.weights_approx N.bf16 x r) (ensures weights_approximates x r)
+  = let lin (d:T.index T.linear_layer_count)
+      : Lemma (layer_approximates linear_attn_approximates (x.T.linear_layers d) (r.T.linear_layers d))
+      = layer_implies linear_attn_approximates (T.linear_attn_approx N.bf16) (x.T.linear_layers d) (r.T.linear_layers d)
+    in
+    let full (g:T.index T.full_layer_count)
+      : Lemma (layer_approximates self_attn_approximates (x.T.full_layers g) (r.T.full_layers g))
+      = layer_implies self_attn_approximates (T.self_attn_approx N.bf16) (x.T.full_layers g) (r.T.full_layers g)
+    in
+    FStar.Classical.forall_intro lin;
+    FStar.Classical.forall_intro full
+
+let run_implies (x:T.inputs) (y:T.outputs) (nm:T.numerics) (w:T.model_weights real)
+  : Lemma (requires numerical nm x y w /\ selection nm x y w)
+          (ensures T.numerical N.bf16 nm x y w /\ T.selection N.bf16 N.f32 nm x y w)
+  = let at (j:T.index y.T.generated_count)
+      : Lemma (T.greedy_choice_relation N.bf16 N.f32 nm w
+                 (T.hidden_at nm w (T.consumed x y) (T.last_prompt_position x + j)) (y.T.tokens j))
+      = greedy_implies nm w (T.hidden_at nm w (T.consumed x y) (T.last_prompt_position x + j)) (y.T.tokens j)
+    in
+    FStar.Classical.forall_intro at
+
+let native_with (x:T.inputs) (y:T.outputs) (nm:T.numerics)
+  : Lemma (requires numerics_ok nm /\
+                    (forall (w:T.model_weights real). weights_approximates x.T.weights w ==>
+                       numerical nm x y w /\ selection nm x y w))
+          (ensures T.numerics_ok N.bf16 nm /\
+                   (forall (w:T.model_weights real). T.weights_approx N.bf16 x.T.weights w ==>
+                      T.numerical N.bf16 nm x y w /\ T.selection N.bf16 N.f32 nm x y w))
+  = numerics_implies nm;
+    introduce forall (w:T.model_weights real). T.weights_approx N.bf16 x.T.weights w ==>
+        T.numerical N.bf16 nm x y w /\ T.selection N.bf16 N.f32 nm x y w
+    with introduce _ ==> _
+    with begin weights_implies x.T.weights w; run_implies x y nm w end
+
+let native_implies (x:T.inputs) (y:T.outputs)
+  : Lemma (requires native_postcondition x y) (ensures T.postcondition x y)
+  = FStar.Classical.forall_intro (FStar.Classical.move_requires (native_with x y))
+
+(*** Main theorem: flat implies the typed postcondition *)
+
+let program_to_typed (w:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) (tokens:S.seq I64.t) (hidden:S.seq BF.t)
+  : Lemma (requires S.length w == SS.weights_len /\ SS.program_postcondition w prompt steps tokens hidden)
+          (ensures T.postcondition (inputs_of w prompt steps) (outputs_of tokens hidden))
+  = program_to_native w prompt steps tokens hidden;
+    native_implies (inputs_of w prompt steps) (outputs_of tokens hidden)

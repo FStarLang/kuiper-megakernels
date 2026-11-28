@@ -4,10 +4,13 @@ module KPlay.Spec.Bridge
    program proofs conclude, to the typed specification KPlay.Spec.
 
    inputs_of / outputs_of are layout views only (row-major flat buffers).
-   program_postcondition_iff shows that, on inputs of the right lengths, the
-   flat postcondition holds exactly when the outputs have their lengths and
-   the typed postcondition holds of the views: the typed spec is neither
-   weaker nor stronger than what the program proofs establish. *)
+   native_postcondition restates the flat postcondition on the views, with
+   its native FP32 selection and combine guards. program_postcondition_iff
+   shows that, on inputs of the right lengths, the flat postcondition holds
+   exactly when the outputs have their lengths and native_postcondition
+   holds of the views. native_implies shows that native_postcondition
+   implies the typed spec's postcondition (spec N.bf16 N.f32), whose FP32
+   argmax and combine rule (KPlay.Numbers) are weaker on non-finite rows. *)
 
 open Kuiper
 open Kuiper.Approximates
@@ -19,8 +22,47 @@ module I32 = FStar.Int32
 module I64 = FStar.Int64
 module SS = KPlay.SharedSpec
 module M = FStar.Math.Lemmas
+module N = KPlay.Numbers
+module FB = Kuiper.Floating.Base
 
 #set-options "--fuel 1 --ifuel 1 --z3rlimit 20"
+
+(* ------------------------------------------------------------------ *)
+(* The flat postcondition's native FP32 rules, on the typed views        *)
+
+let neg_infinity : F32.t = FB.neg (FB.infinity #F32.t)
+
+let is_nan (v:F32.t) : prop = FB.NaN? (FB.kind v)
+
+(* Top-1 over the FP32 row actually used: no entry is strictly greater
+   than the chosen one (or, for a row with nothing above -inf, the choice
+   is expert 0), and every earlier non-NaN entry is strictly below it,
+   witnessed by a native value v with row[i] <= v < row[j]. *)
+let native_top1 (row:vector F32.t expert_count) (j:index expert_count) : prop =
+  ((forall (i:index expert_count). ~(lt (row j) (row i))) \/
+   (j == 0 /\ (forall (i:index expert_count). ~(lt neg_infinity (row i))))) /\
+  (forall (i:index expert_count). i < j ==>
+     is_nan (row i) \/ (exists (v:F32.t). lte (row i) v /\ lt v (row j)))
+
+(* For a selected probability above -inf, the combine weight approximates
+   p / p for every nonzero real p it approximates. *)
+let native_combine (selected_probability combine:F32.t) : prop =
+  forall (p:real).
+    lt neg_infinity selected_probability /\ selected_probability %~ p /\ p =!= 0.0R ==>
+    combine %~ combine_weight p
+
+let native_numerical (input:inputs) (run:routing) : prop =
+  router_probabilities_relation N.bf16 N.f32 input run.probability_rows /\
+  (forall (t:index token_count).
+     survival_of run.selected t (run.selected t) = 1 ==>
+     native_combine (run.probability_rows t (run.selected t)) (run.combine_probability t))
+
+let native_selection (run:routing) : prop =
+  forall (t:index token_count). native_top1 (run.probability_rows t) (run.selected t)
+
+let native_postcondition (input:inputs) (output:outputs) : prop =
+  exists (run:routing).
+    structural N.f32 run output /\ native_numerical input run /\ native_selection run
 
 (* ------------------------------------------------------------------ *)
 (* Views (layout only)                                                  *)
@@ -229,10 +271,10 @@ let selection_iff (rows:S.seq F32.t) (sel:S.seq int) (comb:S.seq F32.t) (run:rou
   : Lemma (requires corresponds rows sel comb run)
           (ensures (forall (t:nat). t < SS.tokens ==>
                       SS.allowed_choice (SS.row_of rows t) (S.index sel t)) <==>
-                   selection run)
+                   native_selection run)
   = let at (t:index token_count)
       : Lemma (SS.allowed_choice (SS.row_of rows t) (S.index sel t) <==>
-               top1_relation (run.probability_rows t) (run.selected t))
+               native_top1 (run.probability_rows t) (run.selected t))
       = row_entries rows sel comb run t
     in
     Classical.forall_intro at
@@ -243,13 +285,13 @@ let combine_iff (rows:S.seq F32.t) (sel:S.seq int) (comb:S.seq F32.t) (run:routi
                       SS.selected_combine_ok (SS.row_of rows t) (S.index sel t) (S.index comb t)) <==>
                    (forall (t:index token_count).
                       survival_of run.selected t (run.selected t) = 1 ==>
-                      combine_relation (run.probability_rows t (run.selected t))
+                      native_combine (run.probability_rows t (run.selected t))
                                        (run.combine_probability t)))
   = let at (t:index token_count)
       : Lemma ((SS.kept sel t ==>
                 SS.selected_combine_ok (SS.row_of rows t) (S.index sel t) (S.index comb t)) <==>
                (survival_of run.selected t (run.selected t) = 1 ==>
-                combine_relation (run.probability_rows t (run.selected t))
+                native_combine (run.probability_rows t (run.selected t))
                                  (run.combine_probability t)))
       = row_entries rows sel comb run t;
         kept_survives sel run.selected t (run.selected t)
@@ -322,18 +364,18 @@ let kept_probabilities_iff (probs:S.seq F32.t) (sel:S.seq int) (comb:S.seq F32.t
                          if t >= 0 then S.index comb t else zero)) <==>
                    (forall (e:index expert_count) (c:index capacity).
                       matrix_view zero probs expert_count capacity e c ==
-                        kept_probability s combine e c))
+                        kept_probability N.f32 s combine e c))
   = introduce (forall (k:nat). k < SS.slots ==>
                  S.index probs k ==
                    (let t = SS.slot_token sel (k / SS.capacity) (k % SS.capacity) SS.tokens in
                     if t >= 0 then S.index comb t else zero)) ==>
               (forall (e:index expert_count) (c:index capacity).
                  matrix_view zero probs expert_count capacity e c ==
-                   kept_probability s combine e c)
+                   kept_probability N.f32 s combine e c)
     with begin
       let at (e:index expert_count) (c:index capacity)
         : Lemma (matrix_view zero probs expert_count capacity e c ==
-                   kept_probability s combine e c)
+                   kept_probability N.f32 s combine e c)
         = index_bound expert_count capacity e c;
           split_index capacity e c;
           slot_kept sel s e c token_count
@@ -342,7 +384,7 @@ let kept_probabilities_iff (probs:S.seq F32.t) (sel:S.seq int) (comb:S.seq F32.t
     end;
     introduce (forall (e:index expert_count) (c:index capacity).
                  matrix_view zero probs expert_count capacity e c ==
-                   kept_probability s combine e c) ==>
+                   kept_probability N.f32 s combine e c) ==>
               (forall (k:nat). k < SS.slots ==>
                  S.index probs k ==
                    (let t = SS.slot_token sel (k / SS.capacity) (k % SS.capacity) SS.tokens in
@@ -357,7 +399,7 @@ let kept_probabilities_iff (probs:S.seq F32.t) (sel:S.seq int) (comb:S.seq F32.t
             div_index expert_count capacity k;
             slot_kept sel s (k / capacity) (k % capacity) token_count;
             assert (matrix_view zero probs expert_count capacity (k / capacity) (k % capacity) ==
-                    kept_probability s combine (k / capacity) (k % capacity))
+                    kept_probability N.f32 s combine (k / capacity) (k % capacity))
           end
       in
       Classical.forall_intro at
@@ -382,7 +424,7 @@ let routing_iff (demand:S.seq I32.t) (idx:S.seq I64.t) (probs:S.seq F32.t) (surv
   : Lemma (requires output_lengths demand idx probs surv /\ corresponds rows sel comb run)
           (ensures (SS.routing_state sel comb SS.tokens demand idx probs /\
                     SS.survival_rows sel SS.tokens surv) <==>
-                   structural run (outputs_of demand idx probs surv))
+                   structural N.f32 run (outputs_of demand idx probs surv))
   = demand_iff demand sel run.selected;
     token_indices_iff idx sel run.selected;
     kept_probabilities_iff probs sel comb run.selected run.combine_probability;
@@ -402,7 +444,7 @@ let reals_of_matrix_at (#rows #cols:pos) (m:matrix real rows cols) (i:index rows
 
 let reals_of_matrix_approximated (#rows #cols:pos) (x:S.seq BF.t) (m:matrix real rows cols)
   : Lemma (requires S.length x == rows * cols /\
-                    matrix_approximates (matrix_view zero x rows cols) m)
+                    matrix_approx N.bf16 (matrix_view zero x rows cols) m)
           (ensures x %~ reals_of_matrix m)
   = let at (k:nat{k < S.length x}) : Lemma (S.index x k %~ S.index (reals_of_matrix m) k) =
       div_index rows cols k;
@@ -413,7 +455,7 @@ let reals_of_matrix_approximated (#rows #cols:pos) (x:S.seq BF.t) (m:matrix real
 
 let matrix_view_approximated (#rows #cols:pos) (x:S.seq BF.t) (rx:S.seq real)
   : Lemma (requires S.length x == rows * cols /\ x %~ rx)
-          (ensures matrix_approximates (matrix_view zero x rows cols) (matrix_view 0.0R rx rows cols))
+          (ensures matrix_approx N.bf16 (matrix_view zero x rows cols) (matrix_view 0.0R rx rows cols))
   = assert (seq_approximates x rx);
     Classical.forall_intro_2 (index_bound rows cols)
 
@@ -452,12 +494,12 @@ let probabilities_forward (x w:S.seq BF.t) (rows:S.seq F32.t) (sel:S.seq int)
   (comb:S.seq F32.t) (run:routing)
   : Lemma (requires input_lengths x w /\ corresponds rows sel comb run /\
                     SS.softmax_rows_ok x w rows)
-          (ensures router_probabilities_relation (inputs_of x w) run.probability_rows)
+          (ensures router_probabilities_relation N.bf16 N.f32 (inputs_of x w) run.probability_rows)
   = let each (r:router_inputs real)
-      : Lemma (inputs_approximates (inputs_of x w) r ==>
-               matrix_approximates run.probability_rows (router_probabilities r))
-      = introduce inputs_approximates (inputs_of x w) r ==>
-                  matrix_approximates run.probability_rows (router_probabilities r)
+      : Lemma (inputs_approx N.bf16 (inputs_of x w) r ==>
+               matrix_approx N.f32 run.probability_rows (router_probabilities r))
+      = introduce inputs_approx N.bf16 (inputs_of x w) r ==>
+                  matrix_approx N.f32 run.probability_rows (router_probabilities r)
         with begin
           reals_of_matrix_approximated x r.tokens;
           reals_of_matrix_approximated w r.router_weights;
@@ -469,7 +511,7 @@ let probabilities_forward (x w:S.seq BF.t) (rows:S.seq F32.t) (sel:S.seq int)
 let probabilities_backward (x w:S.seq BF.t) (rows:S.seq F32.t) (sel:S.seq int)
   (comb:S.seq F32.t) (run:routing)
   : Lemma (requires input_lengths x w /\ corresponds rows sel comb run /\
-                    router_probabilities_relation (inputs_of x w) run.probability_rows)
+                    router_probabilities_relation N.bf16 N.f32 (inputs_of x w) run.probability_rows)
           (ensures SS.softmax_rows_ok x w rows)
   = let each (t:nat) (rx rw:S.seq real)
       : Lemma (t < SS.tokens ==> x %~ rx /\ w %~ rw ==>
@@ -484,7 +526,7 @@ let probabilities_backward (x w:S.seq BF.t) (rows:S.seq F32.t) (sel:S.seq int)
           } in
           matrix_view_approximated #token_count #hidden_size x rx;
           matrix_view_approximated #hidden_size #expert_count w rw;
-          assert (inputs_approximates (inputs_of x w) r);
+          assert (inputs_approx N.bf16 (inputs_of x w) r);
           reference_row rx rw r t;
           row_entries rows sel comb run t;
           assert (seq_approximates (SS.row_of rows t)
@@ -509,8 +551,8 @@ let flat_witness (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t) (probs:
 
 let typed_witness (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t) (probs:S.seq F32.t)
   (surv:S.seq I32.t) (run:routing) : prop =
-  structural run (outputs_of demand idx probs surv) /\ numerical (inputs_of x w) run /\
-  selection run
+  structural N.f32 run (outputs_of demand idx probs surv) /\ native_numerical (inputs_of x w) run /\
+  native_selection run
 
 let witness_iff (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t) (probs:S.seq F32.t)
   (surv:S.seq I32.t) (rows:S.seq F32.t) (sel:S.seq int) (comb:S.seq F32.t) (run:routing)
@@ -528,7 +570,7 @@ let witness_forward (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t) (pro
   (surv:S.seq I32.t) (rows:S.seq F32.t) (sel:S.seq int) (comb:S.seq F32.t)
   : Lemma (requires input_lengths x w /\ output_lengths demand idx probs surv /\
                     flat_witness x w demand idx probs surv rows sel comb)
-          (ensures postcondition (inputs_of x w) (outputs_of demand idx probs surv))
+          (ensures native_postcondition (inputs_of x w) (outputs_of demand idx probs surv))
   = let run = routing_of rows sel comb in
     assert (forall (t:index token_count). SS.allowed_choice (SS.row_of rows t) (S.index sel t));
     corresponds_routing_of rows sel comb;
@@ -546,12 +588,42 @@ let witness_backward (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t) (pr
 (* ------------------------------------------------------------------ *)
 (* Main theorems                                                        *)
 
-(* Flat implies typed. *)
-let program_postcondition_implies (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t)
+(* The native rules imply the typed spec's number rules. *)
+let native_top1_argmax (row:vector F32.t expert_count) (j:index expert_count)
+  : Lemma (requires native_top1 row j) (ensures top1_relation N.f32 row j)
+  = introduce (forall (i:nat{i < expert_count}). N.float_finite (row i)) ==>
+              (forall (i:nat{i < expert_count}). FB.lte (row i) (row j))
+    with begin
+      assert (lt neg_infinity (row 0));
+      F32.lt_ordered neg_infinity (row j);
+      let at (i:index expert_count) : Lemma (FB.lte (row i) (row j)) =
+        F32.lt_ordered neg_infinity (row i)
+      in
+      Classical.forall_intro at
+    end
+
+let native_implies_run (input:inputs) (output:outputs) (run:routing)
+  : Lemma (requires structural N.f32 run output /\ native_numerical input run /\
+                    native_selection run)
+          (ensures postcondition input output)
+  = let at (t:index token_count)
+      : Lemma (top1_relation N.f32 (run.probability_rows t) (run.selected t))
+      = native_top1_argmax (run.probability_rows t) (run.selected t)
+    in
+    Classical.forall_intro at;
+    assert (selection N.f32 run);
+    assert (numerical N.bf16 N.f32 input run)
+
+let native_implies (input:inputs) (output:outputs)
+  : Lemma (requires native_postcondition input output) (ensures postcondition input output)
+  = Classical.forall_intro (Classical.move_requires (native_implies_run input output))
+
+(* Flat implies native. *)
+let program_postcondition_implies_native (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t)
   (probs:S.seq F32.t) (surv:S.seq I32.t)
   : Lemma (requires input_lengths x w /\ SS.program_postcondition x w demand idx probs surv)
           (ensures output_lengths demand idx probs surv /\
-                   postcondition (inputs_of x w) (outputs_of demand idx probs surv))
+                   native_postcondition (inputs_of x w) (outputs_of demand idx probs surv))
   = eliminate exists (rows:S.seq F32.t) (sel:S.seq int) (comb:S.seq F32.t).
       S.length rows == SS.tokens * SS.experts /\
       S.length sel == SS.tokens /\ S.length comb == SS.tokens /\
@@ -563,11 +635,20 @@ let program_postcondition_implies (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.s
       SS.survival_rows sel SS.tokens surv
     with witness_forward x w demand idx probs surv rows sel comb
 
-(* Typed implies flat. *)
+(* Flat implies typed. *)
+let program_postcondition_implies (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t)
+  (probs:S.seq F32.t) (surv:S.seq I32.t)
+  : Lemma (requires input_lengths x w /\ SS.program_postcondition x w demand idx probs surv)
+          (ensures output_lengths demand idx probs surv /\
+                   postcondition (inputs_of x w) (outputs_of demand idx probs surv))
+  = program_postcondition_implies_native x w demand idx probs surv;
+    native_implies (inputs_of x w) (outputs_of demand idx probs surv)
+
+(* Native implies flat. *)
 let postcondition_implies_program (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I64.t)
   (probs:S.seq F32.t) (surv:S.seq I32.t)
   : Lemma (requires input_lengths x w /\ output_lengths demand idx probs surv /\
-                    postcondition (inputs_of x w) (outputs_of demand idx probs surv))
+                    native_postcondition (inputs_of x w) (outputs_of demand idx probs surv))
           (ensures SS.program_postcondition x w demand idx probs surv)
   = let each (run:routing)
       : Lemma (typed_witness x w demand idx probs surv run ==>
@@ -584,6 +665,6 @@ let program_postcondition_iff (x w:S.seq BF.t) (demand:S.seq I32.t) (idx:S.seq I
   : Lemma (requires input_lengths x w)
           (ensures SS.program_postcondition x w demand idx probs surv <==>
                    (output_lengths demand idx probs surv /\
-                    postcondition (inputs_of x w) (outputs_of demand idx probs surv)))
-  = Classical.move_requires (program_postcondition_implies x w demand idx probs) surv;
+                    native_postcondition (inputs_of x w) (outputs_of demand idx probs surv)))
+  = Classical.move_requires (program_postcondition_implies_native x w demand idx probs) surv;
     Classical.move_requires (postcondition_implies_program x w demand idx probs) surv

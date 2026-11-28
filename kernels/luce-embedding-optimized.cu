@@ -12,17 +12,23 @@ __device__ float mul32(float a, float b) {
     return r;
 }
 
-// PyTorch's float32 RoPE inverse frequencies 1 / 1e7^(2i/64).
-__constant__ float ROPE_INV_FREQ[32] = {
-    0x1.000000p+0f, 0x1.356656p-1f, 0x1.75f036p-2f, 0x1.c3f06ap-3f,
-    0x1.111aeep-3f, 0x1.4a12acp-4f, 0x1.8eec7ep-5f, 0x1.e222eep-6f,
-    0x1.235a72p-6f, 0x1.6020a4p-7f, 0x1.a9942ap-8f, 0x1.012cfap-8f,
-    0x1.36d21ap-9f, 0x1.77a7dap-10f, 0x1.c603c4p-11f, 0x1.125c04p-11f,
-    0x1.4b96c0p-12f, 0x1.90c182p-13f, 0x1.e459c4p-14f, 0x1.24b0fcp-14f,
-    0x1.61bea4p-15f, 0x1.ab8882p-16f, 0x1.025b56p-16f, 0x1.383f88p-17f,
-    0x1.796182p-18f, 0x1.c8198cp-19f, 0x1.139e94p-19f, 0x1.4d1c98p-20f,
-    0x1.9298aep-21f, 0x1.e6933ap-22f, 0x1.26091cp-22f, 0x1.635e88p-23f
-};
+__device__ float divide32(float a, float b) {
+    float r;
+    asm("div.approx.ftz.f32 %0, %1, %2;" : "=f"(r) : "f"(a), "f"(b));
+    return r;
+}
+
+__device__ float log2_32(float x) {
+    float r;
+    asm("lg2.approx.ftz.f32 %0, %1;" : "=f"(r) : "f"(x));
+    return r;
+}
+
+__device__ float exp2_32(float x) {
+    float r;
+    asm("ex2.approx.ftz.f32 %0, %1;" : "=f"(r) : "f"(x));
+    return r;
+}
 
 __global__ void embedding(
     const at::BFloat16* weights, const int64_t* prompt, const int64_t* tokens_in,
@@ -30,9 +36,11 @@ __global__ void embedding(
     int64_t token = position == 0 ? tokens_in[0] :
         (position < prompt_length ? prompt[position] : tokens_in[position - prompt_length]);
     for (int i = 0; i < 1024; ++i) hidden[i] = float(weights[token * 1024 + i]);
+    // Keep these powers as runtime PTX, as in the accepted program.
     #pragma unroll 1
     for (int i = 0; i < 32; ++i) {
-        float frequency = mul32(float(position), ROPE_INV_FREQ[i]);
+        float frequency = divide32(float(position),
+            exp2_32(mul32(divide32(float(2 * i), 64.0f), log2_32(10000000.0f))));
         asm("cos.approx.ftz.f32 %0, %1;" : "=f"(cosine[i]) : "f"(frequency));
         asm("sin.approx.ftz.f32 %0, %1;" : "=f"(sine[i]) : "f"(frequency));
     }

@@ -22,14 +22,23 @@ module KPlay.Spec
      for ALL reals the BF16 inputs approximate, and every token that keeps
      its slot has a combine weight approximating p / p for every nonzero
      real p its selected probability approximates;
-   - selection: each token's expert is an allowed first maximum of the
-     probability row actually used (the native row, not the real one);
+   - selection: each token's expert is an argmax, under the number type's
+     rule, of the probability row actually used (not the real one);
    - structural: demand, token indices, kept probabilities and survival are
      EXACTLY the reference's token-order capacity routing of those choices.
-   It is a relation, not a function: two correct implementations may select
-   different experts when their rows differ within the approximation.
    No input-domain premise is needed (the guarantee holds for every input of
-   the right shape, so in particular on the domain of input-domain.txt). *)
+   the right shape, so in particular on the domain of input-domain.txt).
+
+   The spec is written once, over number types (KPlay.Numbers): `spec ni no`
+   takes one for the inputs and one for the probabilities. The kernels are
+   proved against `postcondition = spec N.bf16 N.f32`; tightness.py checks
+   that `spec N.exact N.exact` (exact reals) defines a function.
+
+   LIBRARY RULE (KPlay.Numbers.f32_argmax), the only freedom at FP32:
+   if every score is finite, pick a highest one; if any score is NaN or
+   infinite, any pick is allowed. Likewise the combine weight is
+   constrained only when the picked probability is finite. Exact reals are
+   always finite, so the rule leaves nothing open there. *)
 
 open Kuiper
 open Kuiper.Approximates
@@ -38,6 +47,7 @@ module F32 = Kuiper.Float32
 module I32 = FStar.Int32
 module I64 = FStar.Int64
 module FB = Kuiper.Floating.Base
+module N = KPlay.Numbers
 
 #set-options "--fuel 1 --ifuel 1 --z3rlimit 20"
 
@@ -52,35 +62,42 @@ let expert_count : pos = 8
 let capacity : pos = 32
 
 type index (n:nat) = i:nat{i < n}
-type vector (a:Type0) (n:nat) = index n -> GTot a
-type matrix (a:Type0) (rows cols:nat) = index rows -> index cols -> GTot a
+type vector (a:Type0) (n:nat) = N.row a n
+type matrix (a:Type0) (rows cols:nat) = N.row (N.row a cols) rows
 
 (* The two operands of reference_route (base.py:13), over any element type:
    BF16 for the caller's tensors, real for the reference math. *)
-noeq type router_inputs (a:Type0) = {
+noeq type inputs_t (a:Type0) = {
   tokens : matrix a token_count hidden_size;          (* [tokens, hidden] *)
   router_weights : matrix a hidden_size expert_count; (* [hidden, experts] *)
 }
 
-type inputs = router_inputs BF.t
+type router_inputs (a:Type0) = inputs_t a
 
-(* The returned dictionary (base.py:34-39). *)
-noeq type outputs = {
+type inputs = inputs_t BF.t
+
+(* The returned dictionary (base.py:34-39); probabilities over any number
+   type (float32 for the caller, real for the reference math). *)
+noeq type outputs_t (a:Type0) = {
   expert_demand : vector I32.t expert_count;          (* int32 [experts] *)
   token_indices : matrix I64.t expert_count capacity; (* int64 [experts, capacity] *)
-  probabilities : matrix F32.t expert_count capacity; (* float32 [experts, capacity] *)
+  probabilities : matrix a expert_count capacity;     (* float32 [experts, capacity] *)
   survival : matrix I32.t token_count expert_count;   (* int32 [tokens, experts] *)
 }
+
+type outputs = outputs_t F32.t
 
 (* The reference intermediates that one run actually produces (boundary
    values only): the softmax rows `probabilities` (base.py:18, here
    `probability_rows`), the top-1 `selected` expert (base.py:19) and the
    `combine_probability` (base.py:21). *)
-noeq type routing = {
-  probability_rows : matrix F32.t token_count expert_count;
+noeq type routing_t (a:Type0) = {
+  probability_rows : matrix a token_count expert_count;
   selected : vector (index expert_count) token_count;
-  combine_probability : vector F32.t token_count;
+  combine_probability : vector a token_count;
 }
+
+type routing = routing_t F32.t
 
 (* ------------------------------------------------------------------ *)
 (* S2. Reference equations                                              *)
@@ -117,8 +134,8 @@ let router_probabilities (r:router_inputs real) : matrix real token_count expert
 
 (* base.py:19 selects, per row, the first index of a stable descending
    argsort, i.e. the first maximum. Implementations select over their own
-   FP32 rows, so selection is stated in S4 as an allowed choice over the
-   native row (top1_relation). *)
+   rows, so selection is stated in S4 with the number type's argmax over
+   the row actually used. *)
 
 (* base.py:20-21: selected_probability / selected_probability.sum(dim=1);
    with top_k = 1 the sum is the selected probability itself. *)
@@ -167,83 +184,82 @@ let rec kept_token (selected:vector (index expert_count) token_count)
 
 (* base.py:29,33: kept_probabilities[e, c] is the combine probability of
    that token, and +0.0 for an unfilled slot. *)
-let kept_probability (selected:vector (index expert_count) token_count)
-  (combine:vector F32.t token_count) (e:index expert_count) (c:index capacity) : GTot F32.t
+let kept_probability (#a:Type0) (num:N.number a)
+  (selected:vector (index expert_count) token_count)
+  (combine:vector a token_count) (e:index expert_count) (c:index capacity) : GTot a
   = let t = kept_token selected e c token_count in
-    if t >= 0 then combine t else zero
+    if t >= 0 then combine t else num.N.zero
 
 (* ------------------------------------------------------------------ *)
-(* S3. Liftings of %~                                                   *)
+(* S3. Liftings of approximation                                        *)
 
-let matrix_approximates (#a:Type0) {| scalar a, real_like a |} (#rows #cols:nat)
+let matrix_approx (#a:Type0) (num:N.number a) (#rows #cols:nat)
   (m:matrix a rows cols) (r:matrix real rows cols) : prop =
-  forall (i:index rows) (j:index cols). m i j %~ r i j
+  forall (i:index rows) (j:index cols). num.N.approx (m i j) (r i j)
 
-let inputs_approximates (x:inputs) (r:router_inputs real) : prop =
-  matrix_approximates x.tokens r.tokens /\
-  matrix_approximates x.router_weights r.router_weights
+let inputs_approx (#a:Type0) (num:N.number a) (x:inputs_t a) (r:inputs_t real) : prop =
+  matrix_approx num x.tokens r.tokens /\
+  matrix_approx num x.router_weights r.router_weights
 
 (* ------------------------------------------------------------------ *)
 (* S4. Operation relations                                              *)
 
 (* base.py:15-18, projection then softmax: the rows approximate the real
-   router probabilities of every real input the BF16 inputs approximate. *)
-let router_probabilities_relation (input:inputs) (rows:matrix F32.t token_count expert_count)
+   router probabilities of every real input the inputs approximate. *)
+let router_probabilities_relation (#a #b:Type0) (ni:N.number a) (no:N.number b)
+  (input:inputs_t a) (rows:matrix b token_count expert_count) : prop
+  = forall (r:inputs_t real).
+      inputs_approx ni input r ==> matrix_approx no rows (router_probabilities r)
+
+(* base.py:19, top-1: the number type's argmax over the row actually used. *)
+let top1_relation (#b:Type0) (no:N.number b) (row:vector b expert_count) (j:index expert_count)
   : prop
-  = forall (r:router_inputs real).
-      inputs_approximates input r ==> matrix_approximates rows (router_probabilities r)
+  = no.N.argmax expert_count row j
 
-let neg_infinity : F32.t = FB.neg (FB.infinity #F32.t)
-
-let is_nan (v:F32.t) : prop = FB.NaN? (FB.kind v)
-
-(* base.py:19, top-1 as an allowed choice over the FP32 row actually used:
-   no entry is strictly greater than the chosen one (or, for a row with
-   nothing above -inf, the choice is expert 0), and every earlier non-NaN
-   entry is strictly below it, witnessed by a native value v with
-   row[i] <= v < row[j] (first-maximum tie rule). *)
-let top1_relation (row:vector F32.t expert_count) (j:index expert_count) : prop =
-  ((forall (i:index expert_count). ~(lt (row j) (row i))) \/
-   (j == 0 /\ (forall (i:index expert_count). ~(lt neg_infinity (row i))))) /\
-  (forall (i:index expert_count). i < j ==>
-     is_nan (row i) \/ (exists (v:F32.t). lte (row i) v /\ lt v (row j)))
-
-(* base.py:20-21: the combine weight approximates p / p for every nonzero
-   real p the selected probability approximates. *)
-let combine_relation (selected_probability combine:F32.t) : prop =
-  forall (p:real).
-    selected_probability %~ p /\ p =!= 0.0R ==>
-    combine %~ combine_weight p
+(* base.py:20-21: for a finite selected probability, the combine weight
+   approximates p / p for every nonzero real p it approximates. *)
+let combine_relation (#b:Type0) (no:N.number b) (selected_probability combine:b) : prop =
+  no.N.finite selected_probability ==>
+  (forall (p:real). no.N.approx selected_probability p /\ p =!= 0.0R ==>
+     no.N.approx combine (combine_weight p))
 
 (* base.py:23-33: the four outputs are exactly the token-order capacity
    routing of the selections, with kept probabilities copied from the
    combine probabilities. *)
-let capacity_routing_relation (selected:vector (index expert_count) token_count)
-  (combine:vector F32.t token_count) (output:outputs) : prop =
+let capacity_routing_relation (#b:Type0) (no:N.number b)
+  (selected:vector (index expert_count) token_count)
+  (combine:vector b token_count) (output:outputs_t b) : prop =
   (forall (e:index expert_count). I32.v (output.expert_demand e) == demand selected e) /\
   (forall (e:index expert_count) (c:index capacity).
      I64.v (output.token_indices e c) == kept_token selected e c token_count) /\
   (forall (e:index expert_count) (c:index capacity).
-     output.probabilities e c == kept_probability selected combine e c) /\
+     output.probabilities e c == kept_probability no selected combine e c) /\
   (forall (t:index token_count) (e:index expert_count).
      I32.v (output.survival t e) == survival_of selected t e)
 
 (* ------------------------------------------------------------------ *)
 (* S5. Program postcondition                                            *)
 
-let structural (run:routing) (output:outputs) : prop =
-  capacity_routing_relation run.selected run.combine_probability output
+(* Every input of the right shape. *)
+let input_domain (#a:Type0) (x:inputs_t a) : prop = True
+
+let structural (#b:Type0) (no:N.number b) (run:routing_t b) (output:outputs_t b) : prop =
+  capacity_routing_relation no run.selected run.combine_probability output
 
 (* The combine weight matters only for tokens that keep a slot: no other
    token's weight reaches an output. *)
-let numerical (input:inputs) (run:routing) : prop =
-  router_probabilities_relation input run.probability_rows /\
+let numerical (#a #b:Type0) (ni:N.number a) (no:N.number b) (input:inputs_t a) (run:routing_t b)
+  : prop =
+  router_probabilities_relation ni no input run.probability_rows /\
   (forall (t:index token_count).
      survival_of run.selected t (run.selected t) = 1 ==>
-     combine_relation (run.probability_rows t (run.selected t)) (run.combine_probability t))
+     combine_relation no (run.probability_rows t (run.selected t)) (run.combine_probability t))
 
-let selection (run:routing) : prop =
-  forall (t:index token_count). top1_relation (run.probability_rows t) (run.selected t)
+let selection (#b:Type0) (no:N.number b) (run:routing_t b) : prop =
+  forall (t:index token_count). top1_relation no (run.probability_rows t) (run.selected t)
 
-let postcondition (input:inputs) (output:outputs) : prop =
-  exists (run:routing). structural run output /\ numerical input run /\ selection run
+let spec (#a #b:Type0) (ni:N.number a) (no:N.number b) (input:inputs_t a) (output:outputs_t b)
+  : prop =
+  exists (run:routing_t b). structural no run output /\ numerical ni no input run /\ selection no run
+
+let postcondition (input:inputs) (output:outputs) : prop = spec N.bf16 N.f32 input output

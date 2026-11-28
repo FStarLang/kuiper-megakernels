@@ -35,13 +35,16 @@ class ReplayTests(unittest.TestCase):
     def test_hand_edited_tightness_theorem_is_rejected(self):
         d = self.root / "proofs/demo-tightness"
         d.mkdir(parents=True)
-        (d / "KPlay.Tightness.Demo.Question.fst").write_text("module KPlay.Tightness.Demo.Question\n")
+        spec = self.root / "proofs/demo-spec/KPlay.Spec.fst"
+        spec.parent.mkdir(parents=True)
+        spec.write_text("module KPlay.Spec\nnoeq type outputs_t (a:Type0) = { out : vector a 4 }\n"
+                        "let postcondition (input:inputs) (output:outputs) : prop = spec N.f32 input output\n")
         with patch.object(tightness, "ROOT", self.root):
             files = tightness.generated("demo")
             for path, text in files.items():
                 path.write_text(text)
             next(iter(files)).write_text("module KPlay.Tightness.Demo.Statement\nlet tight : prop = True\n")
-            roots = [str(p.relative_to(self.root)) for p in [d / "KPlay.Tightness.Demo.Question.fst", *files]]
+            roots = [str(p.relative_to(self.root)) for p in [spec, *files]]
             for r in roots:
                 self.manifest["files"][r] = replay.sha256(self.root / r)
             self.manifest["cases"].append({"id": "demo-tightness", "kind": "tightness", "profile": "profile",

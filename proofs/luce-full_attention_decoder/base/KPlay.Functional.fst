@@ -4129,11 +4129,6 @@ let cp_caseB (qn kvo:S.seq bf16) (c t:nat) (rkv kn vn rq:S.seq real) (dots:S.seq
     cp_caseB1 qn kvo c t rkv kn rq dots h p
 #pop-options
 
-let cp_probs_at (dots:S.seq bf16) (t h p:nat) : Lemma
-  (requires h < 8 /\ p < 16)
-  (ensures S.index (probs_s dots t) (h * 16 + p) == prob_m dots t h p)
-  = cp_divmod16 h p
-
 #push-options "--fuel 0 --ifuel 0 --z3rlimit 40"
 let cp_one (qn kvo:S.seq bf16) (c t:nat) (rw rx rkv rc rs:S.seq real) (dots:S.seq bf16) (h p:nat) : Lemma
   (requires S.length qn == 2048 /\ S.length kvo == c * 1024 /\ S.length rkv == c * 1024 /\ 1 <= c /\ c <= 12 /\ t < c /\
@@ -4152,7 +4147,8 @@ let cp_one (qn kvo:S.seq bf16) (c t:nat) (rw rx rkv rc rs:S.seq real) (dots:S.se
       at_score base_numerics rw 0 rx rc rs t (base_hk c rkv) h p' == cp_rd rq kn (base_hk c rkv) t h p' *. 0.0625R
     with introduce _ ==> _ with cp_score_eq base_numerics rw 0 rx rc rs t (base_hk c rkv) h p';
     cp_prob_eq base_numerics rw 0 rx rc rs t (base_hk c rkv) h p (cp_rd rq kn (base_hk c rkv) t h);
-    cp_probs_at dots t h p
+    cp_divmod16 h p;
+    assert (S.index (probs_s dots t) (h * 16 + p) == prob_m dots t h p)
 #pop-options
 
 #push-options "--fuel 0 --ifuel 0 --z3rlimit 40"

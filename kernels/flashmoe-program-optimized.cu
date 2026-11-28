@@ -77,8 +77,8 @@ __global__ void router_capacity(
                 __expf(__fsub_rn(row[expert], maximum)), denominator);
         }
         int selected = 0;
-        float selected_probability = row[0];
-        for (int expert = 1; expert < 8; ++expert) {
+        float selected_probability = -std::numeric_limits<float>::infinity();
+        for (int expert = 0; expert < 8; ++expert) {
             if (row[expert] > selected_probability) {
                 selected = expert;
                 selected_probability = row[expert];

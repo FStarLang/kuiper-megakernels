@@ -20,6 +20,7 @@ module Exp = FStar.Math.Exp
 module Sqrt = FStar.Math.Sqrt
 module Trig = Kuiper.Real.Trigonometry
 module Lit = Kuiper.Float32.Literals
+module RO = Kuiper.Float.Realops
 
 (*** Model dimensions and packed weight layout *)
 
@@ -90,10 +91,9 @@ noeq type numerics = {
   inv_freq : S.seq real;      (* 32 RoPE inverse frequencies, theta = 1e7, rotary dim 64 *)
 }
 
-(* The constants are the float32 values PyTorch computes in the reference
-   (modeling_qwen3_5.py:217, float32): the f32 roundings of 1e-6, 1/sqrt(128)
-   and 1 / 1e7^(2i/64). *)
+let eps_exact : real = 0.000001R
 let eps_f32 : real = Lit.value "0.0000009999999974752427078783512115478515625"
+let qscale_exact : real = Sqrt.rsqrt 128.0R
 let qscale_f32 : real = Lit.value "0.088388346135616302490234375"
 
 let base_freq_literal (i:nat) : string =
@@ -132,17 +132,26 @@ let base_freq_literal (i:nat) : string =
   | 31 -> "0.00000016548170833630138076841831207275390625"
   | _ -> "0.0"
 
-(* PyTorch's float32 inverse frequencies, the same values in both roles *)
+(* f32-rounded inverse frequencies (the base kernel's constants) *)
 let inv_freq_f32 : S.seq real =
   S.init 32 (fun (i:nat{i < 32}) -> Lit.value (base_freq_literal i))
 
-(* The single admitted choice of model constants: PyTorch's float32 values. *)
-let model_numerics : numerics = { eps = eps_f32; dn_qscale = qscale_f32; inv_freq = inv_freq_f32 }
+(* The exact inverse frequencies 1 / 1e7^(2i/64), written as
+   1 / 2^((2i/64) * log2(1e7)), the optimized kernel's form (the library has
+   no law linking Pow.pow to exp/log, so one form is used throughout). *)
+let inv_freq_exp2 : S.seq real =
+  S.init 32 (fun (i:nat{i < 32}) ->
+    1.0R /. RO.r_exp2 ((of_int (2 * i) /. 64.0R) *. RO.r_log2 10000000.0R))
 
-let numerics_ok (nm:numerics) : prop = nm == model_numerics
+(* Admissible spellings of the model constants: the exact real value or its
+   f32 rounding. *)
+let numerics_ok (nm:numerics) : prop =
+  (nm.eps == eps_exact \/ nm.eps == eps_f32) /\
+  (nm.dn_qscale == qscale_exact \/ nm.dn_qscale == qscale_f32) /\
+  (nm.inv_freq == inv_freq_exp2 \/ nm.inv_freq == inv_freq_f32)
 
-let base_numerics : numerics = model_numerics
-let opt_numerics : numerics = model_numerics
+let base_numerics : numerics = { eps = eps_f32; dn_qscale = qscale_f32; inv_freq = inv_freq_f32 }
+let opt_numerics : numerics = { eps = eps_f32; dn_qscale = qscale_f32; inv_freq = inv_freq_exp2 }
 
 let rope_cos (nm:numerics) (t:int) : S.seq real =
   S.init 32 (fun (i:nat{i < 32}) -> Trig.cos (of_int t *. at nm.inv_freq i))
@@ -490,10 +499,11 @@ let prog_tok (prompt tokens:S.seq I64.t) (p:nat) : int =
 let bf_row (s:S.seq BF.t) (j:int) : S.seq BF.t =
   if 0 <= j && j * 1024 + 1024 <= S.length s then S.slice s (j * 1024) (j * 1024 + 1024) else S.empty
 
-(* greedy choice over a consumed score row (BF16 or F32) that approximates
-   the reference logits *)
+(* greedy choice over a consumed score row that approximates the reference
+   logits: the first allowed choice over a BF16 row, an allowed choice over
+   an F32 row *)
 let selected_ok (nm:numerics) (rw:S.seq real) (h:S.seq real) (sel:int) : prop =
-  (exists (row:S.seq BF.t). row %~ ref_logits nm rw h /\ allowed_choice row sel) \/
+  (exists (row:S.seq BF.t). row %~ ref_logits nm rw h /\ first_allowed_choice row sel) \/
   (exists (row:S.seq F32.t). row %~ ref_logits nm rw h /\ allowed_choice row sel)
 
 let program_premise (weights:S.seq BF.t) (prompt:S.seq I64.t) (steps:int) : prop =
